@@ -5,10 +5,8 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, ClipboardList } from "lucide-react"
-import {
-  getActiveEntryTestForStudent,
-  type EntryTestSubmission,
-} from "@/lib/entry-test-storage"
+import type { EntryTestSubmission } from "@/lib/entry-test-storage"
+import { entryTestApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 /** Dashboard banner shown when the student has an assigned placement test. */
@@ -16,7 +14,18 @@ export function EntryTestCard({ studentId }: { studentId: string }) {
   const [test, setTest] = useState<EntryTestSubmission | null>(null)
 
   useEffect(() => {
-    setTest(getActiveEntryTestForStudent(studentId) ?? null)
+    let cancelled = false
+    entryTestApi
+      .mine()
+      .then((t) => {
+        if (!cancelled) setTest(t)
+      })
+      .catch(() => {
+        if (!cancelled) setTest(null)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [studentId])
 
   if (!test) return null

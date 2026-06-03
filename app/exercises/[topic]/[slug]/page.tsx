@@ -17,21 +17,14 @@ import {
   TimerIcon,
   XCircle,
 } from "lucide-react"
-import {
-  ensureGrammarSeed,
-  getGrammarExercise,
-  isBlankCorrect,
-} from "@/lib/grammar-storage"
+import { ensureGrammarSeed, isBlankCorrect } from "@/lib/grammar-storage"
+import { getExerciseBySlug, peekExerciseBySlug } from "@/lib/exercises-cache"
+import { peekHomeworkById, invalidateMyHomework } from "@/lib/homework-cache"
 import {
   GRAMMAR_BLANK_TOKEN,
   type GrammarExercise,
 } from "@/lib/grammar-types"
-import {
-  getHomework,
-  markHomeworkStarted,
-  recordHomeworkAttempt,
-} from "@/lib/admin-storage"
-import { recordExerciseResult } from "@/lib/grammar-analytics"
+import { homeworkApi, analyticsApi } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
 
@@ -66,31 +59,67 @@ function ExerciseRunner() {
   const searchParams = useSearchParams()
   const { user } = useAuth()
 
-  const [exercise, setExercise] = useState<GrammarExercise | null>(null)
+  // Seed synchronously from the warm cache so navigating here from the homework
+  // page shows the exercise instantly (no loading flash).
+  const [exercise, setExercise] = useState<GrammarExercise | null>(() =>
+    slug ? (peekExerciseBySlug(slug) ?? null) : null,
+  )
 
   useEffect(() => {
     ensureGrammarSeed()
     if (!slug) return
-    const ex = getGrammarExercise(slug)
-    if (!ex) {
-      router.replace("/exercises")
-      return
+    // Already resolved from cache — nothing to fetch.
+    if (exercise) return
+    let cancelled = false
+    getExerciseBySlug(slug)
+      .then((ex) => {
+        if (cancelled) return
+        if (!ex) {
+          router.replace("/exercises")
+          return
+        }
+        setExercise(ex)
+      })
+      .catch(() => {
+        if (!cancelled) router.replace("/exercises")
+      })
+    return () => {
+      cancelled = true
     }
-    setExercise(ex)
-  }, [slug, router])
+  }, [slug, router, exercise])
 
   const backHref = topic ? `/exercises/${topic}` : "/exercises"
   const homeworkId = searchParams?.get("hw") ?? undefined
   const studentId = user?.role === "student" ? user.id : undefined
-  const timeLimitMinutes = useMemo(
-    () => (homeworkId ? getHomework(homeworkId)?.timeLimitMinutes : undefined),
-    [homeworkId],
+  // Initialise the time limit from cached homework so there's no request when
+  // opening an assignment that was just listed on the homework page.
+  const [timeLimitMinutes, setTimeLimitMinutes] = useState<number | undefined>(
+    () => (homeworkId ? peekHomeworkById(homeworkId)?.timeLimitMinutes : undefined),
   )
 
-  // Mark the assignment as started so it shows as "in progress" to the teacher.
+  // Mark the assignment as started, and fetch the time limit only if it wasn't
+  // already available from the cache.
   useEffect(() => {
-    if (homeworkId && studentId) {
-      markHomeworkStarted(homeworkId, studentId)
+    if (!homeworkId) return
+    let cancelled = false
+    if (peekHomeworkById(homeworkId) === undefined) {
+      homeworkApi
+        .get(homeworkId)
+        .then((hw) => {
+          if (!cancelled) setTimeLimitMinutes(hw?.timeLimitMinutes)
+        })
+        .catch(() => {})
+    }
+    if (studentId) {
+      // Starting flips the submission to "in_progress"; drop the cached list so
+      // the homework section reflects the new status next time it opens.
+      void homeworkApi
+        .start(homeworkId)
+        .then(() => invalidateMyHomework())
+        .catch(() => {})
+    }
+    return () => {
+      cancelled = true
     }
   }, [homeworkId, studentId])
 
@@ -1247,23 +1276,23 @@ function ResultsScreen({
   // teacher. Runs once when the results screen mounts.
   useEffect(() => {
     // Always record topic/subtopic accuracy for analytics (any run).
-    recordExerciseResult({
-      topic: exercise.topic,
-      subtopic: exercise.subtopic,
-      slug: exercise.slug,
-      title: exercise.title,
-      type: exercise.type,
-      correctCount,
-      totalQuestions: total,
-      timedOut: timedOut || undefined,
-      studentId,
-    })
+    void analyticsApi
+      .record({
+        topic: exercise.topic,
+        subtopic: exercise.subtopic,
+        slug: exercise.slug,
+        title: exercise.title,
+        type: exercise.type,
+        correctCount,
+        totalQuestions: total,
+        timedOut: timedOut || undefined,
+        studentId,
+      })
+      .catch(() => {})
 
     if (!homeworkId || !studentId) return
-    recordHomeworkAttempt({
-      homeworkId,
-      studentId,
-      attempt: {
+    void homeworkApi
+      .recordAttempt(homeworkId, {
         totalQuestions: total,
         correctCount,
         durationSeconds: Math.round(elapsedMs / 1000),
@@ -1276,8 +1305,11 @@ function ResultsScreen({
           correctAnswer: m.correctAnswer,
           explanation: m.explanation,
         })),
-      },
-    })
+      })
+      // The submission status changed — refresh the cached homework list so the
+      // student's homework section reflects it on return.
+      .then(() => invalidateMyHomework())
+      .catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

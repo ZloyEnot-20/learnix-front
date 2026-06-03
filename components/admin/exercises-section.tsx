@@ -24,6 +24,7 @@ import {
   BookOpenText,
   ChevronLeft,
   Clock,
+  DatabaseZap,
   Eye,
   FileText,
   Folder,
@@ -39,25 +40,27 @@ import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
 import { getMaterialsForTopic } from "@/lib/grammar-materials"
+import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import {
-  ensureGrammarSeed,
-  listGrammarExercises,
-} from "@/lib/grammar-storage"
+  getExercises,
+  getTopicsMeta,
+  getLocalCatalog,
+  invalidateExercises,
+} from "@/lib/exercises-cache"
 import {
   formatDuration,
   groupExercisesByTopic,
-  listAllTopicSummaries,
+  buildTopicSummaries,
   topicTitle,
+  type TopicMeta,
   type TopicSummary,
 } from "@/lib/grammar-utils"
 import type { GrammarExercise } from "@/lib/grammar-types"
-import {
-  createHomework,
-  ensureSeeded,
-  listGroups,
-  type Group,
-} from "@/lib/admin-storage"
+import type { Group } from "@/lib/admin-storage"
+import { getGroups, peekGroups } from "@/lib/admin-cache"
+import { exercisesApi, homeworkApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
+import { TopicCardsSkeleton } from "./skeletons"
 import { cn } from "@/lib/utils"
 
 const DIFFICULTY_META: Record<
@@ -149,23 +152,60 @@ export default function ExercisesSection({
   const { toast } = useToast()
 
   const [exercises, setExercises] = useState<GrammarExercise[]>([])
-  const [groups, setGroups] = useState<Group[]>([])
+  const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
+  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null)
   const [topicTab, setTopicTab] = useState<"exercises" | "materials" | "explanation">("exercises")
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  const loadCatalog = async () => {
+    const [ex, metas] = await Promise.all([getExercises(), getTopicsMeta()])
+    setExercises(ex)
+    setTopicsMeta(metas)
+  }
 
   useEffect(() => {
     ensureGrammarSeed()
-    ensureSeeded()
-    setExercises(listGrammarExercises())
-    setGroups(listGroups())
+    void loadCatalog().finally(() => setLoading(false))
+    getGroups()
+      .then(setGroups)
+      .catch(() => {})
   }, [])
 
+  const handleMigrate = async () => {
+    setSyncing(true)
+    try {
+      const { exercises: localExercises, topics: localTopics } = getLocalCatalog()
+      const result = await exercisesApi.import({
+        topics: localTopics,
+        exercises: localExercises,
+      })
+      invalidateExercises()
+      await loadCatalog()
+      toast({
+        title: "Catalogue migrated to database",
+        description: `${result.exercises.received} exercises · ${result.topics.received} folders written`,
+      })
+    } catch (err) {
+      toast({
+        title: "Could not migrate catalogue",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setSyncing(false)
+    }
+  }
+
   const grammarTopics = useMemo<TopicSummary[]>(() => {
-    return listAllTopicSummaries(exercises).filter((t) => t.category === "grammar")
-  }, [exercises])
+    return buildTopicSummaries(exercises, topicsMeta).filter(
+      (t) => t.category === "grammar",
+    )
+  }, [exercises, topicsMeta])
 
   const selectedTopicMeta = useMemo<TopicSummary | null>(() => {
     if (!selectedTopic) return null
@@ -199,7 +239,27 @@ export default function ExercisesSection({
   if (!selectedTopic) {
     return (
       <div className="space-y-6">
-        {grammarTopics.length === 0 ? (
+        {canAssign && (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Exercise database</p>
+              <p className="text-xs text-slate-500">
+                Import every topic folder and its exercises from the local catalogue into the database.
+              </p>
+            </div>
+            <Button
+              onClick={handleMigrate}
+              loading={syncing}
+              className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+            >
+              <DatabaseZap className="h-4 w-4" />
+              Migrate to database
+            </Button>
+          </div>
+        )}
+        {loading && grammarTopics.length === 0 ? (
+          <TopicCardsSkeleton count={6} />
+        ) : grammarTopics.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">No exercises yet</p>
             <p className="text-sm text-slate-500">
@@ -561,6 +621,7 @@ function AssignDialog({
   const [dueDate, setDueDate] = useState<string>("")
   const [unlimited, setUnlimited] = useState<boolean>(true)
   const [timeLimit, setTimeLimit] = useState<string>("20")
+  const [assigning, setAssigning] = useState(false)
 
   useEffect(() => {
     if (!open) return
@@ -572,7 +633,7 @@ function AssignDialog({
     )
   }, [open, exercise])
 
-  const submit = () => {
+  const submit = async () => {
     if (!exercise) return
     if (!groupId) {
       toast({ title: "Pick a group", variant: "destructive" })
@@ -587,18 +648,29 @@ function AssignDialog({
       toast({ title: "Enter a valid time limit", variant: "destructive" })
       return
     }
-    createHomework({
-      title: exercise.title,
-      description: exercise.description,
-      subject: "grammar",
-      groupId,
-      dueAt: new Date(dueDate).toISOString(),
-      estimatedMinutes: Math.max(1, exercise.estimatedTime),
-      createdBy: createdByName,
-      exerciseSlug: exercise.slug,
-      timeLimitMinutes: unlimited ? undefined : parsedLimit,
-    })
-    onAssigned()
+    setAssigning(true)
+    try {
+      await homeworkApi.create({
+        title: exercise.title,
+        description: exercise.description,
+        subject: "grammar",
+        groupId,
+        dueAt: new Date(dueDate).toISOString(),
+        estimatedMinutes: Math.max(1, exercise.estimatedTime),
+        createdBy: createdByName,
+        exerciseSlug: exercise.slug,
+        timeLimitMinutes: unlimited ? undefined : parsedLimit,
+      })
+      onAssigned()
+    } catch (err) {
+      toast({
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
+    }
   }
 
   return (
@@ -698,6 +770,7 @@ function AssignDialog({
         <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
           <Button
             onClick={submit}
+            loading={assigning}
             disabled={groups.length === 0}
             className="bg-blue-500 hover:bg-blue-600 gap-1.5"
           >

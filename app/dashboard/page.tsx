@@ -7,7 +7,7 @@ import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Headphones, PenTool, Mic, CreditCard, LogOut, User, Gamepad2 } from "lucide-react"
+import { BookOpen, Headphones, PenTool, Mic, LogOut, User, Gamepad2 } from "lucide-react"
 import Link from "next/link"
 import { NotificationsPanel } from "@/components/notifications-panel"
 import { StudentHomeworkSection } from "@/components/student/student-homework-section"
@@ -23,12 +23,13 @@ export default function DashboardPage() {
   useEffect(() => setMounted(true), [])
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login")
-    }
+    if (isLoading) return
+    if (!user) router.push("/login")
+    // Staff (super admin / admin / teacher) belong in the admin panel.
+    else if (user.role !== "student") router.push("/admin")
   }, [user, isLoading, router])
 
-  if (!mounted || isLoading || !user) {
+  if (!mounted || isLoading || !user || user.role !== "student") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
@@ -150,24 +151,6 @@ export default function DashboardPage() {
             </Button>
           </CardContent>
         </Card>
-
-        {/* Premium Status */}
-        {!user.isPremium && (
-          <Card className="mb-8 border-[#C8102E] bg-gradient-to-r from-[#C8102E]/5 to-[#C8102E]/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="w-5 h-5" />
-                Upgrade to Premium
-              </CardTitle>
-              <CardDescription>Unlock all test sections and track your progress</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/payment">
-                <Button className="bg-[#C8102E] hover:bg-[#A00D25]">Upgrade Now</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Progress Overview */}
         <div className="mb-8">

@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { TestResultsModal } from "@/components/test-results-modal"
 import { TestConfirmationDialog } from "@/components/test-confirmation-dialog"
-import { saveTestResult } from "@/lib/test-results-storage"
+import { testResultsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 
 export default function ReadingTestPage() {
@@ -24,6 +24,7 @@ export default function ReadingTestPage() {
   const [showReview, setShowReview] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const headerRef = useRef<HTMLDivElement | null>(null)
   const footerRef = useRef<HTMLDivElement | null>(null)
@@ -104,7 +105,8 @@ export default function ReadingTestPage() {
     }
   }
 
-  const submitTest = () => {
+  const submitTest = async () => {
+    setSubmitting(true)
     let totalCorrect = 0
     mockReadingTest.parts.forEach((part) => {
       part.questions.forEach((question) => {
@@ -155,23 +157,30 @@ export default function ReadingTestPage() {
     ]
     const bandScore = bandScoreTable.find((range) => totalCorrect >= range.min && totalCorrect <= range.max)?.band || 0
 
-    saveTestResult({
-      id: `reading-${Date.now()}`,
-      testType: "reading",
-      date: new Date().toISOString(),
-      bandScore,
-      totalCorrect,
-      totalQuestions,
-      answers,
-      parts: mockReadingTest.parts,
-    })
+    try {
+      await testResultsApi.save({
+        testType: "reading",
+        date: new Date().toISOString(),
+        bandScore,
+        totalCorrect,
+        totalQuestions,
+        answers,
+        parts: mockReadingTest.parts,
+      })
+      toast({
+        title: "Test submitted successfully!",
+        description: "Your results have been saved. View them on your profile page.",
+        duration: 5000,
+      })
+    } catch {
+      toast({
+        title: "Could not save results",
+        description: "Your score is shown below but wasn't saved to the server.",
+        variant: "destructive",
+      })
+    }
 
-    toast({
-      title: "Test submitted successfully!",
-      description: "Your results have been saved. View them on your profile page.",
-      duration: 5000,
-    })
-
+    setSubmitting(false)
     setShowResults(true)
     setShowConfirmation(false)
   }
@@ -272,6 +281,7 @@ export default function ReadingTestPage() {
                 variant="default"
                 size="default"
                 onClick={handleSubmit}
+                loading={submitting}
                 className="bg-green-600 hover:bg-green-700"
               >
                 <Check className="w-5 h-5" />
@@ -302,6 +312,7 @@ export default function ReadingTestPage() {
           onConfirm={submitTest}
           unansweredCount={unansweredCount}
           totalQuestions={totalQuestions}
+          confirming={submitting}
         />
       )}
     </div>

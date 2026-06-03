@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { AlertCircle } from "lucide-react"
+import { Spinner } from "@/components/ui/spinner"
 
 interface TestConfirmationDialogProps {
   isOpen: boolean
@@ -18,6 +19,7 @@ interface TestConfirmationDialogProps {
   onConfirm: () => void
   unansweredCount: number
   totalQuestions: number
+  confirming?: boolean
 }
 
 export function TestConfirmationDialog({
@@ -26,6 +28,7 @@ export function TestConfirmationDialog({
   onConfirm,
   unansweredCount,
   totalQuestions,
+  confirming = false,
 }: TestConfirmationDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
@@ -44,10 +47,18 @@ export function TestConfirmationDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-          <AlertDialogAction onClick={onConfirm} className="bg-[#C8102E] hover:bg-[#A00D25]">
-            Submit Anyway
+          <AlertDialogAction
+            onClick={(e) => {
+              // Keep the dialog open while the request is in flight.
+              e.preventDefault()
+              onConfirm()
+            }}
+            disabled={confirming}
+            className="bg-[#C8102E] hover:bg-[#A00D25]"
+          >
+            {confirming ? <Spinner aria-label="Loading" /> : "Submit Anyway"}
           </AlertDialogAction>
-          <AlertDialogCancel>Go Back</AlertDialogCancel>
+          <AlertDialogCancel disabled={confirming}>Go Back</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

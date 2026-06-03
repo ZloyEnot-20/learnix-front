@@ -41,22 +41,22 @@ import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
 import { getMaterialsForTopic } from "@/lib/grammar-materials"
-import { ensureGrammarSeed, listGrammarExercises } from "@/lib/grammar-storage"
+import { ensureGrammarSeed } from "@/lib/grammar-storage"
+import { getExercises, getTopicsMeta } from "@/lib/exercises-cache"
 import {
   groupExercisesByTopic,
-  listAllTopicSummaries,
+  buildTopicSummaries,
   topicTitle,
+  type TopicMeta,
   type TopicSummary,
 } from "@/lib/grammar-utils"
 import type { GrammarExercise } from "@/lib/grammar-types"
-import {
-  createHomework,
-  ensureSeeded,
-  listGroups,
-  type Group,
-} from "@/lib/admin-storage"
+import type { Group } from "@/lib/admin-storage"
+import { getGroups, peekGroups } from "@/lib/admin-cache"
+import { homeworkApi } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/hooks/use-toast"
+import { CardGridSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 
 const DIFFICULTY_META: Record<
@@ -108,22 +108,47 @@ export default function ExercisesTopicPage() {
   const { user } = useAuth()
   const { toast } = useToast()
 
-  const canAssign = user?.role === "admin" || user?.role === "teacher"
+  const canAssign = user ? user.role !== "student" : false
 
-  const [exercises, setExercises] = useState<GrammarExercise[]>([])
-  const [groups, setGroups] = useState<Group[]>([])
+  const [allExercises, setAllExercises] = useState<GrammarExercise[]>([])
+  const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
+  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
   const [tab, setTab] = useState<"exercises" | "materials" | "explanation">("exercises")
   const [typeFilter, setTypeFilter] = useState<ExerciseTypeValue>("all")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     ensureGrammarSeed()
-    ensureSeeded()
-    const all = listGrammarExercises()
-    setExercises(all.filter((e) => e.topic === topic))
-    setGroups(listGroups())
-  }, [topic])
+    let cancelled = false
+    Promise.all([getExercises(), getTopicsMeta()])
+      .then(([ex, metas]) => {
+        if (cancelled) return
+        setAllExercises(ex)
+        setTopicsMeta(metas)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // Only staff can assign homework, so only they need the group list.
+  useEffect(() => {
+    if (!canAssign) return
+    getGroups()
+      .then(setGroups)
+      .catch(() => {})
+  }, [canAssign])
+
+  const exercises = useMemo(
+    () => allExercises.filter((e) => e.topic === topic),
+    [allExercises, topic],
+  )
 
   const summary = useMemo<TopicSummary | null>(() => {
     if (!topic) return null
@@ -131,9 +156,9 @@ export default function ExercisesTopicPage() {
       return groupExercisesByTopic(exercises)[0] ?? null
     }
     return (
-      listAllTopicSummaries(listGrammarExercises()).find((t) => t.topic === topic) ?? null
+      buildTopicSummaries(allExercises, topicsMeta).find((t) => t.topic === topic) ?? null
     )
-  }, [exercises, topic])
+  }, [exercises, allExercises, topicsMeta, topic])
 
   const visibleExercises = useMemo(
     () => (typeFilter === "all" ? exercises : exercises.filter((e) => e.type === typeFilter)),
@@ -233,6 +258,8 @@ export default function ExercisesTopicPage() {
           <MaterialsGrid materials={materials} />
         ) : tab === "explanation" ? (
           <ExplanationPreview />
+        ) : loading && exercises.length === 0 ? (
+          <CardGridSkeleton count={4} columns={2} />
         ) : (
           <>
         {exercises.length > 0 && (
@@ -430,6 +457,7 @@ function AssignDialog({
   const [dueDate, setDueDate] = useState<string>("")
   const [unlimited, setUnlimited] = useState<boolean>(true)
   const [timeLimit, setTimeLimit] = useState<string>("20")
+  const [assigning, setAssigning] = useState(false)
 
   useEffect(() => {
     if (!open) return
@@ -441,7 +469,7 @@ function AssignDialog({
     )
   }, [open, exercise])
 
-  const submit = () => {
+  const submit = async () => {
     if (!exercise) return
     if (!groupId) {
       toast({ title: "Pick a group", variant: "destructive" })
@@ -456,18 +484,29 @@ function AssignDialog({
       toast({ title: "Enter a valid time limit", variant: "destructive" })
       return
     }
-    createHomework({
-      title: exercise.title,
-      description: exercise.description,
-      subject: "grammar",
-      groupId,
-      dueAt: new Date(dueDate).toISOString(),
-      estimatedMinutes: Math.max(1, exercise.estimatedTime),
-      createdBy: createdByName,
-      exerciseSlug: exercise.slug,
-      timeLimitMinutes: unlimited ? undefined : parsedLimit,
-    })
-    onAssigned()
+    setAssigning(true)
+    try {
+      await homeworkApi.create({
+        title: exercise.title,
+        description: exercise.description,
+        subject: "grammar",
+        groupId,
+        dueAt: new Date(dueDate).toISOString(),
+        estimatedMinutes: Math.max(1, exercise.estimatedTime),
+        createdBy: createdByName,
+        exerciseSlug: exercise.slug,
+        timeLimitMinutes: unlimited ? undefined : parsedLimit,
+      })
+      onAssigned()
+    } catch (err) {
+      toast({
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
+    }
   }
 
   return (
@@ -564,6 +603,7 @@ function AssignDialog({
         <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
           <Button
             onClick={submit}
+            loading={assigning}
             disabled={groups.length === 0}
             className="bg-blue-500 hover:bg-blue-600 gap-1.5"
           >

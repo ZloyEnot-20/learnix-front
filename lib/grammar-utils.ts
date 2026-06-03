@@ -73,23 +73,35 @@ export function groupExercisesByTopic(exercises: GrammarExercise[]): TopicSummar
 export function listAllTopicSummaries(
   exercises: GrammarExercise[],
 ): TopicSummary[] {
+  return buildTopicSummaries(exercises, TOPICS_META)
+}
+
+/**
+ * Like {@link listAllTopicSummaries} but with an explicit topic-meta list, so
+ * callers can supply folders fetched from the database instead of the bundled
+ * JSON. Topics with real exercises keep real counts; the rest are placeholders.
+ */
+export function buildTopicSummaries(
+  exercises: GrammarExercise[],
+  metas: TopicMeta[],
+): TopicSummary[] {
   const real = groupExercisesByTopic(exercises)
   const realSlugs = new Set(real.map((t) => t.topic))
-  const placeholders: TopicSummary[] = TOPICS_META.filter(
-    (m) => !realSlugs.has(m.slug),
-  ).map((m) => ({
-    topic: m.slug,
-    title: m.title,
-    category: "grammar",
-    exercises: [],
-    exerciseCount: m.exerciseCount,
-    questionCount: m.questionCount,
-    levels: [m.levels],
-    totalMinutes: m.totalMinutes,
-    description: m.description,
-    comingSoon: true,
-  }))
-  const metaOrder = new Map(TOPICS_META.map((t, idx) => [t.slug, idx]))
+  const placeholders: TopicSummary[] = metas
+    .filter((m) => !realSlugs.has(m.slug))
+    .map((m) => ({
+      topic: m.slug,
+      title: m.title,
+      category: "grammar",
+      exercises: [],
+      exerciseCount: m.exerciseCount,
+      questionCount: m.questionCount,
+      levels: [m.levels],
+      totalMinutes: m.totalMinutes,
+      description: m.description,
+      comingSoon: true,
+    }))
+  const metaOrder = new Map(metas.map((t, idx) => [t.slug, idx]))
   return [...real, ...placeholders].sort((a, b) => {
     const ai = metaOrder.get(a.topic) ?? Number.MAX_SAFE_INTEGER
     const bi = metaOrder.get(b.topic) ?? Number.MAX_SAFE_INTEGER

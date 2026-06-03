@@ -17,6 +17,8 @@ import type {
 import type { EntryTestSubmission } from "./entry-test-storage"
 import type { TestResult } from "./test-results-storage"
 import type { ExerciseResultEvent, TopicStat } from "./grammar-analytics"
+import type { GrammarExercise } from "./grammar-types"
+import type { TopicMeta } from "./grammar-utils"
 
 // ---------- Auth ----------
 export interface AuthUser {
@@ -63,6 +65,10 @@ export const studentsApi = {
     api.patch<Student>(`/students/${id}`, patch),
   remove: (id: string) => api.del(`/students/${id}`),
   progress: (id: string) => api.get<StudentProgress>(`/students/${id}/progress`),
+  context: (id: string) =>
+    api.get<{ groupName: string | null; teacherName: string | null }>(
+      `/students/${id}/context`,
+    ),
 }
 
 // ---------- Homework ----------
@@ -78,6 +84,13 @@ export const homeworkApi = {
   },
   grade: (submissionId: string, patch: Partial<HomeworkSubmission>) =>
     api.patch<HomeworkSubmission>(`/homework/submissions/${submissionId}`, patch),
+  details: (id: string) =>
+    api.get<{
+      homework: HomeworkAssignment
+      group: Group | null
+      students: Student[]
+      submissions: HomeworkSubmission[]
+    }>(`/homework/${id}/details`),
   mine: () => api.get<StudentHomeworkEntry[]>("/homework/mine"),
   start: (homeworkId: string) =>
     api.post<HomeworkSubmission>("/homework/start", { homeworkId }),
@@ -138,6 +151,38 @@ export const analyticsApi = {
   record: (event: Omit<ExerciseResultEvent, "at">) => api.post("/analytics/events", event),
   topics: (studentId?: string) =>
     api.get<TopicStat[]>(`/analytics/topics${studentId ? `?studentId=${studentId}` : ""}`),
+}
+
+// ---------- Notifications ----------
+export interface NotificationItem {
+  id: string
+  studentId: string
+  type: "homework" | "result" | "reminder" | "achievement" | "system" | "entry_test"
+  title: string
+  message: string
+  read: boolean
+  createdAt: string
+}
+export const notificationsApi = {
+  list: () => api.get<NotificationItem[]>("/notifications"),
+  markRead: (id: string, read = true) =>
+    api.patch<NotificationItem>(`/notifications/${id}/read`, { read }),
+  markAllRead: () => api.post("/notifications/read-all"),
+}
+
+// ---------- Exercises catalogue ----------
+export interface ImportCatalogResult {
+  ok: boolean
+  topics: { received: number; written: number }
+  exercises: { received: number; written: number }
+}
+export const exercisesApi = {
+  list: (topic?: string) =>
+    api.get<GrammarExercise[]>(`/exercises${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
+  topics: () => api.get<TopicMeta[]>("/exercises/topics"),
+  get: (slug: string) => api.get<GrammarExercise>(`/exercises/${slug}`),
+  import: (payload: { topics: TopicMeta[]; exercises: GrammarExercise[] }) =>
+    api.post<ImportCatalogResult>("/exercises/import", payload),
 }
 
 // ---------- Test results ----------

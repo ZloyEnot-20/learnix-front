@@ -138,14 +138,6 @@ export function AdminShell({
             <LogOut className="h-4 w-4" />
           </Button>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="mt-2 w-full"
-          onClick={() => router.push("/dashboard")}
-        >
-          Switch to student view
-        </Button>
       </div>
     </nav>
   )

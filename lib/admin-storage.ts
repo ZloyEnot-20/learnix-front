@@ -97,7 +97,7 @@ const KEYS = {
   homework: "ielts_admin_homework",
   submissions: "ielts_admin_submissions",
   payments: "ielts_admin_payments",
-  seeded: "ielts_admin_seeded_v4",
+  seeded: "ielts_admin_seeded_v5",
 }
 
 function safeRead<T>(key: string, fallback: T): T {
@@ -129,6 +129,18 @@ function seedIfNeeded(): void {
   if (typeof window === "undefined") return
   if (localStorage.getItem(KEYS.seeded)) return
 
+  // No mock students or groups. Start every section empty — students come from
+  // the backend, groups/homework/finance are created via the admin UI.
+  safeWrite(KEYS.groups, [])
+  safeWrite(KEYS.students, [])
+  safeWrite(KEYS.homework, [])
+  safeWrite(KEYS.submissions, [])
+  safeWrite(KEYS.payments, [])
+  localStorage.setItem(KEYS.seeded, "1")
+}
+
+// Legacy mock seed — kept for reference only, never called.
+const _legacyMockSeed = (): void => {
   const now = Date.now()
   const day = 1000 * 60 * 60 * 24
 

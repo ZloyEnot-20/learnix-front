@@ -43,21 +43,16 @@ import {
   Trash2,
   X,
 } from "lucide-react"
-import {
-  createHomework,
-  deleteHomework,
-  ensureStudentAccount,
-  ensureDemoHomework,
-  listGroups,
-  listHomework,
-  listStudents,
-  listSubmissions,
-  type Group,
-  type HomeworkAssignment,
-  type HomeworkSubmission,
-  type Student,
-  type Subject,
+import type {
+  Group,
+  HomeworkAssignment,
+  HomeworkSubmission,
+  Student,
+  Subject,
 } from "@/lib/admin-storage"
+import { getGroups, getStudents, peekGroups, peekStudents } from "@/lib/admin-cache"
+import { TableSkeleton } from "./skeletons"
+import { homeworkApi } from "@/lib/api"
 import {
   ensureGrammarSeed,
   listGrammarExercises,
@@ -107,13 +102,16 @@ interface HomeworkManagerProps {
 export default function HomeworkManager({ createdByName, onChanged }: HomeworkManagerProps) {
   const { toast } = useToast()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
-  const [groups, setGroups] = useState<Group[]>([])
+  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
+  const [students, setStudents] = useState<Student[]>(() => peekStudents() ?? [])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
-  const [, setStudents] = useState<Student[]>([])
 
+  const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [showStats, setShowStats] = useState(false)
+  const [assigning, setAssigning] = useState(false)
+  const [removingId, setRemovingId] = useState<string | null>(null)
 
   const [search, setSearch] = useState("")
   const [groupFilter, setGroupFilter] = useState<string>("all")
@@ -137,21 +135,32 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     timeLimitMinutes: "20",
   })
 
-  const refresh = () => {
-    setHomework(listHomework())
-    setGroups(listGroups())
-    setSubmissions(listSubmissions())
-    setStudents(listStudents())
+  const refresh = async () => {
     setGrammarExercises(listGrammarExercises())
+    try {
+      const [hw, subs, g, s] = await Promise.all([
+        homeworkApi.list(),
+        homeworkApi.submissions(),
+        getGroups(),
+        getStudents(),
+      ])
+      setHomework(hw)
+      setSubmissions(subs)
+      setGroups(g)
+      setStudents(s)
+    } catch {
+      toast({
+        title: "Failed to load homework",
+        description: "Make sure the backend is running.",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
   useEffect(() => {
     ensureGrammarSeed()
-    // Make sure the demo student (Alex) is attached to a group so homework
-    // assigned to that group reaches their dashboard, and always has one
-    // pending demo assignment.
-    ensureStudentAccount()
-    ensureDemoHomework()
-    refresh()
+    void refresh()
   }, [])
 
   const grammarTopics = useMemo(
@@ -259,7 +268,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     })
   }, [groups, hwRows])
 
-  const submit = () => {
+  const submit = async () => {
     if (!assignForm.groupId) {
       toast({ title: "Pick a group", variant: "destructive" })
       return
@@ -283,47 +292,71 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     }
     const timeLimitMinutes = assignForm.unlimited ? undefined : parsedLimit
     const dueIso = new Date(assignForm.dueDate).toISOString()
-    let count = 0
-    for (const slug of assignForm.exerciseSlugs) {
-      const ex = grammarExercises.find((e) => e.slug === slug)
-      if (!ex) continue
-      createHomework({
-        title: ex.title,
-        description: ex.description,
-        subject: "grammar",
-        groupId: assignForm.groupId,
-        dueAt: dueIso,
-        estimatedMinutes: Math.max(1, ex.estimatedTime),
-        createdBy: createdByName,
-        exerciseSlug: ex.slug,
-        timeLimitMinutes,
+    const exercises = assignForm.exerciseSlugs
+      .map((slug) => grammarExercises.find((e) => e.slug === slug))
+      .filter((e): e is GrammarExercise => Boolean(e))
+    setAssigning(true)
+    try {
+      await Promise.all(
+        exercises.map((ex) =>
+          homeworkApi.create({
+            title: ex.title,
+            description: ex.description,
+            subject: "grammar",
+            groupId: assignForm.groupId,
+            dueAt: dueIso,
+            estimatedMinutes: Math.max(1, ex.estimatedTime),
+            createdBy: createdByName,
+            exerciseSlug: ex.slug,
+            timeLimitMinutes,
+          }),
+        ),
+      )
+      const count = exercises.length
+      toast({
+        title:
+          count === 1
+            ? "1 exercise assigned to group"
+            : `${count} exercises assigned to group`,
       })
-      count += 1
+      setShowCreate(false)
+      setAssignForm({
+        groupId: "",
+        dueDate: defaultDueDate(),
+        topic: "",
+        exerciseSlugs: [],
+        unlimited: true,
+        timeLimitMinutes: "20",
+      })
+      await refresh()
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not assign homework",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
     }
-    toast({
-      title:
-        count === 1
-          ? "1 exercise assigned to group"
-          : `${count} exercises assigned to group`,
-    })
-    setShowCreate(false)
-    setAssignForm({
-      groupId: "",
-      dueDate: defaultDueDate(),
-      topic: "",
-      exerciseSlugs: [],
-      unlimited: true,
-      timeLimitMinutes: "20",
-    })
-    refresh()
-    onChanged?.()
   }
 
-  const remove = (hw: HomeworkAssignment) => {
+  const remove = async (hw: HomeworkAssignment) => {
     if (!confirm(`Delete homework "${hw.title}" and all its submissions?`)) return
-    deleteHomework(hw.id)
-    refresh()
-    onChanged?.()
+    setRemovingId(hw.id)
+    try {
+      await homeworkApi.remove(hw.id)
+      await refresh()
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not delete homework",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRemovingId(null)
+    }
   }
 
   const subjectFilters: Array<{ key: "all" | Subject; label: string }> = [
@@ -549,21 +582,29 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
             </div>
           </CardHeader>
           <CardContent>
-            <HomeworkTable
-              rows={activeRows}
-              emptyTitle="No active tests"
-              emptyHint={
-                groups.length === 0
-                  ? "Create a group first, then assign homework to it."
-                  : "Click \"Assign homework\" to assign your first task."
-              }
-              onChanged={() => {
-                refresh()
-                onChanged?.()
-              }}
-              onDelete={remove}
-              mode="active"
-            />
+            {loading ? (
+              <TableSkeleton rows={5} columns={5} />
+            ) : (
+              <HomeworkTable
+                rows={activeRows}
+                students={students}
+                groups={groups}
+                submissions={submissions}
+                emptyTitle="No active tests"
+                emptyHint={
+                  groups.length === 0
+                    ? "Create a group first, then assign homework to it."
+                    : "Click \"Assign homework\" to assign your first task."
+                }
+                onChanged={() => {
+                  refresh()
+                  onChanged?.()
+                }}
+                onDelete={remove}
+                deletingId={removingId}
+                mode="active"
+              />
+            )}
           </CardContent>
         </Card>
       </div>
@@ -621,6 +662,9 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
           <div className="max-h-[60vh] overflow-auto">
             <HomeworkTable
               rows={historyRows}
+              students={students}
+              groups={groups}
+              submissions={submissions}
               emptyTitle="No previous tests"
               emptyHint="Past homework will be archived here when its due date passes."
               onChanged={() => {
@@ -628,6 +672,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                 onChanged?.()
               }}
               onDelete={remove}
+              deletingId={removingId}
               mode="history"
             />
           </div>
@@ -836,6 +881,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
           <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
             <Button
               onClick={submit}
+              loading={assigning}
               disabled={
                 !assignForm.groupId ||
                 !assignForm.topic ||
@@ -883,17 +929,25 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
 
 function HomeworkTable({
   rows,
+  students,
+  groups,
+  submissions,
   emptyTitle,
   emptyHint,
   onChanged,
   onDelete,
+  deletingId,
   mode,
 }: {
   rows: HwRow[]
+  students: Student[]
+  groups: Group[]
+  submissions: HomeworkSubmission[]
   emptyTitle: string
   emptyHint: string
   onChanged?: () => void
   onDelete: (hw: HomeworkAssignment) => void
+  deletingId?: string | null
   mode: "active" | "history"
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
@@ -1027,6 +1081,7 @@ function HomeworkTable({
                       <Button
                         variant="ghost"
                         size="sm"
+                        loading={deletingId === row.homework.id}
                         onClick={(e) => {
                           e.stopPropagation()
                           onDelete(row.homework)
@@ -1052,6 +1107,11 @@ function HomeworkTable({
                         <div className="px-3 py-4 sm:px-4">
                           <HomeworkStudentResults
                             homework={row.homework}
+                            students={students}
+                            groups={groups}
+                            submissions={submissions.filter(
+                              (s) => s.homeworkId === row.homework.id,
+                            )}
                             onChanged={onChanged}
                           />
                         </div>

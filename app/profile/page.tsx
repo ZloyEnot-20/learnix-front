@@ -43,14 +43,9 @@ import {
   Users,
 } from "lucide-react"
 import Link from "next/link"
-import { getTestResults, type TestResult } from "@/lib/test-results-storage"
+import type { TestResult } from "@/lib/test-results-storage"
 import { TestResultsModal } from "@/components/test-results-modal"
-import {
-  ensureStudentAccount,
-  getGroup,
-  getStudent,
-  getTeacherName,
-} from "@/lib/admin-storage"
+import { studentsApi, testResultsApi } from "@/lib/api"
 import StudentStatsPanel from "@/components/student/student-stats-panel"
 import { cn } from "@/lib/utils"
 
@@ -94,19 +89,38 @@ export default function ProfilePage() {
     if (!isLoading && !user) {
       router.push("/login")
     }
-    if (user) {
-      setName(user.name)
-      setEmail(user.email)
-      if (user.role === "student") {
-        const student =
-          getStudent(user.id) ??
-          ensureStudentAccount({ id: user.id, name: user.name, email: user.email })
-        const group = student.groupId ? getGroup(student.groupId) : undefined
-        setGroupName(group?.name ?? null)
-        setTeacherName(getTeacherName(group?.teacherId) ?? null)
-      }
+    // Staff (super admin / admin / teacher) belong in the admin panel.
+    if (!isLoading && user && user.role !== "student") {
+      router.push("/admin")
     }
-    setTestResults(getTestResults())
+    if (!user) return
+    setName(user.name)
+    setEmail(user.email)
+
+    let cancelled = false
+    if (user.role === "student") {
+      const studentId = user.studentId ?? user.id
+      studentsApi
+        .context(studentId)
+        .then((ctx) => {
+          if (cancelled) return
+          setGroupName(ctx.groupName)
+          setTeacherName(ctx.teacherName)
+        })
+        .catch(() => {})
+    }
+    testResultsApi
+      .list()
+      .then((results) => {
+        if (!cancelled) setTestResults(results)
+      })
+      .catch(() => {
+        if (!cancelled) setTestResults([])
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [user, isLoading, router])
 
   const stats = useMemo(() => {
@@ -128,7 +142,7 @@ export default function ProfilePage() {
 
   const dirty = user ? name !== user.name || email !== user.email : false
 
-  if (isLoading || !user) {
+  if (isLoading || !user || user.role !== "student") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />

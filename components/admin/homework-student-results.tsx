@@ -20,15 +20,14 @@ import {
   Target,
   XCircle,
 } from "lucide-react"
-import {
-  getGroup,
-  listStudents,
-  listSubmissions,
-  updateSubmission,
-  type HomeworkAssignment,
-  type HomeworkStatus,
-  type HomeworkSubmission,
+import type {
+  Group,
+  HomeworkAssignment,
+  HomeworkStatus,
+  HomeworkSubmission,
+  Student,
 } from "@/lib/admin-storage"
+import { homeworkApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
@@ -58,13 +57,22 @@ interface Row {
 
 export function HomeworkStudentResults({
   homework,
+  students,
+  groups,
+  submissions,
   onChanged,
 }: {
   homework: HomeworkAssignment
+  /** Preloaded by the parent — no per-click fetch. */
+  students: Student[]
+  groups: Group[]
+  /** Submissions for THIS homework (already filtered by the parent). */
+  submissions: HomeworkSubmission[]
   onChanged?: () => void
 }) {
   const { toast } = useToast()
   const [rows, setRows] = useState<Row[]>([])
+  const [savingId, setSavingId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const selectedRow = useMemo(
@@ -72,15 +80,15 @@ export function HomeworkStudentResults({
     [rows, selectedId],
   )
 
+  // Build rows from preloaded data. Submissions are linked to this homework via
+  // `Submission.homeworkId`, so everything is already in memory — no fetch.
   useEffect(() => {
-    const group = getGroup(homework.groupId)
-    const allStudents = listStudents()
-    const submissions = listSubmissions().filter((s) => s.homeworkId === homework.id)
+    const group = groups.find((g) => g.id === homework.groupId)
     const memberIds = group?.studentIds ?? []
 
     const built: Row[] = memberIds
       .map((sid) => {
-        const student = allStudents.find((s) => s.id === sid)
+        const student = students.find((s) => s.id === sid)
         if (!student) return null
         const sub = submissions.find((x) => x.studentId === sid)
         return {
@@ -96,7 +104,7 @@ export function HomeworkStudentResults({
 
     setRows(built)
     setSelectedId(null)
-  }, [homework])
+  }, [homework, students, groups, submissions])
 
   // Completed students first, then in progress, then not started.
   const sortedRows = useMemo(() => {
@@ -129,7 +137,7 @@ export function HomeworkStudentResults({
     )
   }
 
-  const saveRow = (row: Row) => {
+  const saveRow = async (row: Row) => {
     if (!row.submission) {
       toast({
         title: "No submission record",
@@ -138,24 +146,35 @@ export function HomeworkStudentResults({
       })
       return
     }
-    updateSubmission(row.submission.id, {
-      feedback: row.feedback.trim() || undefined,
-    })
-    setRows((prev) =>
-      prev.map((r) =>
-        r.studentId === row.studentId
-          ? {
-              ...r,
-              dirty: false,
-              submission: r.submission
-                ? { ...r.submission, feedback: r.feedback.trim() || undefined }
-                : undefined,
-            }
-          : r,
-      ),
-    )
-    toast({ title: "Saved", description: `${row.studentName} updated` })
-    onChanged?.()
+    setSavingId(row.studentId)
+    try {
+      await homeworkApi.grade(row.submission.id, {
+        feedback: row.feedback.trim() || undefined,
+      })
+      setRows((prev) =>
+        prev.map((r) =>
+          r.studentId === row.studentId
+            ? {
+                ...r,
+                dirty: false,
+                submission: r.submission
+                  ? { ...r.submission, feedback: r.feedback.trim() || undefined }
+                  : undefined,
+              }
+            : r,
+        ),
+      )
+      toast({ title: "Saved", description: `${row.studentName} updated` })
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not save",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setSavingId(null)
+    }
   }
 
   if (rows.length === 0) {
@@ -352,7 +371,12 @@ export function HomeworkStudentResults({
               </DialogHeader>
               <ScrollArea className="flex-1 overflow-y-auto">
                 <div className="px-6 py-5">
-                  <StudentDetail row={selectedRow} onFeedback={updateRow} onSave={saveRow} />
+                  <StudentDetail
+                    row={selectedRow}
+                    onFeedback={updateRow}
+                    onSave={saveRow}
+                    saving={savingId === selectedRow.studentId}
+                  />
                 </div>
               </ScrollArea>
             </>
@@ -367,10 +391,12 @@ function StudentDetail({
   row,
   onFeedback,
   onSave,
+  saving = false,
 }: {
   row: Row
   onFeedback: (studentId: string, patch: Partial<Row>) => void
   onSave: (row: Row) => void
+  saving?: boolean
 }) {
   const attempt = row.submission?.attempt
   const accuracy =
@@ -486,6 +512,7 @@ function StudentDetail({
         <Button
           size="sm"
           onClick={() => onSave(row)}
+          loading={saving}
           disabled={!row.dirty}
           className={cn("bg-emerald-600 hover:bg-emerald-700", !row.dirty && "opacity-50")}
         >

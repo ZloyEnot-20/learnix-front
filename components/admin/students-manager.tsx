@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,6 +24,7 @@ import {
 import {
   Layers,
   Plus,
+  RefreshCw,
   Search,
   Trash2,
   UserMinus,
@@ -31,14 +32,11 @@ import {
   Wallet,
   X,
 } from "lucide-react"
-import {
-  createStudent,
-  deleteStudent,
-  listGroups,
-  listStudents,
-  type Group,
-  type Student,
-} from "@/lib/admin-storage"
+import type { Group, Student } from "@/lib/admin-storage"
+import { studentsApi } from "@/lib/api"
+import { invalidateStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
+import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
@@ -59,13 +57,32 @@ interface StudentsManagerProps {
 
 export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const { toast } = useToast()
-  const [students, setStudents] = useState<Student[]>([])
-  const [groups, setGroups] = useState<Group[]>([])
+  const { students, groups, ready, refreshAll } = useAdminData()
   const [search, setSearch] = useState("")
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [showCreate, setShowCreate] = useState(false)
   const [selected, setSelected] = useState<Student | null>(null)
   const [showDetail, setShowDetail] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [removingId, setRemovingId] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    try {
+      invalidateStudents()
+      await refreshAll(true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not refresh students",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRefreshing(false)
+    }
+  }
 
   const [form, setForm] = useState({
     name: "",
@@ -75,15 +92,6 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     monthlyFee: 1_000_000,
     notes: "",
   })
-
-  const refresh = () => {
-    setStudents(listStudents())
-    setGroups(listGroups())
-  }
-
-  useEffect(() => {
-    refresh()
-  }, [])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -98,7 +106,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     })
   }, [students, search, groupFilter])
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.name.trim() || !form.email.trim()) {
       toast({
         title: "Missing fields",
@@ -107,27 +115,51 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
       })
       return
     }
-    createStudent({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || undefined,
-      groupId: form.groupId || undefined,
-      monthlyFee: Number(form.monthlyFee) || 0,
-      notes: form.notes.trim() || undefined,
-    })
-    toast({ title: "Student added", description: form.name })
-    setForm({ name: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
-    setShowCreate(false)
-    refresh()
-    onChanged?.()
+    setCreating(true)
+    try {
+      await studentsApi.create({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim() || undefined,
+        groupId: form.groupId || undefined,
+        monthlyFee: Number(form.monthlyFee) || 0,
+        notes: form.notes.trim() || undefined,
+      })
+      toast({ title: "Student added", description: form.name })
+      setForm({ name: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
+      setShowCreate(false)
+      invalidateStudents()
+      await refreshAll(true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not add student",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setCreating(false)
+    }
   }
 
-  const remove = (id: string, name: string) => {
+  const remove = async (id: string, name: string) => {
     if (!confirm(`Delete ${name}? This also removes their homework and payments.`)) return
-    deleteStudent(id)
-    refresh()
-    onChanged?.()
-    toast({ title: "Student removed" })
+    setRemovingId(id)
+    try {
+      await studentsApi.remove(id)
+      invalidateStudents()
+      await refreshAll(true)
+      onChanged?.()
+      toast({ title: "Student removed" })
+    } catch (err) {
+      toast({
+        title: "Could not remove student",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRemovingId(null)
+    }
   }
 
   const openDetail = (s: Student) => {
@@ -160,9 +192,14 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     return map
   }, [students])
 
+  const loading = !ready && students.length === 0
+
   return (
     <>
       <div className="space-y-6">
+        {loading ? (
+          <StatCardsSkeleton count={4} />
+        ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Stat
             icon={Users}
@@ -193,6 +230,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
             accent="bg-blue-50 text-blue-700"
           />
         </div>
+        )}
 
         {groups.length > 0 && (
           <Card>
@@ -320,6 +358,15 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                   </SelectContent>
                 </Select>
                 <Button
+                  variant="outline"
+                  onClick={handleRefresh}
+                  loading={refreshing}
+                  aria-label="Refresh students"
+                >
+                  <RefreshCw className={cn("h-4 w-4", !refreshing && "mr-1.5")} />
+                  {!refreshing && "Refresh"}
+                </Button>
+                <Button
                   onClick={() => setShowCreate(true)}
                   className="bg-[#C8102E] hover:bg-[#A00D25]"
                 >
@@ -331,7 +378,9 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
           </CardHeader>
 
           <CardContent>
-            {filtered.length === 0 ? (
+            {loading ? (
+              <TableSkeleton rows={6} columns={6} />
+            ) : filtered.length === 0 ? (
               <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
                 <div className="rounded-full bg-white p-3 shadow-sm">
                   <Users className="h-6 w-6 text-slate-400" />
@@ -410,6 +459,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                               variant="ghost"
                               size="sm"
                               onClick={() => remove(s.id, s.name)}
+                              loading={removingId === s.id}
                               className="text-slate-400 hover:text-rose-600 hover:bg-rose-50"
                               aria-label={`Delete ${s.name}`}
                             >
@@ -512,7 +562,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
             </div>
           </div>
           <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-            <Button onClick={submit} className="bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button onClick={submit} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">
               Add student
             </Button>
             <Button variant="outline" onClick={() => setShowCreate(false)}>

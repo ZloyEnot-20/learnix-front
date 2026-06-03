@@ -28,16 +28,14 @@ import {
   Users,
   XCircle,
 } from "lucide-react"
-import {
-  getGroup,
-  listStudents,
-  listSubmissions,
-  updateSubmission,
-  type HomeworkAssignment,
-  type HomeworkStatus,
-  type HomeworkSubmission,
-  type Subject,
+import type {
+  HomeworkAssignment,
+  HomeworkStatus,
+  HomeworkSubmission,
+  Subject,
 } from "@/lib/admin-storage"
+import { getGroups, getStudents } from "@/lib/admin-cache"
+import { homeworkApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
@@ -91,8 +89,10 @@ export function HomeworkDetailModal({
 }: HomeworkDetailModalProps) {
   const { toast } = useToast()
   const [rows, setRows] = useState<Row[]>([])
+  const [groupName, setGroupName] = useState<string>("—")
   const [filter, setFilter] = useState<"all" | HomeworkStatus>("all")
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+  const [savingId, setSavingId] = useState<string | null>(null)
 
   const toggleExpanded = (studentId: string) => {
     setExpanded((prev) => ({ ...prev, [studentId]: !prev[studentId] }))
@@ -101,33 +101,48 @@ export function HomeworkDetailModal({
   useEffect(() => {
     if (!homework || !open) {
       setRows([])
+      setGroupName("—")
       return
     }
-    const group = getGroup(homework.groupId)
-    const allStudents = listStudents()
-    const submissions = listSubmissions().filter((s) => s.homeworkId === homework.id)
-    const memberIds = group?.studentIds ?? []
+    let cancelled = false
+    Promise.all([
+      getGroups(),
+      getStudents(),
+      homeworkApi.submissions({ homeworkId: homework.id }),
+    ])
+      .then(([groups, allStudents, submissions]) => {
+        if (cancelled) return
+        const group = groups.find((g) => g.id === homework.groupId)
+        setGroupName(group?.name ?? "—")
+        const memberIds = group?.studentIds ?? []
 
-    const built: Row[] = memberIds
-      .map((sid) => {
-        const student = allStudents.find((s) => s.id === sid)
-        if (!student) return null
-        const sub = submissions.find((x) => x.studentId === sid)
-        return {
-          studentId: sid,
-          studentName: student.name,
-          submission: sub,
-          status: (sub?.status ?? "pending") as HomeworkStatus,
-          score: sub?.score != null ? String(sub.score) : "",
-          feedback: sub?.feedback ?? "",
-          dirty: false,
-        }
+        const built: Row[] = memberIds
+          .map((sid) => {
+            const student = allStudents.find((s) => s.id === sid)
+            if (!student) return null
+            const sub = submissions.find((x) => x.studentId === sid)
+            return {
+              studentId: sid,
+              studentName: student.name,
+              submission: sub,
+              status: (sub?.status ?? "pending") as HomeworkStatus,
+              score: sub?.score != null ? String(sub.score) : "",
+              feedback: sub?.feedback ?? "",
+              dirty: false,
+            }
+          })
+          .filter(Boolean) as Row[]
+
+        setRows(built)
+        setFilter("all")
+        setExpanded({})
       })
-      .filter(Boolean) as Row[]
-
-    setRows(built)
-    setFilter("all")
-    setExpanded({})
+      .catch(() => {
+        if (!cancelled) setRows([])
+      })
+    return () => {
+      cancelled = true
+    }
   }, [homework, open])
 
   const counts = useMemo(() => {
@@ -206,7 +221,7 @@ export function HomeworkDetailModal({
     )
   }
 
-  const saveRow = (row: Row) => {
+  const saveRow = async (row: Row) => {
     if (!row.submission) {
       toast({
         title: "No submission record",
@@ -229,27 +244,38 @@ export function HomeworkDetailModal({
     const submittedAt = row.status === "submitted" || row.status === "graded"
       ? row.submission.submittedAt ?? new Date().toISOString()
       : undefined
-    updateSubmission(row.submission.id, {
-      status: row.status,
-      score: parsedScore,
-      feedback: row.feedback.trim() || undefined,
-      submittedAt,
-    })
-    setRows((prev) =>
-      prev.map((r) =>
-        r.studentId === row.studentId
-          ? {
-              ...r,
-              dirty: false,
-              submission: r.submission
-                ? { ...r.submission, status: r.status, score: parsedScore, feedback: r.feedback.trim() || undefined, submittedAt }
-                : undefined,
-            }
-          : r,
-      ),
-    )
-    toast({ title: "Saved", description: `${row.studentName} updated` })
-    onChanged?.()
+    setSavingId(row.studentId)
+    try {
+      await homeworkApi.grade(row.submission.id, {
+        status: row.status,
+        score: parsedScore,
+        feedback: row.feedback.trim() || undefined,
+        submittedAt,
+      })
+      setRows((prev) =>
+        prev.map((r) =>
+          r.studentId === row.studentId
+            ? {
+                ...r,
+                dirty: false,
+                submission: r.submission
+                  ? { ...r.submission, status: r.status, score: parsedScore, feedback: r.feedback.trim() || undefined, submittedAt }
+                  : undefined,
+              }
+            : r,
+        ),
+      )
+      toast({ title: "Saved", description: `${row.studentName} updated` })
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not save",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setSavingId(null)
+    }
   }
 
   const filters: Array<{ key: "all" | HomeworkStatus; label: string }> = [
@@ -279,7 +305,7 @@ export function HomeworkDetailModal({
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
                 <span className="inline-flex items-center gap-1">
                   <Users className="h-3.5 w-3.5" />
-                  {getGroup(homework.groupId)?.name ?? "—"}
+                  {groupName}
                 </span>
                 <span
                   className={cn(
@@ -617,6 +643,7 @@ export function HomeworkDetailModal({
                       <Button
                         size="sm"
                         onClick={() => saveRow(row)}
+                        loading={savingId === row.studentId}
                         disabled={!row.dirty}
                         className={cn(
                           "bg-emerald-600 hover:bg-emerald-700",

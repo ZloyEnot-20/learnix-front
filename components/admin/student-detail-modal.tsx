@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -36,15 +36,17 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import {
-  getGroup,
-  getStudentProgress,
-  listHomework,
-  listPayments,
-  listSubmissions,
-  type Student,
-  type Subject,
+import type {
+  Group,
+  HomeworkAssignment,
+  HomeworkSubmission,
+  Payment,
+  Student,
+  StudentProgress,
+  Subject,
 } from "@/lib/admin-storage"
+import { getGroups } from "@/lib/admin-cache"
+import { homeworkApi, paymentsApi, studentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = {
@@ -84,28 +86,59 @@ function initials(name: string): string {
     .toUpperCase()
 }
 
+interface DetailData {
+  progress: StudentProgress
+  group?: Group
+  homeworkRows: Array<{ hw: HomeworkAssignment; sub: HomeworkSubmission }>
+  payments: Payment[]
+  scoreSeries: Array<{ label: string; score: number }>
+}
+
 export function StudentDetailModal({ student, open, onOpenChange }: StudentDetailModalProps) {
-  const data = useMemo(() => {
-    if (!student) return null
-    const progress = getStudentProgress(student.id)
-    const group = student.groupId ? getGroup(student.groupId) : undefined
-    const homeworkList = listHomework()
-    const submissions = listSubmissions().filter((s) => s.studentId === student.id)
-    const homeworkRows = submissions
-      .map((sub) => {
-        const hw = homeworkList.find((h) => h.id === sub.homeworkId)
-        return hw ? { hw, sub } : null
+  const [data, setData] = useState<DetailData | null>(null)
+
+  useEffect(() => {
+    if (!student || !open) {
+      setData(null)
+      return
+    }
+    let cancelled = false
+    Promise.all([
+      studentsApi.progress(student.id),
+      getGroups(),
+      homeworkApi.list(),
+      homeworkApi.submissions({ studentId: student.id }),
+      paymentsApi.list({ studentId: student.id }),
+    ])
+      .then(([progress, groups, homeworkList, submissions, allPayments]) => {
+        if (cancelled) return
+        const group = student.groupId
+          ? groups.find((g) => g.id === student.groupId)
+          : undefined
+        const homeworkRows = submissions
+          .map((sub) => {
+            const hw = homeworkList.find((h) => h.id === sub.homeworkId)
+            return hw ? { hw, sub } : null
+          })
+          .filter(Boolean) as Array<{ hw: HomeworkAssignment; sub: HomeworkSubmission }>
+        homeworkRows.sort(
+          (a, b) => new Date(b.hw.createdAt).getTime() - new Date(a.hw.createdAt).getTime(),
+        )
+
+        const payments = [...allPayments].sort(
+          (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime(),
+        )
+
+        const scoreSeries = buildScoreSeries(student.id, progress.averageScore)
+
+        setData({ progress, group, homeworkRows, payments, scoreSeries })
       })
-      .filter(Boolean) as Array<{ hw: ReturnType<typeof listHomework>[number]; sub: ReturnType<typeof listSubmissions>[number] }>
-    homeworkRows.sort((a, b) => new Date(b.hw.createdAt).getTime() - new Date(a.hw.createdAt).getTime())
-
-    const payments = listPayments()
-      .filter((p) => p.studentId === student.id)
-      .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())
-
-    const scoreSeries = buildScoreSeries(student.id, progress.averageScore)
-
-    return { progress, group, homeworkRows, payments, scoreSeries }
+      .catch(() => {
+        if (!cancelled) setData(null)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [student, open])
 
   if (!student || !data) return null

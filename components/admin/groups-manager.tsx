@@ -22,21 +22,27 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet } from "lucide-react"
-import {
-  addStudentToGroup,
-  createGroup,
-  deleteGroup,
-  getGroupFinanceSummary,
-  listGroups,
-  listStudents,
-  removeStudentFromGroup,
-  updateGroup,
-  type Group,
-  type Student,
-} from "@/lib/admin-storage"
+import type { Group, Student } from "@/lib/admin-storage"
+import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
+import { groupsApi } from "@/lib/api"
+import { CardGridSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
+
+interface GroupSummary {
+  expectedTotal: number
+  paidTotal: number
+  overdueTotal: number
+  pendingTotal: number
+}
+const EMPTY_SUMMARY: GroupSummary = {
+  expectedTotal: 0,
+  paidTotal: 0,
+  overdueTotal: 0,
+  pendingTotal: 0,
+}
 
 function initials(name: string): string {
   return name
@@ -55,13 +61,17 @@ interface GroupsManagerProps {
 
 export default function GroupsManager({ canCreate = true, onChanged }: GroupsManagerProps) {
   const { toast } = useToast()
-  const [groups, setGroups] = useState<Group[]>([])
-  const [students, setStudents] = useState<Student[]>([])
+  const { students, groups, ready, refreshAll } = useAdminData()
+  const [summaries, setSummaries] = useState<Record<string, GroupSummary>>({})
   const [showCreate, setShowCreate] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
   const [showAddStudent, setShowAddStudent] = useState(false)
   const [studentToAdd, setStudentToAdd] = useState("")
   const [studentDetail, setStudentDetail] = useState<Student | null>(null)
+  const [creating, setCreating] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [addingStudent, setAddingStudent] = useState(false)
+  const [removingId, setRemovingId] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     name: "",
@@ -69,14 +79,23 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     monthlyFee: 1_000_000,
   })
 
-  const refresh = () => {
-    setGroups(listGroups())
-    setStudents(listStudents())
+  const loadSummaries = async (groupList: Group[], force = false) => {
+    const data = await getGroupSummaries(
+      groupList.map((g) => g.id),
+      force,
+    )
+    setSummaries(data)
   }
 
   useEffect(() => {
-    refresh()
-  }, [])
+    if (groups.length === 0) {
+      setSummaries({})
+      return
+    }
+    void loadSummaries(groups)
+  }, [groups])
+
+  const summaryFor = (id: string): GroupSummary => summaries[id] ?? EMPTY_SUMMARY
 
   const selectedGroup = useMemo(
     () => groups.find((g) => g.id === selectedGroupId) ?? null,
@@ -93,51 +112,103 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     return students.filter((s) => !selectedGroup.studentIds.includes(s.id))
   }, [selectedGroup, students])
 
-  const submitGroup = () => {
+  const submitGroup = async () => {
     if (!form.name.trim()) {
       toast({ title: "Name required", variant: "destructive" })
       return
     }
-    createGroup({
-      name: form.name.trim(),
-      description: form.description.trim() || undefined,
-      monthlyFee: Number(form.monthlyFee) || 0,
-    })
-    toast({ title: "Group created" })
-    setForm({ name: "", description: "", monthlyFee: 1_000_000 })
-    setShowCreate(false)
-    refresh()
-    onChanged?.()
+    setCreating(true)
+    try {
+      await groupsApi.create({
+        name: form.name.trim(),
+        description: form.description.trim() || undefined,
+        monthlyFee: Number(form.monthlyFee) || 0,
+      })
+      invalidateGroups()
+      toast({ title: "Group created" })
+      setForm({ name: "", description: "", monthlyFee: 1_000_000 })
+      setShowCreate(false)
+      const { groups: nextGroups } = await refreshAll(true)
+      await loadSummaries(nextGroups, true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not create group",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setCreating(false)
+    }
   }
 
-  const handleDeleteGroup = (g: Group) => {
+  const handleDeleteGroup = async (g: Group) => {
     if (!confirm(`Delete group "${g.name}"? Students will be detached but kept.`)) return
-    deleteGroup(g.id)
-    setSelectedGroupId(null)
-    refresh()
-    onChanged?.()
+    setDeleting(true)
+    try {
+      await groupsApi.remove(g.id)
+      invalidateGroups()
+      setSelectedGroupId(null)
+      const { groups: nextGroups } = await refreshAll(true)
+      await loadSummaries(nextGroups, true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not delete group",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setDeleting(false)
+    }
   }
 
-  const handleAddStudentToGroup = () => {
+  const handleAddStudentToGroup = async () => {
     if (!selectedGroup || !studentToAdd) return
-    addStudentToGroup(selectedGroup.id, studentToAdd)
-    setStudentToAdd("")
-    setShowAddStudent(false)
-    refresh()
-    onChanged?.()
-    toast({ title: "Student added to group" })
+    setAddingStudent(true)
+    try {
+      await groupsApi.addMember(selectedGroup.id, studentToAdd)
+      invalidateGroups()
+      setStudentToAdd("")
+      setShowAddStudent(false)
+      const { groups: nextGroups } = await refreshAll(true)
+      await loadSummaries(nextGroups, true)
+      onChanged?.()
+      toast({ title: "Student added to group" })
+    } catch (err) {
+      toast({
+        title: "Could not add student",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAddingStudent(false)
+    }
   }
 
-  const handleRemoveStudent = (studentId: string) => {
+  const handleRemoveStudent = async (studentId: string) => {
     if (!selectedGroup) return
-    removeStudentFromGroup(selectedGroup.id, studentId)
-    refresh()
-    onChanged?.()
+    setRemovingId(studentId)
+    try {
+      await groupsApi.removeMember(selectedGroup.id, studentId)
+      invalidateGroups()
+      const { groups: nextGroups } = await refreshAll(true)
+      await loadSummaries(nextGroups, true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not remove student",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRemovingId(null)
+    }
   }
 
   // ----- Detail view -----
   if (selectedGroup) {
-    const summary = getGroupFinanceSummary(selectedGroup.id)
+    const summary = summaryFor(selectedGroup.id)
     return (
       <>
         <div className="space-y-4">
@@ -169,6 +240,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                     variant="outline"
                     size="sm"
                     onClick={() => handleDeleteGroup(selectedGroup)}
+                    loading={deleting}
                     className="text-destructive hover:bg-destructive/10"
                   >
                     <Trash2 className="h-4 w-4 mr-1.5" />
@@ -233,6 +305,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemoveStudent(s.id)}
+                        loading={removingId === s.id}
                         className="text-slate-400 hover:text-rose-600"
                         aria-label={`Remove ${s.name} from group`}
                       >
@@ -265,7 +338,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
               </SelectContent>
             </Select>
             <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-              <Button onClick={handleAddStudentToGroup} disabled={!studentToAdd} className="bg-[#C8102E] hover:bg-[#A00D25]">
+              <Button onClick={handleAddStudentToGroup} loading={addingStudent} disabled={!studentToAdd} className="bg-[#C8102E] hover:bg-[#A00D25]">
                 Add
               </Button>
               <Button variant="outline" onClick={() => setShowAddStudent(false)}>
@@ -303,7 +376,9 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           </div>
         </CardHeader>
         <CardContent>
-          {groups.length === 0 ? (
+          {!ready && groups.length === 0 ? (
+            <CardGridSkeleton count={4} columns={2} />
+          ) : groups.length === 0 ? (
             <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
               <div className="rounded-full bg-white p-3 shadow-sm">
                 <Users className="h-6 w-6 text-slate-400" />
@@ -315,7 +390,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {groups.map((g) => {
                 const memberCount = g.studentIds.length
-                const summary = getGroupFinanceSummary(g.id)
+                const summary = summaryFor(g.id)
                 return (
                   <button
                     key={g.id}
@@ -407,7 +482,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
             </div>
           </div>
           <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-            <Button onClick={submitGroup} className="bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button onClick={submitGroup} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">
               Create
             </Button>
             <Button variant="outline" onClick={() => setShowCreate(false)}>

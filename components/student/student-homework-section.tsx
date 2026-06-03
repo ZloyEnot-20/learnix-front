@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { HomeworkSection } from "@/components/homework-section"
-import {
-  ensureStudentAccount,
-  ensureDemoHomework,
-  ensureSeeded,
-  listStudentHomework,
-} from "@/lib/admin-storage"
-import { ensureGrammarSeed, getGrammarExercise } from "@/lib/grammar-storage"
+import { CardGridSkeleton } from "@/components/admin/skeletons"
+import { ensureGrammarSeed } from "@/lib/grammar-storage"
+import { getMyHomework } from "@/lib/homework-cache"
+import { getExercises, peekExerciseBySlug } from "@/lib/exercises-cache"
 
 type Status = "pending" | "in_progress" | "completed"
 
@@ -21,6 +18,8 @@ interface HomeworkItem {
   status: Status
   /** Countdown limit in minutes; undefined = unlimited. */
   timeLimitMinutes?: number
+  /** When the work was submitted/graded — used to group the History tab. */
+  completedAt?: string
   href?: string
 }
 
@@ -42,47 +41,62 @@ export function StudentHomeworkSection({
   const [items, setItems] = useState<HomeworkItem[] | null>(null)
 
   useEffect(() => {
-    ensureSeeded()
     ensureGrammarSeed()
-    ensureStudentAccount({ id: studentId, name: studentName, email: studentEmail })
-    ensureDemoHomework()
+    let cancelled = false
 
-    const mapped: HomeworkItem[] = listStudentHomework(studentId).map(
-      ({ homework, submission }) => {
-        const status: Status =
-          submission.status === "submitted" || submission.status === "graded"
-            ? "completed"
-            : submission.status === "in_progress"
-              ? "in_progress"
-              : "pending"
+    // Preload the homework list and the exercise catalogue together so that
+    // opening an individual assignment afterwards resolves instantly (no spinner
+    // on the runner page — both the exercise and its time limit are cached).
+    Promise.all([getMyHomework(), getExercises()])
+      .then(([entries]) => {
+        if (cancelled) return
+        const mapped: HomeworkItem[] = entries.map(({ homework, submission }) => {
+          const status: Status =
+            submission.status === "submitted" || submission.status === "graded"
+              ? "completed"
+              : submission.status === "in_progress"
+                ? "in_progress"
+                : "pending"
 
-        let href: string | undefined
-        if (homework.subject === "grammar" && homework.exerciseSlug) {
-          const ex = getGrammarExercise(homework.exerciseSlug)
-          if (ex) href = `/exercises/${ex.topic}/${ex.slug}?hw=${homework.id}`
-        }
+          let href: string | undefined
+          if (homework.subject === "grammar" && homework.exerciseSlug) {
+            const ex = peekExerciseBySlug(homework.exerciseSlug)
+            if (ex) href = `/exercises/${ex.topic}/${ex.slug}?hw=${homework.id}`
+          }
 
-        return {
-          id: homework.id,
-          subject: homework.subject,
-          title: homework.title,
-          description: homework.description,
-          dueAt: homework.dueAt,
-          status,
-          timeLimitMinutes: homework.timeLimitMinutes,
-          href,
-        }
-      },
-    )
+          return {
+            id: homework.id,
+            subject: homework.subject,
+            title: homework.title,
+            description: homework.description,
+            dueAt: homework.dueAt,
+            status,
+            timeLimitMinutes: homework.timeLimitMinutes,
+            completedAt: submission.submittedAt ?? undefined,
+            href,
+          }
+        })
 
-    mapped.sort((a, b) => {
-      const s = STATUS_ORDER[a.status] - STATUS_ORDER[b.status]
-      if (s !== 0) return s
-      return new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime()
-    })
+        mapped.sort((a, b) => {
+          const s = STATUS_ORDER[a.status] - STATUS_ORDER[b.status]
+          if (s !== 0) return s
+          return new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime()
+        })
 
-    setItems(mapped)
+        setItems(mapped)
+      })
+      .catch(() => {
+        if (!cancelled) setItems([])
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [studentId, studentName, studentEmail])
 
-  return <HomeworkSection items={items ?? []} />
+  if (items === null) {
+    return <CardGridSkeleton count={4} columns={2} />
+  }
+
+  return <HomeworkSection items={items} />
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,7 @@ import {
   Bell,
   BookOpen,
   CheckCheck,
+  ClipboardCheck,
   ClipboardList,
   Headphones,
   Mic,
@@ -21,66 +22,11 @@ import {
   Sparkles,
   Trophy,
 } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
+import { notificationsApi, type NotificationItem } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
-type NotificationType =
-  | "homework"
-  | "result"
-  | "reminder"
-  | "achievement"
-  | "system"
-
-interface NotificationItem {
-  id: string
-  type: NotificationType
-  title: string
-  message: string
-  createdAt: string
-  read: boolean
-}
-
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: "n1",
-    type: "homework",
-    title: "New homework: Reading Passage 3",
-    message: "Your tutor assigned a new Reading task. Due in 2 days.",
-    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    read: false,
-  },
-  {
-    id: "n2",
-    type: "result",
-    title: "Listening test scored 7.5",
-    message: "Great job! Open the result to see detailed feedback.",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    read: false,
-  },
-  {
-    id: "n3",
-    type: "reminder",
-    title: "Speaking session tomorrow",
-    message: "Don't forget your scheduled Speaking session at 14:00.",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
-    read: true,
-  },
-  {
-    id: "n4",
-    type: "achievement",
-    title: "7-day streak unlocked",
-    message: "You've been studying for 7 days in a row. Keep it up!",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
-    read: true,
-  },
-  {
-    id: "n5",
-    type: "system",
-    title: "Welcome to Learnix",
-    message: "Explore Reading, Listening, Writing and Speaking practice tests.",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(),
-    read: true,
-  },
-]
+type NotificationType = NotificationItem["type"]
 
 const TYPE_META: Record<
   NotificationType,
@@ -116,6 +62,12 @@ const TYPE_META: Record<
     fg: "text-sky-700",
     label: "System",
   },
+  entry_test: {
+    icon: ClipboardCheck,
+    bg: "bg-rose-100",
+    fg: "text-rose-700",
+    label: "Entry test",
+  },
 }
 
 function formatRelative(iso: string): string {
@@ -148,8 +100,26 @@ function groupKey(iso: string): "Today" | "Yesterday" | "Earlier" {
 }
 
 export function NotificationsPanel() {
-  const [items, setItems] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS)
+  const [items, setItems] = useState<NotificationItem[]>([])
   const [open, setOpen] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+
+  const load = () => {
+    notificationsApi
+      .list()
+      .then(setItems)
+      .catch(() => setItems([]))
+      .finally(() => setLoaded(true))
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  // Refresh when the panel is opened so newly-created notifications appear.
+  useEffect(() => {
+    if (open) load()
+  }, [open])
 
   const unreadCount = useMemo(() => items.filter((n) => !n.read).length, [items])
 
@@ -163,13 +133,22 @@ export function NotificationsPanel() {
     return groups
   }, [items])
 
-  const markAllRead = () =>
+  const markAllRead = () => {
     setItems((prev) => prev.map((n) => ({ ...n, read: true })))
+    void notificationsApi.markAllRead().catch(() => {})
+  }
 
-  const toggleRead = (id: string) =>
+  const toggleRead = (id: string) => {
+    let nextRead = false
     setItems((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n)),
+      prev.map((n) => {
+        if (n.id !== id) return n
+        nextRead = !n.read
+        return { ...n, read: nextRead }
+      }),
     )
+    void notificationsApi.markRead(id, nextRead).catch(() => {})
+  }
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -217,7 +196,19 @@ export function NotificationsPanel() {
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">
-          {items.length === 0 ? (
+          {!loaded && items.length === 0 ? (
+            <div className="divide-y divide-slate-100">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-start gap-3 px-5 py-3">
+                  <Skeleton className="h-9 w-9 shrink-0 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-3 w-2/3" />
+                    <Skeleton className="h-2.5 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 px-6 py-20 text-center">
               <div className="rounded-full bg-slate-100 p-3">
                 <Bell className="h-6 w-6 text-slate-400" />

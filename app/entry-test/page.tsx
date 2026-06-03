@@ -27,14 +27,8 @@ import {
   ENTRY_READING_TEXT,
   ENTRY_WRITING_PROMPT,
 } from "@/lib/entry-test-content"
-import {
-  getActiveEntryTestForStudent,
-  saveMCProgress,
-  saveReadingProgress,
-  saveWritingDraft,
-  submitWriting,
-  type EntryTestSubmission,
-} from "@/lib/entry-test-storage"
+import type { EntryTestSubmission } from "@/lib/entry-test-storage"
+import { entryTestApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 type View = "overview" | "mc" | "reading" | "writing"
@@ -52,9 +46,13 @@ export default function EntryTestPage() {
     if (!isLoading && !user) router.push("/login")
   }, [user, isLoading, router])
 
-  const reload = useCallback(() => {
+  const reload = useCallback(async () => {
     if (!user) return
-    setTest(getActiveEntryTestForStudent(user.id) ?? null)
+    try {
+      setTest(await entryTestApi.mine())
+    } catch {
+      setTest(null)
+    }
   }, [user])
 
   useEffect(() => {
@@ -345,6 +343,7 @@ function MCSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => 
     const firstUnanswered = ENTRY_MC_QUESTIONS.findIndex((q) => !test.mcAnswers[q.id])
     return firstUnanswered === -1 ? 0 : firstUnanswered
   })
+  const [submitting, setSubmitting] = useState(false)
   const locked = test.mcCompleted
 
   const question = ENTRY_MC_QUESTIONS[index]
@@ -356,19 +355,29 @@ function MCSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => 
     if (locked) return
     const next = { ...answers, [question.id]: opt }
     setAnswers(next)
-    saveMCProgress(test.id, next, false)
+    void entryTestApi.saveMc(test.id, next, false).catch(() => {})
   }
 
-  const finish = () => {
-    saveMCProgress(test.id, answers, true)
-    onExit()
+  const finish = async () => {
+    setSubmitting(true)
+    try {
+      await entryTestApi.saveMc(test.id, answers, true)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
-  const autofillDemo = () => {
+  const autofillDemo = async () => {
     const filled = buildDemoMCAnswers()
     setAnswers(filled)
-    saveMCProgress(test.id, filled, true)
-    onExit()
+    setSubmitting(true)
+    try {
+      await entryTestApi.saveMc(test.id, filled, true)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -380,6 +389,7 @@ function MCSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => 
       answeredCount={answeredCount}
       locked={locked}
       onDemoAutofill={autofillDemo}
+      demoLoading={submitting}
     >
       <Card className="overflow-hidden">
         <CardContent className="pt-6 pb-6 space-y-5">
@@ -417,6 +427,7 @@ function MCSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => 
         onNext={() => setIndex((i) => Math.min(total - 1, i + 1))}
         canFinish={!locked && allAnswered}
         onFinish={finish}
+        finishing={submitting}
         locked={locked}
       />
     </SectionShell>
@@ -427,6 +438,7 @@ function MCSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => 
 
 function ReadingSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => void }) {
   const [answers, setAnswers] = useState<Record<number, number | boolean>>(test.readingAnswers)
+  const [submitting, setSubmitting] = useState(false)
   const locked = test.readingCompleted
   const total = ENTRY_READING_QUESTIONS.length
   const answeredCount = Object.keys(answers).length
@@ -436,19 +448,29 @@ function ReadingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
     if (locked) return
     const next = { ...answers, [qid]: value }
     setAnswers(next)
-    saveReadingProgress(test.id, next, false)
+    void entryTestApi.saveReading(test.id, next, false).catch(() => {})
   }
 
-  const finish = () => {
-    saveReadingProgress(test.id, answers, true)
-    onExit()
+  const finish = async () => {
+    setSubmitting(true)
+    try {
+      await entryTestApi.saveReading(test.id, answers, true)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
-  const autofillDemo = () => {
+  const autofillDemo = async () => {
     const filled = buildDemoReadingAnswers()
     setAnswers(filled)
-    saveReadingProgress(test.id, filled, true)
-    onExit()
+    setSubmitting(true)
+    try {
+      await entryTestApi.saveReading(test.id, filled, true)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -473,7 +495,7 @@ function ReadingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
             )}
           </div>
           <div className="flex items-center gap-2">
-            {!locked && <DemoAutofillButton onClick={autofillDemo} />}
+            {!locked && <DemoAutofillButton onClick={autofillDemo} loading={submitting} />}
             <span className="text-xs font-medium text-slate-500">
               {answeredCount}/{total} answered
             </span>
@@ -565,6 +587,7 @@ function ReadingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
             <div className="shrink-0 border-t border-slate-200 bg-white px-4 py-3 sm:px-6">
               <Button
                 onClick={finish}
+                loading={submitting}
                 disabled={!allAnswered}
                 className="w-full bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
               >
@@ -582,25 +605,38 @@ function ReadingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
 
 function WritingSection({ test, onExit }: { test: EntryTestSubmission; onExit: () => void }) {
   const [text, setText] = useState(test.writingText)
+  const [submitting, setSubmitting] = useState(false)
   const locked = test.writingSubmitted
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0
 
   // Autosave the draft a moment after typing stops.
   useEffect(() => {
     if (locked) return
-    const t = setTimeout(() => saveWritingDraft(test.id, text), 800)
+    const t = setTimeout(() => {
+      void entryTestApi.saveWritingDraft(test.id, text).catch(() => {})
+    }, 800)
     return () => clearTimeout(t)
   }, [text, locked, test.id])
 
-  const handleSubmit = () => {
-    submitWriting(test.id, text)
-    onExit()
+  const handleSubmit = async () => {
+    setSubmitting(true)
+    try {
+      await entryTestApi.submitWriting(test.id, text)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
-  const autofillDemo = () => {
+  const autofillDemo = async () => {
     setText(DEMO_WRITING_TEXT)
-    submitWriting(test.id, DEMO_WRITING_TEXT)
-    onExit()
+    setSubmitting(true)
+    try {
+      await entryTestApi.submitWriting(test.id, DEMO_WRITING_TEXT)
+      onExit()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -609,6 +645,7 @@ function WritingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
       onExit={onExit}
       locked={locked}
       onDemoAutofill={autofillDemo}
+      demoLoading={submitting}
     >
       <Card>
         <CardContent className="pt-6 pb-6 space-y-4">
@@ -650,6 +687,7 @@ function WritingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
             ) : (
               <Button
                 onClick={handleSubmit}
+                loading={submitting}
                 disabled={wordCount < 10}
                 className="bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
               >
@@ -665,13 +703,20 @@ function WritingSection({ test, onExit }: { test: EntryTestSubmission; onExit: (
 
 // ─── Shared shell ───────────────────────────────────────────────────────────
 
-function DemoAutofillButton({ onClick }: { onClick: () => void }) {
+function DemoAutofillButton({
+  onClick,
+  loading = false,
+}: {
+  onClick: () => void
+  loading?: boolean
+}) {
   return (
     <Button
       type="button"
       variant="outline"
       size="sm"
       onClick={onClick}
+      loading={loading}
       className="gap-1.5 border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100"
     >
       <Sparkles className="h-3.5 w-3.5" />
@@ -691,6 +736,7 @@ function SectionShell({
   answeredCount,
   locked,
   onDemoAutofill,
+  demoLoading = false,
   children,
 }: {
   title: string
@@ -700,6 +746,7 @@ function SectionShell({
   answeredCount?: number
   locked?: boolean
   onDemoAutofill?: () => void
+  demoLoading?: boolean
   children: React.ReactNode
 }) {
   const pct =
@@ -719,7 +766,9 @@ function SectionShell({
               Back to sections
             </button>
             <div className="flex items-center gap-2">
-              {!locked && onDemoAutofill && <DemoAutofillButton onClick={onDemoAutofill} />}
+              {!locked && onDemoAutofill && (
+                <DemoAutofillButton onClick={onDemoAutofill} loading={demoLoading} />
+              )}
               {locked && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
                   <CheckCircle2 className="h-3 w-3" />
@@ -748,6 +797,7 @@ function NavRow({
   onNext,
   canFinish,
   onFinish,
+  finishing = false,
   locked,
 }: {
   index: number
@@ -756,6 +806,7 @@ function NavRow({
   onNext: () => void
   canFinish: boolean
   onFinish: () => void
+  finishing?: boolean
   locked?: boolean
 }) {
   const isLast = index + 1 >= total
@@ -768,6 +819,7 @@ function NavRow({
       {isLast && !locked ? (
         <Button
           onClick={onFinish}
+          loading={finishing}
           disabled={!canFinish}
           className="bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
         >

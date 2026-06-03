@@ -4,7 +4,17 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { authApi, type AuthUser } from "./api"
 import { setTokens, clearTokens, getAccessToken } from "./api-client"
 
-export type UserRole = "admin" | "teacher" | "student"
+export type UserRole = "super_admin" | "admin" | "teacher" | "student"
+
+/** Roles allowed into the admin panel. */
+export function canAccessAdmin(role: UserRole): boolean {
+  return role === "super_admin" || role === "admin" || role === "teacher"
+}
+
+/** Admin-level roles (super admin + admin). */
+export function isAdminRole(role: UserRole): boolean {
+  return role === "super_admin" || role === "admin"
+}
 
 interface TestResult {
   id: string
@@ -47,6 +57,7 @@ export const DEMO_ACCOUNTS: Array<{
   name: string
   role: UserRole
 }> = [
+  { email: "superadmin@ielts.com", password: "super123", name: "Super Admin", role: "super_admin" },
   { email: "admin@ielts.com", password: "admin123", name: "Admin User", role: "admin" },
   { email: "teacher@ielts.com", password: "teacher123", name: "Sarah Teacher", role: "teacher" },
   { email: "student@ielts.com", password: "student123", name: "Alex Student", role: "student" },

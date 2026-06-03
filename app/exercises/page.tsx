@@ -3,13 +3,24 @@
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
-import { ChevronLeft, Folder } from "lucide-react"
-import { ensureGrammarSeed, listGrammarExercises } from "@/lib/grammar-storage"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, DatabaseZap, Folder } from "lucide-react"
+import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import {
   formatDuration,
-  listAllTopicSummaries,
+  buildTopicSummaries,
   type TopicSummary,
 } from "@/lib/grammar-utils"
+import {
+  getExercises,
+  getTopicsMeta,
+  getLocalCatalog,
+  invalidateExercises,
+} from "@/lib/exercises-cache"
+import { exercisesApi } from "@/lib/api"
+import { useAuth } from "@/lib/auth-context"
+import { useToast } from "@/hooks/use-toast"
+import { TopicCardsSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 
 const LEVEL_PALETTE: Record<string, string> = {
@@ -44,12 +55,45 @@ function summariseLevels(levels: string[]): { display: string; cls: string } {
 }
 
 export default function ExercisesIndexPage() {
+  const { user } = useAuth()
+  const { toast } = useToast()
   const [topics, setTopics] = useState<TopicSummary[]>([])
+  const [syncing, setSyncing] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  const canSync = user ? user.role !== "student" : false
+
+  const refresh = async () => {
+    const [exercises, metas] = await Promise.all([getExercises(), getTopicsMeta()])
+    setTopics(buildTopicSummaries(exercises, metas))
+  }
 
   useEffect(() => {
     ensureGrammarSeed()
-    setTopics(listAllTopicSummaries(listGrammarExercises()))
+    void refresh().finally(() => setLoading(false))
   }, [])
+
+  const handleSync = async () => {
+    setSyncing(true)
+    try {
+      const { exercises, topics: topicMeta } = getLocalCatalog()
+      const result = await exercisesApi.import({ topics: topicMeta, exercises })
+      invalidateExercises()
+      await refresh()
+      toast({
+        title: "Catalogue synced to database",
+        description: `${result.exercises.received} exercises · ${result.topics.received} folders`,
+      })
+    } catch (err) {
+      toast({
+        title: "Could not sync catalogue",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   const grammarTopics = useMemo(
     () => topics.filter((t) => t.category === "grammar"),
@@ -67,15 +111,38 @@ export default function ExercisesIndexPage() {
             <ChevronLeft className="h-3.5 w-3.5" />
             Dashboard
           </Link>
-          <h1 className="mt-2 text-2xl font-bold text-slate-900">Exercises</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Practice exercises grouped by topic. Pick a topic to see all available exercises.
-          </p>
+          <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">Exercises</h1>
+              <p className="mt-1 text-sm text-slate-500">
+                Practice exercises grouped by topic. Pick a topic to see all available exercises.
+              </p>
+            </div>
+            {canSync && (
+              <Button
+                onClick={handleSync}
+                loading={syncing}
+                className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+              >
+                <DatabaseZap className="h-4 w-4" />
+                Sync to database
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        {grammarTopics.length > 0 && (
+        {loading && (
+          <section>
+            <div className="h-5 w-56 rounded-md bg-slate-200 animate-pulse" />
+            <div className="mt-4">
+              <TopicCardsSkeleton count={6} />
+            </div>
+          </section>
+        )}
+
+        {!loading && grammarTopics.length > 0 && (
           <section>
             <h2 className="text-lg font-semibold text-slate-900">Choose a Grammar Topic</h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -92,7 +159,7 @@ export default function ExercisesIndexPage() {
           </section>
         )}
 
-        {topics.length === 0 && (
+        {!loading && topics.length === 0 && (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">No exercises yet</p>
             <p className="text-sm text-slate-500">

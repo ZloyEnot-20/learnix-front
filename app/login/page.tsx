@@ -9,18 +9,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { GraduationCap, ShieldCheck, User } from "lucide-react"
+import { GraduationCap, ShieldCheck, ShieldAlert, User } from "lucide-react"
 import Link from "next/link"
 
 const ROLE_META: Record<UserRole, { label: string; Icon: typeof User; accent: string }> = {
+  super_admin: { label: "Super Admin", Icon: ShieldAlert, accent: "text-amber-700 bg-amber-50 border-amber-200" },
   admin: { label: "Admin", Icon: ShieldCheck, accent: "text-rose-700 bg-rose-50 border-rose-200" },
   teacher: { label: "Teacher", Icon: GraduationCap, accent: "text-violet-700 bg-violet-50 border-violet-200" },
   student: { label: "Student", Icon: User, accent: "text-sky-700 bg-sky-50 border-sky-200" },
 }
 
 function redirectFor(role: UserRole): string {
-  if (role === "admin") return "/admin"
-  if (role === "teacher") return "/teacher"
+  // All staff roles (super admin / admin / teacher) live in the admin panel.
+  if (role !== "student") return "/admin"
   return "/dashboard"
 }
 
@@ -117,10 +118,10 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              disabled={submitting}
+              loading={submitting}
               className="w-full bg-[#C8102E] hover:bg-[#A00D25]"
             >
-              {submitting ? "Signing in…" : "Sign In"}
+              Sign In
             </Button>
           </form>
 

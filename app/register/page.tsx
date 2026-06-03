@@ -18,6 +18,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
+  const [submitting, setSubmitting] = useState(false)
   const { register } = useAuth()
   const router = useRouter()
 
@@ -30,16 +31,23 @@ export default function RegisterPage() {
       return
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters")
       return
     }
 
+    setSubmitting(true)
     try {
       await register(email, password, name)
       router.push("/dashboard")
     } catch (err) {
-      setError("Registration failed. Please try again.")
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : "Registration failed. Please try again."
+      setError(message)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -100,7 +108,7 @@ export default function RegisterPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button type="submit" loading={submitting} className="w-full bg-[#C8102E] hover:bg-[#A00D25]">
               Create Account
             </Button>
           </form>

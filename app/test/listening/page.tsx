@@ -10,7 +10,7 @@ import { mockListeningTest } from "@/lib/mock-data/listening-test"
 import { ListeningContent } from "@/components/listening-test/listening-content"
 import { TestResultsModal } from "@/components/test-results-modal"
 import { TestConfirmationDialog } from "@/components/test-confirmation-dialog"
-import { saveTestResult } from "@/lib/test-results-storage"
+import { testResultsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 
 export default function ListeningTestPage() {
@@ -23,6 +23,7 @@ export default function ListeningTestPage() {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [showResults, setShowResults] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -78,7 +79,8 @@ export default function ListeningTestPage() {
     }
   }
 
-  const submitTest = () => {
+  const submitTest = async () => {
+    setSubmitting(true)
     let totalCorrect = 0
     mockListeningTest.parts.forEach((part) => {
       part.questions.forEach((question) => {
@@ -107,23 +109,30 @@ export default function ListeningTestPage() {
     ]
     const bandScore = bandScoreTable.find((range) => totalCorrect >= range.min && totalCorrect <= range.max)?.band || 0
 
-    saveTestResult({
-      id: `listening-${Date.now()}`,
-      testType: "listening",
-      date: new Date().toISOString(),
-      bandScore,
-      totalCorrect,
-      totalQuestions,
-      answers,
-      parts: mockListeningTest.parts,
-    })
+    try {
+      await testResultsApi.save({
+        testType: "listening",
+        date: new Date().toISOString(),
+        bandScore,
+        totalCorrect,
+        totalQuestions,
+        answers,
+        parts: mockListeningTest.parts,
+      })
+      toast({
+        title: "Test submitted successfully!",
+        description: "Your results have been saved. View them on your profile page.",
+        duration: 5000,
+      })
+    } catch {
+      toast({
+        title: "Could not save results",
+        description: "Your score is shown below but wasn't saved to the server.",
+        variant: "destructive",
+      })
+    }
 
-    toast({
-      title: "Test submitted successfully!",
-      description: "Your results have been saved. View them on your profile page.",
-      duration: 5000,
-    })
-
+    setSubmitting(false)
     setShowResults(true)
     setShowConfirmation(false)
   }
@@ -203,7 +212,7 @@ export default function ListeningTestPage() {
             </Button>
 
             {currentPart === totalParts - 1 ? (
-              <Button variant="default" onClick={handleSubmit} className="bg-[#C8102E] hover:bg-[#A00D24]">
+              <Button variant="default" onClick={handleSubmit} loading={submitting} className="bg-[#C8102E] hover:bg-[#A00D24]">
                 Submit Test
               </Button>
             ) : (
@@ -232,6 +241,7 @@ export default function ListeningTestPage() {
         onConfirm={submitTest}
         unansweredCount={unansweredCount}
         totalQuestions={totalQuestions}
+        confirming={submitting}
       />
 
       <div className="fixed bottom-20 right-6 w-48 h-32 bg-white border-2 border-gray-300 rounded shadow-lg overflow-hidden">

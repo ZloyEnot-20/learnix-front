@@ -31,18 +31,16 @@ import {
   Users,
   Wallet,
 } from "lucide-react"
-import {
-  ensureSeeded,
-  listGroups,
-  listHomework,
-  listPayments,
-  listStudents,
-  listSubmissions,
-  type Group,
-  type HomeworkAssignment,
-  type Payment,
-  type Student,
+import type {
+  Group,
+  HomeworkAssignment,
+  HomeworkSubmission,
+  Payment,
+  Student,
 } from "@/lib/admin-storage"
+import { getGroups, getStudents } from "@/lib/admin-cache"
+import { StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
+import { homeworkApi, paymentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
 
 interface AdminTestRecord {
@@ -75,23 +73,41 @@ export default function OverviewDashboard({
   const [groups, setGroups] = useState<Group[]>([])
   const [students, setStudents] = useState<Student[]>([])
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
-  const [submissions, setSubmissions] = useState<ReturnType<typeof listSubmissions>>([])
+  const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
   const [tests, setTests] = useState<AdminTestRecord[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ensureSeeded()
-    setGroups(listGroups())
-    setStudents(listStudents())
-    setHomework(listHomework())
-    setSubmissions(listSubmissions())
-    setPayments(listPayments())
+    let cancelled = false
+    Promise.all([
+      getGroups(),
+      getStudents(),
+      homeworkApi.list(),
+      homeworkApi.submissions(),
+      paymentsApi.list(),
+    ])
+      .then(([g, s, hw, subs, p]) => {
+        if (cancelled) return
+        setGroups(g)
+        setStudents(s)
+        setHomework(hw)
+        setSubmissions(subs)
+        setPayments(p)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
 
     try {
       const raw = JSON.parse(localStorage.getItem("adminTests") || "{}") as Record<string, AdminTestRecord>
       setTests(Object.values(raw))
     } catch {
       setTests([])
+    }
+    return () => {
+      cancelled = true
     }
   }, [refreshKey])
 
@@ -216,6 +232,18 @@ export default function OverviewDashboard({
     { name: "Pending", value: paymentStats.pending, color: "#fbbf24" },
     { name: "Overdue", value: paymentStats.overdue, color: "#fb7185" },
   ].filter((d) => d.value > 0)
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <StatCardsSkeleton count={5} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TableCardSkeleton rows={5} columns={3} />
+          <TableCardSkeleton rows={5} columns={3} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

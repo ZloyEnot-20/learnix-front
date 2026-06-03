@@ -31,14 +31,13 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { ensureSeeded, listStudents, type Student } from "@/lib/admin-storage"
-import {
-  assignEntryTest,
-  deleteEntryTest,
-  gradeWriting,
-  listEntryTests,
-  type EntryTestStatus,
-  type EntryTestSubmission,
+import type { Student } from "@/lib/admin-storage"
+import { getStudents, peekStudents } from "@/lib/admin-cache"
+import { TableSkeleton } from "./skeletons"
+import { entryTestApi } from "@/lib/api"
+import type {
+  EntryTestStatus,
+  EntryTestSubmission,
 } from "@/lib/entry-test-storage"
 import {
   CEFR_LEVELS,
@@ -64,19 +63,31 @@ export default function EntryTestManager({
   createdByName: string
 }) {
   const { toast } = useToast()
-  const [students, setStudents] = useState<Student[]>([])
+  const [students, setStudents] = useState<Student[]>(() => peekStudents() ?? [])
   const [tests, setTests] = useState<EntryTestSubmission[]>([])
   const [showAssign, setShowAssign] = useState(false)
   const [assignStudentId, setAssignStudentId] = useState("")
+  const [assigning, setAssigning] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const refresh = () => {
-    setStudents(listStudents())
-    setTests(listEntryTests())
+  const refresh = async () => {
+    try {
+      const [s, list] = await Promise.all([getStudents(), entryTestApi.list()])
+      setStudents(s)
+      setTests(list)
+    } catch {
+      toast({
+        title: "Failed to load entry tests",
+        description: "Make sure the backend is running.",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
   useEffect(() => {
-    ensureSeeded()
-    refresh()
+    void refresh()
   }, [])
 
   const selected = useMemo(
@@ -84,37 +95,43 @@ export default function EntryTestManager({
     [tests, selectedId],
   )
 
-  const assign = () => {
+  const assign = async () => {
     if (!assignStudentId) {
       toast({ title: "Pick a student", variant: "destructive" })
       return
     }
     const student = students.find((s) => s.id === assignStudentId)
     if (!student) return
-    if (tests.some((t) => t.studentId === student.id && t.status !== "graded")) {
+    setAssigning(true)
+    try {
+      await entryTestApi.assign(student.id)
+      toast({ title: "Entry test assigned", description: student.name })
+      setShowAssign(false)
+      setAssignStudentId("")
+      await refresh()
+    } catch (err) {
       toast({
-        title: "Already has an active test",
-        description: `${student.name} already has an entry test in progress.`,
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
         variant: "destructive",
       })
-      return
+    } finally {
+      setAssigning(false)
     }
-    assignEntryTest({
-      studentId: student.id,
-      studentName: student.name,
-      studentEmail: student.email,
-      assignedBy: createdByName,
-    })
-    toast({ title: "Entry test assigned", description: student.name })
-    setShowAssign(false)
-    setAssignStudentId("")
-    refresh()
   }
 
-  const remove = (t: EntryTestSubmission) => {
+  const remove = async (t: EntryTestSubmission) => {
     if (!confirm(`Delete entry test for ${t.studentName}?`)) return
-    deleteEntryTest(t.id)
-    refresh()
+    try {
+      await entryTestApi.remove(t.id)
+      await refresh()
+    } catch (err) {
+      toast({
+        title: "Could not delete",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    }
   }
 
   const counts = useMemo(() => {
@@ -153,7 +170,9 @@ export default function EntryTestManager({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {tests.length === 0 ? (
+          {loading && tests.length === 0 ? (
+            <TableSkeleton rows={5} columns={6} />
+          ) : tests.length === 0 ? (
             <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
               No entry tests assigned yet.
             </div>
@@ -247,7 +266,7 @@ export default function EntryTestManager({
             </Select>
           </div>
           <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-            <Button onClick={assign} disabled={students.length === 0} className="bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button onClick={assign} loading={assigning} disabled={students.length === 0} className="bg-[#C8102E] hover:bg-[#A00D25]">
               Assign
             </Button>
             <Button variant="outline" onClick={() => setShowAssign(false)}>
@@ -286,7 +305,8 @@ function EntryTestDetail({
   const [overallLevel, setOverallLevel] = useState(test.overallLevel ?? "")
   const [feedback, setFeedback] = useState(test.writingFeedback ?? "")
 
-  const submitGrade = () => {
+  const [saving, setSaving] = useState(false)
+  const submitGrade = async () => {
     if (!level) {
       toast({ title: "Pick a writing level", variant: "destructive" })
       return
@@ -295,9 +315,20 @@ function EntryTestDetail({
       toast({ title: "Overall level is required", variant: "destructive" })
       return
     }
-    gradeWriting(test.id, level, overallLevel, feedback)
-    toast({ title: "Entry test graded", description: `${test.studentName} · ${overallLevel}` })
-    onGraded()
+    setSaving(true)
+    try {
+      await entryTestApi.grade(test.id, level, overallLevel, feedback)
+      toast({ title: "Entry test graded", description: `${test.studentName} · ${overallLevel}` })
+      onGraded()
+    } catch (err) {
+      toast({
+        title: "Could not save grade",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -433,7 +464,7 @@ function EntryTestDetail({
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={submitGrade} className="bg-emerald-600 hover:bg-emerald-700">
+          <Button onClick={submitGrade} loading={saving} className="bg-emerald-600 hover:bg-emerald-700">
             <CheckCircle2 className="mr-1.5 h-4 w-4" />
             {test.overallLevel != null ? "Update grade" : "Save grade"}
           </Button>
