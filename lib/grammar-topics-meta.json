@@ -1,0 +1,470 @@
+[
+  {
+    "slug": "verb-to-be",
+    "title": "Verb To Be",
+    "exerciseCount": 11,
+    "questionCount": 220,
+    "levels": "A1",
+    "totalMinutes": 126,
+    "description": "11 exercises and 220 questions focused on Verb To Be, for A1 learners."
+  },
+  {
+    "slug": "there-is-there-are",
+    "title": "There Is / There Are",
+    "exerciseCount": 5,
+    "questionCount": 100,
+    "levels": "A1-A2",
+    "totalMinutes": 60,
+    "description": "Master there is / there are with 100 practice questions across 5 beginner-friendly exercises"
+  },
+  {
+    "slug": "verb-to-have",
+    "title": "Verb To Have",
+    "exerciseCount": 4,
+    "questionCount": 80,
+    "levels": "A1-A2",
+    "totalMinutes": 44,
+    "description": "4 exercises and 80 questions focused on Verb To Have, for A1-A2 learners."
+  },
+  {
+    "slug": "possessives",
+    "title": "Possessives",
+    "exerciseCount": 9,
+    "questionCount": 180,
+    "levels": "A1-B1",
+    "totalMinutes": 90,
+    "description": "9 exercises and 180 questions focused on Possessives, for A1-B1 learners."
+  },
+  {
+    "slug": "present-simple",
+    "title": "Present Simple",
+    "exerciseCount": 20,
+    "questionCount": 337,
+    "levels": "A1-B1",
+    "totalMinutes": 233,
+    "description": "Learn how to use the present simple tense for habits, routines, and general truths"
+  },
+  {
+    "slug": "pronouns",
+    "title": "Pronouns",
+    "exerciseCount": 8,
+    "questionCount": 160,
+    "levels": "A1-B1",
+    "totalMinutes": 101,
+    "description": "8 exercises and 160 questions focused on Pronouns, for A1-B1 learners."
+  },
+  {
+    "slug": "ed-vs-ing-adjectives",
+    "title": "-ed vs -ing Adjectives",
+    "exerciseCount": 3,
+    "questionCount": 60,
+    "levels": "A1-B2",
+    "totalMinutes": 30,
+    "description": "Practise adjectives like bored and boring, interested and interesting, excited and exciting. Learn when -ed describes a feeling and when -ing describes the cause."
+  },
+  {
+    "slug": "articles",
+    "title": "Articles",
+    "exerciseCount": 12,
+    "questionCount": 240,
+    "levels": "A1-B2",
+    "totalMinutes": 199,
+    "description": "12 exercises and 240 questions focused on Articles, for A1-B2 learners."
+  },
+  {
+    "slug": "past-simple",
+    "title": "Past Simple",
+    "exerciseCount": 18,
+    "questionCount": 370,
+    "levels": "A1-B2",
+    "totalMinutes": 279,
+    "description": "Learn how to talk about completed actions in the past using the past simple tense"
+  },
+  {
+    "slug": "present-continuous",
+    "title": "Present Continuous",
+    "exerciseCount": 14,
+    "questionCount": 285,
+    "levels": "A1-B2",
+    "totalMinutes": 182,
+    "description": "14 exercises and 285 questions focused on Present Continuous, for A1-B2 learners."
+  },
+  {
+    "slug": "quantifiers",
+    "title": "Quantifiers",
+    "exerciseCount": 15,
+    "questionCount": 305,
+    "levels": "A1-B2",
+    "totalMinutes": 194,
+    "description": "15 exercises and 305 questions focused on Quantifiers, for A1-B2 learners."
+  },
+  {
+    "slug": "subject-verb-agreement",
+    "title": "Subject Verb Agreement",
+    "exerciseCount": 16,
+    "questionCount": 320,
+    "levels": "A1-B2",
+    "totalMinutes": 212,
+    "description": "16 exercises and 320 questions focused on Subject Verb Agreement, for A1-B2 learners."
+  },
+  {
+    "slug": "wh-question-words-and-question-order",
+    "title": "Wh- Question Words & Question Order",
+    "exerciseCount": 12,
+    "questionCount": 240,
+    "levels": "A1-B2",
+    "totalMinutes": 160,
+    "description": "Master question formation with who, what, where, when, why, how, which, and whose. Practise correct word order for yes/no questions, wh-questions, subject questions, and embedded questions."
+  },
+  {
+    "slug": "containers-partitives",
+    "title": "Containers Partitives",
+    "exerciseCount": 5,
+    "questionCount": 100,
+    "levels": "A2-B1",
+    "totalMinutes": 58,
+    "description": "5 exercises and 100 questions focused on Containers Partitives, for A2-B1 learners."
+  },
+  {
+    "slug": "future-tenses",
+    "title": "Future Tenses",
+    "exerciseCount": 12,
+    "questionCount": 240,
+    "levels": "A2-B1",
+    "totalMinutes": 182,
+    "description": "12 exercises and 240 questions focused on Future Tenses, for A2-B1 learners."
+  },
+  {
+    "slug": "reflexive-pronouns",
+    "title": "Reflexive Pronouns",
+    "exerciseCount": 8,
+    "questionCount": 160,
+    "levels": "A2-B1",
+    "totalMinutes": 93,
+    "description": "8 exercises and 160 questions focused on Reflexive Pronouns, for A2-B1 learners."
+  },
+  {
+    "slug": "adjective-order",
+    "title": "Adjective Order",
+    "exerciseCount": 6,
+    "questionCount": 120,
+    "levels": "A2-B2",
+    "totalMinutes": 72,
+    "description": "6 exercises and 120 questions focused on Adjective Order, for A2-B2 learners."
+  },
+  {
+    "slug": "adverb-vs-adjective",
+    "title": "Adverb Vs Adjective",
+    "exerciseCount": 7,
+    "questionCount": 140,
+    "levels": "A2-B2",
+    "totalMinutes": 84,
+    "description": "7 exercises and 140 questions focused on Adverb Vs Adjective, for A2-B2 learners."
+  },
+  {
+    "slug": "comparatives",
+    "title": "Comparatives",
+    "exerciseCount": 19,
+    "questionCount": 390,
+    "levels": "A2-B2",
+    "totalMinutes": 271,
+    "description": "19 exercises and 390 questions focused on Comparatives, for A2-B2 learners."
+  },
+  {
+    "slug": "confusing-verbs",
+    "title": "Confusing Verbs",
+    "exerciseCount": 22,
+    "questionCount": 440,
+    "levels": "A2-B2",
+    "totalMinutes": 310,
+    "description": "22 exercises and 440 questions focused on Confusing Verbs, for A2-B2 learners."
+  },
+  {
+    "slug": "ellipsis-substitution",
+    "title": "Ellipsis Substitution",
+    "exerciseCount": 8,
+    "questionCount": 160,
+    "levels": "A2-B2",
+    "totalMinutes": 92,
+    "description": "8 exercises and 160 questions focused on Ellipsis Substitution, for A2-B2 learners."
+  },
+  {
+    "slug": "modal-verbs",
+    "title": "Modal Verbs",
+    "exerciseCount": 13,
+    "questionCount": 260,
+    "levels": "A2-B2",
+    "totalMinutes": 196,
+    "description": "13 exercises and 260 questions focused on Modal Verbs, for A2-B2 learners."
+  },
+  {
+    "slug": "past-continuous",
+    "title": "Past Continuous",
+    "exerciseCount": 15,
+    "questionCount": 300,
+    "levels": "A2-B2",
+    "totalMinutes": 243,
+    "description": "15 exercises and 300 questions focused on Past Continuous, for A2-B2 learners."
+  },
+  {
+    "slug": "prepositions",
+    "title": "Prepositions",
+    "exerciseCount": 14,
+    "questionCount": 280,
+    "levels": "A2-B2",
+    "totalMinutes": 228,
+    "description": "14 exercises and 280 questions focused on Prepositions, for A2-B2 learners."
+  },
+  {
+    "slug": "question-tags",
+    "title": "Question Tags",
+    "exerciseCount": 16,
+    "questionCount": 320,
+    "levels": "A2-B2",
+    "totalMinutes": 205,
+    "description": "Master question tags (tag questions) in English. Learn when to use 'isn't it?', 'don't you?', 'haven't they?' and more. 16 exercises with 320 questions covering all patterns from basic to advanced."
+  },
+  {
+    "slug": "time-expressions",
+    "title": "Time Expressions",
+    "exerciseCount": 11,
+    "questionCount": 220,
+    "levels": "A2-B2",
+    "totalMinutes": 164,
+    "description": "11 exercises and 220 questions focused on Time Expressions, for A2-B2 learners."
+  },
+  {
+    "slug": "too-enough",
+    "title": "Too Enough",
+    "exerciseCount": 4,
+    "questionCount": 80,
+    "levels": "A2-B2",
+    "totalMinutes": 65,
+    "description": "4 exercises and 80 questions focused on Too Enough, for A2-B2 learners."
+  },
+  {
+    "slug": "word-order",
+    "title": "Word Order",
+    "exerciseCount": 11,
+    "questionCount": 220,
+    "levels": "A2-B2",
+    "totalMinutes": 139,
+    "description": "11 exercises and 220 questions focused on Word Order, for A2-B2 learners."
+  },
+  {
+    "slug": "adjective-preposition",
+    "title": "Adjective Preposition",
+    "exerciseCount": 9,
+    "questionCount": 180,
+    "levels": "A2-C1",
+    "totalMinutes": 130,
+    "description": "9 exercises and 180 questions focused on Adjective Preposition, for A2-C1 learners."
+  },
+  {
+    "slug": "causative",
+    "title": "Causative",
+    "exerciseCount": 11,
+    "questionCount": 220,
+    "levels": "A2-C1",
+    "totalMinutes": 179,
+    "description": "11 exercises and 220 questions focused on Causative, for A2-C1 learners."
+  },
+  {
+    "slug": "gerunds-and-infinitives",
+    "title": "Gerunds & Infinitives",
+    "exerciseCount": 22,
+    "questionCount": 440,
+    "levels": "A2-C1",
+    "totalMinutes": 311,
+    "description": "Complete guide to using gerunds (-ing forms) and infinitives (to + verb) with 21 exercises and 420+ questions."
+  },
+  {
+    "slug": "noun-preposition",
+    "title": "Noun Preposition",
+    "exerciseCount": 9,
+    "questionCount": 180,
+    "levels": "A2-C1",
+    "totalMinutes": 132,
+    "description": "9 exercises and 180 questions focused on Noun Preposition, for A2-C1 learners."
+  },
+  {
+    "slug": "passive-voice",
+    "title": "Passive Voice",
+    "exerciseCount": 16,
+    "questionCount": 330,
+    "levels": "A2-C1",
+    "totalMinutes": 187,
+    "description": "Master the passive voice across all tenses, with modals, and in special structures"
+  },
+  {
+    "slug": "past-perfect",
+    "title": "Past Perfect",
+    "exerciseCount": 20,
+    "questionCount": 405,
+    "levels": "A2-C1",
+    "totalMinutes": 320,
+    "description": "20 exercises and 405 questions focused on Past Perfect, for A2-C1 learners."
+  },
+  {
+    "slug": "phrasal-verbs",
+    "title": "Phrasal Verbs",
+    "exerciseCount": 24,
+    "questionCount": 490,
+    "levels": "A2-C1",
+    "totalMinutes": 370,
+    "description": "Complete guide to mastering English phrasal verbs from A2 to C1 level. 24 exercises covering 250+ phrasal verbs organised by particle and topic."
+  },
+  {
+    "slug": "present-perfect",
+    "title": "Present Perfect",
+    "exerciseCount": 15,
+    "questionCount": 310,
+    "levels": "A2-C1",
+    "totalMinutes": 256,
+    "description": "15 exercises and 310 questions focused on Present Perfect, for A2-C1 learners."
+  },
+  {
+    "slug": "relative-clauses",
+    "title": "Relative Clauses",
+    "exerciseCount": 17,
+    "questionCount": 345,
+    "levels": "A2-C1",
+    "totalMinutes": 279,
+    "description": "17 exercises and 345 questions focused on Relative Clauses, for A2-C1 learners."
+  },
+  {
+    "slug": "reported-speech",
+    "title": "Reported Speech",
+    "exerciseCount": 15,
+    "questionCount": 310,
+    "levels": "A2-C1",
+    "totalMinutes": 222,
+    "description": "Learn how to report what someone said using indirect speech"
+  },
+  {
+    "slug": "so-vs-such",
+    "title": "So vs Such",
+    "exerciseCount": 6,
+    "questionCount": 120,
+    "levels": "A2-C1",
+    "totalMinutes": 84,
+    "description": "Master the difference between 'so' and 'such' with 120 practice questions across 6 exercises"
+  },
+  {
+    "slug": "used-to",
+    "title": "Used To",
+    "exerciseCount": 15,
+    "questionCount": 310,
+    "levels": "A2-C1",
+    "totalMinutes": 242,
+    "description": "15 exercises and 310 questions focused on Used To, for A2-C1 learners."
+  },
+  {
+    "slug": "conditionals",
+    "title": "Conditionals",
+    "exerciseCount": 25,
+    "questionCount": 499,
+    "levels": "A2-C2",
+    "totalMinutes": 426,
+    "description": "Master all types of conditional sentences to express possibilities, hypothetical situations, and consequences"
+  },
+  {
+    "slug": "business-english",
+    "title": "Business English",
+    "exerciseCount": 5,
+    "questionCount": 100,
+    "levels": "B1-B2",
+    "totalMinutes": 80,
+    "description": "5 exercises and 100 questions focused on Business English, for B1-B2 learners."
+  },
+  {
+    "slug": "compound-words",
+    "title": "Compound Words",
+    "exerciseCount": 9,
+    "questionCount": 180,
+    "levels": "B1-B2",
+    "totalMinutes": 117,
+    "description": "9 exercises and 180 questions focused on Compound Words, for B1-B2 learners."
+  },
+  {
+    "slug": "would-rather",
+    "title": "Would Rather",
+    "exerciseCount": 4,
+    "questionCount": 80,
+    "levels": "B1-B2",
+    "totalMinutes": 51,
+    "description": "4 exercises and 80 questions focused on Would Rather, for B1-B2 learners."
+  },
+  {
+    "slug": "linking-words-and-connectors",
+    "title": "Linking Words & Connectors",
+    "exerciseCount": 23,
+    "questionCount": 485,
+    "levels": "B1-C1",
+    "totalMinutes": 296,
+    "description": "Master discourse connectors for contrast, cause & effect, addition, and advanced formal connectors. 23 exercises with 450+ questions targeting real learner errors."
+  },
+  {
+    "slug": "prepositional-phrases",
+    "title": "Prepositional Phrases",
+    "exerciseCount": 10,
+    "questionCount": 200,
+    "levels": "B1-C1",
+    "totalMinutes": 144,
+    "description": "10 exercises and 200 questions focused on Prepositional Phrases, for B1-C1 learners."
+  },
+  {
+    "slug": "wish-if-only",
+    "title": "Wish If Only",
+    "exerciseCount": 8,
+    "questionCount": 160,
+    "levels": "B1-C1",
+    "totalMinutes": 152,
+    "description": "8 exercises and 160 questions focused on Wish If Only, for B1-C1 learners."
+  },
+  {
+    "slug": "word-formation",
+    "title": "Word Formation",
+    "exerciseCount": 18,
+    "questionCount": 360,
+    "levels": "B1-C1",
+    "totalMinutes": 305,
+    "description": "18 exercises and 360 questions focused on Word Formation, for B1-C1 learners."
+  },
+  {
+    "slug": "cleft-sentences",
+    "title": "Cleft Sentences",
+    "exerciseCount": 14,
+    "questionCount": 280,
+    "levels": "B2-C1",
+    "totalMinutes": 224,
+    "description": "14 exercises and 280 questions focused on Cleft Sentences, for B2-C1 learners."
+  },
+  {
+    "slug": "inversion",
+    "title": "Inversion",
+    "exerciseCount": 11,
+    "questionCount": 220,
+    "levels": "B2-C1",
+    "totalMinutes": 153,
+    "description": "11 exercises and 220 questions focused on Inversion, for B2-C1 learners."
+  },
+  {
+    "slug": "participle-clauses",
+    "title": "Participle Clauses",
+    "exerciseCount": 10,
+    "questionCount": 200,
+    "levels": "B2-C1",
+    "totalMinutes": 158,
+    "description": "10 exercises and 200 questions focused on Participle Clauses, for B2-C1 learners."
+  },
+  {
+    "slug": "whatever-whoever",
+    "title": "Whatever Whoever",
+    "exerciseCount": 7,
+    "questionCount": 140,
+    "levels": "B2-C1",
+    "totalMinutes": 96,
+    "description": "7 exercises and 140 questions focused on Whatever Whoever, for B2-C1 learners."
+  }
+]
