@@ -58,7 +58,8 @@ async function load<T>(
   force: boolean,
 ): Promise<T> {
   if (!force && isFresh(cache)) return cache.data as T
-  if (!force && cache.inflight) return cache.inflight
+  // Always share one in-flight request (avoids duplicate calls from Strict Mode / parallel effects).
+  if (cache.inflight) return cache.inflight
 
   const promise = fetcher()
     .then((data) => {

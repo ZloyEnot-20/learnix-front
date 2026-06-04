@@ -87,7 +87,7 @@ function CopyChip({
 
 export default function TelegramBotSection() {
   const { toast } = useToast()
-  const { students, refreshStudents } = useAdminData()
+  const { students } = useAdminData()
   const [studentId, setStudentId] = useState<string>("")
   const [ttl, setTtl] = useState<string>("72")
   const [invites, setInvites] = useState<BotInvite[]>([])
@@ -96,10 +96,6 @@ export default function TelegramBotSection() {
   const [creating, setCreating] = useState(false)
   const [pendingRevoke, setPendingRevoke] = useState<BotInvite | null>(null)
   const [pendingRemove, setPendingRemove] = useState<BotSubscriber | null>(null)
-
-  useEffect(() => {
-    void refreshStudents(true)
-  }, [refreshStudents])
 
   const studentName = useMemo(
     () => students.find((s) => s.id === studentId)?.name ?? "",

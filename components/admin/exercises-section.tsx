@@ -59,8 +59,8 @@ import { folderColorClass } from "@/lib/folder-colors"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { listVocabDecks, vocabHomeworkSlug, type VocabDeck } from "@/lib/vocabulary-data"
 import type { Group } from "@/lib/admin-storage"
-import { getGroups, peekGroups } from "@/lib/admin-cache"
 import { homeworkApi, type ExtraLevel } from "@/lib/api"
+import { useAdminData } from "@/lib/admin-data-context"
 import { useToast } from "@/hooks/use-toast"
 import { TopicCardsSkeleton } from "./skeletons"
 import { cn } from "@/lib/utils"
@@ -220,11 +220,11 @@ export default function ExercisesSection({
   onHomeworkAssigned,
 }: ExercisesSectionProps) {
   const { toast } = useToast()
+  const { groups } = useAdminData()
 
   const [exercises, setExercises] = useState<GrammarExercise[]>([])
   const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
   const [extraLevels, setExtraLevels] = useState<ExtraLevel[]>([])
-  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null)
@@ -249,9 +249,6 @@ export default function ExercisesSection({
 
   useEffect(() => {
     void loadCatalog().finally(() => setLoading(false))
-    getGroups()
-      .then(setGroups)
-      .catch(() => {})
   }, [])
 
   const grammarTopics = useMemo<TopicSummary[]>(() => {

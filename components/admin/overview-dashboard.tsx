@@ -70,7 +70,7 @@ export default function OverviewDashboard({
   onSelectTab,
   accent = "rose",
 }: Props) {
-  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
+  const { students, groups } = useAdminData()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
@@ -80,13 +80,11 @@ export default function OverviewDashboard({
   useEffect(() => {
     let cancelled = false
     Promise.all([
-      refreshGroups(true),
-      refreshStudents(true),
       homeworkApi.list(),
       homeworkApi.submissions(),
       paymentsApi.list(),
     ])
-      .then(([, , hw, subs, p]) => {
+      .then(([hw, subs, p]) => {
         if (cancelled) return
         setHomework(hw)
         setSubmissions(subs)
@@ -106,7 +104,7 @@ export default function OverviewDashboard({
     return () => {
       cancelled = true
     }
-  }, [refreshKey, refreshGroups, refreshStudents])
+  }, [refreshKey])
 
   const now = Date.now()
   const day = 1000 * 60 * 60 * 24

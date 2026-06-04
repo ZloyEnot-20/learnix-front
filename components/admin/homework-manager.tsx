@@ -107,7 +107,7 @@ interface HomeworkManagerProps {
 
 export default function HomeworkManager({ createdByName, onChanged }: HomeworkManagerProps) {
   const { toast } = useToast()
-  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
+  const { students, groups } = useAdminData()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
 
@@ -146,8 +146,6 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
         homeworkApi.list(),
         homeworkApi.submissions(),
         getExercises(true),
-        refreshGroups(true),
-        refreshStudents(true),
       ])
       setHomework(hw)
       setSubmissions(subs)

@@ -67,13 +67,6 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
-  // Re-fetch the list every time the section opens, but keep showing the
-  // current data until the fresh response arrives (stale-while-revalidate),
-  // so it never looks like everything reloads from scratch.
-  useEffect(() => {
-    void refreshStudents(true)
-  }, [refreshStudents])
-
   const handleRefresh = async () => {
     setRefreshing(true)
     try {

@@ -45,7 +45,7 @@ interface FinanceManagerProps {
 
 export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   const { toast } = useToast()
-  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
+  const { students, groups } = useAdminData()
   const [payments, setPayments] = useState<Payment[]>([])
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "unpaid">("all")
@@ -55,11 +55,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
 
   const refresh = async () => {
     try {
-      const [, , p] = await Promise.all([
-        refreshGroups(true),
-        refreshStudents(true),
-        paymentsApi.list(),
-      ])
+      const p = await paymentsApi.list()
       setPayments(p)
     } catch {
       toast({

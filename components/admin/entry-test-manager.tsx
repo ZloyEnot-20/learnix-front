@@ -63,7 +63,7 @@ export default function EntryTestManager({
   createdByName: string
 }) {
   const { toast } = useToast()
-  const { students, refreshStudents } = useAdminData()
+  const { students } = useAdminData()
   const [tests, setTests] = useState<EntryTestSubmission[]>([])
   const [showAssign, setShowAssign] = useState(false)
   const [assignStudentId, setAssignStudentId] = useState("")
@@ -73,7 +73,7 @@ export default function EntryTestManager({
 
   const refresh = async () => {
     try {
-      const [, list] = await Promise.all([refreshStudents(true), entryTestApi.list()])
+      const list = await entryTestApi.list()
       setTests(list)
     } catch {
       toast({

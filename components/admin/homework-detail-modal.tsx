@@ -90,7 +90,7 @@ export function HomeworkDetailModal({
   onChanged,
 }: HomeworkDetailModalProps) {
   const { toast } = useToast()
-  const { refreshGroups, refreshStudents } = useAdminData()
+  const { students: allStudents, groups } = useAdminData()
   const [rows, setRows] = useState<Row[]>([])
   const [groupName, setGroupName] = useState<string>("—")
   const [filter, setFilter] = useState<"all" | HomeworkStatus>("all")
@@ -108,12 +108,9 @@ export function HomeworkDetailModal({
       return
     }
     let cancelled = false
-    Promise.all([
-      refreshGroups(true),
-      refreshStudents(true),
-      homeworkApi.submissions({ homeworkId: homework.id }),
-    ])
-      .then(([groups, allStudents, submissions]) => {
+    homeworkApi
+      .submissions({ homeworkId: homework.id })
+      .then((submissions) => {
         if (cancelled) return
         const group = groups.find((g) => g.id === homework.groupId)
         setGroupName(group?.name ?? "—")
@@ -146,7 +143,7 @@ export function HomeworkDetailModal({
     return () => {
       cancelled = true
     }
-  }, [homework, open, refreshGroups, refreshStudents])
+  }, [homework, open, groups, allStudents])
 
   const counts = useMemo(() => {
     const c: Record<"all" | HomeworkStatus, number> = {

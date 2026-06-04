@@ -20,6 +20,8 @@ import {
   peekHomeworkCount,
 } from "./admin-cache"
 
+export type AdminListKey = "students" | "groups" | "homeworkCount"
+
 interface AdminDataContextValue {
   students: Student[]
   groups: Group[]
@@ -29,6 +31,8 @@ interface AdminDataContextValue {
   ready: boolean
   refreshStudents: (force?: boolean) => Promise<Student[]>
   refreshGroups: (force?: boolean) => Promise<Group[]>
+  /** Fetch only the lists a section needs (uses cache + in-flight dedup). */
+  ensureLists: (keys: AdminListKey[], force?: boolean) => Promise<void>
   refreshAll: (force?: boolean) => Promise<{ students: Student[]; groups: Group[] }>
 }
 
@@ -67,6 +71,19 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const ensureLists = useCallback(
+    async (keys: AdminListKey[], force = false) => {
+      if (keys.length === 0) return
+      const tasks: Promise<unknown>[] = []
+      if (keys.includes("students")) tasks.push(refreshStudents(force))
+      if (keys.includes("groups")) tasks.push(refreshGroups(force))
+      if (keys.includes("homeworkCount")) tasks.push(refreshHomeworkCount(force))
+      await Promise.all(tasks)
+      setReady(true)
+    },
+    [refreshStudents, refreshGroups, refreshHomeworkCount],
+  )
+
   const refreshAll = useCallback(
     async (force = false) => {
       const [s, g] = await Promise.all([
@@ -74,8 +91,6 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
         refreshGroups(force),
         refreshHomeworkCount(force),
       ])
-      setStudents(s)
-      setGroups(g)
       setReady(true)
       return { students: s, groups: g }
     },
@@ -95,11 +110,6 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  // Always fetch fresh lists when the admin shell mounts.
-  useEffect(() => {
-    void refreshAll(true)
-  }, [refreshAll])
-
   // After any invalidate*() call, refetch so all sections see new names.
   useEffect(() => {
     return onAdminCacheInvalidate((key) => {
@@ -111,15 +121,6 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     })
   }, [refreshAll, refreshStudents, refreshGroups, refreshHomeworkCount])
 
-  // Refetch when returning to the tab (e.g. student edited in another window).
-  useEffect(() => {
-    const onVisible = () => {
-      if (document.visibilityState === "visible") void refreshAll(true)
-    }
-    document.addEventListener("visibilitychange", onVisible)
-    return () => document.removeEventListener("visibilitychange", onVisible)
-  }, [refreshAll])
-
   const value = useMemo(
     () => ({
       students,
@@ -128,6 +129,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ready,
       refreshStudents,
       refreshGroups,
+      ensureLists,
       refreshAll,
     }),
     [
@@ -137,6 +139,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ready,
       refreshStudents,
       refreshGroups,
+      ensureLists,
       refreshAll,
     ],
   )

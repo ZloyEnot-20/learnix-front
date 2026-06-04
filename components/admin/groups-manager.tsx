@@ -88,11 +88,6 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     setSummaries(data)
   }
 
-  // Re-fetch on every visit; keep current cards visible until new data arrives.
-  useEffect(() => {
-    void Promise.all([refreshGroups(true), refreshStudents(true)])
-  }, [refreshGroups, refreshStudents])
-
   useEffect(() => {
     if (groups.length === 0) {
       setSummaries({})

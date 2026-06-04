@@ -33,7 +33,11 @@ import FinanceManager from "@/components/admin/finance-manager"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
-import { AdminDataProvider, useAdminData } from "@/lib/admin-data-context"
+import {
+  AdminDataProvider,
+  useAdminData,
+  type AdminListKey,
+} from "@/lib/admin-data-context"
 import { StatusScreen } from "@/components/status-screen"
 
 const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
@@ -52,6 +56,19 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
 
 /** Section ids that map to a URL segment under /admin. */
 const SECTION_IDS = Object.keys(SECTION_TITLES)
+
+/** Shared admin lists each section needs — fetched once per session (cached). */
+const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
+  dashboard: ["students", "groups", "homeworkCount"],
+  groups: ["students", "groups"],
+  students: ["students", "groups"],
+  homework: ["students", "groups", "homeworkCount"],
+  entry: ["students"],
+  exercises: ["groups"],
+  finance: ["students", "groups"],
+  bot: ["students"],
+  // tests, manage, ocr — no shared list APIs
+}
 
 function sectionFromSegment(segment?: string): string {
   return segment && SECTION_IDS.includes(segment) ? segment : "dashboard"
@@ -141,7 +158,7 @@ function readTestCount(): number {
 
 function AdminPanelContent() {
   const { user, logout, isLoading } = useAuth()
-  const { students, groups, homeworkCount, refreshAll } = useAdminData()
+  const { students, groups, homeworkCount, ensureLists } = useAdminData()
   const router = useRouter()
   const params = useParams<{ section?: string[] }>()
 
@@ -173,9 +190,15 @@ function AdminPanelContent() {
     setTotalTests(readTestCount())
   }, [refreshKey])
 
+  // Load only the shared lists this section needs (cached; no refetch on re-render).
+  useEffect(() => {
+    const keys = SECTION_LIST_NEEDS[activeTab]
+    if (keys?.length) void ensureLists(keys)
+  }, [activeTab, ensureLists])
+
   const bump = () => {
     invalidateHomeworkCount()
-    void refreshAll(true)
+    void ensureLists(["students", "groups", "homeworkCount"], true)
     setRefreshKey((k) => k + 1)
   }
 
