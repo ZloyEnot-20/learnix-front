@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { HomeworkSection } from "@/components/homework-section"
 import { CardGridSkeleton } from "@/components/admin/skeletons"
-import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import { getMyHomework } from "@/lib/homework-cache"
 import { getExercises, peekExerciseBySlug } from "@/lib/exercises-cache"
 import { parseVocabHomeworkSlug } from "@/lib/vocabulary-data"
@@ -16,6 +15,8 @@ interface HomeworkItem {
   title: string
   description: string
   dueAt: string
+  /** When the homework was assigned — newest assignments sort to the top. */
+  createdAt: string
   status: Status
   /** Countdown limit in minutes; undefined = unlimited. */
   timeLimitMinutes?: number
@@ -42,7 +43,6 @@ export function StudentHomeworkSection({
   const [items, setItems] = useState<HomeworkItem[] | null>(null)
 
   useEffect(() => {
-    ensureGrammarSeed()
     let cancelled = false
 
     // Preload the homework list and the exercise catalogue together so that
@@ -74,6 +74,7 @@ export function StudentHomeworkSection({
             title: homework.title,
             description: homework.description,
             dueAt: homework.dueAt,
+            createdAt: homework.createdAt,
             status,
             timeLimitMinutes: homework.timeLimitMinutes,
             completedAt: submission.submittedAt ?? undefined,
@@ -84,6 +85,10 @@ export function StudentHomeworkSection({
         mapped.sort((a, b) => {
           const s = STATUS_ORDER[a.status] - STATUS_ORDER[b.status]
           if (s !== 0) return s
+          // Within the same status, show the most recently assigned homework
+          // first so brand-new tasks always appear at the top of the list.
+          const byAssigned = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          if (byAssigned !== 0) return byAssigned
           return new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime()
         })
 

@@ -38,7 +38,7 @@ import type {
   Payment,
   Student,
 } from "@/lib/admin-storage"
-import { getGroups, getStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
 import { StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
 import { homeworkApi, paymentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
@@ -70,8 +70,7 @@ export default function OverviewDashboard({
   onSelectTab,
   accent = "rose",
 }: Props) {
-  const [groups, setGroups] = useState<Group[]>([])
-  const [students, setStudents] = useState<Student[]>([])
+  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
@@ -81,16 +80,14 @@ export default function OverviewDashboard({
   useEffect(() => {
     let cancelled = false
     Promise.all([
-      getGroups(),
-      getStudents(),
+      refreshGroups(true),
+      refreshStudents(true),
       homeworkApi.list(),
       homeworkApi.submissions(),
       paymentsApi.list(),
     ])
-      .then(([g, s, hw, subs, p]) => {
+      .then(([, , hw, subs, p]) => {
         if (cancelled) return
-        setGroups(g)
-        setStudents(s)
         setHomework(hw)
         setSubmissions(subs)
         setPayments(p)
@@ -109,7 +106,7 @@ export default function OverviewDashboard({
     return () => {
       cancelled = true
     }
-  }, [refreshKey])
+  }, [refreshKey, refreshGroups, refreshStudents])
 
   const now = Date.now()
   const day = 1000 * 60 * 60 * 24

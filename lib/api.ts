@@ -176,10 +176,19 @@ export interface ImportCatalogResult {
   topics: { received: number; written: number }
   exercises: { received: number; written: number }
 }
+export interface ExtraLevel {
+  key: string
+  label: string
+  color: string
+  comingSoon: boolean
+  order: number
+}
+
 export const exercisesApi = {
   list: (topic?: string) =>
     api.get<GrammarExercise[]>(`/exercises${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
   topics: () => api.get<TopicMeta[]>("/exercises/topics"),
+  levels: () => api.get<ExtraLevel[]>("/exercises/levels"),
   get: (slug: string) => api.get<GrammarExercise>(`/exercises/${slug}`),
   import: (payload: { topics: TopicMeta[]; exercises: GrammarExercise[] }) =>
     api.post<ImportCatalogResult>("/exercises/import", payload),
@@ -190,4 +199,35 @@ export const testResultsApi = {
   list: () => api.get<TestResult[]>("/test-results"),
   get: (id: string) => api.get<TestResult>(`/test-results/${id}`),
   save: (result: Omit<TestResult, "id">) => api.post<TestResult>("/test-results", result),
+}
+
+// ---------- Telegram bot ----------
+export interface BotInvite {
+  id: string
+  code: string
+  studentId: string
+  createdBy: string
+  expiresAt: string
+  usedAt: string | null
+  parentName: string | null
+  createdAt: string
+  status: "active" | "used" | "expired"
+}
+export interface BotSubscriber {
+  id: string
+  studentId: string
+  parentName: string | null
+  username: string | null
+  phone: string | null
+  createdAt: string
+}
+export const botApi = {
+  listInvites: (studentId?: string) =>
+    api.get<BotInvite[]>(`/bot/invites${studentId ? `?studentId=${studentId}` : ""}`),
+  createInvite: (studentId: string, ttlHours?: number) =>
+    api.post<BotInvite>("/bot/invites", { studentId, ttlHours }),
+  revokeInvite: (id: string) => api.del(`/bot/invites/${id}`),
+  listSubscribers: (studentId?: string) =>
+    api.get<BotSubscriber[]>(`/bot/subscribers${studentId ? `?studentId=${studentId}` : ""}`),
+  removeSubscriber: (id: string) => api.del(`/bot/subscribers/${id}`),
 }

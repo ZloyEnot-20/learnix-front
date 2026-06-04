@@ -35,7 +35,7 @@ import type {
   HomeworkSubmission,
   Subject,
 } from "@/lib/admin-storage"
-import { getGroups, getStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
 import { homeworkApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
@@ -90,6 +90,7 @@ export function HomeworkDetailModal({
   onChanged,
 }: HomeworkDetailModalProps) {
   const { toast } = useToast()
+  const { refreshGroups, refreshStudents } = useAdminData()
   const [rows, setRows] = useState<Row[]>([])
   const [groupName, setGroupName] = useState<string>("—")
   const [filter, setFilter] = useState<"all" | HomeworkStatus>("all")
@@ -108,8 +109,8 @@ export function HomeworkDetailModal({
     }
     let cancelled = false
     Promise.all([
-      getGroups(),
-      getStudents(),
+      refreshGroups(true),
+      refreshStudents(true),
       homeworkApi.submissions({ homeworkId: homework.id }),
     ])
       .then(([groups, allStudents, submissions]) => {
@@ -145,7 +146,7 @@ export function HomeworkDetailModal({
     return () => {
       cancelled = true
     }
-  }, [homework, open])
+  }, [homework, open, refreshGroups, refreshStudents])
 
   const counts = useMemo(() => {
     const c: Record<"all" | HomeworkStatus, number> = {

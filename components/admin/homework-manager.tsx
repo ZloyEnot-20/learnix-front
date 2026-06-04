@@ -51,13 +51,10 @@ import type {
   Student,
   Subject,
 } from "@/lib/admin-storage"
-import { getGroups, getStudents, peekGroups, peekStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
 import { TableSkeleton } from "./skeletons"
 import { homeworkApi } from "@/lib/api"
-import {
-  ensureGrammarSeed,
-  listGrammarExercises,
-} from "@/lib/grammar-storage"
+import { getExercises } from "@/lib/exercises-cache"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import { useToast } from "@/hooks/use-toast"
@@ -72,6 +69,7 @@ const DIFFICULTY_META: Record<
   easy: { label: "easy", cls: "bg-emerald-100 text-emerald-700" },
   medium: { label: "medium", cls: "bg-amber-100 text-amber-800" },
   hard: { label: "hard", cls: "bg-rose-100 text-rose-700" },
+  mixed: { label: "mixed", cls: "bg-violet-100 text-violet-700" },
 }
 
 const SUBJECT_META: Record<Subject, { label: string; icon: typeof BookOpen; color: string }> = {
@@ -109,9 +107,8 @@ interface HomeworkManagerProps {
 
 export default function HomeworkManager({ createdByName, onChanged }: HomeworkManagerProps) {
   const { toast } = useToast()
+  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
-  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
-  const [students, setStudents] = useState<Student[]>(() => peekStudents() ?? [])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
 
   const [loading, setLoading] = useState(true)
@@ -144,18 +141,17 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   })
 
   const refresh = async () => {
-    setGrammarExercises(listGrammarExercises())
     try {
-      const [hw, subs, g, s] = await Promise.all([
+      const [hw, subs, exercises] = await Promise.all([
         homeworkApi.list(),
         homeworkApi.submissions(),
-        getGroups(),
-        getStudents(),
+        getExercises(true),
+        refreshGroups(true),
+        refreshStudents(true),
       ])
       setHomework(hw)
       setSubmissions(subs)
-      setGroups(g)
-      setStudents(s)
+      setGrammarExercises(exercises)
     } catch {
       toast({
         title: "Failed to load homework",
@@ -167,7 +163,6 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     }
   }
   useEffect(() => {
-    ensureGrammarSeed()
     void refresh()
   }, [])
 

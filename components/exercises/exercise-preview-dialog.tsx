@@ -29,6 +29,7 @@ const DIFFICULTY_META: Record<GrammarExercise["difficulty"], { label: string; cl
   easy: { label: "Easy", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200/60" },
   medium: { label: "Medium", cls: "bg-amber-50 text-amber-800 ring-amber-200/60" },
   hard: { label: "Hard", cls: "bg-rose-50 text-rose-700 ring-rose-200/60" },
+  mixed: { label: "Mixed", cls: "bg-violet-50 text-violet-700 ring-violet-200/60" },
 }
 
 function levelBadgeClass(level: string): string {

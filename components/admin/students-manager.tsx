@@ -497,7 +497,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 id="s-name"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Anna Petrova"
+                placeholder="Full name"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -508,7 +508,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="anna@example.com"
+                  placeholder="name@example.com"
                 />
               </div>
               <div className="space-y-1.5">

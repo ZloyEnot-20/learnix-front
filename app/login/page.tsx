@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { DEMO_ACCOUNTS, useAuth, type UserRole } from "@/lib/auth-context"
 import { IELTSLogo } from "@/components/ielts-logo"
@@ -9,13 +9,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { GraduationCap, ShieldCheck, ShieldAlert, User } from "lucide-react"
+import { ShieldAlert, User } from "lucide-react"
 import Link from "next/link"
 
-const ROLE_META: Record<UserRole, { label: string; Icon: typeof User; accent: string }> = {
+const ROLE_META: Partial<Record<UserRole, { label: string; Icon: typeof User; accent: string }>> = {
   super_admin: { label: "Super Admin", Icon: ShieldAlert, accent: "text-amber-700 bg-amber-50 border-amber-200" },
-  admin: { label: "Admin", Icon: ShieldCheck, accent: "text-rose-700 bg-rose-50 border-rose-200" },
-  teacher: { label: "Teacher", Icon: GraduationCap, accent: "text-violet-700 bg-violet-50 border-violet-200" },
   student: { label: "Student", Icon: User, accent: "text-sky-700 bg-sky-50 border-sky-200" },
 }
 
@@ -86,8 +84,6 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          {/* <div id="telegram-login-container" className="flex justify-center my-3"></div> */}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -128,7 +124,7 @@ export default function LoginPage() {
           <div className="my-6 flex items-center gap-3">
             <Separator className="flex-1" />
             <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
-              Demo accounts
+              Quick login
             </span>
             <Separator className="flex-1" />
           </div>
@@ -136,6 +132,7 @@ export default function LoginPage() {
           <div className="grid gap-2">
             {DEMO_ACCOUNTS.map((acc) => {
               const meta = ROLE_META[acc.role]
+              if (!meta) return null
               const Icon = meta.Icon
               return (
                 <button
@@ -154,9 +151,7 @@ export default function LoginPage() {
                     <span className="block text-sm font-semibold text-slate-900">
                       Sign in as {meta.label}
                     </span>
-                    <span className="block truncate text-xs text-slate-500">
-                      {acc.email} · {acc.password}
-                    </span>
+                    <span className="block truncate text-xs text-slate-500">{acc.email}</span>
                   </span>
                   <span className="text-xs font-medium text-slate-400 group-hover:text-slate-700">
                     →

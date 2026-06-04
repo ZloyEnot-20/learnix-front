@@ -16,6 +16,15 @@ const slug = z.string().min(1).max(200)
 // ─── Exercise / questions ───────────────────────────────────────────────────
 const matchingPair = z.object({ left: z.string(), right: z.string() })
 
+const errorSegment = z.object({
+  id: z.string(),
+  text: z.string(),
+  after: z.string().optional(),
+  correctText: z.string().optional(),
+  acceptableText: z.array(z.string()).optional(),
+  hint: z.string().optional(),
+})
+
 const grammarQuestion = z.object({
   id: z.number(),
   instruction: z.string().optional(),
@@ -25,7 +34,14 @@ const grammarQuestion = z.object({
   options: z.array(z.string()).optional(),
   correctAnswer: z.string().optional(),
   answer: z.string().optional(),
+  accepted: z.array(z.string()).optional(),
   correctBool: z.boolean().optional(),
+  segments: z.array(errorSegment).optional(),
+  prefix: z.array(z.string()).optional(),
+  scrambled: z.array(z.string()).optional(),
+  correct: z.array(z.string()).optional(),
+  suffix: z.array(z.string()).optional(),
+  alternates: z.array(z.array(z.string())).optional(),
   explanation: z.string().default(""),
   hint: z.string().optional(),
 })
@@ -39,7 +55,7 @@ const exerciseSchema = z
     category: z.enum(["grammar", "vocabulary"]).default("grammar"),
     topic: slug,
     subtopic: z.string().max(200).default(""),
-    difficulty: z.enum(["easy", "medium", "hard"]).default("easy"),
+    difficulty: z.enum(["easy", "medium", "hard", "mixed"]).default("easy"),
     level: z.string().max(40).default("A1"),
     type: z.enum([
       "fill-in-the-blank",
@@ -48,6 +64,8 @@ const exerciseSchema = z
       "word-formation",
       "sentence-transformation",
       "true-false",
+      "error-correction",
+      "word-order",
     ]),
     estimatedTime: z.number().int().nonnegative().default(10),
     totalQuestions: z.number().int().nonnegative().default(0),
@@ -71,6 +89,7 @@ const topicSchema = z.object({
   exerciseCount: z.number().int().nonnegative().default(0),
   questionCount: z.number().int().nonnegative().default(0),
   totalMinutes: z.number().int().nonnegative().default(0),
+  color: z.string().max(40).optional(),
 }) as unknown as z.ZodType<TopicMeta>
 
 // ─── IELTS test ──────────────────────────────────────────────────────────────

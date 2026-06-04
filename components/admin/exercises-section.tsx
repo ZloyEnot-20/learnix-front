@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,7 +27,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
-  DatabaseZap,
   Eye,
   FileText,
   Folder,
@@ -35,6 +34,7 @@ import {
   ListChecks,
   Mic,
   PenLine,
+  Search,
   SpellCheck,
   UserPlus,
   Users,
@@ -46,13 +46,7 @@ import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
 import { getMaterialsForTopic } from "@/lib/grammar-materials"
-import { ensureGrammarSeed } from "@/lib/grammar-storage"
-import {
-  getExercises,
-  getTopicsMeta,
-  getLocalCatalog,
-  invalidateExercises,
-} from "@/lib/exercises-cache"
+import { getExercises, getTopicsMeta, getExtraLevels } from "@/lib/exercises-cache"
 import {
   formatDuration,
   groupExercisesByTopic,
@@ -61,11 +55,12 @@ import {
   type TopicMeta,
   type TopicSummary,
 } from "@/lib/grammar-utils"
+import { folderColorClass } from "@/lib/folder-colors"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { listVocabDecks, vocabHomeworkSlug, type VocabDeck } from "@/lib/vocabulary-data"
 import type { Group } from "@/lib/admin-storage"
 import { getGroups, peekGroups } from "@/lib/admin-cache"
-import { exercisesApi, homeworkApi } from "@/lib/api"
+import { homeworkApi, type ExtraLevel } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 import { TopicCardsSkeleton } from "./skeletons"
 import { cn } from "@/lib/utils"
@@ -88,6 +83,11 @@ const DIFFICULTY_META: Record<
     label: "Hard",
     cls: "bg-rose-50 text-rose-700 ring-rose-200/60",
     dot: "bg-rose-500",
+  },
+  mixed: {
+    label: "Mixed",
+    cls: "bg-violet-50 text-violet-700 ring-violet-200/60",
+    dot: "bg-violet-500",
   },
 }
 
@@ -152,6 +152,31 @@ function primaryLevel(levels: string[]): string {
   return best === Number.MAX_SAFE_INTEGER ? "Other" : CEFR_ORDER[best]
 }
 
+/**
+ * The folder a topic lives in: its *dominant* level (most common entry level
+ * across its exercises) rather than the absolute minimum, so a wide-ranging
+ * topic isn't dragged into the lowest folder by one introductory exercise.
+ * Placeholder topics without exercises fall back to their declared range.
+ */
+function topicFolderLevel(topic: TopicSummary): string {
+  if (!topic.exercises.length) return primaryLevel(topic.levels)
+  const counts = new Map<string, number>()
+  for (const ex of topic.exercises) {
+    const lvl = primaryLevel([ex.level])
+    counts.set(lvl, (counts.get(lvl) ?? 0) + 1)
+  }
+  const order = [...CEFR_ORDER, "Other"]
+  let bestLevel = "Other"
+  let bestCount = -1
+  for (const [lvl, count] of counts) {
+    if (count > bestCount || (count === bestCount && order.indexOf(lvl) < order.indexOf(bestLevel))) {
+      bestLevel = lvl
+      bestCount = count
+    }
+  }
+  return bestLevel
+}
+
 function summariseLevels(levels: string[]): { display: string; cls: string } {
   const all = new Set<string>()
   for (const l of levels) {
@@ -198,56 +223,36 @@ export default function ExercisesSection({
 
   const [exercises, setExercises] = useState<GrammarExercise[]>([])
   const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
+  const [extraLevels, setExtraLevels] = useState<ExtraLevel[]>([])
   const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null)
+  const [levelSearch, setLevelSearch] = useState("")
   const [topicTab, setTopicTab] = useState<"exercises" | "materials" | "explanation">("exercises")
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
-  const [syncing, setSyncing] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const loadCatalog = async () => {
-    const [ex, metas] = await Promise.all([getExercises(), getTopicsMeta()])
+    const [ex, metas, levels] = await Promise.all([
+      getExercises(),
+      getTopicsMeta(),
+      getExtraLevels(),
+    ])
     setExercises(ex)
     setTopicsMeta(metas)
+    setExtraLevels(levels)
   }
 
   useEffect(() => {
-    ensureGrammarSeed()
     void loadCatalog().finally(() => setLoading(false))
     getGroups()
       .then(setGroups)
       .catch(() => {})
   }, [])
-
-  const handleMigrate = async () => {
-    setSyncing(true)
-    try {
-      const { exercises: localExercises, topics: localTopics } = getLocalCatalog()
-      const result = await exercisesApi.import({
-        topics: localTopics,
-        exercises: localExercises,
-      })
-      invalidateExercises()
-      await loadCatalog()
-      toast({
-        title: "Catalogue migrated to database",
-        description: `${result.exercises.received} exercises · ${result.topics.received} folders written`,
-      })
-    } catch (err) {
-      toast({
-        title: "Could not migrate catalogue",
-        description: err instanceof Error ? err.message : "Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setSyncing(false)
-    }
-  }
 
   const grammarTopics = useMemo<TopicSummary[]>(() => {
     return buildTopicSummaries(exercises, topicsMeta).filter(
@@ -255,12 +260,31 @@ export default function ExercisesSection({
     )
   }, [exercises, topicsMeta])
 
+  const colorBySlug = useMemo(() => {
+    const m = new Map<string, string>()
+    for (const meta of topicsMeta) {
+      if (meta.color) m.set(meta.slug, meta.color)
+    }
+    return m
+  }, [topicsMeta])
+
+  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
+  useEffect(() => {
+    setVocabDecks(listVocabDecks())
+  }, [])
+
   const levelFolders = useMemo(() => {
     const map = new Map<string, TopicSummary[]>()
     for (const t of grammarTopics) {
-      const lvl = primaryLevel(t.levels)
+      const lvl = topicFolderLevel(t)
       if (!map.has(lvl)) map.set(lvl, [])
       map.get(lvl)!.push(t)
+    }
+    // Surface levels that only have vocabulary decks (no grammar topics) so the
+    // deck stays reachable after it's added.
+    for (const d of vocabDecks) {
+      const lvl = primaryLevel([d.level])
+      if (!map.has(lvl)) map.set(lvl, [])
     }
     const order = [...CEFR_ORDER, "Other"]
     return [...map.entries()]
@@ -270,15 +294,16 @@ export default function ExercisesSection({
         topics: list,
         exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
         questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
+        color: list.map((t) => colorBySlug.get(t.topic)).find(Boolean),
       }))
-  }, [grammarTopics])
+  }, [grammarTopics, colorBySlug, vocabDecks])
 
   const vocabDecksForLevel = useMemo(
     () =>
       selectedLevel
-        ? listVocabDecks().filter((d) => primaryLevel([d.level]) === selectedLevel)
+        ? vocabDecks.filter((d) => primaryLevel([d.level]) === selectedLevel)
         : [],
-    [selectedLevel],
+    [selectedLevel, vocabDecks],
   )
   const activeLevelFolder = useMemo(
     () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
@@ -313,32 +338,37 @@ export default function ExercisesSection({
     return groupExercisesByTopic(topicExercises)[0] ?? null
   }, [selectedTopic, topicExercises])
 
+  // Defer the heavy filtering behind the keystrokes so typing stays smooth, and
+  // memoise it so it only recomputes when the query or catalogue changes.
+  const deferredSearch = useDeferredValue(levelSearch)
+  const searchHits = useMemo(() => {
+    const query = deferredSearch.trim().toLowerCase()
+    // Only search once the query is meaningful (3+ chars) to avoid noise/lag.
+    if (query.length < 3) return { query: "", topics: [] as TopicSummary[], exercises: [] as GrammarExercise[] }
+    const topics = grammarTopics.filter((t) =>
+      `${t.title} ${t.topic} ${t.description ?? ""} ${t.levels.join(" ")}`
+        .toLowerCase()
+        .includes(query),
+    )
+    const exerciseHits = exercises.filter((e) =>
+      `${e.title} ${e.slug} ${e.subtopic} ${e.topic} ${e.level} ${e.description}`
+        .toLowerCase()
+        .includes(query),
+    )
+    return { query, topics, exercises: exerciseHits }
+  }, [deferredSearch, grammarTopics, exercises])
+
   // ─── Level folders view (top level) ──────────────────────────────────────
   if (!selectedTopic && !selectedLevel) {
+    const query = searchHits.query
+    const topicResults = searchHits.topics
+    const exerciseResults = searchHits.exercises
+    const totalMatches = topicResults.length + exerciseResults.length
     return (
       <div className="space-y-6">
-        {canAssign && (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
-            <div>
-              <p className="text-sm font-semibold text-slate-900">Exercise database</p>
-              <p className="text-xs text-slate-500">
-                Import every topic folder and its exercises from the local catalogue into the database.
-              </p>
-            </div>
-            <Button
-              onClick={handleMigrate}
-              loading={syncing}
-              className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
-            >
-              <DatabaseZap className="h-4 w-4" />
-              Migrate to database
-            </Button>
-          </div>
-        )}
-        <Breadcrumbs items={[{ label: "Exercises" }]} />
-        {loading && grammarTopics.length === 0 ? (
+        {loading && grammarTopics.length === 0 && vocabDecks.length === 0 ? (
           <TopicCardsSkeleton count={6} />
-        ) : grammarTopics.length === 0 ? (
+        ) : grammarTopics.length === 0 && vocabDecks.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">No exercises yet</p>
             <p className="text-sm text-slate-500">
@@ -346,30 +376,140 @@ export default function ExercisesSection({
             </p>
           </div>
         ) : (
-          <section>
-            <div className="mb-1">
-              <h2 className="text-lg font-semibold text-slate-900">Choose a level</h2>
-              <p className="text-sm text-slate-500">
-                Topics are organised into folders by CEFR level. Open a folder to see its topics.
-              </p>
+          <section className="space-y-4">
+            <div className="space-y-3">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">
+                  {query ? "Search results" : "Choose a level"}
+                </h2>
+                <p className="text-sm text-slate-500">
+                  {query
+                    ? `${totalMatches} result${totalMatches === 1 ? "" : "s"} matching “${levelSearch.trim()}”`
+                    : "Topics are organised into folders by CEFR level. Open a folder to see its topics."}
+                </p>
+              </div>
+              <div className="w-full sm:max-w-md">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    value={levelSearch}
+                    onChange={(e) => setLevelSearch(e.target.value)}
+                    placeholder="Search folders & exercises…"
+                    className="pl-9"
+                  />
+                </div>
+                {!query && levelSearch.trim().length > 0 && (
+                  <p className="mt-1.5 text-xs text-slate-400 duration-200 animate-in fade-in-0">
+                    Type at least 3 characters to search.
+                  </p>
+                )}
+              </div>
             </div>
-            <div
-              className="mt-3 grid gap-3"
-              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-            >
-              {levelFolders.map((folder) => (
-                <LevelFolderCard
-                  key={folder.level}
-                  level={folder.level}
-                  topicCount={folder.topics.length}
-                  exerciseCount={folder.exerciseCount}
-                  questionCount={folder.questionCount}
-                  onOpen={() => setSelectedLevel(folder.level)}
-                />
-              ))}
-            </div>
+
+            {query ? (
+              totalMatches === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center duration-200 animate-in fade-in-0">
+                  <p className="font-medium text-slate-900">Nothing found</p>
+                  <p className="text-sm text-slate-500">
+                    Try a different word, or clear the search to browse by level.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {topicResults.length > 0 && (
+                    <div className="space-y-2.5 duration-300 animate-in fade-in-0 slide-in-from-bottom-1">
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Folders · {topicResults.length}
+                      </h3>
+                      <div
+                        className="grid gap-3"
+                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
+                      >
+                        {topicResults.map((t) => (
+                          <TopicHubCard
+                            key={t.topic}
+                            topic={t}
+                            onSelect={() => setSelectedTopic(t.topic)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {exerciseResults.length > 0 && (
+                    <div className="space-y-2.5 duration-300 animate-in fade-in-0 slide-in-from-bottom-1">
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Exercises · {exerciseResults.length}
+                      </h3>
+                      <div
+                        className="grid gap-3"
+                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
+                      >
+                        {exerciseResults.map((ex) => (
+                          <ExerciseSearchCard
+                            key={ex.id}
+                            exercise={ex}
+                            onOpenTopic={() => setSelectedTopic(ex.topic)}
+                            onPreview={() => setPreviewTarget(ex)}
+                            onAssign={canAssign ? () => setAssignTarget(ex) : undefined}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            ) : (
+              <div
+                className="grid gap-3 duration-300 animate-in fade-in-0"
+                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
+              >
+                {levelFolders.map((folder) => (
+                  <LevelFolderCard
+                    key={folder.level}
+                    level={folder.level}
+                    topicCount={folder.topics.length}
+                    exerciseCount={folder.exerciseCount}
+                    questionCount={folder.questionCount}
+                    colorCls={folderColorClass(folder.color)}
+                    onOpen={() => setSelectedLevel(folder.level)}
+                  />
+                ))}
+                {extraLevels.map((lvl) => (
+                  <LevelFolderCard
+                    key={lvl.key}
+                    level={lvl.key}
+                    label={lvl.label || lvl.key}
+                    topicCount={0}
+                    exerciseCount={0}
+                    questionCount={0}
+                    colorCls={folderColorClass(lvl.color)}
+                    comingSoon={lvl.comingSoon}
+                    onOpen={() => setSelectedLevel(lvl.key)}
+                  />
+                ))}
+              </div>
+            )}
           </section>
         )}
+
+        <AssignDialog
+          exercise={assignTarget}
+          groups={groups}
+          open={!!assignTarget}
+          onOpenChange={(open) => !open && setAssignTarget(null)}
+          onAssigned={() => {
+            toast({ title: "Exercise assigned to group" })
+            setAssignTarget(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
+        <ExercisePreviewDialog
+          exercise={previewTarget}
+          open={!!previewTarget}
+          onOpenChange={(open) => !open && setPreviewTarget(null)}
+        />
       </div>
     )
   }
@@ -409,12 +549,19 @@ export default function ExercisesSection({
           ]}
         />
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">
-            {selectedLevel}{" "}
-            <span className="text-base font-medium text-slate-500">
-              · {LEVEL_LABELS[selectedLevel] ?? ""}
+          <div className="flex items-center gap-2.5">
+            <span
+              className={cn(
+                "inline-flex items-center rounded-xl px-3 py-1 text-xl font-bold ring-1",
+                folderColorClass(activeLevelFolder?.color) ?? levelBadgeClass(selectedLevel),
+              )}
+            >
+              {selectedLevel}
             </span>
-          </h2>
+            <span className="text-base font-medium text-slate-500">
+              {LEVEL_LABELS[selectedLevel] ?? ""}
+            </span>
+          </div>
           <p className="mt-1 text-sm text-slate-500">Choose a section</p>
         </div>
         <Button
@@ -599,6 +746,16 @@ export default function ExercisesSection({
           </p>
         )}
       </div>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => setSelectedTopic(null)}
+        className="gap-1.5 border-slate-300 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:text-slate-900"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back
+      </Button>
 
       <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100/70 p-1">
         <button
@@ -849,23 +1006,37 @@ function Breadcrumbs({
 
 function LevelFolderCard({
   level,
+  label,
   topicCount,
   exerciseCount,
   questionCount,
+  colorCls,
+  comingSoon = false,
   onOpen,
 }: {
   level: string
+  label?: string
   topicCount: number
   exerciseCount: number
   questionCount: number
+  colorCls?: string
+  comingSoon?: boolean
   onOpen: () => void
 }) {
-  const cls = LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700 ring-slate-200/70"
+  const cls =
+    colorCls ?? LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700 ring-slate-200/70"
   return (
     <button
       type="button"
-      onClick={onOpen}
-      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+      onClick={comingSoon ? undefined : onOpen}
+      disabled={comingSoon}
+      aria-disabled={comingSoon}
+      className={cn(
+        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        comingSoon
+          ? "cursor-not-allowed opacity-60"
+          : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
+      )}
     >
       <div className="flex items-center justify-between gap-2">
         <span
@@ -877,16 +1048,26 @@ function LevelFolderCard({
         >
           <Folder className="h-6 w-6" />
         </span>
-        <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1", cls)}>
-          {level}
-        </span>
+        {comingSoon ? (
+          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500 ring-1 ring-slate-200/70">
+            Soon
+          </span>
+        ) : (
+          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1", cls)}>
+            {level}
+          </span>
+        )}
       </div>
       <div>
-        <h3 className="text-base font-semibold text-slate-900">{LEVEL_LABELS[level] ?? level}</h3>
+        <h3 className="text-base font-semibold text-slate-900">
+          {label ?? LEVEL_LABELS[level] ?? level}
+        </h3>
         <p className="mt-0.5 text-xs text-slate-500">
-          {topicCount} topic{topicCount === 1 ? "" : "s"} · {exerciseCount} exercise
-          {exerciseCount === 1 ? "" : "s"} · {questionCount} question
-          {questionCount === 1 ? "" : "s"}
+          {comingSoon
+            ? "Coming soon"
+            : `${topicCount} topic${topicCount === 1 ? "" : "s"} · ${exerciseCount} exercise${
+                exerciseCount === 1 ? "" : "s"
+              } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
         </p>
       </div>
     </button>
@@ -1000,6 +1181,71 @@ function VocabDeckCard({
         </Button>
       </div>
     </div>
+  )
+}
+
+/** Compact exercise card shown directly in global search results. */
+function ExerciseSearchCard({
+  exercise: ex,
+  onOpenTopic,
+  onPreview,
+  onAssign,
+}: {
+  exercise: GrammarExercise
+  onOpenTopic: () => void
+  onPreview: () => void
+  onAssign?: () => void
+}) {
+  const diff = DIFFICULTY_META[ex.difficulty]
+  return (
+    <Card className="h-full overflow-hidden border-slate-200/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+      <CardContent className="flex h-full flex-col gap-3 p-4">
+        <div className="flex items-start justify-between gap-2">
+          <button
+            type="button"
+            onClick={onOpenTopic}
+            className="text-left text-[11px] font-medium uppercase tracking-wider text-slate-500 hover:text-slate-900"
+          >
+            {topicTitle(ex.topic)}
+          </button>
+          <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold ring-1", levelBadgeClass(ex.level))}>
+            {ex.level}
+          </span>
+        </div>
+
+        <h4 className="text-sm font-bold leading-snug text-slate-900">{ex.title}</h4>
+
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+          <span className="rounded-md bg-slate-50 px-2 py-0.5">{prettifySubtopic(ex.subtopic)}</span>
+          <span className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-0.5">
+            <ListChecks className="h-3 w-3 text-slate-400" />
+            <span className="tabular-nums">{ex.totalQuestions}</span>
+          </span>
+          <span className={cn("ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-semibold ring-1", diff.cls)}>
+            <span className={cn("h-1.5 w-1.5 rounded-full", diff.dot)} />
+            {diff.label}
+          </span>
+        </div>
+
+        <div className="mt-auto flex gap-2 pt-1">
+          {onAssign && (
+            <Button size="sm" onClick={onAssign} className="h-8 flex-1 gap-1.5 bg-blue-500 text-white hover:bg-blue-600">
+              <UserPlus className="h-3.5 w-3.5" />
+              Assign
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onPreview}
+            className={cn("h-8 gap-1.5", !onAssign && "ml-auto")}
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Preview
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

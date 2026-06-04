@@ -6,12 +6,18 @@
  * list — in that case we transparently fall back to the bundled local seed so
  * the exercises tab keeps working. Once data exists in the DB, it wins.
  */
-import { exercisesApi } from "./api"
+import { exercisesApi, type ExtraLevel } from "./api"
 import { listGrammarExercises } from "./grammar-storage"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import topicsMetaRaw from "./grammar-topics-meta.json"
 import { mergeCustomTopics } from "./topic-storage"
+
+/** Shown even before the DB is seeded so the folders never disappear offline. */
+const DEFAULT_EXTRA_LEVELS: ExtraLevel[] = [
+  { key: "Advanced", label: "Advanced", color: "rose", comingSoon: true, order: 100 },
+  { key: "Expert", label: "Expert", color: "purple", comingSoon: true, order: 101 },
+]
 
 /** Merge remote exercises with locally-added ones (local wins on slug clash). */
 function mergeLocalExercises(remote: GrammarExercise[]): GrammarExercise[] {
@@ -32,6 +38,7 @@ interface CacheEntry<T> {
 
 const exercisesCache: CacheEntry<GrammarExercise[]> = {}
 const topicsCache: CacheEntry<TopicMeta[]> = {}
+const levelsCache: CacheEntry<ExtraLevel[]> = {}
 
 function isFresh<T>(entry: CacheEntry<T>): boolean {
   return (
@@ -95,6 +102,22 @@ export const getTopicsMeta = (force = false): Promise<TopicMeta[]> =>
     force,
   )
 
+/** Extra (non-CEFR) level folders — from the DB, falling back to defaults. */
+export const getExtraLevels = (force = false): Promise<ExtraLevel[]> =>
+  load(
+    levelsCache,
+    async () => {
+      try {
+        const remote = await exercisesApi.levels()
+        if (remote.length > 0) return remote
+      } catch {
+        /* fall through to defaults */
+      }
+      return DEFAULT_EXTRA_LEVELS
+    },
+    force,
+  )
+
 /** Synchronously read whatever is cached — for instant first render. */
 export const peekExercises = (): GrammarExercise[] | undefined =>
   exercisesCache.data
@@ -130,15 +153,4 @@ export function invalidateExercises(): void {
   exercisesCache.fetchedAt = undefined
   topicsCache.data = undefined
   topicsCache.fetchedAt = undefined
-}
-
-/**
- * The bundled local catalogue (folders + exercises) used as the import payload
- * when syncing everything into the database.
- */
-export function getLocalCatalog(): {
-  exercises: GrammarExercise[]
-  topics: TopicMeta[]
-} {
-  return { exercises: listGrammarExercises(), topics: LOCAL_TOPICS }
 }

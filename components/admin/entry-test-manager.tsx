@@ -32,7 +32,7 @@ import {
   Trash2,
 } from "lucide-react"
 import type { Student } from "@/lib/admin-storage"
-import { getStudents, peekStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
 import { TableSkeleton } from "./skeletons"
 import { entryTestApi } from "@/lib/api"
 import type {
@@ -63,7 +63,7 @@ export default function EntryTestManager({
   createdByName: string
 }) {
   const { toast } = useToast()
-  const [students, setStudents] = useState<Student[]>(() => peekStudents() ?? [])
+  const { students, refreshStudents } = useAdminData()
   const [tests, setTests] = useState<EntryTestSubmission[]>([])
   const [showAssign, setShowAssign] = useState(false)
   const [assignStudentId, setAssignStudentId] = useState("")
@@ -73,8 +73,7 @@ export default function EntryTestManager({
 
   const refresh = async () => {
     try {
-      const [s, list] = await Promise.all([getStudents(), entryTestApi.list()])
-      setStudents(s)
+      const [, list] = await Promise.all([refreshStudents(true), entryTestApi.list()])
       setTests(list)
     } catch {
       toast({

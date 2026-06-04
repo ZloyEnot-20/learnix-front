@@ -17,7 +17,7 @@ import {
   TimerIcon,
   XCircle,
 } from "lucide-react"
-import { ensureGrammarSeed, isBlankCorrect } from "@/lib/grammar-storage"
+import { isBlankCorrect } from "@/lib/grammar-storage"
 import { getExerciseBySlug, peekExerciseBySlug } from "@/lib/exercises-cache"
 import { peekHomeworkById, invalidateMyHomework } from "@/lib/homework-cache"
 import {
@@ -66,7 +66,6 @@ function ExerciseRunner() {
   )
 
   useEffect(() => {
-    ensureGrammarSeed()
     if (!slug) return
     // Already resolved from cache — nothing to fetch.
     if (exercise) return
@@ -142,6 +141,10 @@ function ExerciseRunner() {
     case "word-formation":
     case "sentence-transformation":
       return <TextAnswerRunner {...common} />
+    case "error-correction":
+      return <ErrorCorrectionRunner {...common} />
+    case "word-order":
+      return <WordOrderRunner {...common} />
     default:
       return <FillBlankRunner {...common} />
   }
@@ -598,7 +601,9 @@ function TextAnswerRunner({
   const handleCheck = useCallback(() => {
     if (!question || result !== "idle" || input.trim().length === 0) return
     const expected = question.answer ?? ""
-    const isCorrect = normalizeAnswer(input) === normalizeAnswer(expected)
+    const accepted = [expected, ...(question.accepted ?? [])].filter((a) => a.length > 0)
+    const typed = normalizeAnswer(input)
+    const isCorrect = accepted.some((a) => normalizeAnswer(a) === typed)
     setResult(isCorrect ? "correct" : "incorrect")
     if (isCorrect) {
       setCorrectCount((c) => c + 1)
@@ -709,6 +714,433 @@ function TextAnswerRunner({
             <ActionRow
               result={result}
               canCheck={input.trim().length > 0}
+              isLast={index + 1 >= total}
+              onCheck={handleCheck}
+              onNext={handleNext}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+// ─── Error correction runner (click a wrong chunk and fix it) ────────────────
+
+function ErrorCorrectionRunner({
+  exercise,
+  backHref,
+  homeworkId,
+  studentId,
+  timeLimitMinutes,
+}: {
+  exercise: GrammarExercise
+  backHref: string
+  homeworkId?: string
+  studentId?: string
+  timeLimitMinutes?: number
+}) {
+  const questions = exercise.content.questions ?? []
+  const [index, setIndex] = useState(0)
+  const [edits, setEdits] = useState<Record<string, string>>({})
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [showHint, setShowHint] = useState(false)
+  const [result, setResult] = useState<"idle" | "correct" | "incorrect">("idle")
+  const [correctCount, setCorrectCount] = useState(0)
+  const [mistakes, setMistakes] = useState<ReviewItem[]>([])
+  const [finished, setFinished] = useState(false)
+  const [startedAt] = useState(() => Date.now())
+  const [finishedAt, setFinishedAt] = useState<number | null>(null)
+  const [timedOut, setTimedOut] = useState(false)
+  const secondsLeft = useCountdown(
+    timeLimitMinutes,
+    () => {
+      setTimedOut(true)
+      setFinished(true)
+      setFinishedAt(Date.now())
+    },
+    finished,
+  )
+
+  const question = questions[index] ?? null
+  const segments = question?.segments ?? []
+
+  useEffect(() => {
+    setEdits({})
+    setEditingId(null)
+    setShowHint(false)
+    setResult("idle")
+  }, [index])
+
+  const rebuild = useCallback(
+    () => segments.map((s) => (edits[s.id] ?? s.text) + (s.after ?? "")).join("").trim(),
+    [segments, edits],
+  )
+
+  const handleCheck = useCallback(() => {
+    if (!question || result !== "idle") return
+    const rebuilt = rebuild()
+    const accepted = [question.answer ?? "", ...(question.accepted ?? [])].filter(
+      (a) => a.length > 0,
+    )
+    const isCorrect = accepted.some((a) => normalizeAnswer(a) === normalizeAnswer(rebuilt))
+    setEditingId(null)
+    setResult(isCorrect ? "correct" : "incorrect")
+    if (isCorrect) {
+      setCorrectCount((c) => c + 1)
+    } else {
+      setMistakes((prev) => [
+        ...prev,
+        {
+          id: question.id,
+          prompt: question.text,
+          userAnswer: rebuilt,
+          correctAnswer: question.answer ?? "",
+          explanation: question.explanation,
+        },
+      ])
+    }
+  }, [question, result, rebuild])
+
+  const handleNext = useCallback(() => {
+    if (index + 1 >= questions.length) {
+      setFinished(true)
+      setFinishedAt(Date.now())
+      return
+    }
+    setIndex((i) => i + 1)
+  }, [questions.length, index])
+
+  const total = questions.length
+  const progressPct = Math.round(((finished ? total : index) / total) * 100)
+
+  if (finished) {
+    return (
+      <ResultsScreen
+        exercise={exercise}
+        backHref={backHref}
+        correctCount={correctCount}
+        total={total}
+        startedAt={startedAt}
+        finishedAt={finishedAt}
+        mistakes={mistakes}
+        homeworkId={homeworkId}
+        studentId={studentId}
+        timedOut={timedOut}
+      />
+    )
+  }
+
+  if (!question) return null
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <ExerciseHeader
+        exercise={exercise}
+        backHref={backHref}
+        secondsLeft={secondsLeft}
+        hideBack={!!homeworkId}
+      />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+        <ProgressBar index={index} total={total} correctCount={correctCount} progressPct={progressPct} />
+
+        <Card className="overflow-hidden">
+          <CardContent className="pt-6 pb-6 space-y-5">
+            <h2 className="text-lg font-semibold text-slate-900">Question {index + 1}</h2>
+
+            {exercise.instructions && (
+              <p className="text-sm text-slate-500">{exercise.instructions}</p>
+            )}
+
+            <div className="text-lg leading-loose text-slate-900">
+              {segments.map((seg) => {
+                const value = edits[seg.id] ?? seg.text
+                const changed = value !== seg.text
+                const isEditing = editingId === seg.id
+                return (
+                  <span key={seg.id}>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        autoFocus
+                        value={value}
+                        onChange={(e) =>
+                          setEdits((m) => ({ ...m, [seg.id]: e.target.value }))
+                        }
+                        onBlur={() => setEditingId(null)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault()
+                            setEditingId(null)
+                          }
+                        }}
+                        style={{ width: `${Math.max(value.length, 3) + 1}ch` }}
+                        className="rounded-md border border-blue-400 bg-blue-50 px-1.5 py-0.5 text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        title={seg.hint}
+                        onClick={() => result === "idle" && setEditingId(seg.id)}
+                        disabled={result !== "idle"}
+                        className={cn(
+                          "rounded-md px-1 py-0.5 transition-colors",
+                          result === "idle" &&
+                            "cursor-pointer hover:bg-amber-100 hover:ring-1 hover:ring-amber-200",
+                          changed
+                            ? "bg-amber-100 font-semibold text-amber-900 underline decoration-dotted underline-offset-4"
+                            : "text-slate-900",
+                        )}
+                      >
+                        {value}
+                      </button>
+                    )}
+                    <span className="whitespace-pre">{seg.after ?? ""}</span>
+                  </span>
+                )
+              })}
+            </div>
+
+            {result === "idle" && (
+              <p className="text-xs text-slate-400">
+                Click a chunk to fix it. Leave the sentence unchanged if it is already correct.
+              </p>
+            )}
+
+            {question.hint && result === "idle" && (
+              <HintRow showHint={showHint} setShowHint={setShowHint} hint={question.hint} />
+            )}
+
+            {result !== "idle" && (
+              <FeedbackBox
+                correct={result === "correct"}
+                correctAnswer={question.answer ?? ""}
+                explanation={question.explanation}
+              />
+            )}
+
+            <ActionRow
+              result={result}
+              canCheck
+              isLast={index + 1 >= total}
+              onCheck={handleCheck}
+              onNext={handleNext}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+// ─── Word order runner (arrange the scrambled words) ─────────────────────────
+
+function arraysEqual(a: string[], b: string[]): boolean {
+  return a.length === b.length && a.every((x, i) => normalizeAnswer(x) === normalizeAnswer(b[i]))
+}
+
+function WordOrderRunner({
+  exercise,
+  backHref,
+  homeworkId,
+  studentId,
+  timeLimitMinutes,
+}: {
+  exercise: GrammarExercise
+  backHref: string
+  homeworkId?: string
+  studentId?: string
+  timeLimitMinutes?: number
+}) {
+  const questions = exercise.content.questions ?? []
+  const [index, setIndex] = useState(0)
+  const [order, setOrder] = useState<number[]>([])
+  const [showHint, setShowHint] = useState(false)
+  const [result, setResult] = useState<"idle" | "correct" | "incorrect">("idle")
+  const [correctCount, setCorrectCount] = useState(0)
+  const [mistakes, setMistakes] = useState<ReviewItem[]>([])
+  const [finished, setFinished] = useState(false)
+  const [startedAt] = useState(() => Date.now())
+  const [finishedAt, setFinishedAt] = useState<number | null>(null)
+  const [timedOut, setTimedOut] = useState(false)
+  const secondsLeft = useCountdown(
+    timeLimitMinutes,
+    () => {
+      setTimedOut(true)
+      setFinished(true)
+      setFinishedAt(Date.now())
+    },
+    finished,
+  )
+
+  const question = questions[index] ?? null
+  const scrambled = question?.scrambled ?? []
+  const prefix = question?.prefix ?? []
+  const suffix = question?.suffix ?? []
+
+  const correctSentence = [...prefix, ...(question?.correct ?? []), ...suffix].join(" ")
+
+  useEffect(() => {
+    setOrder([])
+    setShowHint(false)
+    setResult("idle")
+  }, [index])
+
+  const placeWord = (i: number) => {
+    if (result !== "idle" || order.includes(i)) return
+    setOrder((o) => [...o, i])
+  }
+  const removeWord = (i: number) => {
+    if (result !== "idle") return
+    setOrder((o) => o.filter((x) => x !== i))
+  }
+
+  const handleCheck = useCallback(() => {
+    if (!question || result !== "idle" || order.length !== scrambled.length) return
+    const arranged = order.map((i) => scrambled[i])
+    const candidates = [question.correct ?? [], ...(question.alternates ?? [])]
+    const isCorrect = candidates.some((c) => arraysEqual(arranged, c))
+    setResult(isCorrect ? "correct" : "incorrect")
+    if (isCorrect) {
+      setCorrectCount((c) => c + 1)
+    } else {
+      setMistakes((prev) => [
+        ...prev,
+        {
+          id: question.id,
+          prompt: [...prefix, ...scrambled, ...suffix].join(" "),
+          userAnswer: [...prefix, ...arranged, ...suffix].join(" "),
+          correctAnswer: correctSentence,
+          explanation: question.explanation,
+        },
+      ])
+    }
+  }, [question, result, order, scrambled, prefix, suffix, correctSentence])
+
+  const handleNext = useCallback(() => {
+    if (index + 1 >= questions.length) {
+      setFinished(true)
+      setFinishedAt(Date.now())
+      return
+    }
+    setIndex((i) => i + 1)
+  }, [questions.length, index])
+
+  const total = questions.length
+  const progressPct = Math.round(((finished ? total : index) / total) * 100)
+
+  if (finished) {
+    return (
+      <ResultsScreen
+        exercise={exercise}
+        backHref={backHref}
+        correctCount={correctCount}
+        total={total}
+        startedAt={startedAt}
+        finishedAt={finishedAt}
+        mistakes={mistakes}
+        homeworkId={homeworkId}
+        studentId={studentId}
+        timedOut={timedOut}
+      />
+    )
+  }
+
+  if (!question) return null
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <ExerciseHeader
+        exercise={exercise}
+        backHref={backHref}
+        secondsLeft={secondsLeft}
+        hideBack={!!homeworkId}
+      />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+        <ProgressBar index={index} total={total} correctCount={correctCount} progressPct={progressPct} />
+
+        <Card className="overflow-hidden">
+          <CardContent className="pt-6 pb-6 space-y-5">
+            <h2 className="text-lg font-semibold text-slate-900">Question {index + 1}</h2>
+
+            {exercise.instructions && (
+              <p className="text-sm text-slate-500">{exercise.instructions}</p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-1.5 text-lg text-slate-900">
+              {prefix.map((w, i) => (
+                <span key={`p-${i}`} className="text-slate-400">
+                  {w}
+                </span>
+              ))}
+              {order.length === 0 ? (
+                <span className="rounded-md border border-dashed border-slate-300 px-3 py-1 text-sm text-slate-400">
+                  tap the words below
+                </span>
+              ) : (
+                order.map((wi) => (
+                  <button
+                    key={`a-${wi}`}
+                    type="button"
+                    onClick={() => removeWord(wi)}
+                    disabled={result !== "idle"}
+                    className={cn(
+                      "rounded-md border px-2.5 py-1 text-base font-medium transition-colors",
+                      result === "idle"
+                        ? "border-blue-300 bg-blue-50 text-blue-900 hover:bg-blue-100"
+                        : "border-slate-200 bg-white text-slate-900",
+                    )}
+                  >
+                    {scrambled[wi]}
+                  </button>
+                ))
+              )}
+              {suffix.map((w, i) => (
+                <span key={`s-${i}`} className="text-slate-400">
+                  {w}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+              {scrambled.map((w, i) => {
+                const used = order.includes(i)
+                return (
+                  <button
+                    key={`c-${i}`}
+                    type="button"
+                    onClick={() => placeWord(i)}
+                    disabled={used || result !== "idle"}
+                    className={cn(
+                      "rounded-lg border px-3 py-1.5 text-base font-medium transition-colors",
+                      used
+                        ? "cursor-default border-slate-100 bg-slate-50 text-slate-300"
+                        : "border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50",
+                    )}
+                  >
+                    {w}
+                  </button>
+                )
+              })}
+            </div>
+
+            {question.hint && result === "idle" && (
+              <HintRow showHint={showHint} setShowHint={setShowHint} hint={question.hint} />
+            )}
+
+            {result !== "idle" && (
+              <FeedbackBox
+                correct={result === "correct"}
+                correctAnswer={correctSentence}
+                explanation={question.explanation}
+              />
+            )}
+
+            <ActionRow
+              result={result}
+              canCheck={order.length === scrambled.length}
               isLast={index + 1 >= total}
               onCheck={handleCheck}
               onNext={handleNext}
@@ -1271,10 +1703,17 @@ function ResultsScreen({
   const passed = !timedOut && correctCount >= exercise.passingScore
   const scorePct = Math.round((correctCount / total) * 100)
 
+  // Guard against React StrictMode double-invoking this effect in dev, which
+  // would POST the attempt twice and create duplicate notifications.
+  const recorded = useRef(false)
+
   // When the exercise was opened from a homework assignment, record the
   // student's attempt so it shows as submitted on their dashboard and to the
   // teacher. Runs once when the results screen mounts.
   useEffect(() => {
+    if (recorded.current) return
+    recorded.current = true
+
     // Always record topic/subtopic accuracy for analytics (any run).
     void analyticsApi
       .record({

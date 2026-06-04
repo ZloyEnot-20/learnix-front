@@ -9,6 +9,8 @@ export interface TopicMeta {
   levels: string
   totalMinutes: number
   description: string
+  /** Preset colour id for the folder's CEFR level tint (see folder-colors.ts). */
+  color?: string
 }
 
 const TOPICS_META: TopicMeta[] = topicsMetaRaw as TopicMeta[]

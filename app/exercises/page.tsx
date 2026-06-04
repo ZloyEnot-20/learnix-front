@@ -9,28 +9,20 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  DatabaseZap,
   Folder,
   Mic,
   PenLine,
   SpellCheck,
 } from "lucide-react"
-import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import {
   formatDuration,
   buildTopicSummaries,
   type TopicSummary,
 } from "@/lib/grammar-utils"
-import {
-  getExercises,
-  getTopicsMeta,
-  getLocalCatalog,
-  invalidateExercises,
-} from "@/lib/exercises-cache"
+import { getExercises, getTopicsMeta, getExtraLevels } from "@/lib/exercises-cache"
+import { type ExtraLevel } from "@/lib/api"
+import { folderColorClass } from "@/lib/folder-colors"
 import { listVocabDecks, type VocabDeck } from "@/lib/vocabulary-data"
-import { exercisesApi } from "@/lib/api"
-import { useAuth } from "@/lib/auth-context"
-import { useToast } from "@/hooks/use-toast"
 import { TopicCardsSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 
@@ -83,6 +75,32 @@ function primaryLevel(levels: string[]): string {
   return best === Number.MAX_SAFE_INTEGER ? "Other" : CEFR_ORDER[best]
 }
 
+/**
+ * The folder a topic lives in. A wide-ranging topic (e.g. Past Simple spans
+ * A1–B2) should sit in its *dominant* level, not get dragged into the lowest
+ * one by a single introductory exercise. We tally each exercise's entry level
+ * and pick the most common (ties resolve to the lower CEFR level). Placeholder
+ * topics without exercises fall back to their declared range.
+ */
+function topicFolderLevel(topic: TopicSummary): string {
+  if (!topic.exercises.length) return primaryLevel(topic.levels)
+  const counts = new Map<string, number>()
+  for (const ex of topic.exercises) {
+    const lvl = primaryLevel([ex.level])
+    counts.set(lvl, (counts.get(lvl) ?? 0) + 1)
+  }
+  const order = [...CEFR_ORDER, "Other"]
+  let bestLevel = "Other"
+  let bestCount = -1
+  for (const [lvl, count] of counts) {
+    if (count > bestCount || (count === bestCount && order.indexOf(lvl) < order.indexOf(bestLevel))) {
+      bestLevel = lvl
+      bestCount = count
+    }
+  }
+  return bestLevel
+}
+
 function summariseLevels(levels: string[]): { display: string; cls: string } {
   const all = new Set<string>()
   for (const l of levels) {
@@ -104,57 +122,45 @@ function summariseLevels(levels: string[]): { display: string; cls: string } {
 }
 
 export default function ExercisesIndexPage() {
-  const { user } = useAuth()
-  const { toast } = useToast()
   const [topics, setTopics] = useState<TopicSummary[]>([])
-  const [syncing, setSyncing] = useState(false)
+  const [extraLevels, setExtraLevels] = useState<ExtraLevel[]>([])
   const [loading, setLoading] = useState(true)
 
-  const canSync = user ? user.role !== "student" : false
-
   const refresh = async () => {
-    const [exercises, metas] = await Promise.all([getExercises(), getTopicsMeta()])
+    const [exercises, metas, levels] = await Promise.all([
+      getExercises(),
+      getTopicsMeta(),
+      getExtraLevels(),
+    ])
     setTopics(buildTopicSummaries(exercises, metas))
+    setExtraLevels(levels)
   }
 
   useEffect(() => {
-    ensureGrammarSeed()
     void refresh().finally(() => setLoading(false))
   }, [])
-
-  const handleSync = async () => {
-    setSyncing(true)
-    try {
-      const { exercises, topics: topicMeta } = getLocalCatalog()
-      const result = await exercisesApi.import({ topics: topicMeta, exercises })
-      invalidateExercises()
-      await refresh()
-      toast({
-        title: "Catalogue synced to database",
-        description: `${result.exercises.received} exercises · ${result.topics.received} folders`,
-      })
-    } catch (err) {
-      toast({
-        title: "Could not sync catalogue",
-        description: err instanceof Error ? err.message : "Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setSyncing(false)
-    }
-  }
 
   const grammarTopics = useMemo(
     () => topics.filter((t) => t.category === "grammar" || t.category === "vocabulary"),
     [topics],
   )
 
+  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
+  useEffect(() => {
+    setVocabDecks(listVocabDecks())
+  }, [])
+
   const levelFolders = useMemo(() => {
     const map = new Map<string, TopicSummary[]>()
     for (const t of grammarTopics) {
-      const lvl = primaryLevel(t.levels)
+      const lvl = topicFolderLevel(t)
       if (!map.has(lvl)) map.set(lvl, [])
       map.get(lvl)!.push(t)
+    }
+    // Surface levels that only have vocabulary decks so they stay reachable.
+    for (const d of vocabDecks) {
+      const lvl = primaryLevel([d.level])
+      if (!map.has(lvl)) map.set(lvl, [])
     }
     const order = [...CEFR_ORDER, "Other"]
     return [...map.entries()]
@@ -165,7 +171,7 @@ export default function ExercisesIndexPage() {
         exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
         questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
       }))
-  }, [grammarTopics])
+  }, [grammarTopics, vocabDecks])
 
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -176,16 +182,18 @@ export default function ExercisesIndexPage() {
   const vocabDecksForLevel = useMemo(
     () =>
       selectedLevel
-        ? listVocabDecks().filter((d) => primaryLevel([d.level]) === selectedLevel)
+        ? vocabDecks.filter((d) => primaryLevel([d.level]) === selectedLevel)
         : [],
-    [selectedLevel],
+    [selectedLevel, vocabDecks],
   )
+  const hasContent = grammarTopics.length > 0 || vocabDecks.length > 0
+
   const categoryStats = (
     level: string,
     categoryId: string,
   ): { count: number; lines: string[] } => {
     if (categoryId === "vocabulary") {
-      const decks = listVocabDecks().filter((d) => primaryLevel([d.level]) === level)
+      const decks = vocabDecks.filter((d) => primaryLevel([d.level]) === level)
       const words = decks.reduce((acc, d) => acc + d.words.length, 0)
       return {
         count: decks.length,
@@ -227,16 +235,6 @@ export default function ExercisesIndexPage() {
                 Practice exercises grouped by topic. Pick a topic to see all available exercises.
               </p>
             </div>
-            {canSync && (
-              <Button
-                onClick={handleSync}
-                loading={syncing}
-                className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
-              >
-                <DatabaseZap className="h-4 w-4" />
-                Sync to database
-              </Button>
-            )}
           </div>
         </div>
       </div>
@@ -251,10 +249,9 @@ export default function ExercisesIndexPage() {
           </section>
         )}
 
-        {!loading && grammarTopics.length > 0 && !selectedLevel && (
+        {!loading && hasContent && !selectedLevel && (
           <section>
-            <Breadcrumbs items={[{ label: "Exercises" }]} />
-            <h2 className="mt-4 text-lg font-semibold text-slate-900">Choose a level</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Choose a level</h2>
             <p className="mt-1 text-sm text-slate-500">
               Topics are organised into folders by CEFR level. Open a folder to see its topics.
             </p>
@@ -272,11 +269,24 @@ export default function ExercisesIndexPage() {
                   onOpen={() => setSelectedLevel(folder.level)}
                 />
               ))}
+              {extraLevels.map((lvl) => (
+                <LevelFolderCard
+                  key={lvl.key}
+                  level={lvl.key}
+                  label={lvl.label || lvl.key}
+                  topicCount={0}
+                  exerciseCount={0}
+                  questionCount={0}
+                  colorCls={folderColorClass(lvl.color)}
+                  comingSoon={lvl.comingSoon}
+                  onOpen={() => setSelectedLevel(lvl.key)}
+                />
+              ))}
             </div>
           </section>
         )}
 
-        {!loading && grammarTopics.length > 0 && selectedLevel && !selectedCategory && (
+        {!loading && hasContent && selectedLevel && !selectedCategory && (
           <section>
             <Breadcrumbs
               items={[
@@ -322,7 +332,7 @@ export default function ExercisesIndexPage() {
           </section>
         )}
 
-        {!loading && grammarTopics.length > 0 && selectedLevel && selectedCategory && (
+        {!loading && hasContent && selectedLevel && selectedCategory && (
           <section>
             {(() => {
               const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
@@ -394,7 +404,7 @@ export default function ExercisesIndexPage() {
           </section>
         )}
 
-        {!loading && topics.length === 0 && (
+        {!loading && !hasContent && (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">No exercises yet</p>
             <p className="text-sm text-slate-500">
@@ -441,23 +451,36 @@ function Breadcrumbs({
 
 function LevelFolderCard({
   level,
+  label,
   topicCount,
   exerciseCount,
   questionCount,
+  colorCls,
+  comingSoon = false,
   onOpen,
 }: {
   level: string
+  label?: string
   topicCount: number
   exerciseCount: number
   questionCount: number
+  colorCls?: string
+  comingSoon?: boolean
   onOpen: () => void
 }) {
-  const cls = LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700"
+  const cls = colorCls ?? LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700"
   return (
     <button
       type="button"
-      onClick={onOpen}
-      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+      onClick={comingSoon ? undefined : onOpen}
+      disabled={comingSoon}
+      aria-disabled={comingSoon}
+      className={cn(
+        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        comingSoon
+          ? "cursor-not-allowed opacity-60"
+          : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
+      )}
     >
       <div className="flex items-center justify-between gap-2">
         <span
@@ -469,16 +492,26 @@ function LevelFolderCard({
         >
           <Folder className="h-6 w-6" />
         </span>
-        <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
-          {level}
-        </span>
+        {comingSoon ? (
+          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Soon
+          </span>
+        ) : (
+          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
+            {level}
+          </span>
+        )}
       </div>
       <div>
-        <h3 className="text-base font-semibold text-slate-900">{LEVEL_LABELS[level] ?? level}</h3>
+        <h3 className="text-base font-semibold text-slate-900">
+          {label ?? LEVEL_LABELS[level] ?? level}
+        </h3>
         <p className="mt-0.5 text-xs text-slate-500">
-          {topicCount} topic{topicCount === 1 ? "" : "s"} · {exerciseCount} exercise
-          {exerciseCount === 1 ? "" : "s"} · {questionCount} question
-          {questionCount === 1 ? "" : "s"}
+          {comingSoon
+            ? "Coming soon"
+            : `${topicCount} topic${topicCount === 1 ? "" : "s"} · ${exerciseCount} exercise${
+                exerciseCount === 1 ? "" : "s"
+              } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
         </p>
       </div>
     </button>

@@ -24,7 +24,7 @@ import {
   X,
 } from "lucide-react"
 import type { Group, Payment, Student } from "@/lib/admin-storage"
-import { getGroups, getStudents } from "@/lib/admin-cache"
+import { useAdminData } from "@/lib/admin-data-context"
 import { CardGridSkeleton, StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
 import { paymentsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
@@ -45,8 +45,7 @@ interface FinanceManagerProps {
 
 export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   const { toast } = useToast()
-  const [groups, setGroups] = useState<Group[]>([])
-  const [students, setStudents] = useState<Student[]>([])
+  const { students, groups, refreshStudents, refreshGroups } = useAdminData()
   const [payments, setPayments] = useState<Payment[]>([])
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "unpaid">("all")
@@ -56,13 +55,11 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
 
   const refresh = async () => {
     try {
-      const [g, s, p] = await Promise.all([
-        getGroups(),
-        getStudents(),
+      const [, , p] = await Promise.all([
+        refreshGroups(true),
+        refreshStudents(true),
         paymentsApi.list(),
       ])
-      setGroups(g)
-      setStudents(s)
       setPayments(p)
     } catch {
       toast({

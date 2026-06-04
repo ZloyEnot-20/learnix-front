@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,6 +21,7 @@ import {
   Image as ImageIcon,
   Loader2,
   ScanText,
+  Wand2,
   X,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
@@ -31,11 +33,13 @@ import {
   OCR_LANGUAGES,
   type OcrResult,
 } from "@/lib/ocr-client"
+import { parseExercisesFromText, OCR_HANDOFF_KEY } from "@/lib/ocr-to-exercise"
 
 const MAX_MB = 15
 
 export default function OcrSection() {
   const { toast } = useToast()
+  const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -133,6 +137,32 @@ export default function OcrSection() {
     a.download = `${(file?.name ?? "ocr").replace(/\.[^.]+$/, "")}.txt`
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  const convertToExercise = () => {
+    if (!result?.text) return
+    const { exercises, warnings } = parseExercisesFromText(result.text)
+    if (exercises.length === 0) {
+      toast({
+        title: "Could not build an exercise",
+        description: warnings[0] ?? "No questions detected in the text.",
+        variant: "destructive",
+      })
+      return
+    }
+    // Hand the JSON to the Manage exercises uploader via sessionStorage.
+    const payload = exercises.length === 1 ? exercises[0] : exercises
+    try {
+      window.sessionStorage.setItem(OCR_HANDOFF_KEY, JSON.stringify(payload, null, 2))
+    } catch {
+      toast({ title: "Could not pass data to the uploader", variant: "destructive" })
+      return
+    }
+    toast({
+      title: "Draft exercise ready",
+      description: warnings.join(" "),
+    })
+    router.push("/admin/manage")
   }
 
   const isPdf = file?.type === "application/pdf"
@@ -305,6 +335,15 @@ export default function OcrSection() {
                   >
                     <Download className="h-4 w-4" />
                     .txt
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={convertToExercise}
+                    disabled={!result.text}
+                    className="gap-1.5 bg-indigo-600 hover:bg-indigo-700"
+                  >
+                    <Wand2 className="h-4 w-4" />
+                    To exercise JSON
                   </Button>
                 </div>
               )}

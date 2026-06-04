@@ -41,7 +41,6 @@ import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
 import { getMaterialsForTopic } from "@/lib/grammar-materials"
-import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import { getExercises, getTopicsMeta } from "@/lib/exercises-cache"
 import {
   groupExercisesByTopic,
@@ -77,6 +76,11 @@ const DIFFICULTY_META: Record<
     label: "Hard",
     cls: "bg-rose-50 text-rose-700 ring-rose-200/60",
     dot: "bg-rose-500",
+  },
+  mixed: {
+    label: "Mixed",
+    cls: "bg-violet-50 text-violet-700 ring-violet-200/60",
+    dot: "bg-violet-500",
   },
 }
 
@@ -120,7 +124,6 @@ export default function ExercisesTopicPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ensureGrammarSeed()
     let cancelled = false
     Promise.all([getExercises(), getTopicsMeta()])
       .then(([ex, metas]) => {

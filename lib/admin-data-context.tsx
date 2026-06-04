@@ -14,6 +14,7 @@ import {
   getGroups,
   getStudents,
   getHomeworkCount,
+  onAdminCacheInvalidate,
   peekGroups,
   peekStudents,
   peekHomeworkCount,
@@ -43,9 +44,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [homeworkCount, setHomeworkCount] = useState<number>(
     () => peekHomeworkCount() ?? 0,
   )
-  const [ready, setReady] = useState(
-    () => peekStudents() !== undefined && peekGroups() !== undefined,
-  )
+  const [ready, setReady] = useState(false)
 
   const refreshStudents = useCallback(async (force = false) => {
     const data = await getStudents(force)
@@ -83,9 +82,42 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     [refreshStudents, refreshGroups, refreshHomeworkCount],
   )
 
-  // Single load when the admin shell mounts — not on every section change.
+  // Drop legacy sessionStorage cache from older builds.
   useEffect(() => {
-    void refreshAll()
+    if (typeof window === "undefined") return
+    for (const key of [
+      "admin-cache:students",
+      "admin-cache:groups",
+      "admin-cache:homework-count",
+      "admin-cache:group-summaries",
+    ]) {
+      window.sessionStorage.removeItem(key)
+    }
+  }, [])
+
+  // Always fetch fresh lists when the admin shell mounts.
+  useEffect(() => {
+    void refreshAll(true)
+  }, [refreshAll])
+
+  // After any invalidate*() call, refetch so all sections see new names.
+  useEffect(() => {
+    return onAdminCacheInvalidate((key) => {
+      if (key === "all") void refreshAll(true)
+      else if (key === "students") void refreshStudents(true)
+      else if (key === "groups")
+        void Promise.all([refreshGroups(true), refreshStudents(true)])
+      else if (key === "homework-count") void refreshHomeworkCount(true)
+    })
+  }, [refreshAll, refreshStudents, refreshGroups, refreshHomeworkCount])
+
+  // Refetch when returning to the tab (e.g. student edited in another window).
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refreshAll(true)
+    }
+    document.addEventListener("visibilitychange", onVisible)
+    return () => document.removeEventListener("visibilitychange", onVisible)
   }, [refreshAll])
 
   const value = useMemo(

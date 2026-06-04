@@ -18,6 +18,7 @@ import {
   UserSquare,
   ShieldAlert,
   Home,
+  Send,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
@@ -27,6 +28,7 @@ import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
 import ManageContentSection from "@/components/admin/manage-content-section"
 import OcrSection from "@/components/admin/ocr-section"
+import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
@@ -44,6 +46,7 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
   ocr: { title: "OCR", subtitle: "Extract text from scans and PDFs" },
+  bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
 }
 
@@ -202,6 +205,10 @@ function AdminPanelContent() {
       ],
     },
     {
+      label: "Communication",
+      items: [{ id: "bot", label: "Telegram bot", icon: Send }],
+    },
+    {
       label: "Money",
       items: [{ id: "finance", label: "Finance", icon: Wallet }],
     },
@@ -250,6 +257,7 @@ function AdminPanelContent() {
       )}
       {activeTab === "manage" && <ManageContentSection onChanged={bump} />}
       {activeTab === "ocr" && <OcrSection />}
+      {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
     </AdminShell>
   )

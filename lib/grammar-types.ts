@@ -1,4 +1,4 @@
-export type GrammarDifficulty = "easy" | "medium" | "hard"
+export type GrammarDifficulty = "easy" | "medium" | "hard" | "mixed"
 
 export type GrammarCategory = "grammar" | "vocabulary"
 
@@ -9,6 +9,8 @@ export type GrammarExerciseType =
   | "word-formation"
   | "sentence-transformation"
   | "true-false"
+  | "error-correction"
+  | "word-order"
 
 /** Display labels for each exercise type, in the order they should appear in filters. */
 export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
@@ -17,6 +19,8 @@ export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
   matching: "Matching",
   "word-formation": "Word formation",
   "sentence-transformation": "Sentence transformation",
+  "error-correction": "Error correction",
+  "word-order": "Word order",
   "true-false": "True / False",
 }
 
@@ -26,6 +30,8 @@ export const EXERCISE_TYPE_ORDER: GrammarExerciseType[] = [
   "matching",
   "word-formation",
   "sentence-transformation",
+  "error-correction",
+  "word-order",
   "true-false",
 ]
 
@@ -44,8 +50,22 @@ export interface GrammarQuestion {
   correctAnswer?: string
   /** Single canonical answer. (word-formation, sentence-transformation) */
   answer?: string
+  /** Extra accepted full answers, case/punctuation tolerant. (word-formation, sentence-transformation) */
+  accepted?: string[]
   /** Correct truth value of the statement. (true-false) */
   correctBool?: boolean
+  /** Clickable sentence chunks for click-to-edit grading. (error-correction) */
+  segments?: ErrorSegment[]
+  /** Fixed leading words shown before the orderable words. (word-order) */
+  prefix?: string[]
+  /** Words to arrange into the correct order. (word-order) */
+  scrambled?: string[]
+  /** The canonical correct ordering of `scrambled`. (word-order) */
+  correct?: string[]
+  /** Fixed trailing words shown after the orderable words. (word-order) */
+  suffix?: string[]
+  /** Other accepted orderings besides `correct`. (word-order) */
+  alternates?: string[][]
   explanation: string
   hint?: string
 }
@@ -54,6 +74,23 @@ export interface GrammarQuestion {
 export interface MatchingPair {
   left: string
   right: string
+}
+
+/**
+ * A clickable chunk of a sentence in an error-correction exercise. Segments with
+ * a `correctText` carry the mistake; the student clicks the wrong chunk and
+ * replaces it. Sentences with no `correctText` anywhere are already correct.
+ */
+export interface ErrorSegment {
+  id: string
+  text: string
+  /** Literal text (space/punctuation) rendered after this segment. */
+  after?: string
+  /** The fixed version of this chunk, when it contains a mistake. */
+  correctText?: string
+  /** Extra accepted fixes for this chunk. */
+  acceptableText?: string[]
+  hint?: string
 }
 
 export interface GrammarExerciseContent {

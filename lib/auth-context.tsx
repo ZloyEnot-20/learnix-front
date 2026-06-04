@@ -50,7 +50,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-/** Seeded demo accounts (created by the backend `npm run seed`). */
+/** Quick-login accounts created by the backend `npm run seed`. */
 export const DEMO_ACCOUNTS: Array<{
   email: string
   password: string
@@ -58,9 +58,7 @@ export const DEMO_ACCOUNTS: Array<{
   role: UserRole
 }> = [
   { email: "superadmin@ielts.com", password: "super123", name: "Super Admin", role: "super_admin" },
-  { email: "admin@ielts.com", password: "admin123", name: "Admin User", role: "admin" },
-  { email: "teacher@ielts.com", password: "teacher123", name: "Sarah Teacher", role: "teacher" },
-  { email: "student@ielts.com", password: "student123", name: "Alex Student", role: "student" },
+  { email: "student@ielts.com", password: "student123", name: "Student", role: "student" },
 ]
 
 function toUser(u: AuthUser): User {
