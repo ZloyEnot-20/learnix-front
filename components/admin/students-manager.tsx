@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,7 +57,7 @@ interface StudentsManagerProps {
 
 export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const { toast } = useToast()
-  const { students, groups, ready, refreshAll } = useAdminData()
+  const { students, groups, ready, refreshAll, refreshStudents } = useAdminData()
   const [search, setSearch] = useState("")
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [showCreate, setShowCreate] = useState(false)
@@ -66,6 +66,13 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [creating, setCreating] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+
+  // Re-fetch the list every time the section opens, but keep showing the
+  // current data until the fresh response arrives (stale-while-revalidate),
+  // so it never looks like everything reloads from scratch.
+  useEffect(() => {
+    void refreshStudents(true)
+  }, [refreshStudents])
 
   const handleRefresh = async () => {
     setRefreshing(true)

@@ -11,6 +11,15 @@ import { listGrammarExercises } from "./grammar-storage"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import topicsMetaRaw from "./grammar-topics-meta.json"
+import { mergeCustomTopics } from "./topic-storage"
+
+/** Merge remote exercises with locally-added ones (local wins on slug clash). */
+function mergeLocalExercises(remote: GrammarExercise[]): GrammarExercise[] {
+  const local = listGrammarExercises()
+  const remoteSlugs = new Set(remote.map((e) => e.slug))
+  const extras = local.filter((e) => !remoteSlugs.has(e.slug))
+  return extras.length === 0 ? remote : [...remote, ...extras]
+}
 
 const LOCAL_TOPICS = topicsMetaRaw as TopicMeta[]
 const TTL = 5 * 60 * 1000
@@ -61,7 +70,7 @@ export const getExercises = (force = false): Promise<GrammarExercise[]> =>
     async () => {
       try {
         const remote = await exercisesApi.list()
-        if (remote.length > 0) return remote
+        if (remote.length > 0) return mergeLocalExercises(remote)
       } catch {
         /* fall through to seed */
       }
@@ -77,11 +86,11 @@ export const getTopicsMeta = (force = false): Promise<TopicMeta[]> =>
     async () => {
       try {
         const remote = await exercisesApi.topics()
-        if (remote.length > 0) return remote
+        if (remote.length > 0) return mergeCustomTopics(remote)
       } catch {
         /* fall through to seed */
       }
-      return LOCAL_TOPICS
+      return mergeCustomTopics(LOCAL_TOPICS)
     },
     force,
   )

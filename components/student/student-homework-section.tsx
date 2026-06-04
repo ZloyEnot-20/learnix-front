@@ -6,12 +6,13 @@ import { CardGridSkeleton } from "@/components/admin/skeletons"
 import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import { getMyHomework } from "@/lib/homework-cache"
 import { getExercises, peekExerciseBySlug } from "@/lib/exercises-cache"
+import { parseVocabHomeworkSlug } from "@/lib/vocabulary-data"
 
 type Status = "pending" | "in_progress" | "completed"
 
 interface HomeworkItem {
   id: string
-  subject: "reading" | "listening" | "writing" | "speaking" | "grammar"
+  subject: "reading" | "listening" | "writing" | "speaking" | "grammar" | "vocabulary"
   title: string
   description: string
   dueAt: string
@@ -62,6 +63,9 @@ export function StudentHomeworkSection({
           if (homework.subject === "grammar" && homework.exerciseSlug) {
             const ex = peekExerciseBySlug(homework.exerciseSlug)
             if (ex) href = `/exercises/${ex.topic}/${ex.slug}?hw=${homework.id}`
+          } else if (homework.subject === "vocabulary") {
+            const deckSlug = parseVocabHomeworkSlug(homework.exerciseSlug)
+            if (deckSlug) href = `/vocabulary/${deckSlug}?hw=${homework.id}`
           }
 
           return {

@@ -12,6 +12,8 @@ import {
   ClipboardList,
   ClipboardCheck,
   GraduationCap,
+  FileJson,
+  ScanText,
   Wallet,
   UserSquare,
   ShieldAlert,
@@ -23,6 +25,8 @@ import StudentsManager from "@/components/admin/students-manager"
 import HomeworkManager from "@/components/admin/homework-manager"
 import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
+import ManageContentSection from "@/components/admin/manage-content-section"
+import OcrSection from "@/components/admin/ocr-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
@@ -38,6 +42,8 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   homework: { title: "Homework", subtitle: "Assign tasks to groups and track submissions" },
   entry: { title: "Entry Test", subtitle: "Assign placement tests and grade writing" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
+  manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
+  ocr: { title: "OCR", subtitle: "Extract text from scans and PDFs" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
 }
 
@@ -191,6 +197,8 @@ function AdminPanelContent() {
         { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
         { id: "entry", label: "Entry Test", icon: ClipboardCheck },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
+        { id: "manage", label: "Manage exercises", icon: FileJson },
+        { id: "ocr", label: "OCR", icon: ScanText, badge: "beta" },
       ],
     },
     {
@@ -240,6 +248,8 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
+      {activeTab === "manage" && <ManageContentSection onChanged={bump} />}
+      {activeTab === "ocr" && <OcrSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
     </AdminShell>
   )

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import {
   BookOpen,
+  BookMarked,
   Headphones,
   PenTool,
   Mic,
@@ -19,7 +20,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type Subject = "reading" | "listening" | "writing" | "speaking" | "grammar"
+type Subject = "reading" | "listening" | "writing" | "speaking" | "grammar" | "vocabulary"
 type Status = "pending" | "in_progress" | "completed"
 
 interface HomeworkItem {
@@ -43,6 +44,7 @@ const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = 
   writing: { icon: PenTool, color: "#a7e237" },
   speaking: { icon: Mic, color: "#9fcffb" },
   grammar: { icon: GraduationCap, color: "#fcd5a4" },
+  vocabulary: { icon: BookMarked, color: "#d8b4fe" },
 }
 
 const STATUS_META: Record<

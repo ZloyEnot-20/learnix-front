@@ -61,7 +61,8 @@ interface GroupsManagerProps {
 
 export default function GroupsManager({ canCreate = true, onChanged }: GroupsManagerProps) {
   const { toast } = useToast()
-  const { students, groups, ready, refreshAll } = useAdminData()
+  const { students, groups, ready, refreshAll, refreshGroups, refreshStudents } =
+    useAdminData()
   const [summaries, setSummaries] = useState<Record<string, GroupSummary>>({})
   const [showCreate, setShowCreate] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
@@ -86,6 +87,11 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     )
     setSummaries(data)
   }
+
+  // Re-fetch on every visit; keep current cards visible until new data arrives.
+  useEffect(() => {
+    void Promise.all([refreshGroups(true), refreshStudents(true)])
+  }, [refreshGroups, refreshStudents])
 
   useEffect(() => {
     if (groups.length === 0) {

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
+  BookMarked,
   BookOpen,
   Calendar,
   CheckCircle2,
@@ -55,6 +56,7 @@ const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = 
   writing: { icon: PenTool, color: "#a7e237" },
   speaking: { icon: Mic, color: "#9fcffb" },
   grammar: { icon: GraduationCap, color: "#fcd5a4" },
+  vocabulary: { icon: BookMarked, color: "#d8b4fe" },
 }
 
 const STATUS_LABEL: Record<string, { label: string; cls: string }> = {

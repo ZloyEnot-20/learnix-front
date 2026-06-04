@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import {
   Award,
+  BookMarked,
   BookOpen,
   CalendarDays,
   CheckCircle2,
@@ -45,6 +46,7 @@ const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string; labe
   writing: { icon: PenTool, color: "#a7e237", label: "Writing" },
   speaking: { icon: Mic, color: "#9fcffb", label: "Speaking" },
   grammar: { icon: GraduationCap, color: "#fcd5a4", label: "Grammar" },
+  vocabulary: { icon: BookMarked, color: "#d8b4fe", label: "Vocabulary" },
 }
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {

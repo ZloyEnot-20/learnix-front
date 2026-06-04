@@ -4,7 +4,17 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, DatabaseZap, Folder } from "lucide-react"
+import {
+  BookMarked,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  DatabaseZap,
+  Folder,
+  Mic,
+  PenLine,
+  SpellCheck,
+} from "lucide-react"
 import { ensureGrammarSeed } from "@/lib/grammar-storage"
 import {
   formatDuration,
@@ -17,6 +27,7 @@ import {
   getLocalCatalog,
   invalidateExercises,
 } from "@/lib/exercises-cache"
+import { listVocabDecks, type VocabDeck } from "@/lib/vocabulary-data"
 import { exercisesApi } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/hooks/use-toast"
@@ -33,6 +44,44 @@ const LEVEL_PALETTE: Record<string, string> = {
 }
 
 const CEFR_ORDER = ["A1", "A2", "B1", "B2", "C1", "C2"]
+
+const LEVEL_LABELS: Record<string, string> = {
+  A1: "Beginner",
+  A2: "Elementary",
+  B1: "Intermediate",
+  B2: "Upper-Intermediate",
+  C1: "Advanced",
+  C2: "Proficiency",
+  Other: "Other",
+}
+
+interface SubjectFolder {
+  id: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  cls: string
+}
+
+/** Subject folders shown inside every level. Grammar/Vocabulary carry the catalogue content. */
+const SUBJECT_FOLDERS: SubjectFolder[] = [
+  { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800" },
+  { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700" },
+  { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700" },
+  { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700" },
+  { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700" },
+]
+
+/** The entry (lowest) CEFR level a topic belongs to — used to bucket it into a folder. */
+function primaryLevel(levels: string[]): string {
+  let best = Number.MAX_SAFE_INTEGER
+  for (const l of levels) {
+    for (const part of l.split(/[-–]/)) {
+      const idx = CEFR_ORDER.indexOf(part.trim().toUpperCase())
+      if (idx >= 0 && idx < best) best = idx
+    }
+  }
+  return best === Number.MAX_SAFE_INTEGER ? "Other" : CEFR_ORDER[best]
+}
 
 function summariseLevels(levels: string[]): { display: string; cls: string } {
   const all = new Set<string>()
@@ -96,9 +145,69 @@ export default function ExercisesIndexPage() {
   }
 
   const grammarTopics = useMemo(
-    () => topics.filter((t) => t.category === "grammar"),
+    () => topics.filter((t) => t.category === "grammar" || t.category === "vocabulary"),
     [topics],
   )
+
+  const levelFolders = useMemo(() => {
+    const map = new Map<string, TopicSummary[]>()
+    for (const t of grammarTopics) {
+      const lvl = primaryLevel(t.levels)
+      if (!map.has(lvl)) map.set(lvl, [])
+      map.get(lvl)!.push(t)
+    }
+    const order = [...CEFR_ORDER, "Other"]
+    return [...map.entries()]
+      .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]))
+      .map(([level, list]) => ({
+        level,
+        topics: list,
+        exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
+        questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
+      }))
+  }, [grammarTopics])
+
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const activeLevelFolder = useMemo(
+    () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
+    [levelFolders, selectedLevel],
+  )
+  const vocabDecksForLevel = useMemo(
+    () =>
+      selectedLevel
+        ? listVocabDecks().filter((d) => primaryLevel([d.level]) === selectedLevel)
+        : [],
+    [selectedLevel],
+  )
+  const categoryStats = (
+    level: string,
+    categoryId: string,
+  ): { count: number; lines: string[] } => {
+    if (categoryId === "vocabulary") {
+      const decks = listVocabDecks().filter((d) => primaryLevel([d.level]) === level)
+      const words = decks.reduce((acc, d) => acc + d.words.length, 0)
+      return {
+        count: decks.length,
+        lines: [
+          `${decks.length} deck${decks.length === 1 ? "" : "s"}`,
+          `${words} word${words === 1 ? "" : "s"}`,
+        ],
+      }
+    }
+    const folder = levelFolders.find((f) => f.level === level)
+    const topics = folder?.topics.filter((t) => t.category === categoryId) ?? []
+    const exercises = topics.reduce((acc, t) => acc + t.exerciseCount, 0)
+    const questions = topics.reduce((acc, t) => acc + t.questionCount, 0)
+    return {
+      count: topics.length,
+      lines: [
+        `${topics.length} topic${topics.length === 1 ? "" : "s"}`,
+        `${exercises} exercise${exercises === 1 ? "" : "s"}`,
+        `${questions} question${questions === 1 ? "" : "s"}`,
+      ],
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -142,20 +251,146 @@ export default function ExercisesIndexPage() {
           </section>
         )}
 
-        {!loading && grammarTopics.length > 0 && (
+        {!loading && grammarTopics.length > 0 && !selectedLevel && (
           <section>
-            <h2 className="text-lg font-semibold text-slate-900">Choose a Grammar Topic</h2>
+            <Breadcrumbs items={[{ label: "Exercises" }]} />
+            <h2 className="mt-4 text-lg font-semibold text-slate-900">Choose a level</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Each topic hub groups together related exercises, question counts, and level coverage.
+              Topics are organised into folders by CEFR level. Open a folder to see its topics.
             </p>
             <div
-              className="mt-4 grid gap-4 justify-center"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
+              className="mt-4 grid gap-3"
+              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
             >
-              {grammarTopics.map((t) => (
-                <TopicCard key={t.topic} topic={t} />
+              {levelFolders.map((folder) => (
+                <LevelFolderCard
+                  key={folder.level}
+                  level={folder.level}
+                  topicCount={folder.topics.length}
+                  exerciseCount={folder.exerciseCount}
+                  questionCount={folder.questionCount}
+                  onOpen={() => setSelectedLevel(folder.level)}
+                />
               ))}
             </div>
+          </section>
+        )}
+
+        {!loading && grammarTopics.length > 0 && selectedLevel && !selectedCategory && (
+          <section>
+            <Breadcrumbs
+              items={[
+                { label: "Exercises", onClick: () => setSelectedLevel(null) },
+                { label: selectedLevel },
+              ]}
+            />
+            <h2 className="mt-4 text-lg font-semibold text-slate-900">
+              {selectedLevel}{" "}
+              <span className="text-base font-medium text-slate-500">
+                · {LEVEL_LABELS[selectedLevel] ?? ""}
+              </span>
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">Choose a section</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setSelectedLevel(null)}
+              className="mt-4 gap-1.5"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Back
+            </Button>
+            <div
+              className="mt-4 grid gap-3"
+              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
+            >
+              {SUBJECT_FOLDERS.map((folder) => {
+                const stats = categoryStats(selectedLevel, folder.id)
+                return (
+                  <SubjectFolderCard
+                    key={folder.id}
+                    folder={folder}
+                    count={stats.count}
+                    lines={stats.lines}
+                    onOpen={() => setSelectedCategory(folder.id)}
+                  />
+                )
+              })}
+            </div>
+
+          </section>
+        )}
+
+        {!loading && grammarTopics.length > 0 && selectedLevel && selectedCategory && (
+          <section>
+            {(() => {
+              const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
+              const isVocab = selectedCategory === "vocabulary"
+              const topics =
+                activeLevelFolder?.topics.filter((t) => t.category === selectedCategory) ?? []
+              const count = isVocab ? vocabDecksForLevel.length : topics.length
+              return (
+                <>
+                  <Breadcrumbs
+                    items={[
+                      {
+                        label: "Exercises",
+                        onClick: () => {
+                          setSelectedLevel(null)
+                          setSelectedCategory(null)
+                        },
+                      },
+                      { label: selectedLevel, onClick: () => setSelectedCategory(null) },
+                      { label: subject?.label ?? selectedCategory },
+                    ]}
+                  />
+                  <h2 className="mt-4 text-lg font-semibold text-slate-900">
+                    {subject?.label ?? selectedCategory}
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {selectedLevel} · {count} {isVocab ? "deck" : "topic"}
+                    {count === 1 ? "" : "s"}
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedCategory(null)}
+                    className="mt-4 gap-1.5"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Back
+                  </Button>
+                  {count === 0 ? (
+                    <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                      <p className="font-medium text-slate-900">Coming soon</p>
+                      <p className="text-sm text-slate-500">
+                        {subject?.label ?? "These"} exercises haven&apos;t been added yet.
+                      </p>
+                    </div>
+                  ) : isVocab ? (
+                    <div
+                      className="mt-4 grid gap-4 justify-center"
+                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
+                    >
+                      {vocabDecksForLevel.map((d) => (
+                        <VocabDeckCard key={d.slug} deck={d} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      className="mt-4 grid gap-4 justify-center"
+                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
+                    >
+                      {topics.map((t) => (
+                        <TopicCard key={t.topic} topic={t} />
+                      ))}
+                    </div>
+                  )}
+                </>
+              )
+            })()}
           </section>
         )}
 
@@ -169,6 +404,176 @@ export default function ExercisesIndexPage() {
         )}
       </div>
     </div>
+  )
+}
+
+function Breadcrumbs({
+  items,
+}: {
+  items: { label: string; onClick?: () => void }[]
+}) {
+  return (
+    <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-sm">
+      {items.map((item, idx) => {
+        const isLast = idx === items.length - 1
+        return (
+          <span key={idx} className="inline-flex items-center gap-1">
+            {item.onClick && !isLast ? (
+              <button
+                type="button"
+                onClick={item.onClick}
+                className="font-medium text-slate-500 transition-colors hover:text-slate-900"
+              >
+                {item.label}
+              </button>
+            ) : (
+              <span className={cn(isLast ? "font-semibold text-slate-900" : "text-slate-500")}>
+                {item.label}
+              </span>
+            )}
+            {!isLast && <ChevronRight className="h-3.5 w-3.5 text-slate-300" />}
+          </span>
+        )
+      })}
+    </nav>
+  )
+}
+
+function LevelFolderCard({
+  level,
+  topicCount,
+  exerciseCount,
+  questionCount,
+  onOpen,
+}: {
+  level: string
+  topicCount: number
+  exerciseCount: number
+  questionCount: number
+  onOpen: () => void
+}) {
+  const cls = LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700"
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <span
+          aria-hidden
+          className={cn(
+            "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl shadow-sm",
+            cls,
+          )}
+        >
+          <Folder className="h-6 w-6" />
+        </span>
+        <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
+          {level}
+        </span>
+      </div>
+      <div>
+        <h3 className="text-base font-semibold text-slate-900">{LEVEL_LABELS[level] ?? level}</h3>
+        <p className="mt-0.5 text-xs text-slate-500">
+          {topicCount} topic{topicCount === 1 ? "" : "s"} · {exerciseCount} exercise
+          {exerciseCount === 1 ? "" : "s"} · {questionCount} question
+          {questionCount === 1 ? "" : "s"}
+        </p>
+      </div>
+    </button>
+  )
+}
+
+function SubjectFolderCard({
+  folder,
+  count,
+  lines,
+  onOpen,
+}: {
+  folder: SubjectFolder
+  count: number
+  lines: string[]
+  onOpen: () => void
+}) {
+  const Icon = folder.icon
+  const empty = count === 0
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <span
+          aria-hidden
+          className={cn(
+            "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl shadow-sm",
+            folder.cls,
+          )}
+        >
+          <Icon className="h-6 w-6" />
+        </span>
+        {empty && (
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            Soon
+          </span>
+        )}
+      </div>
+      <div>
+        <h3 className="text-base font-semibold text-slate-900">{folder.label}</h3>
+        {empty ? (
+          <p className="mt-0.5 text-xs text-slate-500">Coming soon</p>
+        ) : (
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {lines.map((line) => (
+              <span
+                key={line}
+                className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600"
+              >
+                {line}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </button>
+  )
+}
+
+function VocabDeckCard({ deck }: { deck: VocabDeck }) {
+  return (
+    <Link href={`/vocabulary/${deck.slug}`} className="group block h-full">
+      <Card className="relative h-full rounded-3xl border-violet-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
+            <div className="flex items-start gap-3 min-w-0 flex-1">
+              <span
+                aria-hidden
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-sm"
+              >
+                <BookMarked className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 space-y-2">
+                <h3 className="text-lg font-semibold text-slate-900">{deck.title}</h3>
+                <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                    {deck.words.length} words
+                  </span>
+                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                    Flashcards · Quiz
+                  </span>
+                </div>
+              </div>
+            </div>
+            <span className="shrink-0 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700">
+              {deck.level}
+            </span>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-slate-600">{deck.description}</p>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 

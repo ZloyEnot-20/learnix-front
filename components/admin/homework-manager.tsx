@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select"
 import {
   BarChart3,
+  BookMarked,
   BookOpen,
   CalendarClock,
   CheckCircle2,
@@ -79,7 +80,14 @@ const SUBJECT_META: Record<Subject, { label: string; icon: typeof BookOpen; colo
   writing: { label: "Writing", icon: PenTool, color: "#a7e237" },
   speaking: { label: "Speaking", icon: Mic, color: "#9fcffb" },
   grammar: { label: "Grammar", icon: GraduationCap, color: "#fcd5a4" },
+  vocabulary: { label: "Vocabulary", icon: BookMarked, color: "#d8b4fe" },
 }
+
+const DEFAULT_SUBJECT_META = {
+  label: "Other",
+  icon: ClipboardList,
+  color: "#e2e8f0",
+} as const
 
 interface HwRow {
   homework: HomeworkAssignment
@@ -366,6 +374,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     { key: "writing", label: "Writing" },
     { key: "speaking", label: "Speaking" },
     { key: "grammar", label: "Grammar" },
+    { key: "vocabulary", label: "Vocabulary" },
   ]
 
   const activeCountTotal = hwRows.filter((r) => !r.isPast).length
@@ -977,7 +986,7 @@ function HomeworkTable({
         </thead>
         <tbody>
           {rows.map((row, idx) => {
-            const subjectMeta = SUBJECT_META[row.homework.subject]
+            const subjectMeta = SUBJECT_META[row.homework.subject] ?? DEFAULT_SUBJECT_META
             const SubjectIcon = subjectMeta.icon
             const due = new Date(row.homework.dueAt)
             const overdueActive =

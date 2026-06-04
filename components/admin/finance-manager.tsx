@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { MonthPicker } from "@/components/ui/month-picker"
 import {
   Select,
   SelectContent,
@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/select"
 import {
   Banknote,
-  CalendarDays,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Filter,
   TrendingUp,
@@ -50,7 +51,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "unpaid">("all")
   const [selectedMonth, setSelectedMonth] = useState<string>(defaultPeriodMonth())
-  const [togglingId, setTogglingId] = useState<string | null>(null)
+  const [togglingIds, setTogglingIds] = useState<Set<string>>(() => new Set())
   const [loading, setLoading] = useState(true)
 
   const refresh = async () => {
@@ -130,7 +131,8 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
       toast({ title: "Student must belong to a group", variant: "destructive" })
       return
     }
-    setTogglingId(row.student.id)
+    const id = row.student.id
+    setTogglingIds((prev) => new Set(prev).add(id))
     try {
       if (row.payment) {
         await paymentsApi.markPaid(row.payment.id)
@@ -155,14 +157,19 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
         variant: "destructive",
       })
     } finally {
-      setTogglingId(null)
+      setTogglingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
     }
   }
 
   /** Revert a paid record back to unpaid for the selected month. */
   const unmarkStudent = async (row: { student: Student; payment?: Payment }) => {
     if (!row.payment) return
-    setTogglingId(row.student.id)
+    const id = row.student.id
+    setTogglingIds((prev) => new Set(prev).add(id))
     try {
       await paymentsApi.markUnpaid(row.payment.id)
       await refresh()
@@ -174,7 +181,11 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
         variant: "destructive",
       })
     } finally {
-      setTogglingId(null)
+      setTogglingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
     }
   }
 
@@ -370,15 +381,29 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                 </CardDescription>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <div className="relative">
-                  <CalendarDays className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                  <Input
-                    type="month"
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label="Previous month"
+                    onClick={() => setSelectedMonth((m) => shiftMonth(m, -1))}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <MonthPicker
                     aria-label="Payment month"
                     value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value || defaultPeriodMonth())}
-                    className="w-44 pl-8"
+                    onChange={(v) => setSelectedMonth(v || defaultPeriodMonth())}
+                    className="w-44"
                   />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label="Next month"
+                    onClick={() => setSelectedMonth((m) => shiftMonth(m, 1))}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
                 <Select value={groupFilter} onValueChange={setGroupFilter}>
                   <SelectTrigger className="w-48">
@@ -467,7 +492,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => unmarkStudent(row)}
-                                loading={togglingId === row.student.id}
+                                loading={togglingIds.has(row.student.id)}
                               >
                                 <Undo2 className="h-3.5 w-3.5 mr-1.5" />
                                 Unmark
@@ -476,7 +501,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                               <Button
                                 size="sm"
                                 onClick={() => markStudentPaid(row)}
-                                loading={togglingId === row.student.id}
+                                loading={togglingIds.has(row.student.id)}
                                 className="bg-emerald-600 hover:bg-emerald-700"
                               >
                                 <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
@@ -534,6 +559,14 @@ function defaultPeriodMonth(): string {
   const year = d.getFullYear()
   const month = String(d.getMonth() + 1).padStart(2, "0")
   return `${year}-${month}`
+}
+
+/** Shift a `YYYY-MM` month string by the given number of months. */
+function shiftMonth(periodMonth: string, delta: number): string {
+  const [year, month] = periodMonth.split("-").map(Number)
+  if (!year || !month) return defaultPeriodMonth()
+  const d = new Date(year, month - 1 + delta, 1)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
 }
 
 /** The `YYYY-MM` period a payment belongs to, derived from its due date. */

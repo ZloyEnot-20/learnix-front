@@ -4,7 +4,7 @@
 import { getGrammarExercise, listGrammarExercises } from "./grammar-storage"
 import type { GrammarExercise } from "./grammar-types"
 
-export type Subject = "reading" | "listening" | "writing" | "speaking" | "grammar"
+export type Subject = "reading" | "listening" | "writing" | "speaking" | "grammar" | "vocabulary"
 
 export interface Group {
   id: string
