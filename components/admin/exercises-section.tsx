@@ -1090,8 +1090,15 @@ function SubjectFolderCard({
   return (
     <button
       type="button"
-      onClick={onOpen}
-      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+      onClick={empty ? undefined : onOpen}
+      disabled={empty}
+      aria-disabled={empty}
+      className={cn(
+        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        empty
+          ? "cursor-not-allowed opacity-60"
+          : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
+      )}
     >
       <div className="flex items-center justify-between gap-2">
         <span
@@ -1257,17 +1264,25 @@ function TopicHubCard({
   onSelect: () => void
 }) {
   const lvl = summariseLevels(t.levels)
+  const empty = t.exerciseCount === 0
+  const disabled = empty || t.comingSoon
   return (
-    <button type="button" onClick={onSelect} className="text-left group">
+    <button
+      type="button"
+      onClick={disabled ? undefined : onSelect}
+      disabled={disabled}
+      aria-disabled={disabled}
+      className={cn("text-left group", disabled && "cursor-not-allowed")}
+    >
       <div
         className={cn(
-          "relative border text-card-foreground shadow-sm h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg",
-          t.comingSoon && "opacity-90",
+          "relative border text-card-foreground shadow-sm h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200",
+          disabled ? "opacity-60" : "group-hover:-translate-y-1 group-hover:shadow-lg",
         )}
       >
-        {t.comingSoon && (
+        {(t.comingSoon || empty) && (
           <span className="absolute -top-2 left-6 inline-flex items-center rounded-full bg-slate-900 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-            Coming soon
+            {t.comingSoon ? "Coming soon" : "Empty"}
           </span>
         )}
         <div className="flex flex-col space-y-1.5 p-6 border-b border-slate-100 pb-5">

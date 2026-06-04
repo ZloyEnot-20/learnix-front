@@ -106,29 +106,82 @@ const testSchema = z.object({
 type TestInput = z.infer<typeof testSchema>
 
 // ─── Vocabulary deck ─────────────────────────────────────────────────────────
+const VALID_POS = new Set(["noun", "verb", "adjective", "adverb", "phrase"])
+
+/** Map loose part-of-speech labels onto the supported set (default "noun"). */
+function normalizePartOfSpeech(value: unknown): string {
+  const v = String(value ?? "").trim().toLowerCase()
+  if (VALID_POS.has(v)) return v
+  if (v.startsWith("n")) return "noun"
+  if (v.startsWith("v")) return "verb"
+  if (v === "adj" || v.startsWith("adjective")) return "adjective"
+  if (v === "adv" || v.startsWith("adverb")) return "adverb"
+  if (v.includes("phrase") || v.includes("idiom") || v.includes("expression")) return "phrase"
+  return "noun"
+}
+
+// Accept loosely-shaped word objects: auto-fill ids, normalise the part of
+// speech, and default optional text so real-world decks validate cleanly.
 const vocabWord = z
   .object({
-    id: z.string().min(1),
+    id: z.union([z.string(), z.number()]).optional(),
     term: z.string().min(1),
-    partOfSpeech: z.enum(["noun", "verb", "adjective", "adverb", "phrase"]),
-    definition: z.string().min(1),
-    example: z.string().default(""),
-    translation: z.string().default(""),
-    translationUz: z.string().default(""),
+    word: z.string().optional(),
+    partOfSpeech: z.unknown().optional(),
+    pos: z.unknown().optional(),
+    definition: z.string().optional().default(""),
+    meaning: z.string().optional(),
+    example: z.string().optional().default(""),
+    translation: z.string().optional().default(""),
+    translationUz: z.string().optional().default(""),
+    translationUZ: z.string().optional(),
   })
-  // Keep both languages populated so the in-exercise toggle always has a value.
-  .transform((word) => ({
-    ...word,
-    translationUz: word.translationUz || word.translation,
-  }))
+  .passthrough()
+  .transform((word, ctx) => {
+    const term = (word.term || word.word || "").trim()
+    if (!term) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "term is required" })
+      return z.NEVER
+    }
+    const idBase =
+      word.id != null && String(word.id).trim()
+        ? String(word.id).trim()
+        : term.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+    const translation = word.translation || ""
+    const translationUz = word.translationUz || word.translationUZ || translation
+    return {
+      id: idBase || term,
+      term,
+      partOfSpeech: normalizePartOfSpeech(word.partOfSpeech ?? word.pos),
+      definition: word.definition || word.meaning || "",
+      example: word.example || "",
+      translation,
+      translationUz,
+    }
+  })
 
-const vocabDeckSchema = z.object({
-  slug,
-  title: z.string().min(1).max(200),
-  description: z.string().max(2000).default(""),
-  level: z.string().max(40).default("A1"),
-  words: z.array(vocabWord).min(1),
-}) as unknown as z.ZodType<VocabDeck>
+const vocabDeckSchema = z
+  .object({
+    id: z.union([z.string(), z.number()]).optional(),
+    slug: slug.optional(),
+    title: z.string().min(1).max(200),
+    description: z.string().max(2000).optional().default(""),
+    level: z.string().max(40).optional().default("A1"),
+    words: z.array(vocabWord).min(1),
+  })
+  .transform((deck) => {
+    const deckSlug =
+      (deck.slug && String(deck.slug).trim()) ||
+      (deck.id != null && String(deck.id).trim()) ||
+      deck.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+    return {
+      slug: deckSlug,
+      title: deck.title,
+      description: deck.description,
+      level: deck.level,
+      words: deck.words,
+    }
+  }) as unknown as z.ZodType<VocabDeck>
 
 const SCHEMAS: Record<ContentKind, z.ZodTypeAny> = {
   exercise: exerciseSchema,

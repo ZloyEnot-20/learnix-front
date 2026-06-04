@@ -534,8 +534,15 @@ function SubjectFolderCard({
   return (
     <button
       type="button"
-      onClick={onOpen}
-      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+      onClick={empty ? undefined : onOpen}
+      disabled={empty}
+      aria-disabled={empty}
+      className={cn(
+        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        empty
+          ? "cursor-not-allowed opacity-60"
+          : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
+      )}
     >
       <div className="flex items-center justify-between gap-2">
         <span
@@ -612,17 +619,21 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
 
 function TopicCard({ topic }: { topic: TopicSummary }) {
   const lvl = summariseLevels(topic.levels)
-  return (
-    <Link href={`/exercises/${topic.topic}`} className="group block h-full">
+  const empty = topic.exerciseCount === 0
+  const disabled = empty || topic.comingSoon
+
+  const card = (
       <Card
         className={cn(
-          "relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg",
-          topic.comingSoon && "opacity-90",
+          "relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200",
+          disabled
+            ? "opacity-60"
+            : "group-hover:-translate-y-1 group-hover:shadow-lg",
         )}
       >
-        {topic.comingSoon && (
+        {(topic.comingSoon || empty) && (
           <span className="absolute -top-2 left-6 inline-flex items-center rounded-full bg-slate-900 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-            Coming soon
+            {topic.comingSoon ? "Coming soon" : "Empty"}
           </span>
         )}
         <CardContent className="p-6">
@@ -672,6 +683,18 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
           </p>
         </CardContent>
       </Card>
+  )
+
+  if (disabled) {
+    return (
+      <div aria-disabled className="block h-full cursor-not-allowed">
+        {card}
+      </div>
+    )
+  }
+  return (
+    <Link href={`/exercises/${topic.topic}`} className="group block h-full">
+      {card}
     </Link>
   )
 }
