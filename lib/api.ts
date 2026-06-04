@@ -19,6 +19,7 @@ import type { TestResult } from "./test-results-storage"
 import type { ExerciseResultEvent, TopicStat } from "./grammar-analytics"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
+import type { VocabDeck } from "./vocabulary-data"
 
 // ---------- Auth ----------
 export interface AuthUser {
@@ -182,6 +183,8 @@ export interface ExtraLevel {
   color: string
   comingSoon: boolean
   order: number
+  /** CEFR band shown as the top-right badge (e.g. "C1"). */
+  cefr?: string
 }
 
 export const exercisesApi = {
@@ -192,6 +195,10 @@ export const exercisesApi = {
   get: (slug: string) => api.get<GrammarExercise>(`/exercises/${slug}`),
   import: (payload: { topics: TopicMeta[]; exercises: GrammarExercise[] }) =>
     api.post<ImportCatalogResult>("/exercises/import", payload),
+  vocab: () => api.get<VocabDeck[]>("/exercises/vocab"),
+  vocabDeck: (slug: string) => api.get<VocabDeck>(`/exercises/vocab/${slug}`),
+  importVocab: (decks: VocabDeck[]) =>
+    api.post<{ ok: boolean; decksWritten: number }>("/exercises/vocab/import", { decks }),
 }
 
 // ---------- Test results ----------

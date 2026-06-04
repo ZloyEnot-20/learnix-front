@@ -33,6 +33,7 @@ import FinanceManager from "@/components/admin/finance-manager"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
+import { invalidateExercises } from "@/lib/exercises-cache"
 import {
   AdminDataProvider,
   useAdminData,
@@ -196,6 +197,11 @@ function AdminPanelContent() {
     if (keys?.length) void ensureLists(keys)
   }, [activeTab, ensureLists])
 
+  /** Refresh exercise/topic catalogue after Manage exercises uploads — no people APIs. */
+  const bumpCatalog = () => {
+    invalidateExercises()
+  }
+
   const bump = () => {
     invalidateHomeworkCount()
     void ensureLists(["students", "groups", "homeworkCount"], true)
@@ -278,7 +284,7 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
-      {activeTab === "manage" && <ManageContentSection onChanged={bump} />}
+      {activeTab === "manage" && <ManageContentSection onChanged={bumpCatalog} />}
       {activeTab === "ocr" && <OcrSection />}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}

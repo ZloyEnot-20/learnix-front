@@ -2,7 +2,7 @@ import { z } from "zod"
 import { saveGrammarExercise } from "./grammar-storage"
 import { invalidateExercises } from "./exercises-cache"
 import { saveCustomTopic } from "./topic-storage"
-import { saveVocabDeck } from "./vocabulary-data"
+import { invalidateVocabDecks } from "./vocabulary-data"
 import { exercisesApi } from "./api"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
@@ -125,7 +125,7 @@ function normalizePartOfSpeech(value: unknown): string {
 const vocabWord = z
   .object({
     id: z.union([z.string(), z.number()]).optional(),
-    term: z.string().min(1),
+    term: z.string().optional(),
     word: z.string().optional(),
     partOfSpeech: z.unknown().optional(),
     pos: z.unknown().optional(),
@@ -137,12 +137,17 @@ const vocabWord = z
     translationUZ: z.string().optional(),
   })
   .passthrough()
-  .transform((word, ctx) => {
-    const term = (word.term || word.word || "").trim()
-    if (!term) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "term is required" })
-      return z.NEVER
+  .superRefine((word, ctx) => {
+    if (!(word.term || word.word || "").trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "term or word is required",
+        path: ["term"],
+      })
     }
+  })
+  .transform((word) => {
+    const term = (word.term || word.word || "").trim()
     const idBase =
       word.id != null && String(word.id).trim()
         ? String(word.id).trim()
@@ -253,7 +258,9 @@ export async function saveContent(kind: ContentKind, items: unknown[]): Promise<
     }
     case "vocabulary": {
       const decks = items as VocabDeck[]
-      decks.forEach(saveVocabDeck)
+      // DB is the single source of truth — no localStorage copy.
+      await exercisesApi.importVocab(decks)
+      invalidateVocabDecks()
       return decks.length
     }
     case "test": {

@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import {
   getVocabDeck,
+  fetchVocabDeck,
   wordTranslation,
   TRANSLATION_LANGS,
   type TranslationLang,
@@ -58,7 +59,25 @@ function VocabularyDeckInner() {
   const params = useParams<{ deck: string }>()
   const searchParams = useSearchParams()
   const { user } = useAuth()
-  const deck = useMemo(() => getVocabDeck(params?.deck ?? ""), [params?.deck])
+  const slug = params?.deck ?? ""
+  // Start from any local copy for instant render, then confirm against the DB.
+  const [deck, setDeck] = useState<VocabDeck | undefined>(() => getVocabDeck(slug))
+  const [deckLoading, setDeckLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    setDeckLoading(true)
+    fetchVocabDeck(slug)
+      .then((d) => {
+        if (!cancelled) setDeck(d ?? getVocabDeck(slug))
+      })
+      .finally(() => {
+        if (!cancelled) setDeckLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [slug])
 
   const homeworkId = searchParams?.get("hw") ?? undefined
   const isStudent = user?.role === "student"
@@ -77,6 +96,14 @@ function VocabularyDeckInner() {
   }, [homeworkId, isStudent])
 
   if (!deck) {
+    if (deckLoading) {
+      return (
+        <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-50 px-6 text-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-[#C8102E]" />
+          <p className="text-sm text-slate-500">Loading deck…</p>
+        </div>
+      )
+    }
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-6 text-center">
         <BookMarked className="h-10 w-10 text-slate-300" />

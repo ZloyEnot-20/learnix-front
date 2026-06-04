@@ -22,8 +22,13 @@ import {
 import { getExercises, getTopicsMeta, getExtraLevels } from "@/lib/exercises-cache"
 import { type ExtraLevel } from "@/lib/api"
 import { folderColorClass } from "@/lib/folder-colors"
-import { listVocabDecks, type VocabDeck } from "@/lib/vocabulary-data"
-import { TopicCardsSkeleton } from "@/components/admin/skeletons"
+import {
+  listVocabDecks,
+  fetchVocabDecks,
+  onVocabDecksInvalidate,
+  type VocabDeck,
+} from "@/lib/vocabulary-data"
+import { LevelFolderCardsSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 
 const LEVEL_PALETTE: Record<string, string> = {
@@ -145,9 +150,11 @@ export default function ExercisesIndexPage() {
     [topics],
   )
 
-  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
+  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>(() => listVocabDecks())
   useEffect(() => {
-    setVocabDecks(listVocabDecks())
+    const reload = () => void fetchVocabDecks().then(setVocabDecks)
+    reload()
+    return onVocabDecksInvalidate(reload)
   }, [])
 
   const levelFolders = useMemo(() => {
@@ -170,6 +177,9 @@ export default function ExercisesIndexPage() {
         topics: list,
         exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
         questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
+        wordCount: vocabDecks
+          .filter((d) => primaryLevel([d.level]) === level)
+          .reduce((acc, d) => acc + d.words.length, 0),
       }))
   }, [grammarTopics, vocabDecks])
 
@@ -242,9 +252,10 @@ export default function ExercisesIndexPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {loading && (
           <section>
-            <div className="h-5 w-56 rounded-md bg-slate-200 animate-pulse" />
+            <div className="h-5 w-40 rounded-md bg-slate-200 animate-pulse" />
+            <div className="mt-2 h-4 w-80 rounded-md bg-slate-200 animate-pulse" />
             <div className="mt-4">
-              <TopicCardsSkeleton count={6} />
+              <LevelFolderCardsSkeleton count={6} />
             </div>
           </section>
         )}
@@ -266,6 +277,7 @@ export default function ExercisesIndexPage() {
                   topicCount={folder.topics.length}
                   exerciseCount={folder.exerciseCount}
                   questionCount={folder.questionCount}
+                  wordCount={folder.wordCount}
                   onOpen={() => setSelectedLevel(folder.level)}
                 />
               ))}
@@ -274,6 +286,7 @@ export default function ExercisesIndexPage() {
                   key={lvl.key}
                   level={lvl.key}
                   label={lvl.label || lvl.key}
+                  badge={lvl.cefr}
                   topicCount={0}
                   exerciseCount={0}
                   questionCount={0}
@@ -452,18 +465,22 @@ function Breadcrumbs({
 function LevelFolderCard({
   level,
   label,
+  badge,
   topicCount,
   exerciseCount,
   questionCount,
+  wordCount = 0,
   colorCls,
   comingSoon = false,
   onOpen,
 }: {
   level: string
   label?: string
+  badge?: string
   topicCount: number
   exerciseCount: number
   questionCount: number
+  wordCount?: number
   colorCls?: string
   comingSoon?: boolean
   onOpen: () => void
@@ -492,15 +509,18 @@ function LevelFolderCard({
         >
           <Folder className="h-6 w-6" />
         </span>
-        {comingSoon ? (
-          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Soon
-          </span>
-        ) : (
-          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
-            {level}
-          </span>
-        )}
+        <div className="flex items-center gap-1.5">
+          {comingSoon && (
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Soon
+            </span>
+          )}
+          {(badge || !comingSoon) && (
+            <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
+              {badge ?? level}
+            </span>
+          )}
+        </div>
       </div>
       <div>
         <h3 className="text-base font-semibold text-slate-900">
@@ -513,6 +533,11 @@ function LevelFolderCard({
                 exerciseCount === 1 ? "" : "s"
               } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
         </p>
+        {!comingSoon && wordCount > 0 && (
+          <p className="mt-0.5 text-xs text-slate-500">
+            {wordCount} vocabulary word{wordCount === 1 ? "" : "s"}
+          </p>
+        )}
       </div>
     </button>
   )

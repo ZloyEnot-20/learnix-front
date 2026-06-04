@@ -57,12 +57,19 @@ import {
 } from "@/lib/grammar-utils"
 import { folderColorClass } from "@/lib/folder-colors"
 import type { GrammarExercise } from "@/lib/grammar-types"
-import { listVocabDecks, vocabHomeworkSlug, type VocabDeck } from "@/lib/vocabulary-data"
+import {
+  listVocabDecks,
+  fetchVocabDecks,
+  onVocabDecksInvalidate,
+  vocabHomeworkSlug,
+  type VocabDeck,
+} from "@/lib/vocabulary-data"
 import type { Group } from "@/lib/admin-storage"
 import { homeworkApi, type ExtraLevel } from "@/lib/api"
 import { useAdminData } from "@/lib/admin-data-context"
 import { useToast } from "@/hooks/use-toast"
-import { TopicCardsSkeleton } from "./skeletons"
+import { LevelFolderCardsSkeleton } from "./skeletons"
+import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 
 const DIFFICULTY_META: Record<
@@ -233,6 +240,7 @@ export default function ExercisesSection({
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
+  const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -265,9 +273,11 @@ export default function ExercisesSection({
     return m
   }, [topicsMeta])
 
-  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
+  const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>(() => listVocabDecks())
   useEffect(() => {
-    setVocabDecks(listVocabDecks())
+    const reload = () => void fetchVocabDecks().then(setVocabDecks)
+    reload()
+    return onVocabDecksInvalidate(reload)
   }, [])
 
   const levelFolders = useMemo(() => {
@@ -291,6 +301,9 @@ export default function ExercisesSection({
         topics: list,
         exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
         questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
+        wordCount: vocabDecks
+          .filter((d) => primaryLevel([d.level]) === level)
+          .reduce((acc, d) => acc + d.words.length, 0),
         color: list.map((t) => colorBySlug.get(t.topic)).find(Boolean),
       }))
   }, [grammarTopics, colorBySlug, vocabDecks])
@@ -363,9 +376,16 @@ export default function ExercisesSection({
     const totalMatches = topicResults.length + exerciseResults.length
     return (
       <div className="space-y-6">
-        {loading && grammarTopics.length === 0 && vocabDecks.length === 0 ? (
-          <TopicCardsSkeleton count={6} />
-        ) : grammarTopics.length === 0 && vocabDecks.length === 0 ? (
+        {loading ? (
+          <section className="space-y-4">
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-4 w-80" />
+            </div>
+            <Skeleton className="h-10 w-full sm:max-w-md rounded-md" />
+            <LevelFolderCardsSkeleton count={6} />
+          </section>
+        ) : levelFolders.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">No exercises yet</p>
             <p className="text-sm text-slate-500">
@@ -468,6 +488,7 @@ export default function ExercisesSection({
                     topicCount={folder.topics.length}
                     exerciseCount={folder.exerciseCount}
                     questionCount={folder.questionCount}
+                    wordCount={folder.wordCount}
                     colorCls={folderColorClass(folder.color)}
                     onOpen={() => setSelectedLevel(folder.level)}
                   />
@@ -477,6 +498,7 @@ export default function ExercisesSection({
                     key={lvl.key}
                     level={lvl.key}
                     label={lvl.label || lvl.key}
+                    badge={lvl.cefr}
                     topicCount={0}
                     exerciseCount={0}
                     questionCount={0}
@@ -662,6 +684,7 @@ export default function ExercisesSection({
                 deck={d}
                 canAssign={canAssign}
                 onAssign={() => setAssignDeck(d)}
+                onPreview={() => setPreviewDeck(d)}
               />
             ))}
           </div>
@@ -675,6 +698,12 @@ export default function ExercisesSection({
             ))}
           </div>
         )}
+
+        <VocabPreviewDialog
+          deck={previewDeck}
+          open={!!previewDeck}
+          onOpenChange={(open) => !open && setPreviewDeck(null)}
+        />
 
         <AssignVocabDialog
           deck={assignDeck}
@@ -1004,18 +1033,22 @@ function Breadcrumbs({
 function LevelFolderCard({
   level,
   label,
+  badge,
   topicCount,
   exerciseCount,
   questionCount,
+  wordCount = 0,
   colorCls,
   comingSoon = false,
   onOpen,
 }: {
   level: string
   label?: string
+  badge?: string
   topicCount: number
   exerciseCount: number
   questionCount: number
+  wordCount?: number
   colorCls?: string
   comingSoon?: boolean
   onOpen: () => void
@@ -1045,15 +1078,18 @@ function LevelFolderCard({
         >
           <Folder className="h-6 w-6" />
         </span>
-        {comingSoon ? (
-          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500 ring-1 ring-slate-200/70">
-            Soon
-          </span>
-        ) : (
-          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1", cls)}>
-            {level}
-          </span>
-        )}
+        <div className="flex items-center gap-1.5">
+          {comingSoon && (
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500 ring-1 ring-slate-200/70">
+              Soon
+            </span>
+          )}
+          {(badge || !comingSoon) && (
+            <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1", cls)}>
+              {badge ?? level}
+            </span>
+          )}
+        </div>
       </div>
       <div>
         <h3 className="text-base font-semibold text-slate-900">
@@ -1066,6 +1102,11 @@ function LevelFolderCard({
                 exerciseCount === 1 ? "" : "s"
               } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
         </p>
+        {!comingSoon && wordCount > 0 && (
+          <p className="mt-0.5 text-xs text-slate-500">
+            {wordCount} vocabulary word{wordCount === 1 ? "" : "s"}
+          </p>
+        )}
       </div>
     </button>
   )
@@ -1138,10 +1179,12 @@ function VocabDeckCard({
   deck,
   canAssign,
   onAssign,
+  onPreview,
 }: {
   deck: VocabDeck
   canAssign: boolean
   onAssign: () => void
+  onPreview: () => void
 }) {
   return (
     <div className="flex h-full flex-col rounded-3xl border border-violet-200/80 bg-white p-6 shadow-sm">
@@ -1177,14 +1220,94 @@ function VocabDeckCard({
             Assign repetition
           </Button>
         )}
-        <Button asChild size="sm" variant="outline" className={cn("gap-1.5 h-9", !canAssign && "ml-auto")}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onPreview}
+          className={cn("gap-1.5 h-9", !canAssign && "ml-auto")}
+        >
+          <Eye className="h-4 w-4" />
+          Preview
+        </Button>
+        <Button asChild size="sm" variant="outline" className="gap-1.5 h-9">
           <a href={`/vocabulary/${deck.slug}`} target="_blank" rel="noreferrer">
-            <Eye className="h-4 w-4" />
+            <BookOpen className="h-4 w-4" />
             Open
           </a>
         </Button>
       </div>
     </div>
+  )
+}
+
+/** Read-only modal listing every word in a vocabulary deck. */
+function VocabPreviewDialog({
+  deck,
+  open,
+  onOpenChange,
+}: {
+  deck: VocabDeck | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <BookMarked className="h-4 w-4 text-violet-500" />
+            {deck?.title ?? "Vocabulary deck"}
+          </DialogTitle>
+          <DialogDescription>
+            {deck ? (
+              <>
+                <span className="font-medium text-slate-900">{deck.words.length} words</span>
+                <span className="text-slate-500"> · {deck.level}</span>
+              </>
+            ) : (
+              "Deck preview"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="max-h-[60vh] space-y-2 overflow-y-auto pr-1">
+          {deck?.words.map((word, i) => (
+            <div
+              key={word.id ?? `${word.term}-${i}`}
+              className="rounded-xl border border-slate-200 bg-white p-3"
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="font-semibold text-slate-900">{word.term}</span>
+                <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                  {word.partOfSpeech}
+                </span>
+              </div>
+              {word.definition && (
+                <p className="mt-1 text-sm text-slate-600">{word.definition}</p>
+              )}
+              {(word.translation || word.translationUz) && (
+                <p className="mt-1 text-sm text-slate-500">
+                  {[word.translation, word.translationUz].filter(Boolean).join(" · ")}
+                </p>
+              )}
+              {word.example && (
+                <p className="mt-1 text-sm italic text-slate-400">“{word.example}”</p>
+              )}
+            </div>
+          ))}
+        </div>
+        <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+          <Button asChild variant="outline" className="gap-1.5">
+            <a href={deck ? `/vocabulary/${deck.slug}` : "#"} target="_blank" rel="noreferrer">
+              <BookOpen className="h-4 w-4" />
+              Open deck
+            </a>
+          </Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

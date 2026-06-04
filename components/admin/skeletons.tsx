@@ -99,6 +99,32 @@ export function TopicCardsSkeleton({ count = 6 }: { count?: number }) {
   )
 }
 
+/** Level folder cards used on the exercises levels view. */
+export function LevelFolderCardsSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div
+      className="grid gap-3"
+      style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <Skeleton className="h-12 w-12 rounded-xl" />
+            <Skeleton className="h-5 w-12 rounded-full" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-3 w-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /** Table placeholder with a header row and N body rows. */
 export function TableSkeleton({
   rows = 6,

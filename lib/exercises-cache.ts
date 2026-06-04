@@ -13,11 +13,6 @@ import type { TopicMeta } from "./grammar-utils"
 import topicsMetaRaw from "./grammar-topics-meta.json"
 import { mergeCustomTopics } from "./topic-storage"
 
-/** Shown even before the DB is seeded so the folders never disappear offline. */
-const DEFAULT_EXTRA_LEVELS: ExtraLevel[] = [
-  { key: "Advanced", label: "Advanced", color: "rose", comingSoon: true, order: 100 },
-  { key: "Expert", label: "Expert", color: "purple", comingSoon: true, order: 101 },
-]
 
 /** Merge remote exercises with locally-added ones (local wins on slug clash). */
 function mergeLocalExercises(remote: GrammarExercise[]): GrammarExercise[] {
@@ -102,18 +97,16 @@ export const getTopicsMeta = (force = false): Promise<TopicMeta[]> =>
     force,
   )
 
-/** Extra (non-CEFR) level folders — from the DB, falling back to defaults. */
+/** Extra (non-CEFR) level folders — sourced entirely from the DB. */
 export const getExtraLevels = (force = false): Promise<ExtraLevel[]> =>
   load(
     levelsCache,
     async () => {
       try {
-        const remote = await exercisesApi.levels()
-        if (remote.length > 0) return remote
+        return await exercisesApi.levels()
       } catch {
-        /* fall through to defaults */
+        return []
       }
-      return DEFAULT_EXTRA_LEVELS
     },
     force,
   )

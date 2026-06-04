@@ -328,6 +328,21 @@ function withTopic(raw: string, topic: string): string {
   return JSON.stringify(list, null, 2)
 }
 
+/** Inject CEFR level into vocabulary deck JSON when omitted in the payload. */
+function withDeckLevel(raw: string, level: string): string {
+  const json = JSON.parse(raw)
+  const list = Array.isArray(json) ? json : [json]
+  for (const item of list) {
+    if (item && typeof item === "object") {
+      const obj = item as Record<string, unknown>
+      if (!obj.level) obj.level = level
+    }
+  }
+  return JSON.stringify(list, null, 2)
+}
+
+const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
+
 interface ManageContentSectionProps {
   /** Called after a successful save so the shell can refresh badges/counts. */
   onChanged?: () => void
@@ -350,6 +365,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
   const [exerciseSource, setExerciseSource] = useState<"json" | "url">("json")
   const [urls, setUrls] = useState<string[]>([""])
   const [fetching, setFetching] = useState(false)
+  const [vocabLevel, setVocabLevel] = useState("A2")
 
   // New-folder form.
   const [folderForm, setFolderForm] = useState({
@@ -496,6 +512,13 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
         /* let parseContent surface the JSON syntax error below */
       }
     }
+    if (kind === "vocabulary") {
+      try {
+        rawToParse = withDeckLevel(raw, vocabLevel.trim() || "A1")
+      } catch {
+        /* let parseContent surface the JSON syntax error below */
+      }
+    }
     const parsed = parseContent(kind, rawToParse)
     if (!parsed.ok) {
       setError(parsed.error ?? "Validation failed.")
@@ -506,11 +529,15 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
       const count = await saveContent(kind, parsed.items)
       toast({
         title: "Saved",
-        description: `${count} ${active.label.toLowerCase()} item${count === 1 ? "" : "s"} added.`,
+        description:
+          kind === "vocabulary"
+            ? `${count} deck${count === 1 ? "" : "s"} saved for level ${vocabLevel}. Open Exercises → ${vocabLevel} → Vocabulary.`
+            : `${count} ${active.label.toLowerCase()} item${count === 1 ? "" : "s"} added.`,
       })
       setRaw("")
       if (kind === "exercise") void reloadTopics()
-      onChanged?.()
+      // Vocabulary is localStorage-only; exercises catalogue refresh is not needed.
+      if (kind === "topic" || kind === "exercise" || kind === "test") onChanged?.()
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Please try again."
       setError(msg)
@@ -838,6 +865,29 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                       {src === "json" ? "Paste JSON" : "From link(s)"}
                     </button>
                   ))}
+                </div>
+              )}
+
+              {kind === "vocabulary" && (
+                <div className="space-y-1.5">
+                  <Label>CEFR level *</Label>
+                  <Select value={vocabLevel} onValueChange={setVocabLevel}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose level for this deck" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CEFR_LEVELS.map((lvl) => (
+                        <SelectItem key={lvl} value={lvl}>
+                          {lvl}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[11px] text-slate-400">
+                    Applied when <code className="rounded bg-slate-100 px-1">level</code> is
+                    omitted in the JSON. The deck appears under this level in Exercises →
+                    Vocabulary.
+                  </p>
                 </div>
               )}
 
