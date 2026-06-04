@@ -22,6 +22,7 @@ import {
 import { getExercises, getTopicsMeta, getExtraLevels } from "@/lib/exercises-cache"
 import { type ExtraLevel } from "@/lib/api"
 import { folderColorClass } from "@/lib/folder-colors"
+import { claimedCefrBands, contentCefrBand } from "@/lib/level-folders"
 import {
   listVocabDecks,
   fetchVocabDecks,
@@ -157,14 +158,15 @@ export default function ExercisesIndexPage() {
     return onVocabDecksInvalidate(reload)
   }, [])
 
-  const levelFolders = useMemo(() => {
+  const cefrClaimedByExtra = useMemo(() => claimedCefrBands(extraLevels), [extraLevels])
+
+  const levelBuckets = useMemo(() => {
     const map = new Map<string, TopicSummary[]>()
     for (const t of grammarTopics) {
       const lvl = topicFolderLevel(t)
       if (!map.has(lvl)) map.set(lvl, [])
       map.get(lvl)!.push(t)
     }
-    // Surface levels that only have vocabulary decks so they stay reachable.
     for (const d of vocabDecks) {
       const lvl = primaryLevel([d.level])
       if (!map.has(lvl)) map.set(lvl, [])
@@ -183,27 +185,56 @@ export default function ExercisesIndexPage() {
       }))
   }, [grammarTopics, vocabDecks])
 
+  const levelFolders = useMemo(
+    () => levelBuckets.filter((b) => !cefrClaimedByExtra.has(b.level)),
+    [levelBuckets, cefrClaimedByExtra],
+  )
+
+  const bucketByCefr = useMemo(() => {
+    const m = new Map<string, (typeof levelBuckets)[number]>()
+    for (const b of levelBuckets) m.set(b.level, b)
+    return m
+  }, [levelBuckets])
+
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const contentLevel = useMemo(
+    () => contentCefrBand(selectedLevel, extraLevels),
+    [selectedLevel, extraLevels],
+  )
+
   const activeLevelFolder = useMemo(
-    () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
-    [levelFolders, selectedLevel],
+    () => (contentLevel ? levelFolders.find((f) => f.level === contentLevel) ?? null : null),
+    [levelFolders, contentLevel],
+  )
+  const activeExtraLevel = useMemo(
+    () => extraLevels.find((l) => l.key === selectedLevel) ?? null,
+    [extraLevels, selectedLevel],
   )
   const vocabDecksForLevel = useMemo(
     () =>
-      selectedLevel
-        ? vocabDecks.filter((d) => primaryLevel([d.level]) === selectedLevel)
+      contentLevel
+        ? vocabDecks.filter((d) => primaryLevel([d.level]) === contentLevel)
         : [],
-    [selectedLevel, vocabDecks],
+    [contentLevel, vocabDecks],
   )
+  const levelTopics = useMemo(() => {
+    if (!contentLevel) return []
+    if (activeExtraLevel) {
+      return grammarTopics.filter((t) => topicFolderLevel(t) === contentLevel)
+    }
+    return activeLevelFolder?.topics ?? []
+  }, [contentLevel, activeExtraLevel, activeLevelFolder, grammarTopics])
   const hasContent = grammarTopics.length > 0 || vocabDecks.length > 0
 
   const categoryStats = (
-    level: string,
+    folderKey: string,
     categoryId: string,
   ): { count: number; lines: string[] } => {
+    const band = contentCefrBand(folderKey, extraLevels) ?? folderKey
     if (categoryId === "vocabulary") {
-      const decks = vocabDecks.filter((d) => primaryLevel([d.level]) === level)
+      const decks = vocabDecks.filter((d) => primaryLevel([d.level]) === band)
       const words = decks.reduce((acc, d) => acc + d.words.length, 0)
       return {
         count: decks.length,
@@ -213,8 +244,8 @@ export default function ExercisesIndexPage() {
         ],
       }
     }
-    const folder = levelFolders.find((f) => f.level === level)
-    const topics = folder?.topics.filter((t) => t.category === categoryId) ?? []
+    const bucket = levelBuckets.find((f) => f.level === band)
+    const topics = bucket?.topics.filter((t) => t.category === categoryId) ?? []
     const exercises = topics.reduce((acc, t) => acc + t.exerciseCount, 0)
     const questions = topics.reduce((acc, t) => acc + t.questionCount, 0)
     return {
@@ -281,20 +312,25 @@ export default function ExercisesIndexPage() {
                   onOpen={() => setSelectedLevel(folder.level)}
                 />
               ))}
-              {extraLevels.map((lvl) => (
-                <LevelFolderCard
-                  key={lvl.key}
-                  level={lvl.key}
-                  label={lvl.label || lvl.key}
-                  badge={lvl.cefr}
-                  topicCount={0}
-                  exerciseCount={0}
-                  questionCount={0}
-                  colorCls={folderColorClass(lvl.color)}
-                  comingSoon={lvl.comingSoon}
-                  onOpen={() => setSelectedLevel(lvl.key)}
-                />
-              ))}
+              {extraLevels.map((lvl) => {
+                const band = lvl.cefr?.trim().toUpperCase()
+                const bucket = band ? bucketByCefr.get(band) : undefined
+                return (
+                  <LevelFolderCard
+                    key={lvl.key}
+                    level={lvl.key}
+                    label={lvl.label || lvl.key}
+                    badge={lvl.cefr}
+                    topicCount={bucket?.topics.length ?? 0}
+                    exerciseCount={bucket?.exerciseCount ?? 0}
+                    questionCount={bucket?.questionCount ?? 0}
+                    wordCount={bucket?.wordCount ?? 0}
+                    colorCls={folderColorClass(lvl.color)}
+                    comingSoon={lvl.comingSoon}
+                    onOpen={() => setSelectedLevel(lvl.key)}
+                  />
+                )
+              })}
             </div>
           </section>
         )}
@@ -304,13 +340,13 @@ export default function ExercisesIndexPage() {
             <Breadcrumbs
               items={[
                 { label: "Exercises", onClick: () => setSelectedLevel(null) },
-                { label: selectedLevel },
+                { label: activeExtraLevel?.label ?? selectedLevel },
               ]}
             />
             <h2 className="mt-4 text-lg font-semibold text-slate-900">
-              {selectedLevel}{" "}
+              {activeExtraLevel?.label ?? selectedLevel}{" "}
               <span className="text-base font-medium text-slate-500">
-                · {LEVEL_LABELS[selectedLevel] ?? ""}
+                · {activeExtraLevel?.label ? "" : LEVEL_LABELS[contentLevel ?? ""] ?? ""}
               </span>
             </h2>
             <p className="mt-1 text-sm text-slate-500">Choose a section</p>
@@ -350,9 +386,9 @@ export default function ExercisesIndexPage() {
             {(() => {
               const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
               const isVocab = selectedCategory === "vocabulary"
-              const topics =
-                activeLevelFolder?.topics.filter((t) => t.category === selectedCategory) ?? []
+              const topics = levelTopics.filter((t) => t.category === selectedCategory)
               const count = isVocab ? vocabDecksForLevel.length : topics.length
+              const levelLabel = activeExtraLevel?.label ?? selectedLevel
               return (
                 <>
                   <Breadcrumbs
@@ -364,7 +400,7 @@ export default function ExercisesIndexPage() {
                           setSelectedCategory(null)
                         },
                       },
-                      { label: selectedLevel, onClick: () => setSelectedCategory(null) },
+                      { label: levelLabel, onClick: () => setSelectedCategory(null) },
                       { label: subject?.label ?? selectedCategory },
                     ]}
                   />
@@ -372,7 +408,7 @@ export default function ExercisesIndexPage() {
                     {subject?.label ?? selectedCategory}
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
-                    {selectedLevel} · {count} {isVocab ? "deck" : "topic"}
+                    {levelLabel} · {count} {isVocab ? "deck" : "topic"}
                     {count === 1 ? "" : "s"}
                   </p>
                   <Button
