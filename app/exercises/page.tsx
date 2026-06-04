@@ -19,10 +19,7 @@ import {
   buildTopicSummaries,
   type TopicSummary,
 } from "@/lib/grammar-utils"
-import { getExercises, getTopicsMeta, getExtraLevels } from "@/lib/exercises-cache"
-import { type ExtraLevel } from "@/lib/api"
-import { folderColorClass } from "@/lib/folder-colors"
-import { claimedCefrBands, contentCefrBand } from "@/lib/level-folders"
+import { getExercises, getTopicsMeta } from "@/lib/exercises-cache"
 import {
   listVocabDecks,
   fetchVocabDecks,
@@ -43,13 +40,23 @@ const LEVEL_PALETTE: Record<string, string> = {
 
 const CEFR_ORDER = ["A1", "A2", "B1", "B2", "C1", "C2"]
 
+/** The six fixed levels. These are the only level folders that ever render. */
+const LEVELS: { key: string; label: string }[] = [
+  { key: "A1", label: "Beginner" },
+  { key: "A2", label: "Elementary" },
+  { key: "B1", label: "Intermediate" },
+  { key: "B2", label: "Upper-Intermediate" },
+  { key: "C1", label: "Advanced" },
+  { key: "C2", label: "Expert" },
+]
+
 const LEVEL_LABELS: Record<string, string> = {
   A1: "Beginner",
   A2: "Elementary",
   B1: "Intermediate",
   B2: "Upper-Intermediate",
   C1: "Advanced",
-  C2: "Proficiency",
+  C2: "Expert",
   Other: "Other",
 }
 
@@ -79,6 +86,11 @@ function primaryLevel(levels: string[]): string {
     }
   }
   return best === Number.MAX_SAFE_INTEGER ? "Other" : CEFR_ORDER[best]
+}
+
+/** Map any level (incl. "Other") onto one of the six fixed bands (A1–C2). */
+function clampToFixedLevel(level: string): string {
+  return CEFR_ORDER.includes(level) ? level : "A1"
 }
 
 /**
@@ -129,17 +141,11 @@ function summariseLevels(levels: string[]): { display: string; cls: string } {
 
 export default function ExercisesIndexPage() {
   const [topics, setTopics] = useState<TopicSummary[]>([])
-  const [extraLevels, setExtraLevels] = useState<ExtraLevel[]>([])
   const [loading, setLoading] = useState(true)
 
   const refresh = async () => {
-    const [exercises, metas, levels] = await Promise.all([
-      getExercises(),
-      getTopicsMeta(),
-      getExtraLevels(),
-    ])
+    const [exercises, metas] = await Promise.all([getExercises(), getTopicsMeta()])
     setTopics(buildTopicSummaries(exercises, metas))
-    setExtraLevels(levels)
   }
 
   useEffect(() => {
@@ -158,83 +164,55 @@ export default function ExercisesIndexPage() {
     return onVocabDecksInvalidate(reload)
   }, [])
 
-  const cefrClaimedByExtra = useMemo(() => claimedCefrBands(extraLevels), [extraLevels])
-
-  const levelBuckets = useMemo(() => {
-    const map = new Map<string, TopicSummary[]>()
+  // Exactly the six fixed levels with their content folded in.
+  const levelFolders = useMemo(() => {
+    const topicsByLevel = new Map<string, TopicSummary[]>()
     for (const t of grammarTopics) {
-      const lvl = topicFolderLevel(t)
-      if (!map.has(lvl)) map.set(lvl, [])
-      map.get(lvl)!.push(t)
+      const lvl = clampToFixedLevel(topicFolderLevel(t))
+      if (!topicsByLevel.has(lvl)) topicsByLevel.set(lvl, [])
+      topicsByLevel.get(lvl)!.push(t)
     }
-    for (const d of vocabDecks) {
-      const lvl = primaryLevel([d.level])
-      if (!map.has(lvl)) map.set(lvl, [])
-    }
-    const order = [...CEFR_ORDER, "Other"]
-    return [...map.entries()]
-      .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]))
-      .map(([level, list]) => ({
-        level,
+    return LEVELS.map(({ key, label }) => {
+      const list = topicsByLevel.get(key) ?? []
+      return {
+        level: key,
+        label,
         topics: list,
         exerciseCount: list.reduce((acc, t) => acc + t.exerciseCount, 0),
         questionCount: list.reduce((acc, t) => acc + t.questionCount, 0),
         wordCount: vocabDecks
-          .filter((d) => primaryLevel([d.level]) === level)
+          .filter((d) => clampToFixedLevel(primaryLevel([d.level])) === key)
           .reduce((acc, d) => acc + d.words.length, 0),
-      }))
+      }
+    })
   }, [grammarTopics, vocabDecks])
-
-  const levelFolders = useMemo(
-    () => levelBuckets.filter((b) => !cefrClaimedByExtra.has(b.level)),
-    [levelBuckets, cefrClaimedByExtra],
-  )
-
-  const bucketByCefr = useMemo(() => {
-    const m = new Map<string, (typeof levelBuckets)[number]>()
-    for (const b of levelBuckets) m.set(b.level, b)
-    return m
-  }, [levelBuckets])
 
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  const contentLevel = useMemo(
-    () => contentCefrBand(selectedLevel, extraLevels),
-    [selectedLevel, extraLevels],
-  )
-
   const activeLevelFolder = useMemo(
-    () => (contentLevel ? levelFolders.find((f) => f.level === contentLevel) ?? null : null),
-    [levelFolders, contentLevel],
-  )
-  const activeExtraLevel = useMemo(
-    () => extraLevels.find((l) => l.key === selectedLevel) ?? null,
-    [extraLevels, selectedLevel],
+    () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
+    [levelFolders, selectedLevel],
   )
   const vocabDecksForLevel = useMemo(
     () =>
-      contentLevel
-        ? vocabDecks.filter((d) => primaryLevel([d.level]) === contentLevel)
+      selectedLevel
+        ? vocabDecks.filter((d) => clampToFixedLevel(primaryLevel([d.level])) === selectedLevel)
         : [],
-    [contentLevel, vocabDecks],
+    [selectedLevel, vocabDecks],
   )
-  const levelTopics = useMemo(() => {
-    if (!contentLevel) return []
-    if (activeExtraLevel) {
-      return grammarTopics.filter((t) => topicFolderLevel(t) === contentLevel)
-    }
-    return activeLevelFolder?.topics ?? []
-  }, [contentLevel, activeExtraLevel, activeLevelFolder, grammarTopics])
-  const hasContent = grammarTopics.length > 0 || vocabDecks.length > 0
+  const levelTopics = useMemo(
+    () => activeLevelFolder?.topics ?? [],
+    [activeLevelFolder],
+  )
+  const hasContent = true
 
   const categoryStats = (
-    folderKey: string,
+    level: string,
     categoryId: string,
   ): { count: number; lines: string[] } => {
-    const band = contentCefrBand(folderKey, extraLevels) ?? folderKey
     if (categoryId === "vocabulary") {
-      const decks = vocabDecks.filter((d) => primaryLevel([d.level]) === band)
+      const decks = vocabDecks.filter((d) => clampToFixedLevel(primaryLevel([d.level])) === level)
       const words = decks.reduce((acc, d) => acc + d.words.length, 0)
       return {
         count: decks.length,
@@ -244,7 +222,7 @@ export default function ExercisesIndexPage() {
         ],
       }
     }
-    const bucket = levelBuckets.find((f) => f.level === band)
+    const bucket = levelFolders.find((f) => f.level === level)
     const topics = bucket?.topics.filter((t) => t.category === categoryId) ?? []
     const exercises = topics.reduce((acc, t) => acc + t.exerciseCount, 0)
     const questions = topics.reduce((acc, t) => acc + t.questionCount, 0)
@@ -305,6 +283,7 @@ export default function ExercisesIndexPage() {
                 <LevelFolderCard
                   key={folder.level}
                   level={folder.level}
+                  label={folder.label}
                   topicCount={folder.topics.length}
                   exerciseCount={folder.exerciseCount}
                   questionCount={folder.questionCount}
@@ -312,25 +291,6 @@ export default function ExercisesIndexPage() {
                   onOpen={() => setSelectedLevel(folder.level)}
                 />
               ))}
-              {extraLevels.map((lvl) => {
-                const band = lvl.cefr?.trim().toUpperCase()
-                const bucket = band ? bucketByCefr.get(band) : undefined
-                return (
-                  <LevelFolderCard
-                    key={lvl.key}
-                    level={lvl.key}
-                    label={lvl.label || lvl.key}
-                    badge={lvl.cefr}
-                    topicCount={bucket?.topics.length ?? 0}
-                    exerciseCount={bucket?.exerciseCount ?? 0}
-                    questionCount={bucket?.questionCount ?? 0}
-                    wordCount={bucket?.wordCount ?? 0}
-                    colorCls={folderColorClass(lvl.color)}
-                    comingSoon={lvl.comingSoon}
-                    onOpen={() => setSelectedLevel(lvl.key)}
-                  />
-                )
-              })}
             </div>
           </section>
         )}
@@ -340,13 +300,13 @@ export default function ExercisesIndexPage() {
             <Breadcrumbs
               items={[
                 { label: "Exercises", onClick: () => setSelectedLevel(null) },
-                { label: activeExtraLevel?.label ?? selectedLevel },
+                { label: selectedLevel },
               ]}
             />
             <h2 className="mt-4 text-lg font-semibold text-slate-900">
-              {activeExtraLevel?.label ?? selectedLevel}{" "}
+              {selectedLevel}{" "}
               <span className="text-base font-medium text-slate-500">
-                · {activeExtraLevel?.label ? "" : LEVEL_LABELS[contentLevel ?? ""] ?? ""}
+                · {LEVEL_LABELS[selectedLevel] ?? ""}
               </span>
             </h2>
             <p className="mt-1 text-sm text-slate-500">Choose a section</p>
@@ -388,7 +348,7 @@ export default function ExercisesIndexPage() {
               const isVocab = selectedCategory === "vocabulary"
               const topics = levelTopics.filter((t) => t.category === selectedCategory)
               const count = isVocab ? vocabDecksForLevel.length : topics.length
-              const levelLabel = activeExtraLevel?.label ?? selectedLevel
+              const levelLabel = selectedLevel
               return (
                 <>
                   <Breadcrumbs

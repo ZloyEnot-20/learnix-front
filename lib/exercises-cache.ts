@@ -6,7 +6,7 @@
  * list — in that case we transparently fall back to the bundled local seed so
  * the exercises tab keeps working. Once data exists in the DB, it wins.
  */
-import { exercisesApi, type ExtraLevel } from "./api"
+import { exercisesApi } from "./api"
 import { listGrammarExercises } from "./grammar-storage"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
@@ -33,7 +33,6 @@ interface CacheEntry<T> {
 
 const exercisesCache: CacheEntry<GrammarExercise[]> = {}
 const topicsCache: CacheEntry<TopicMeta[]> = {}
-const levelsCache: CacheEntry<ExtraLevel[]> = {}
 
 function isFresh<T>(entry: CacheEntry<T>): boolean {
   return (
@@ -93,20 +92,6 @@ export const getTopicsMeta = (force = false): Promise<TopicMeta[]> =>
         /* fall through to seed */
       }
       return mergeCustomTopics(LOCAL_TOPICS)
-    },
-    force,
-  )
-
-/** Extra (non-CEFR) level folders — sourced entirely from the DB. */
-export const getExtraLevels = (force = false): Promise<ExtraLevel[]> =>
-  load(
-    levelsCache,
-    async () => {
-      try {
-        return await exercisesApi.levels()
-      } catch {
-        return []
-      }
     },
     force,
   )

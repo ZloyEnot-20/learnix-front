@@ -177,21 +177,10 @@ export interface ImportCatalogResult {
   topics: { received: number; written: number }
   exercises: { received: number; written: number }
 }
-export interface ExtraLevel {
-  key: string
-  label: string
-  color: string
-  comingSoon: boolean
-  order: number
-  /** CEFR band shown as the top-right badge (e.g. "C1"). */
-  cefr?: string
-}
-
 export const exercisesApi = {
   list: (topic?: string) =>
     api.get<GrammarExercise[]>(`/exercises${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
   topics: () => api.get<TopicMeta[]>("/exercises/topics"),
-  levels: () => api.get<ExtraLevel[]>("/exercises/levels"),
   get: (slug: string) => api.get<GrammarExercise>(`/exercises/${slug}`),
   import: (payload: { topics: TopicMeta[]; exercises: GrammarExercise[] }) =>
     api.post<ImportCatalogResult>("/exercises/import", payload),
