@@ -156,10 +156,15 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
             <div className="min-w-0 flex-1">
               <DialogTitle className="text-xl">{student.name}</DialogTitle>
               <DialogDescription className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
-                <span className="inline-flex items-center gap-1">
-                  <Mail className="h-3.5 w-3.5" />
-                  {student.email}
+                <span className="inline-flex items-center gap-1 font-mono">
+                  @{student.login}
                 </span>
+                {student.email && (
+                  <span className="inline-flex items-center gap-1">
+                    <Mail className="h-3.5 w-3.5" />
+                    {student.email}
+                  </span>
+                )}
                 {student.phone && (
                   <span className="inline-flex items-center gap-1">
                     <Phone className="h-3.5 w-3.5" />

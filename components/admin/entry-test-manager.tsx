@@ -258,7 +258,7 @@ export default function EntryTestManager({
                 {students.map((s) => (
                   <SelectItem key={s.id} value={s.id}>
                     {s.name}
-                    <span className="ml-1 text-xs text-slate-500">· {s.email}</span>
+                    <span className="ml-1 text-xs text-slate-500 font-mono">· {s.login}</span>
                   </SelectItem>
                 ))}
               </SelectContent>

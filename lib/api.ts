@@ -24,11 +24,11 @@ import type { VocabDeck } from "./vocabulary-data"
 // ---------- Auth ----------
 export interface AuthUser {
   id: string
+  login: string
   email: string
   name: string
-  role: "admin" | "teacher" | "student"
+  role: "admin" | "teacher" | "student" | "super_admin"
   isPremium: boolean
-  studentId?: string
 }
 export interface AuthResponse {
   user: AuthUser
@@ -37,8 +37,8 @@ export interface AuthResponse {
 }
 
 export const authApi = {
-  login: (email: string, password: string) =>
-    api.post<AuthResponse>("/auth/login", { email, password }, false),
+  login: (login: string, password: string) =>
+    api.post<AuthResponse>("/auth/login", { login, password }, false),
   register: (email: string, password: string, name: string) =>
     api.post<AuthResponse>("/auth/register", { email, password, name }, false),
   me: () => api.get<{ user: AuthUser }>("/auth/me"),
@@ -61,7 +61,13 @@ export const groupsApi = {
 export const studentsApi = {
   list: () => api.get<Student[]>("/students"),
   get: (id: string) => api.get<Student>(`/students/${id}`),
-  create: (input: Partial<Student>) => api.post<Student>("/students", input),
+  loginSuggestions: (name: string) =>
+    api.get<string[]>(`/students/login-suggestions?name=${encodeURIComponent(name)}`),
+  create: (input: Partial<Student> & { login: string }) =>
+    api.post<{ student: Student; credentials: { login: string; password: string } }>(
+      "/students",
+      input,
+    ),
   update: (id: string, patch: Partial<Student>) =>
     api.patch<Student>(`/students/${id}`, patch),
   remove: (id: string) => api.del(`/students/${id}`),

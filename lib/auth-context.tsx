@@ -26,11 +26,12 @@ interface TestResult {
 
 interface User {
   id: string
+  login: string
   email: string
   name: string
   role: UserRole
   isPremium: boolean
-  /** CRM student record id (for role=student); falls back to user id. */
+  /** Student record id — same as user id for role=student. */
   studentId?: string
   testHistory: TestResult[]
   completedSections: {
@@ -42,7 +43,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<User>
+  login: (login: string, password: string) => Promise<User>
   register: (email: string, password: string, name: string) => Promise<User>
   logout: () => void
   isLoading: boolean
@@ -64,11 +65,12 @@ export const DEMO_ACCOUNTS: Array<{
 function toUser(u: AuthUser): User {
   return {
     id: u.id,
+    login: u.login || u.email,
     email: u.email,
     name: u.name,
     role: u.role,
     isPremium: u.isPremium,
-    studentId: u.studentId ?? (u.role === "student" ? u.id : undefined),
+    studentId: u.role === "student" ? u.id : undefined,
     testHistory: [],
     completedSections: { reading: true, listening: true, writing: true },
   }
@@ -101,8 +103,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const login = async (email: string, password: string): Promise<User> => {
-    const res = await authApi.login(email.trim().toLowerCase(), password)
+  const login = async (loginValue: string, password: string): Promise<User> => {
+    const res = await authApi.login(loginValue.trim().toLowerCase(), password)
     setTokens(res.accessToken, res.refreshToken)
     const next = toUser(res.user)
     setUser(next)

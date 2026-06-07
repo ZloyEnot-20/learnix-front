@@ -24,11 +24,11 @@ function redirectFor(role: UserRole): string {
 }
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [loginValue, setLoginValue] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
-  const { login } = useAuth()
+  const { login: signIn } = useAuth()
   const router = useRouter()
 
   // useEffect(() => {
@@ -48,10 +48,10 @@ export default function LoginPage() {
     setError("")
     setSubmitting(true)
     try {
-      const u = await login(email, password)
+      const u = await signIn(loginValue, password)
       router.push(redirectFor(u.role))
     } catch {
-      setError("Invalid email or password")
+      setError("Invalid login or password")
     } finally {
       setSubmitting(false)
     }
@@ -60,10 +60,10 @@ export default function LoginPage() {
   const handleDemoLogin = async (demoEmail: string, demoPassword: string) => {
     setError("")
     setSubmitting(true)
-    setEmail(demoEmail)
+    setLoginValue(demoEmail)
     setPassword(demoPassword)
     try {
-      const u = await login(demoEmail, demoPassword)
+      const u = await signIn(demoEmail, demoPassword)
       router.push(redirectFor(u.role))
     } catch {
       setError("Demo login failed")
@@ -86,15 +86,15 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="login">Login</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="your.email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="login"
+                type="text"
+                placeholder="your.login"
+                value={loginValue}
+                onChange={(e) => setLoginValue(e.target.value)}
                 required
-                autoComplete="email"
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">

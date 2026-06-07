@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
+  Copy,
   Layers,
   Plus,
   RefreshCw,
@@ -86,13 +87,51 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
 
   const [form, setForm] = useState({
     name: "",
+    login: "",
     email: "",
     phone: "",
     groupId: "",
     monthlyFee: 1_000_000,
     notes: "",
   })
+  const [loginSuggestions, setLoginSuggestions] = useState<string[]>([])
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false)
+  const [credentials, setCredentials] = useState<{ login: string; password: string } | null>(null)
 
+  useEffect(() => {
+    const name = form.name.trim()
+    if (name.length < 2) {
+      setLoginSuggestions([])
+      return
+    }
+    const timer = setTimeout(async () => {
+      setLoadingSuggestions(true)
+      try {
+        const suggestions = await studentsApi.loginSuggestions(name)
+        setLoginSuggestions(suggestions)
+      } catch {
+        setLoginSuggestions([])
+      } finally {
+        setLoadingSuggestions(false)
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [form.name])
+
+  const resetCreateForm = () => {
+    setForm({ name: "", login: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
+    setLoginSuggestions([])
+    setCredentials(null)
+  }
+
+  const copyText = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast({ title: `${label} copied` })
+    } catch {
+      toast({ title: "Could not copy", variant: "destructive" })
+    }
+  }
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return students.filter((s) => {
@@ -100,34 +139,35 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
       if (!q) return true
       return (
         s.name.toLowerCase().includes(q) ||
-        s.email.toLowerCase().includes(q) ||
+        s.login.toLowerCase().includes(q) ||
+        (s.email?.toLowerCase().includes(q) ?? false) ||
         (s.phone?.toLowerCase().includes(q) ?? false)
       )
     })
   }, [students, search, groupFilter])
 
   const submit = async () => {
-    if (!form.name.trim() || !form.email.trim()) {
+    if (!form.name.trim() || !form.login.trim()) {
       toast({
         title: "Missing fields",
-        description: "Name and email are required.",
+        description: "Name and login are required.",
         variant: "destructive",
       })
       return
     }
     setCreating(true)
     try {
-      await studentsApi.create({
+      const res = await studentsApi.create({
         name: form.name.trim(),
-        email: form.email.trim(),
+        login: form.login.trim().toLowerCase(),
+        email: form.email.trim() || undefined,
         phone: form.phone.trim() || undefined,
         groupId: form.groupId || undefined,
         monthlyFee: Number(form.monthlyFee) || 0,
         notes: form.notes.trim() || undefined,
       })
+      setCredentials(res.credentials)
       toast({ title: "Student added", description: form.name })
-      setForm({ name: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
-      setShowCreate(false)
       invalidateStudents()
       await refreshAll(true)
       onChanged?.()
@@ -424,7 +464,8 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                                   {s.name}
                                 </p>
                                 <p className="truncate text-xs text-slate-500">
-                                  {s.email}
+                                  {s.login}
+                                  {s.email ? ` · ${s.email}` : ""}
                                 </p>
                               </div>
                             </div>
@@ -477,98 +518,198 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
         </Card>
       </div>
 
-      <Dialog open={showCreate} onOpenChange={setShowCreate}>
+      <Dialog
+        open={showCreate}
+        onOpenChange={(open) => {
+          setShowCreate(open)
+          if (!open) resetCreateForm()
+        }}
+      >
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add a student</DialogTitle>
-            <DialogDescription>Create a student profile and optionally assign to a group.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="s-name">Full name *</Label>
-              <Input
-                id="s-name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Full name"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="s-email">Email *</Label>
-                <Input
-                  id="s-email"
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="name@example.com"
-                />
+          {credentials ? (
+            <>
+              <DialogHeader>
+                <DialogTitle>Student created</DialogTitle>
+                <DialogDescription>
+                  Share these credentials with the student. The password is shown only once.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Login</p>
+                    <p className="truncate font-mono text-sm font-semibold text-slate-900">
+                      {credentials.login}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyText(credentials.login, "Login")}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Password</p>
+                    <p className="truncate font-mono text-sm font-semibold text-slate-900">
+                      {credentials.password}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyText(credentials.password, "Password")}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="s-phone">Phone</Label>
-                <Input
-                  id="s-phone"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="+7 999 …"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label>Group</Label>
-                <Select
-                  value={form.groupId || "none"}
-                  onValueChange={(v) => setForm({ ...form, groupId: v === "none" ? "" : v })}
+              <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+                <Button
+                  onClick={() => {
+                    setShowCreate(false)
+                    resetCreateForm()
+                  }}
+                  className="bg-[#C8102E] hover:bg-[#A00D25]"
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="No group" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No group</SelectItem>
-                    {groups.map((g) => (
-                      <SelectItem key={g.id} value={g.id}>
-                        {g.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  Done
+                </Button>
+              </DialogFooter>
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle>Add a student</DialogTitle>
+                <DialogDescription>
+                  Create a login account. Email and phone are optional.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="s-name">Full name *</Label>
+                  <Input
+                    id="s-name"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder="Full name"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="s-login">Login *</Label>
+                  <Input
+                    id="s-login"
+                    value={form.login}
+                    onChange={(e) =>
+                      setForm({ ...form, login: e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, "") })
+                    }
+                    placeholder="student.login"
+                    className="font-mono"
+                  />
+                  {loginSuggestions.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {loginSuggestions.map((suggestion) => (
+                        <button
+                          key={suggestion}
+                          type="button"
+                          onClick={() => setForm({ ...form, login: suggestion })}
+                          className={cn(
+                            "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
+                            form.login === suggestion
+                              ? "border-slate-900 bg-slate-900 text-white"
+                              : "border-slate-200 bg-white text-slate-700 hover:border-slate-300",
+                          )}
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                      {loadingSuggestions && (
+                        <span className="text-xs text-slate-400 self-center">…</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="s-email">Email</Label>
+                    <Input
+                      id="s-email"
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder="name@example.com"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="s-phone">Phone (UZ)</Label>
+                    <Input
+                      id="s-phone"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder="+998 90 123 45 67"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label>Group</Label>
+                    <Select
+                      value={form.groupId || "none"}
+                      onValueChange={(v) => setForm({ ...form, groupId: v === "none" ? "" : v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="No group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No group</SelectItem>
+                        {groups.map((g) => (
+                          <SelectItem key={g.id} value={g.id}>
+                            {g.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="s-fee">Monthly fee (som)</Label>
+                    <Input
+                      id="s-fee"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      value={formatThousands(form.monthlyFee)}
+                      onChange={(e) =>
+                        setForm({ ...form, monthlyFee: parseDigits(e.target.value) })
+                      }
+                      placeholder="1 000 000"
+                      className="tabular-nums"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="s-notes">Notes</Label>
+                  <Textarea
+                    id="s-notes"
+                    rows={2}
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    placeholder="Anything important about this student"
+                  />
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="s-fee">Monthly fee (som)</Label>
-                <Input
-                  id="s-fee"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="off"
-                  value={formatThousands(form.monthlyFee)}
-                  onChange={(e) =>
-                    setForm({ ...form, monthlyFee: parseDigits(e.target.value) })
-                  }
-                  placeholder="1 000 000"
-                  className="tabular-nums"
-                />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="s-notes">Notes</Label>
-              <Textarea
-                id="s-notes"
-                rows={2}
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                placeholder="Anything important about this student"
-              />
-            </div>
-          </div>
-          <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-            <Button onClick={submit} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">
-              Add student
-            </Button>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>
-              Cancel
-            </Button>
-          </DialogFooter>
+              <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+                <Button onClick={submit} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">
+                  Add student
+                </Button>
+                <Button variant="outline" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+              </DialogFooter>
+            </>
+          )}
         </DialogContent>
       </Dialog>
 

@@ -16,8 +16,9 @@ export interface Group {
 
 export interface Student {
   id: string
+  login: string
   name: string
-  email: string
+  email?: string
   phone?: string
   groupId?: string
   joinedAt: string
