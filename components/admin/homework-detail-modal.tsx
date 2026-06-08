@@ -52,6 +52,7 @@ const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string; labe
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
   in_progress: { label: "In progress", cls: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
+  paused: { label: "Paused", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
   submitted: { label: "Submitted", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
   graded: { label: "Graded", cls: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
 }

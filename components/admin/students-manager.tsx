@@ -157,11 +157,12 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     }
     setCreating(true)
     try {
+      const trimmedEmail = form.email.trim()
       const res = await studentsApi.create({
         name: form.name.trim(),
         login: form.login.trim().toLowerCase(),
-        email: form.email.trim() || undefined,
-        phone: form.phone.trim() || undefined,
+        ...(trimmedEmail ? { email: trimmedEmail.toLowerCase() } : {}),
+        ...(form.phone.trim() ? { phone: form.phone.trim() } : {}),
         groupId: form.groupId || undefined,
         monthlyFee: Number(form.monthlyFee) || 0,
         notes: form.notes.trim() || undefined,
@@ -641,13 +642,15 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label htmlFor="s-email">Email</Label>
+                    <Label htmlFor="s-email">Email (optional)</Label>
                     <Input
                       id="s-email"
-                      type="email"
+                      type="text"
+                      inputMode="email"
+                      autoComplete="off"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      placeholder="name@example.com"
+                      placeholder="Optional"
                     />
                   </div>
                   <div className="space-y-1.5">

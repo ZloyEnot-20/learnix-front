@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { useAuth, canAccessAdmin } from "@/lib/auth-context"
+import { useAuth, canAccessAdmin, isSuperAdmin, type UserRole } from "@/lib/auth-context"
 import { Badge } from "@/components/ui/badge"
 import {
   Users,
@@ -13,7 +13,6 @@ import {
   ClipboardCheck,
   GraduationCap,
   FileJson,
-  ScanText,
   Wallet,
   UserSquare,
   ShieldAlert,
@@ -27,7 +26,6 @@ import HomeworkManager from "@/components/admin/homework-manager"
 import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
 import ManageContentSection from "@/components/admin/manage-content-section"
-import OcrSection from "@/components/admin/ocr-section"
 import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
@@ -50,7 +48,6 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   entry: { title: "Entry Test", subtitle: "Assign placement tests and grade writing" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
-  ocr: { title: "OCR", subtitle: "Extract text from scans and PDFs" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
 }
@@ -68,11 +65,18 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   exercises: ["groups"],
   finance: ["students", "groups"],
   bot: ["students"],
-  // tests, manage, ocr — no shared list APIs
+  // tests, manage — no shared list APIs
 }
 
-function sectionFromSegment(segment?: string): string {
-  return segment && SECTION_IDS.includes(segment) ? segment : "dashboard"
+/** Section ids restricted to super admin. */
+const SUPER_ADMIN_ONLY_SECTIONS = new Set(["manage"])
+
+function sectionFromSegment(segment: string | undefined, role: UserRole): string {
+  if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
+  if (SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(role)) {
+    return "dashboard"
+  }
+  return segment
 }
 
 function roleBadge(role: string) {
@@ -166,9 +170,10 @@ function AdminPanelContent() {
   // The active section is derived from the URL (/admin or /admin/<section>),
   // so it is bookmarkable and reflected in the address bar.
   const segment = Array.isArray(params.section) ? params.section[0] : undefined
-  const activeTab = sectionFromSegment(segment)
+  const activeTab = sectionFromSegment(segment, user?.role ?? "student")
   const selectTab = (id: string) =>
     router.push(id === "dashboard" ? "/admin" : `/admin/${id}`)
+  const superAdmin = user ? isSuperAdmin(user.role) : false
 
   // Synchronous (localStorage) — no flicker, no request on navigation.
   const [totalTests, setTotalTests] = useState<number>(() => readTestCount())
@@ -180,12 +185,17 @@ function AdminPanelContent() {
     }
   }, [user, isLoading, router])
 
-  // Unknown section segment → normalise the URL back to /admin.
+  // Unknown or forbidden section segment → normalise the URL back to /admin.
   useEffect(() => {
+    if (!user) return
     if (segment && !SECTION_IDS.includes(segment)) {
       router.replace("/admin")
+      return
     }
-  }, [segment, router])
+    if (segment && SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(user.role)) {
+      router.replace("/admin")
+    }
+  }, [segment, user, router])
 
   useEffect(() => {
     setTotalTests(readTestCount())
@@ -229,8 +239,6 @@ function AdminPanelContent() {
         { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
         { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
-        { id: "manage", label: "Manage exercises", icon: FileJson },
-        { id: "ocr", label: "OCR", icon: ScanText, badge: "beta" },
       ],
     },
     {
@@ -241,6 +249,14 @@ function AdminPanelContent() {
       label: "Money",
       items: [{ id: "finance", label: "Finance", icon: Wallet }],
     },
+    ...(superAdmin
+      ? [
+          {
+            label: "Administration",
+            items: [{ id: "manage", label: "Manage exercises", icon: FileJson }],
+          } satisfies NavSection,
+        ]
+      : []),
   ]
 
   const meta = SECTION_TITLES[activeTab] ?? SECTION_TITLES.dashboard
@@ -284,8 +300,9 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
-      {activeTab === "manage" && <ManageContentSection onChanged={bumpCatalog} />}
-      {activeTab === "ocr" && <OcrSection />}
+      {activeTab === "manage" && superAdmin && (
+        <ManageContentSection onChanged={bumpCatalog} />
+      )}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
     </AdminShell>

@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select"
 import {
   ArrowRight,
-  BookOpenText,
   ChevronLeft,
   Clock,
   Eye,
@@ -36,7 +35,6 @@ import {
 } from "lucide-react"
 import ExercisePreviewDialog from "@/components/exercises/exercise-preview-dialog"
 import MaterialsGrid from "@/components/exercises/materials-grid"
-import ExplanationPreview from "@/components/exercises/explanation-preview"
 import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
@@ -119,7 +117,7 @@ export default function ExercisesTopicPage() {
   const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
-  const [tab, setTab] = useState<"exercises" | "materials" | "explanation">("exercises")
+  const [view, setView] = useState<"list" | "materials">("list")
   const [typeFilter, setTypeFilter] = useState<ExerciseTypeValue>("all")
   const [loading, setLoading] = useState(true)
 
@@ -201,66 +199,34 @@ export default function ExercisesTopicPage() {
             </p>
           )}
 
-          <div className="mt-4 inline-flex rounded-xl border border-slate-200 bg-slate-100/70 p-1">
-            <button
-              type="button"
-              onClick={() => setTab("exercises")}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-                tab === "exercises"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900",
-              )}
-            >
-              <ListChecks className="h-4 w-4" />
-              Exercises
-              <span className="ml-1 rounded-full bg-slate-200 px-1.5 text-[10px] font-semibold tabular-nums text-slate-700">
-                {totalCount}
-              </span>
-            </button>
-            {hasMaterials && (
+          {hasMaterials && (
+            <div className="mt-4">
               <button
                 type="button"
-                onClick={() => setTab("materials")}
+                onClick={() => setView((v) => (v === "materials" ? "list" : "materials"))}
                 className={cn(
-                  "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-                  tab === "materials"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-600 hover:text-slate-900",
+                  "inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-sm font-medium transition-colors",
+                  view === "materials"
+                    ? "border-slate-900 bg-slate-900 text-white shadow-sm"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50",
                 )}
               >
                 <FileText className="h-4 w-4" />
-                Materials
-                <span className="ml-1 rounded-full bg-slate-200 px-1.5 text-[10px] font-semibold tabular-nums text-slate-700">
-                  {materials.length}
-                </span>
+                {view === "materials" ? "Back to exercises" : "Materials"}
+                {view !== "materials" && (
+                  <span className="ml-1 rounded-full bg-slate-200 px-1.5 text-[10px] font-semibold tabular-nums text-slate-700">
+                    {materials.length}
+                  </span>
+                )}
               </button>
-            )}
-            <button
-              type="button"
-              onClick={() => setTab("explanation")}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-                tab === "explanation"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900",
-              )}
-            >
-              <BookOpenText className="h-4 w-4" />
-              Explanation
-              <span className="ml-1 rounded-full bg-amber-100 px-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-800">
-                Soon
-              </span>
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
-        {tab === "materials" ? (
+        {view === "materials" ? (
           <MaterialsGrid materials={materials} />
-        ) : tab === "explanation" ? (
-          <ExplanationPreview />
         ) : loading && exercises.length === 0 ? (
           <CardGridSkeleton count={4} columns={2} />
         ) : (

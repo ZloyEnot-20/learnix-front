@@ -22,6 +22,7 @@ interface HomeworkItem {
   timeLimitMinutes?: number
   /** When the work was submitted/graded — used to group the History tab. */
   completedAt?: string
+  failedCheating?: boolean
   href?: string
 }
 
@@ -52,10 +53,14 @@ export function StudentHomeworkSection({
       .then(([entries]) => {
         if (cancelled) return
         const mapped: HomeworkItem[] = entries.map(({ homework, submission }) => {
+          const failedCheating =
+            submission.integrityStatus === "cheating_detected" ||
+            submission.attempt?.failedDueToCheating
+
           const status: Status =
-            submission.status === "submitted" || submission.status === "graded"
+            failedCheating || submission.status === "submitted" || submission.status === "graded"
               ? "completed"
-              : submission.status === "in_progress"
+              : submission.status === "in_progress" || submission.status === "paused"
                 ? "in_progress"
                 : "pending"
 
@@ -78,6 +83,7 @@ export function StudentHomeworkSection({
             status,
             timeLimitMinutes: homework.timeLimitMinutes,
             completedAt: submission.submittedAt ?? undefined,
+            failedCheating,
             href,
           }
         })

@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
+  AlertTriangle,
   BarChart3,
   BookMarked,
   BookOpen,
@@ -95,6 +96,7 @@ interface HwRow {
   in_progress: number
   submitted: number
   graded: number
+  cheating: number
   done: number
   pct: number
   isPast: boolean
@@ -203,7 +205,14 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
       const subs = submissions.filter((s) => s.homeworkId === hw.id)
       const total = subs.length
       const c = { pending: 0, in_progress: 0, submitted: 0, graded: 0 }
-      for (const s of subs) c[s.status] += 1
+      for (const s of subs) {
+        const key = s.status === "paused" ? "in_progress" : s.status
+        if (key in c) c[key as keyof typeof c] += 1
+      }
+      const cheating = subs.filter(
+        (s) =>
+          s.integrityStatus === "cheating_detected" || s.attempt?.failedDueToCheating,
+      ).length
       const done = c.submitted + c.graded
       const pct = total > 0 ? Math.round((done / total) * 100) : 0
       return {
@@ -214,6 +223,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
         in_progress: c.in_progress,
         submitted: c.submitted,
         graded: c.graded,
+        cheating,
         done,
         pct,
         isPast: new Date(hw.dueAt).getTime() < now,
@@ -252,8 +262,14 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   )
 
   const totals = useMemo(() => {
-    const c = { total: submissions.length, pending: 0, in_progress: 0, submitted: 0, graded: 0 }
-    for (const s of submissions) c[s.status] += 1
+    const c = { total: submissions.length, pending: 0, in_progress: 0, submitted: 0, graded: 0, cheating: 0 }
+    for (const s of submissions) {
+      const key = s.status === "paused" ? "in_progress" : s.status
+      if (key in c) c[key as keyof typeof c] += 1
+      if (s.integrityStatus === "cheating_detected" || s.attempt?.failedDueToCheating) {
+        c.cheating += 1
+      }
+    }
     return c
   }, [submissions])
 
@@ -952,7 +968,11 @@ function HomeworkTable({
   deletingId?: string | null
   mode: "active" | "history"
 }) {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
+
+  const toggleExpanded = (homeworkId: string) => {
+    setExpandedIds((prev) => ({ ...prev, [homeworkId]: !prev[homeworkId] }))
+  }
 
   if (rows.length === 0) {
     return (
@@ -969,10 +989,12 @@ function HomeworkTable({
           <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
             <th className="py-3 px-3 font-semibold">Test</th>
             <th className="py-3 px-3 font-semibold">Group</th>
+            <th className="py-3 px-3 font-semibold">Assigned</th>
             <th className="py-3 px-3 font-semibold">Subject</th>
             <th className="py-3 px-3 font-semibold">{mode === "active" ? "Due" : "Closed"}</th>
             <th className="py-3 px-3 font-semibold">Progress</th>
             <th className="py-3 px-3 font-semibold">Pending</th>
+            <th className="py-3 px-3 font-semibold">Cheating</th>
             <th className="py-3 px-3 font-semibold">Graded</th>
             <th className="py-3 px-3 w-20"></th>
           </tr>
@@ -987,13 +1009,11 @@ function HomeworkTable({
               due.getTime() < Date.now() &&
               row.done < row.total
             const dueLabel = formatDue(due, mode)
-            const isExpanded = expandedId === row.homework.id
+            const isExpanded = !!expandedIds[row.homework.id]
             return (
               <Fragment key={row.homework.id}>
                 <tr
-                  onClick={() =>
-                    setExpandedId((prev) => (prev === row.homework.id ? null : row.homework.id))
-                  }
+                  onClick={() => toggleExpanded(row.homework.id)}
                   aria-expanded={isExpanded}
                   className={cn(
                     "cursor-pointer border-b transition-colors",
@@ -1007,11 +1027,11 @@ function HomeworkTable({
                 >
                   <td className="py-3 px-3 max-w-xs">
                     <p className="truncate font-medium text-slate-900">{row.homework.title}</p>
-                    <p className="truncate text-[11px] text-slate-500">
-                      Assigned {new Date(row.homework.createdAt).toLocaleDateString()}
-                    </p>
                   </td>
                   <td className="py-3 px-3 text-slate-600">{row.group?.name ?? "—"}</td>
+                  <td className="py-3 px-3 whitespace-nowrap text-xs text-slate-600">
+                    {formatShortDateTime(row.homework.createdAt)}
+                  </td>
                   <td className="py-3 px-3">
                     <span className="inline-flex items-center gap-1.5">
                       <span
@@ -1069,6 +1089,16 @@ function HomeworkTable({
                     )}
                   </td>
                   <td className="py-3 px-3">
+                    {row.cheating > 0 ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-800">
+                        <AlertTriangle className="h-3 w-3" />
+                        {row.cheating}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-slate-400">—</span>
+                    )}
+                  </td>
+                  <td className="py-3 px-3">
                     {row.graded > 0 ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
                         <Sparkles className="h-3 w-3" />
@@ -1104,7 +1134,7 @@ function HomeworkTable({
                 </tr>
                 {isExpanded && (
                   <tr className="border-b border-blue-100 bg-blue-50/30">
-                    <td colSpan={8} className="p-0">
+                    <td colSpan={10} className="p-0">
                       <ExpandableRowContent>
                         <div className="px-3 py-4 sm:px-4">
                           <HomeworkStudentResults
@@ -1231,4 +1261,14 @@ function formatDue(due: Date, mode: "active" | "history") {
 
 function defaultDueDate(): string {
   return new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString().slice(0, 10)
+}
+
+function formatShortDateTime(iso: string): string {
+  return new Date(iso).toLocaleString([], {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
 }

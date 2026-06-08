@@ -12,8 +12,9 @@ export type PartOfSpeech = "noun" | "verb" | "adjective" | "adverb" | "phrase"
 export type TranslationLang = "ru" | "uz"
 
 export const TRANSLATION_LANGS: { value: TranslationLang; label: string; short: string }[] = [
-  { value: "ru", label: "Русский", short: "RU" },
   { value: "uz", label: "O‘zbekcha", short: "UZ" },
+  { value: "ru", label: "Русский", short: "RU" },
+
 ]
 
 export interface VocabWord {

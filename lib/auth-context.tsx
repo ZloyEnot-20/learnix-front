@@ -16,6 +16,11 @@ export function isAdminRole(role: UserRole): boolean {
   return role === "super_admin" || role === "admin"
 }
 
+/** Platform administration (content import, etc.). */
+export function isSuperAdmin(role: UserRole): boolean {
+  return role === "super_admin"
+}
+
 interface TestResult {
   id: string
   type: "reading" | "listening" | "writing" | "speaking"

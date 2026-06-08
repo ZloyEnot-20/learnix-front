@@ -1,14 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Trophy, Lock, ChevronRight, Check } from "lucide-react"
+import { Lock, ChevronRight, Check } from "lucide-react"
+import { TierIcon } from "@/components/tier-icon"
 import { studentsApi } from "@/lib/api"
 import {
   tierForLevel,
   TIERS,
   CEFR_LEVEL_REQUIREMENT,
   type StudentLevel,
-  type TierMeta,
 } from "@/lib/gamification"
 import {
   Dialog,
@@ -19,20 +19,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-
-function TierFallbackIcon({ tier }: { tier: TierMeta }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm",
-        tier.ring,
-      )}
-    >
-      <Trophy className="h-6 w-6" />
-    </span>
-  )
-}
 
 /** Modal that showcases every tier so each level feels like a prestige goal. */
 function AllLevelsDialog({ currentLevel }: { currentLevel: number }) {
@@ -74,18 +60,11 @@ function AllLevelsDialog({ currentLevel }: { currentLevel: number }) {
                   !isCurrent && !isPassed && "opacity-90",
                 )}
               >
-                {tier.icon ? (
-                  <img
-                    src={tier.icon}
-                    alt={`${tier.label} tier`}
-                    className={cn(
-                      "h-14 w-14 shrink-0 object-contain drop-shadow-sm",
-                      !isCurrent && !isPassed && "grayscale-[0.35]",
-                    )}
-                  />
-                ) : (
-                  <TierFallbackIcon tier={tier} />
-                )}
+                <TierIcon
+                  tierId={tier.id}
+                  size={56}
+                  dimmed={!isCurrent && !isPassed}
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h4 className="text-sm font-bold text-slate-900">{tier.label}</h4>
@@ -189,23 +168,7 @@ export function LevelScale({ studentId, compact = false, className }: LevelScale
       )}
     >
       <div className="flex items-center gap-3">
-        {tier.icon ? (
-          <img
-            src={tier.icon}
-            alt={`${tier.label} tier`}
-            className="h-12 w-12 shrink-0 object-contain drop-shadow-sm"
-          />
-        ) : (
-          <span
-            aria-hidden
-            className={cn(
-              "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm",
-              tier.ring,
-            )}
-          >
-            <Trophy className="h-6 w-6" />
-          </span>
-        )}
+        <TierIcon tierId={tier.id} size={48} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-base font-semibold text-slate-900">

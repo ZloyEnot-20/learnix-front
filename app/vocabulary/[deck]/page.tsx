@@ -83,7 +83,7 @@ function VocabularyDeckInner() {
   const isStudent = user?.role === "student"
 
   const [mode, setMode] = useState<Mode>("menu")
-  const [lang, setLang] = useState<TranslationLang>("ru")
+  const [lang, setLang] = useState<TranslationLang>("uz")
 
   // Mark the homework as started the first time a student opens it.
   useEffect(() => {

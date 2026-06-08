@@ -44,7 +44,6 @@ import {
 } from "@/lib/manage-content"
 import { getTopicsMeta, peekTopicsMeta } from "@/lib/exercises-cache"
 import type { TopicMeta } from "@/lib/grammar-utils"
-import { OCR_HANDOFF_KEY } from "@/lib/ocr-to-exercise"
 
 interface KindMeta {
   id: ContentKind
@@ -395,25 +394,6 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
   useEffect(() => {
     void reloadTopics()
   }, [reloadTopics])
-
-  // Pick up a draft handed over from the OCR section ("To exercise JSON").
-  useEffect(() => {
-    try {
-      const draft = window.sessionStorage.getItem(OCR_HANDOFF_KEY)
-      if (draft) {
-        window.sessionStorage.removeItem(OCR_HANDOFF_KEY)
-        setKind("exercise")
-        setRaw(draft)
-        toast({
-          title: "Loaded from OCR",
-          description: "Review the draft, pick a folder, then validate & save.",
-        })
-      }
-    } catch {
-      /* sessionStorage unavailable */
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const switchKind = (next: ContentKind) => {
     setKind(next)

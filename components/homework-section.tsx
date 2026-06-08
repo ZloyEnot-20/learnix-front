@@ -34,6 +34,7 @@ interface HomeworkItem {
   timeLimitMinutes?: number
   /** When the work was submitted/graded — used to group the History tab. */
   completedAt?: string
+  failedCheating?: boolean
   /** Optional URL — if set, Start/Continue buttons link to it. */
   href?: string
 }
@@ -186,7 +187,9 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
   const meta = SUBJECT_META[hw.subject]
   const Icon = meta.icon
   const due = formatDue(hw.dueAt, hw.status)
-  const status = STATUS_META[hw.status]
+  const status = hw.failedCheating
+    ? { label: "Failed", className: "bg-red-100 text-red-800" }
+    : STATUS_META[hw.status]
   const isCompleted = hw.status === "completed"
   const timeLimit = formatTimeLimit(hw.timeLimitMinutes)
   const TimeLimitIcon = timeLimit.Icon
@@ -259,13 +262,21 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
         {isCompleted ? (
           hw.href ? (
             <Link href={hw.href}>
-              <Button variant="ghost" size="sm" className="text-emerald-700">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={hw.failedCheating ? "text-red-700" : "text-emerald-700"}
+              >
                 <CheckCircle2 className="h-4 w-4 mr-1.5" />
                 View
               </Button>
             </Link>
           ) : (
-            <Button variant="ghost" size="sm" className="text-emerald-700">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={hw.failedCheating ? "text-red-700" : "text-emerald-700"}
+            >
               <CheckCircle2 className="h-4 w-4 mr-1.5" />
               View
             </Button>

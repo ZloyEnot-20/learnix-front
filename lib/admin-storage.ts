@@ -26,7 +26,7 @@ export interface Student {
   notes?: string
 }
 
-export type HomeworkStatus = "pending" | "in_progress" | "submitted" | "graded"
+export type HomeworkStatus = "pending" | "in_progress" | "paused" | "submitted" | "graded"
 
 export interface HomeworkAssignment {
   id: string
@@ -56,6 +56,8 @@ export interface HomeworkAttempt {
   totalQuestions: number
   correctCount: number
   durationSeconds?: number
+  failedDueToCheating?: boolean
+  cheatingReason?: string
   mistakes: HomeworkMistake[]
   /** True when the student ran out of time before finishing all questions. */
   timedOut?: boolean
@@ -74,6 +76,9 @@ export interface HomeworkSubmission {
   submittedAt?: string
   feedback?: string
   attempt?: HomeworkAttempt
+  integrityStatus?: "ok" | "cheating_suspicion" | "cheating_detected"
+  pausedAt?: string
+  pauseUsed?: boolean
 }
 
 export type PaymentStatus = "pending" | "paid" | "overdue"

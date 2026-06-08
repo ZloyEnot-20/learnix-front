@@ -780,7 +780,7 @@ export default function ExercisesSection({
         Back
       </Button>
 
-      <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100/70 p-1">
+      {/* <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100/70 p-1">
         <button
           type="button"
           onClick={() => setTopicTab("exercises")}
@@ -831,7 +831,7 @@ export default function ExercisesSection({
             Soon
           </span>
         </button>
-      </div>
+      </div> */}
 
       {topicTab === "materials" ? (
         <MaterialsGrid materials={topicMaterials} />

@@ -12,7 +12,9 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   AlertTriangle,
-  Award,
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
   CheckCircle2,
   ChevronRight,
   Clock,
@@ -34,16 +36,30 @@ import { useToast } from "@/hooks/use-toast"
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
   in_progress: { label: "In progress", cls: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
+  paused: { label: "Paused", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
   submitted: { label: "Submitted", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
   graded: { label: "Graded", cls: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
 }
+
+const INTEGRITY_META = {
+  ok: { label: "OK", cls: "bg-emerald-50 text-emerald-700" },
+  suspicion: { label: "Suspicion", cls: "bg-amber-100 text-amber-800" },
+  detected: { label: "Cheating", cls: "bg-red-100 text-red-800" },
+} as const
+
+const FAILED_STATUS_META = {
+  label: "Failed",
+  cls: "bg-red-100 text-red-800",
+  dot: "bg-red-500",
+} as const
 
 // Lower number = appears earlier. Completed first, not completed last.
 const STATUS_RANK: Record<HomeworkStatus, number> = {
   graded: 0,
   submitted: 1,
-  in_progress: 2,
-  pending: 3,
+  paused: 2,
+  in_progress: 3,
+  pending: 4,
 }
 
 interface Row {
@@ -53,6 +69,15 @@ interface Row {
   status: HomeworkStatus
   feedback: string
   dirty: boolean
+}
+
+type SortKey = "student" | "status" | "integrity" | "correct" | "submitted"
+type SortDir = "asc" | "desc"
+
+const INTEGRITY_RANK: Record<keyof typeof INTEGRITY_META, number> = {
+  detected: 0,
+  suspicion: 1,
+  ok: 2,
 }
 
 export function HomeworkStudentResults({
@@ -74,6 +99,8 @@ export function HomeworkStudentResults({
   const [rows, setRows] = useState<Row[]>([])
   const [savingId, setSavingId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [sortKey, setSortKey] = useState<SortKey>("status")
+  const [sortDir, setSortDir] = useState<SortDir>("asc")
 
   const selectedRow = useMemo(
     () => rows.find((r) => r.studentId === selectedId) ?? null,
@@ -106,26 +133,52 @@ export function HomeworkStudentResults({
     setSelectedId(null)
   }, [homework, students, groups, submissions])
 
-  // Completed students first, then in progress, then not started.
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+    } else {
+      setSortKey(key)
+      setSortDir(key === "student" ? "asc" : key === "submitted" ? "desc" : "asc")
+    }
+  }
+
   const sortedRows = useMemo(() => {
     const dueAt = new Date(homework.dueAt).getTime()
+    const dir = sortDir === "asc" ? 1 : -1
+
     return [...rows].sort((a, b) => {
-      const rankDiff = STATUS_RANK[a.status] - STATUS_RANK[b.status]
-      if (rankDiff !== 0) return rankDiff
-      const accA = accuracyOf(a.submission)
-      const accB = accuracyOf(b.submission)
-      if (accA !== accB) return accB - accA
-      const subA = a.submission?.submittedAt ? new Date(a.submission.submittedAt).getTime() : dueAt
-      const subB = b.submission?.submittedAt ? new Date(b.submission.submittedAt).getTime() : dueAt
-      return subA - subB
+      let cmp = 0
+      switch (sortKey) {
+        case "student":
+          cmp = a.studentName.localeCompare(b.studentName, undefined, { sensitivity: "base" })
+          break
+        case "status":
+          cmp = statusSortRank(a) - statusSortRank(b)
+          break
+        case "integrity":
+          cmp = integritySortRank(a.submission) - integritySortRank(b.submission)
+          break
+        case "correct":
+          cmp = accuracyOf(a.submission) - accuracyOf(b.submission)
+          break
+        case "submitted": {
+          const subA = submittedSortTime(a.submission, dueAt)
+          const subB = submittedSortTime(b.submission, dueAt)
+          cmp = subA - subB
+          break
+        }
+      }
+      if (cmp !== 0) return cmp * dir
+      return a.studentName.localeCompare(b.studentName, undefined, { sensitivity: "base" })
     })
-  }, [rows, homework.dueAt])
+  }, [rows, homework.dueAt, sortKey, sortDir])
 
   const counts = useMemo(() => {
-    const c = { done: 0, working: 0, pending: 0 }
+    const c = { done: 0, working: 0, pending: 0, cheating: 0 }
     for (const r of rows) {
+      if (isCheatingFailed(r.submission)) c.cheating += 1
       if (r.status === "submitted" || r.status === "graded") c.done += 1
-      else if (r.status === "in_progress") c.working += 1
+      else if (r.status === "in_progress" || r.status === "paused") c.working += 1
       else c.pending += 1
     }
     return c
@@ -189,6 +242,12 @@ export function HomeworkStudentResults({
 
   return (
     <div className="space-y-3">
+      <p className="text-[11px] text-slate-500">
+        Assigned to group · {formatShortDateTime(homework.createdAt)}
+        {homework.timeLimitMinutes != null && homework.timeLimitMinutes > 0
+          ? ` · ${homework.timeLimitMinutes} min limit`
+          : " · unlimited time"}
+      </p>
       <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-800">
           <CheckCircle2 className="h-3 w-3" />
@@ -202,25 +261,33 @@ export function HomeworkStudentResults({
           <XCircle className="h-3 w-3" />
           {counts.pending} not started
         </span>
+        {counts.cheating > 0 && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-red-800">
+            <AlertTriangle className="h-3 w-3" />
+            {counts.cheating} cheating
+          </span>
+        )}
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
-              <th className="py-3 px-3 font-semibold">Student</th>
-              <th className="py-3 px-3 font-semibold">Status</th>
-              <th className="py-3 px-3 font-semibold">Score</th>
-              <th className="py-3 px-3 font-semibold">Correct</th>
-              <th className="py-3 px-3 font-semibold">Submitted</th>
+              <SortableTh label="Student" active={sortKey === "student"} dir={sortDir} onSort={() => toggleSort("student")} />
+              <SortableTh label="Status" active={sortKey === "status"} dir={sortDir} onSort={() => toggleSort("status")} />
+              <SortableTh label="Integrity" active={sortKey === "integrity"} dir={sortDir} onSort={() => toggleSort("integrity")} />
+              <SortableTh label="Correct" active={sortKey === "correct"} dir={sortDir} onSort={() => toggleSort("correct")} />
+              <SortableTh label="Submitted" active={sortKey === "submitted"} dir={sortDir} onSort={() => toggleSort("submitted")} />
               <th className="py-3 px-3 w-10"></th>
             </tr>
           </thead>
           <tbody>
             {sortedRows.map((row, idx) => {
-              const sMeta = STATUS_META[row.status]
+              const sMeta = displayStatusMeta(row.status, row.submission)
               const submittedAt = row.submission?.submittedAt
-              const numericScore = row.submission?.score
+              const startedAt = row.submission?.startedAt
+              const cheatingFailed = isCheatingFailed(row.submission)
+              const integrity = integrityDisplay(row.submission)
               const lateBy =
                 submittedAt && dueAt
                   ? Math.floor((new Date(submittedAt).getTime() - dueAt) / (24 * 60 * 60 * 1000))
@@ -230,7 +297,8 @@ export function HomeworkStudentResults({
                 attempt && attempt.totalQuestions > 0
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
-              const canExpand = !!attempt || row.status !== "pending"
+              const canExpand =
+                !!attempt || cheatingFailed || row.status !== "pending"
               const isSelected = selectedId === row.studentId
               const rowBg = isSelected
                 ? "bg-blue-50/60"
@@ -250,16 +318,8 @@ export function HomeworkStudentResults({
                     <td className="py-3 px-3 font-medium text-slate-900">{row.studentName}</td>
                     <td className="py-3 px-3">
                       <span className="inline-flex flex-wrap items-center gap-1.5">
-                        <span
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                            sMeta.cls,
-                          )}
-                        >
-                          <span className={cn("h-1.5 w-1.5 rounded-full", sMeta.dot)} />
-                          {sMeta.label}
-                        </span>
-                        {attempt?.timedOut && (
+                        <StatusBadge meta={sMeta} />
+                        {attempt?.timedOut && !cheatingFailed && (
                           <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-800">
                             <AlertTriangle className="h-3 w-3" />
                             Time
@@ -268,22 +328,24 @@ export function HomeworkStudentResults({
                       </span>
                     </td>
                     <td className="py-3 px-3">
-                      {typeof numericScore === "number" && !Number.isNaN(numericScore) ? (
+                      {integrity ? (
                         <span
                           className={cn(
-                            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
-                            bandClass(numericScore),
+                            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                            INTEGRITY_META[integrity].cls,
                           )}
                         >
-                          <Award className="h-3 w-3" />
-                          {numericScore.toFixed(1)}
+                          {integrity === "detected" && <AlertTriangle className="h-3 w-3" />}
+                          {INTEGRITY_META[integrity].label}
                         </span>
                       ) : (
-                        <span className="text-slate-400">—</span>
+                        <span className="text-xs text-slate-400">—</span>
                       )}
                     </td>
                     <td className="py-3 px-3">
-                      {attempt && accuracy != null ? (
+                      {cheatingFailed ? (
+                        <span className="text-xs font-semibold text-red-700">—</span>
+                      ) : attempt && accuracy != null ? (
                         <span className="inline-flex items-center gap-2">
                           <span className="tabular-nums text-slate-700">
                             {attempt.correctCount}/{attempt.totalQuestions}
@@ -303,10 +365,8 @@ export function HomeworkStudentResults({
                     </td>
                     <td className="py-3 px-3 text-slate-600">
                       {submittedAt ? (
-                        <span className="inline-flex items-center gap-2 whitespace-nowrap">
-                          <span className="text-xs">
-                            {new Date(submittedAt).toLocaleDateString()}
-                          </span>
+                        <span className="inline-flex flex-col gap-0.5 whitespace-nowrap">
+                          <span className="text-xs">{formatShortDateTime(submittedAt)}</span>
                           {lateBy > 0 ? (
                             <span className="text-[11px] font-semibold text-rose-600">
                               {lateBy}d late
@@ -314,6 +374,13 @@ export function HomeworkStudentResults({
                           ) : (
                             <span className="text-[11px] text-emerald-600">on time</span>
                           )}
+                        </span>
+                      ) : startedAt ? (
+                        <span className="inline-flex flex-col gap-0.5 whitespace-nowrap">
+                          <span className="text-xs text-slate-500">
+                            Started {formatShortDateTime(startedAt)}
+                          </span>
+                          <span className="text-[11px] italic text-slate-400">in progress</span>
                         </span>
                       ) : (
                         <span className="text-xs italic text-slate-400">Not submitted</span>
@@ -330,38 +397,40 @@ export function HomeworkStudentResults({
       </div>
 
       <Dialog open={!!selectedRow} onOpenChange={(open) => !open && setSelectedId(null)}>
-        <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0">
+        <DialogContent
+          className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           {selectedRow && (
             <>
               <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                      STATUS_META[selectedRow.status].cls,
-                    )}
-                  >
+                  <StatusBadge
+                    meta={displayStatusMeta(selectedRow.status, selectedRow.submission)}
+                  />
+                  {selectedRow.submission && integrityDisplay(selectedRow.submission) && (
                     <span
-                      className={cn("h-1.5 w-1.5 rounded-full", STATUS_META[selectedRow.status].dot)}
-                    />
-                    {STATUS_META[selectedRow.status].label}
-                  </span>
+                      className={cn(
+                        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                        INTEGRITY_META[integrityDisplay(selectedRow.submission)!].cls,
+                      )}
+                    >
+                      {integrityDisplay(selectedRow.submission) === "detected" && (
+                        <AlertTriangle className="h-3 w-3" />
+                      )}
+                      {INTEGRITY_META[integrityDisplay(selectedRow.submission)!].label}
+                    </span>
+                  )}
                   {selectedRow.submission?.startedAt && (
                     <span className="text-[11px] text-slate-500">
-                      Started{" "}
-                      {new Date(selectedRow.submission.startedAt).toLocaleString([], {
-                        dateStyle: "short",
-                        timeStyle: "short",
-                      })}
+                      Started {formatShortDateTime(selectedRow.submission.startedAt)}
                     </span>
                   )}
                   {selectedRow.submission?.submittedAt && (
                     <span className="text-[11px] text-slate-500">
-                      · Finished{" "}
-                      {new Date(selectedRow.submission.submittedAt).toLocaleString([], {
-                        dateStyle: "short",
-                        timeStyle: "short",
-                      })}
+                      ·{" "}
+                      {isCheatingFailed(selectedRow.submission) ? "Failed" : "Submitted"}{" "}
+                      {formatShortDateTime(selectedRow.submission.submittedAt)}
                     </span>
                   )}
                 </div>
@@ -399,6 +468,7 @@ function StudentDetail({
   saving?: boolean
 }) {
   const attempt = row.submission?.attempt
+  const cheatingFailed = isCheatingFailed(row.submission)
   const accuracy =
     attempt && attempt.totalQuestions > 0
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
@@ -406,7 +476,24 @@ function StudentDetail({
 
   return (
     <div className="space-y-3">
-      {attempt ? (
+      {cheatingFailed ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-red-700" />
+            <span className="text-sm font-semibold text-red-800">Cheating detected</span>
+          </div>
+          <p className="mt-1 text-xs text-red-700/90">
+            {attempt?.cheatingReason
+              ? `Reason: ${attempt.cheatingReason.replace(/_/g, " ")}`
+              : "The student left the app after using their pause."}
+          </p>
+          {row.submission?.submittedAt && (
+            <p className="mt-2 text-[11px] text-red-700/80">
+              Failed at {formatShortDateTime(row.submission.submittedAt)}
+            </p>
+          )}
+        </div>
+      ) : attempt ? (
         <div className="rounded-xl border border-slate-200 bg-white p-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -530,11 +617,50 @@ function accuracyOf(sub?: HomeworkSubmission): number {
   return a.correctCount / a.totalQuestions
 }
 
-function bandClass(score: number): string {
-  if (score >= 7) return "bg-emerald-100 text-emerald-800"
-  if (score >= 5.5) return "bg-sky-100 text-sky-800"
-  if (score >= 4) return "bg-amber-100 text-amber-800"
-  return "bg-rose-100 text-rose-800"
+function statusSortRank(row: Row): number {
+  if (isCheatingFailed(row.submission)) return -1
+  return STATUS_RANK[row.status] ?? 99
+}
+
+function integritySortRank(sub?: HomeworkSubmission): number {
+  const label = integrityDisplay(sub)
+  if (!label) return 99
+  return INTEGRITY_RANK[label]
+}
+
+function submittedSortTime(sub: HomeworkSubmission | undefined, dueAt: number): number {
+  if (sub?.submittedAt) return new Date(sub.submittedAt).getTime()
+  if (sub?.startedAt) return new Date(sub.startedAt).getTime()
+  return dueAt + 1
+}
+
+function SortableTh({
+  label,
+  active,
+  dir,
+  onSort,
+}: {
+  label: string
+  active: boolean
+  dir: SortDir
+  onSort: () => void
+}) {
+  const Icon = active ? (dir === "asc" ? ArrowUp : ArrowDown) : ArrowUpDown
+  return (
+    <th className="py-3 px-3 font-semibold">
+      <button
+        type="button"
+        onClick={onSort}
+        className={cn(
+          "inline-flex items-center gap-1 transition-colors hover:text-slate-800",
+          active && "text-slate-800",
+        )}
+      >
+        {label}
+        <Icon className={cn("h-3.5 w-3.5", active ? "text-slate-700" : "text-slate-400")} />
+      </button>
+    </th>
+  )
 }
 
 function accuracyClass(pct: number): string {
@@ -551,4 +677,52 @@ function formatDuration(totalSeconds: number): string {
   if (m < 60) return s > 0 && m < 10 ? `${m}m ${s}s` : `${m} min`
   const h = Math.floor(m / 60)
   return `${h}h ${m % 60}m`
+}
+
+function formatShortDateTime(iso: string): string {
+  return new Date(iso).toLocaleString([], {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
+
+function isCheatingFailed(sub?: HomeworkSubmission): boolean {
+  return (
+    sub?.integrityStatus === "cheating_detected" || sub?.attempt?.failedDueToCheating === true
+  )
+}
+
+function displayStatusMeta(
+  status: HomeworkStatus,
+  submission?: HomeworkSubmission,
+): { label: string; cls: string; dot: string } {
+  if (isCheatingFailed(submission)) return FAILED_STATUS_META
+  return STATUS_META[status] ?? STATUS_META.pending
+}
+
+function StatusBadge({ meta }: { meta: { label: string; cls: string; dot: string } }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold",
+        meta.cls,
+      )}
+    >
+      <span className={cn("h-1.5 w-1.5 rounded-full", meta.dot)} />
+      {meta.label}
+    </span>
+  )
+}
+
+function integrityDisplay(
+  sub?: HomeworkSubmission,
+): keyof typeof INTEGRITY_META | null {
+  if (!sub) return null
+  if (isCheatingFailed(sub)) return "detected"
+  if (sub.integrityStatus === "cheating_suspicion") return "suspicion"
+  if (sub.integrityStatus === "ok") return "ok"
+  return null
 }
