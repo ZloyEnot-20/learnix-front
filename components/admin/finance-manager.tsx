@@ -92,11 +92,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
         return { student, group, payment, paid, amount, status, monthPast }
       })
       .filter((r) => (statusFilter === "all" ? true : r.status === statusFilter))
-    return rows.sort((a, b) => {
-      // Unpaid first, then by name.
-      if (a.paid !== b.paid) return a.paid ? 1 : -1
-      return a.student.name.localeCompare(b.student.name)
-    })
+    return rows.sort((a, b) => a.student.name.localeCompare(b.student.name))
   }, [students, groups, payments, groupFilter, statusFilter, selectedMonth])
 
   const totals = useMemo(() => {
@@ -128,11 +124,12 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
     setTogglingIds((prev) => new Set(prev).add(id))
     try {
       if (row.payment) {
-        await paymentsApi.markPaid(row.payment.id)
+        const updated = await paymentsApi.markPaid(row.payment.id)
+        setPayments((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
       } else {
         const [year, month] = selectedMonth.split("-").map(Number)
         const dueIso = new Date(year, month - 1, 5).toISOString()
-        await paymentsApi.create({
+        const created = await paymentsApi.create({
           studentId: row.student.id,
           groupId: row.student.groupId,
           amount: Math.max(0, row.amount),
@@ -140,8 +137,8 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
           dueDate: dueIso,
           status: "paid",
         })
+        setPayments((prev) => [...prev, created])
       }
-      await refresh()
       onChanged?.()
     } catch (err) {
       toast({
@@ -164,8 +161,8 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
     const id = row.student.id
     setTogglingIds((prev) => new Set(prev).add(id))
     try {
-      await paymentsApi.markUnpaid(row.payment.id)
-      await refresh()
+      const updated = await paymentsApi.markUnpaid(row.payment.id)
+      setPayments((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
       onChanged?.()
     } catch (err) {
       toast({

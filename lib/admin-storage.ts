@@ -26,6 +26,17 @@ export interface Student {
   notes?: string
 }
 
+export type StaffRole = "super_admin" | "admin" | "teacher"
+
+export interface StaffUser {
+  id: string
+  login: string
+  email: string
+  name: string
+  role: StaffRole
+  isPremium?: boolean
+}
+
 export type HomeworkStatus = "pending" | "in_progress" | "paused" | "submitted" | "graded"
 
 export interface HomeworkAssignment {
@@ -98,6 +109,57 @@ export interface Payment {
 export interface StudentHomeworkEntry {
   homework: HomeworkAssignment
   submission: HomeworkSubmission
+}
+
+export type ControlWorkSubject = "vocabulary" | "grammar" | "reading" | "listening" | "writing"
+
+export interface ControlWorkStep {
+  subject: ControlWorkSubject
+  title: string
+  exerciseSlug?: string
+  deckSlug?: string
+  testId?: string
+  topic?: string
+}
+
+export interface ControlWork {
+  id: string
+  title: string
+  description: string
+  groupId: string
+  dueAt: string
+  timeLimitMinutes?: number
+  createdBy: string
+  createdAt: string
+  steps: ControlWorkStep[]
+}
+
+export interface ControlWorkStepResult {
+  stepIndex: number
+  status: "pending" | "completed"
+  attempt?: HomeworkAttempt
+  submittedAt?: string
+}
+
+export interface ControlWorkSubmission {
+  id: string
+  controlWorkId: string
+  studentId: string
+  status: HomeworkStatus
+  currentStep: number
+  stepResults: ControlWorkStepResult[]
+  score?: number
+  startedAt?: string
+  submittedAt?: string
+  feedback?: string
+  integrityStatus?: "ok" | "cheating_suspicion" | "cheating_detected"
+  pausedAt?: string
+  pauseUsed?: boolean
+}
+
+export interface StudentControlWorkEntry {
+  controlWork: ControlWork
+  submission: ControlWorkSubmission
 }
 
 export interface StudentProgress {

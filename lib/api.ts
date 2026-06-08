@@ -13,6 +13,12 @@ import type {
   Payment,
   StudentHomeworkEntry,
   StudentProgress,
+  ControlWork,
+  ControlWorkSubject,
+  ControlWorkSubmission,
+  StudentControlWorkEntry,
+  StaffUser,
+  StaffRole,
 } from "./admin-storage"
 import type { EntryTestSubmission } from "./entry-test-storage"
 import type { TestResult } from "./test-results-storage"
@@ -82,6 +88,68 @@ export const studentsApi = {
     ),
 }
 
+// ---------- Staff users (org admin) ----------
+export const usersApi = {
+  list: () => api.get<StaffUser[]>("/users"),
+  get: (id: string) => api.get<StaffUser>(`/users/${id}`),
+  create: (input: { name: string; login: string; email?: string; role: StaffRole }) =>
+    api.post<{ user: StaffUser; temporaryPassword: string }>("/users", input),
+  update: (id: string, patch: Partial<Pick<StaffUser, "name" | "login" | "email" | "role">>) =>
+    api.patch<StaffUser>(`/users/${id}`, patch),
+  resetPassword: (id: string) =>
+    api.post<{ login: string; temporaryPassword: string }>(`/users/${id}/reset-password`),
+  remove: (id: string) => api.del(`/users/${id}`),
+}
+
+// ---------- Audit logs (org admin) ----------
+export interface AuditLogEntry {
+  id: string
+  action: string
+  category: string
+  actorId: string | null
+  actorName: string
+  actorRole: string | null
+  targetType: string | null
+  targetId: string | null
+  targetLabel: string | null
+  details: Record<string, unknown> | null
+  ipAddress: string | null
+  userAgent: string | null
+  createdAt: string
+}
+
+export interface AuditLogListResponse {
+  items: AuditLogEntry[]
+  total: number
+  page: number
+  limit: number
+  pages: number
+}
+
+export const auditApi = {
+  list: (params?: {
+    page?: number
+    limit?: number
+    category?: string
+    action?: string
+    search?: string
+    from?: string
+    to?: string
+  }) => {
+    const qs = new URLSearchParams()
+    if (params?.page) qs.set("page", String(params.page))
+    if (params?.limit) qs.set("limit", String(params.limit))
+    if (params?.category) qs.set("category", params.category)
+    if (params?.action) qs.set("action", params.action)
+    if (params?.search) qs.set("search", params.search)
+    if (params?.from) qs.set("from", params.from)
+    if (params?.to) qs.set("to", params.to)
+    const q = qs.toString()
+    return api.get<AuditLogListResponse>(`/audit${q ? `?${q}` : ""}`)
+  },
+  meta: () => api.get<{ categories: string[]; actions: string[] }>("/audit/meta"),
+}
+
 // ---------- Homework ----------
 export const homeworkApi = {
   list: () => api.get<HomeworkAssignment[]>("/homework"),
@@ -107,6 +175,51 @@ export const homeworkApi = {
     api.post<HomeworkSubmission>("/homework/start", { homeworkId }),
   recordAttempt: (homeworkId: string, attempt: HomeworkAttempt) =>
     api.post<HomeworkSubmission>("/homework/attempt", { homeworkId, attempt }),
+}
+
+// ---------- Control works (unit tests) ----------
+export const controlWorkApi = {
+  list: () => api.get<ControlWork[]>("/control-works"),
+  get: (id: string) => api.get<ControlWork>(`/control-works/${id}`),
+  create: (input: {
+    title: string
+    description?: string
+    groupId: string
+    dueAt: string
+    timeLimitMinutes?: number
+    createdBy?: string
+    sectionOrder: ControlWorkSubject[]
+    sections: Partial<
+      Record<
+        ControlWorkSubject,
+        {
+          mode?: "manual" | "mix"
+          topicSlugs?: string[]
+          exerciseSlugs?: string[]
+          deckSlugs?: string[]
+          mixCount?: number
+          testId?: string
+          testTitle?: string
+        }
+      >
+    >
+  }) => api.post<ControlWork>("/control-works", input),
+  remove: (id: string) => api.del(`/control-works/${id}`),
+  submissions: (params?: { controlWorkId?: string; studentId?: string }) => {
+    const qs = new URLSearchParams(params as Record<string, string>).toString()
+    return api.get<ControlWorkSubmission[]>(
+      `/control-works/submissions${qs ? `?${qs}` : ""}`,
+    )
+  },
+  mine: () => api.get<StudentControlWorkEntry[]>("/control-works/mine"),
+  start: (controlWorkId: string) =>
+    api.post<ControlWorkSubmission>("/control-works/start", { controlWorkId }),
+  completeStep: (controlWorkId: string, stepIndex: number, attempt: HomeworkAttempt) =>
+    api.post<ControlWorkSubmission>("/control-works/step", {
+      controlWorkId,
+      stepIndex,
+      attempt,
+    }),
 }
 
 // ---------- Entry tests ----------
@@ -158,10 +271,117 @@ export const paymentsApi = {
 }
 
 // ---------- Analytics ----------
+export interface StudentActivityItem {
+  id: string
+  studentId: string
+  eventType: string
+  category: string
+  source: string
+  subject: string | null
+  contextId: string | null
+  contextLabel: string | null
+  materialSlug: string | null
+  materialTitle: string | null
+  correctCount: number | null
+  totalQuestions: number | null
+  score: number | null
+  accuracy: number | null
+  durationSeconds: number | null
+  timedOut: boolean
+  failedDueToCheating: boolean
+  metadata: Record<string, unknown> | null
+  at: string
+}
+
+export interface StudentAnalyticsSummary {
+  integrity: {
+    violations: number
+    cheatingIncidents: number
+    byReason: Record<string, number>
+  }
+  homework: { completed: number; cheating: number }
+  controlWorks: { completed: number; cheating: number }
+  bySubject: Array<{
+    subject: string
+    attempts: number
+    accuracy: number | null
+    avgScore: number | null
+  }>
+  grammarByTopic: Array<{
+    topic: string
+    attempts: number
+    correct: number
+    total: number
+    accuracy: number | null
+  }>
+  vocabulary: {
+    wordsLearned: number
+    deckAttempts: number
+    byDeck: Array<{
+      deckSlug: string
+      deckTitle: string
+      attempts: number
+      correct: number
+      total: number
+      accuracy: number | null
+    }>
+  }
+  mockTests: Array<{ testType: string; count: number; avgBand: number | null }>
+  recentActivity: Array<{
+    id: string
+    eventType: string
+    category: string
+    subject: string | null
+    contextLabel: string | null
+    materialTitle: string | null
+    accuracy: number | null
+    at: string
+  }>
+}
+
 export const analyticsApi = {
-  record: (event: Omit<ExerciseResultEvent, "at">) => api.post("/analytics/events", event),
+  record: (event: Omit<ExerciseResultEvent, "at"> & {
+    source?: "game" | "homework" | "control_work"
+    homeworkId?: string
+    controlWorkId?: string
+    durationSeconds?: number
+  }) => api.post("/analytics/events", event),
+  recordVocab: (input: {
+    deckSlug: string
+    deckTitle: string
+    correct: number
+    total: number
+    source?: "game" | "homework"
+    words?: Array<{ term: string; partOfSpeech?: string; definition?: string; deckSlug?: string; deckTitle?: string }>
+  }) => api.post("/analytics/vocab", input),
   topics: (studentId?: string) =>
     api.get<TopicStat[]>(`/analytics/topics${studentId ? `?studentId=${studentId}` : ""}`),
+  activity: (params?: {
+    studentId?: string
+    page?: number
+    limit?: number
+    category?: string
+    eventType?: string
+  }) => {
+    const qs = new URLSearchParams()
+    if (params?.studentId) qs.set("studentId", params.studentId)
+    if (params?.page) qs.set("page", String(params.page))
+    if (params?.limit) qs.set("limit", String(params.limit))
+    if (params?.category) qs.set("category", params.category)
+    if (params?.eventType) qs.set("eventType", params.eventType)
+    const q = qs.toString()
+    return api.get<{
+      items: StudentActivityItem[]
+      total: number
+      page: number
+      limit: number
+      pages: number
+    }>(`/analytics/activity${q ? `?${q}` : ""}`)
+  },
+  summary: (studentId?: string) =>
+    api.get<StudentAnalyticsSummary>(
+      studentId ? `/analytics/students/${studentId}/summary` : "/analytics/summary",
+    ),
 }
 
 // ---------- Notifications ----------

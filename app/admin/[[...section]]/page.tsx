@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { useAuth, canAccessAdmin, isSuperAdmin, type UserRole } from "@/lib/auth-context"
+import { useAuth, canAccessAdmin, isSuperAdmin, isAdminRole, type UserRole } from "@/lib/auth-context"
 import { Badge } from "@/components/ui/badge"
 import {
   Users,
@@ -17,17 +17,23 @@ import {
   UserSquare,
   ShieldAlert,
   Home,
+  Layers,
   Send,
+  UserCog,
+  ScrollText,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
 import StudentsManager from "@/components/admin/students-manager"
 import HomeworkManager from "@/components/admin/homework-manager"
+import ControlWorkManager from "@/components/admin/control-work-manager"
 import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
 import ManageContentSection from "@/components/admin/manage-content-section"
 import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
+import UsersManager from "@/components/admin/users-manager"
+import AuditSection from "@/components/admin/audit-section"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
@@ -43,8 +49,11 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   dashboard: { title: "Overview", subtitle: "Platform snapshot and key metrics" },
   groups: { title: "Groups", subtitle: "Create groups and assign students" },
   students: { title: "Students", subtitle: "Manage student profiles" },
+  users: { title: "Users", subtitle: "Manage admins and teachers in your organization" },
+  audit: { title: "Activity log", subtitle: "Who did what on the platform" },
   tests: { title: "IELTS Tests", subtitle: "Browse and remove existing tests" },
   homework: { title: "Homework", subtitle: "Assign tasks to groups and track submissions" },
+  control: { title: "Control works", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Assign placement tests and grade writing" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
@@ -71,9 +80,15 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
 /** Section ids restricted to super admin. */
 const SUPER_ADMIN_ONLY_SECTIONS = new Set(["manage"])
 
+/** Section ids restricted to org admin (admin + super admin), not teachers. */
+const ADMIN_ONLY_SECTIONS = new Set(["users", "audit"])
+
 function sectionFromSegment(segment: string | undefined, role: UserRole): string {
   if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
   if (SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(role)) {
+    return "dashboard"
+  }
+  if (ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(role)) {
     return "dashboard"
   }
   return segment
@@ -174,6 +189,7 @@ function AdminPanelContent() {
   const selectTab = (id: string) =>
     router.push(id === "dashboard" ? "/admin" : `/admin/${id}`)
   const superAdmin = user ? isSuperAdmin(user.role) : false
+  const orgAdmin = user ? isAdminRole(user.role) : false
 
   // Synchronous (localStorage) — no flicker, no request on navigation.
   const [totalTests, setTotalTests] = useState<number>(() => readTestCount())
@@ -193,6 +209,9 @@ function AdminPanelContent() {
       return
     }
     if (segment && SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(user.role)) {
+      router.replace("/admin")
+    }
+    if (segment && ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(user.role)) {
       router.replace("/admin")
     }
   }, [segment, user, router])
@@ -238,6 +257,7 @@ function AdminPanelContent() {
       items: [
         { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
         { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
+        { id: "control", label: "Control works", icon: Layers },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
       ],
     },
@@ -249,11 +269,17 @@ function AdminPanelContent() {
       label: "Money",
       items: [{ id: "finance", label: "Finance", icon: Wallet }],
     },
-    ...(superAdmin
+    ...(orgAdmin || superAdmin
       ? [
           {
             label: "Administration",
-            items: [{ id: "manage", label: "Manage exercises", icon: FileJson }],
+            items: [
+              ...(orgAdmin ? [{ id: "users", label: "Users", icon: UserCog }] : []),
+              ...(orgAdmin ? [{ id: "audit", label: "Activity", icon: ScrollText }] : []),
+              ...(superAdmin
+                ? [{ id: "manage", label: "Manage exercises", icon: FileJson }]
+                : []),
+            ],
           } satisfies NavSection,
         ]
       : []),
@@ -288,9 +314,16 @@ function AdminPanelContent() {
 
       {activeTab === "groups" && <GroupsManager canCreate onChanged={bump} />}
       {activeTab === "students" && <StudentsManager onChanged={bump} />}
+      {activeTab === "users" && orgAdmin && (
+        <UsersManager actorRole={user.role} actorId={user.id} onChanged={bump} />
+      )}
+      {activeTab === "audit" && orgAdmin && <AuditSection />}
       {activeTab === "tests" && <TestsList onTestsChanged={bump} />}
       {activeTab === "homework" && (
         <HomeworkManager createdByName={user.name} onChanged={bump} />
+      )}
+      {activeTab === "control" && (
+        <ControlWorkManager createdByName={user.name} onChanged={bump} />
       )}
       {activeTab === "entry" && <EntryTestManager createdByName={user.name} />}
       {activeTab === "exercises" && (
