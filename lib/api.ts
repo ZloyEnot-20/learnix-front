@@ -20,6 +20,7 @@ import type { ExerciseResultEvent, TopicStat } from "./grammar-analytics"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import type { VocabDeck } from "./vocabulary-data"
+import type { StudentLevel } from "./gamification"
 
 // ---------- Auth ----------
 export interface AuthUser {
@@ -64,14 +65,17 @@ export const studentsApi = {
   loginSuggestions: (name: string) =>
     api.get<string[]>(`/students/login-suggestions?name=${encodeURIComponent(name)}`),
   create: (input: Partial<Student> & { login: string }) =>
-    api.post<{ student: Student; credentials: { login: string; password: string } }>(
-      "/students",
-      input,
-    ),
+    api.post<{
+      student: Student
+      confirmation: { login: string; code: string; expiresAt: string }
+    }>("/students", input),
+  regenerateClaim: (id: string) =>
+    api.post<{ login: string; code: string; expiresAt: string }>(`/students/${id}/claim`),
   update: (id: string, patch: Partial<Student>) =>
     api.patch<Student>(`/students/${id}`, patch),
   remove: (id: string) => api.del(`/students/${id}`),
   progress: (id: string) => api.get<StudentProgress>(`/students/${id}/progress`),
+  level: (id: string) => api.get<StudentLevel>(`/students/${id}/level`),
   context: (id: string) =>
     api.get<{ groupName: string | null; teacherName: string | null }>(
       `/students/${id}/context`,
@@ -223,6 +227,15 @@ export interface BotSubscriber {
   phone: string | null
   createdAt: string
 }
+export interface StudentClaim {
+  id: string
+  studentId: string
+  code: string
+  expiresAt: string
+  usedAt: string | null
+  createdAt: string
+  status: "active" | "used" | "expired"
+}
 export const botApi = {
   listInvites: (studentId?: string) =>
     api.get<BotInvite[]>(`/bot/invites${studentId ? `?studentId=${studentId}` : ""}`),
@@ -232,4 +245,6 @@ export const botApi = {
   listSubscribers: (studentId?: string) =>
     api.get<BotSubscriber[]>(`/bot/subscribers${studentId ? `?studentId=${studentId}` : ""}`),
   removeSubscriber: (id: string) => api.del(`/bot/subscribers/${id}`),
+  listClaims: (studentId?: string) =>
+    api.get<StudentClaim[]>(`/bot/claims${studentId ? `?studentId=${studentId}` : ""}`),
 }

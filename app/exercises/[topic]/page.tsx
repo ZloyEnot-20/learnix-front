@@ -389,14 +389,16 @@ export default function ExercisesTopicPage() {
                           Start Exercise
                           <ArrowRight className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="outline"
-                          onClick={() => setPreviewTarget(ex)}
-                          className="gap-1.5 h-10"
-                        >
-                          <Eye className="h-4 w-4" />
-                          Preview
-                        </Button>
+                        {canAssign && (
+                          <Button
+                            variant="outline"
+                            onClick={() => setPreviewTarget(ex)}
+                            className="gap-1.5 h-10"
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                        )}
                       </div>
                       {canAssign && (
                         <Button

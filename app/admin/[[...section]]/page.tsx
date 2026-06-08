@@ -220,6 +220,7 @@ function AdminPanelContent() {
       items: [
         { id: "groups", label: "Groups", icon: Users, badge: groups.length },
         { id: "students", label: "Students", icon: UserSquare, badge: students.length },
+        { id: "entry", label: "Entry Test", icon: ClipboardCheck },
       ],
     },
     {
@@ -227,7 +228,6 @@ function AdminPanelContent() {
       items: [
         { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
         { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
-        { id: "entry", label: "Entry Test", icon: ClipboardCheck },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
         { id: "manage", label: "Manage exercises", icon: FileJson },
         { id: "ocr", label: "OCR", icon: ScanText, badge: "beta" },

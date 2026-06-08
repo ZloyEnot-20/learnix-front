@@ -96,6 +96,11 @@ function ExerciseRunner() {
     () => (homeworkId ? peekHomeworkById(homeworkId)?.timeLimitMinutes : undefined),
   )
 
+  // For homework, wait for the server start timestamp so the timer resumes correctly.
+  const [sessionStartedAt, setSessionStartedAt] = useState<number | null>(
+    homeworkId ? null : Date.now(),
+  )
+
   // Mark the assignment as started, and fetch the time limit only if it wasn't
   // already available from the cache.
   useEffect(() => {
@@ -114,15 +119,25 @@ function ExerciseRunner() {
       // the homework section reflects the new status next time it opens.
       void homeworkApi
         .start(homeworkId)
-        .then(() => invalidateMyHomework())
-        .catch(() => {})
+        .then((sub) => {
+          if (cancelled) return
+          setSessionStartedAt(
+            sub.startedAt ? new Date(sub.startedAt).getTime() : Date.now(),
+          )
+          invalidateMyHomework()
+        })
+        .catch(() => {
+          if (!cancelled) setSessionStartedAt(Date.now())
+        })
+    } else {
+      setSessionStartedAt(Date.now())
     }
     return () => {
       cancelled = true
     }
   }, [homeworkId, studentId])
 
-  if (!exercise) {
+  if (!exercise || sessionStartedAt === null) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 text-sm">
         Loading exercise…
@@ -130,7 +145,14 @@ function ExerciseRunner() {
     )
   }
 
-  const common = { exercise, backHref, homeworkId, studentId, timeLimitMinutes }
+  const common = {
+    exercise,
+    backHref,
+    homeworkId,
+    studentId,
+    timeLimitMinutes,
+    sessionStartedAt,
+  }
   switch (exercise.type) {
     case "multiple-choice":
       return <MultipleChoiceRunner {...common} />
@@ -160,6 +182,16 @@ function normalizeAnswer(s: string): string {
     .trim()
 }
 
+function remainingSeconds(
+  minutes: number | undefined,
+  startedAtMs: number,
+): number | null {
+  if (!minutes || minutes <= 0) return null
+  const total = Math.round(minutes * 60)
+  const elapsed = Math.floor((Date.now() - startedAtMs) / 1000)
+  return Math.max(0, total - elapsed)
+}
+
 /**
  * Per-exercise countdown. Returns remaining seconds (or null when unlimited).
  * Calls `onExpire` once when it reaches zero. Pauses while `stopped` is true.
@@ -168,12 +200,17 @@ function useCountdown(
   minutes: number | undefined,
   onExpire: () => void,
   stopped: boolean,
+  startedAtMs: number,
 ): number | null {
-  const [secondsLeft, setSecondsLeft] = useState<number | null>(
-    minutes && minutes > 0 ? Math.round(minutes * 60) : null,
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(() =>
+    remainingSeconds(minutes, startedAtMs),
   )
   const onExpireRef = useRef(onExpire)
   onExpireRef.current = onExpire
+
+  useEffect(() => {
+    setSecondsLeft(remainingSeconds(minutes, startedAtMs))
+  }, [minutes, startedAtMs])
 
   useEffect(() => {
     if (secondsLeft == null || stopped) return
@@ -191,6 +228,15 @@ function useCountdown(
   return secondsLeft
 }
 
+type ExerciseRunnerProps = {
+  exercise: GrammarExercise
+  backHref: string
+  homeworkId?: string
+  studentId?: string
+  timeLimitMinutes?: number
+  sessionStartedAt: number
+}
+
 // ─── Fill in the blank runner ───────────────────────────────────────────────
 
 function FillBlankRunner({
@@ -199,13 +245,8 @@ function FillBlankRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const [index, setIndex] = useState(0)
   const [inputs, setInputs] = useState<string[]>([])
   const [result, setResult] = useState<"idle" | "correct" | "incorrect">("idle")
@@ -214,7 +255,6 @@ function FillBlankRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -225,6 +265,7 @@ function FillBlankRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const questions = exercise.content.questions ?? []
@@ -296,7 +337,7 @@ function FillBlankRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -390,13 +431,8 @@ function MultipleChoiceRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<string | null>(null)
   const [result, setResult] = useState<"idle" | "correct" | "incorrect">("idle")
@@ -404,7 +440,6 @@ function MultipleChoiceRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -415,6 +450,7 @@ function MultipleChoiceRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const questions = exercise.content.questions ?? []
@@ -465,7 +501,7 @@ function MultipleChoiceRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -564,13 +600,8 @@ function TextAnswerRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const questions = exercise.content.questions ?? []
   const [index, setIndex] = useState(0)
   const [input, setInput] = useState("")
@@ -578,7 +609,6 @@ function TextAnswerRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -589,6 +619,7 @@ function TextAnswerRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const question = questions[index] ?? null
@@ -647,7 +678,7 @@ function TextAnswerRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -733,13 +764,8 @@ function ErrorCorrectionRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const questions = exercise.content.questions ?? []
   const [index, setIndex] = useState(0)
   const [edits, setEdits] = useState<Record<string, string>>({})
@@ -749,7 +775,6 @@ function ErrorCorrectionRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -760,6 +785,7 @@ function ErrorCorrectionRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const question = questions[index] ?? null
@@ -821,7 +847,7 @@ function ErrorCorrectionRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -946,13 +972,8 @@ function WordOrderRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const questions = exercise.content.questions ?? []
   const [index, setIndex] = useState(0)
   const [order, setOrder] = useState<number[]>([])
@@ -961,7 +982,6 @@ function WordOrderRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -972,6 +992,7 @@ function WordOrderRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const question = questions[index] ?? null
@@ -1037,7 +1058,7 @@ function WordOrderRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -1160,13 +1181,8 @@ function TrueFalseRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const questions = exercise.content.questions ?? []
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<boolean | null>(null)
@@ -1174,7 +1190,6 @@ function TrueFalseRunner({
   const [correctCount, setCorrectCount] = useState(0)
   const [mistakes, setMistakes] = useState<ReviewItem[]>([])
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -1185,6 +1200,7 @@ function TrueFalseRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   const question = questions[index] ?? null
@@ -1233,7 +1249,7 @@ function TrueFalseRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}
@@ -1334,18 +1350,12 @@ function MatchingRunner({
   homeworkId,
   studentId,
   timeLimitMinutes,
-}: {
-  exercise: GrammarExercise
-  backHref: string
-  homeworkId?: string
-  studentId?: string
-  timeLimitMinutes?: number
-}) {
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
   const pairs = exercise.content.pairs ?? []
   const [picks, setPicks] = useState<(string | null)[]>(() => pairs.map(() => null))
   const [checked, setChecked] = useState(false)
   const [finished, setFinished] = useState(false)
-  const [startedAt] = useState(() => Date.now())
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const [timedOut, setTimedOut] = useState(false)
   const secondsLeft = useCountdown(
@@ -1356,6 +1366,7 @@ function MatchingRunner({
       setFinishedAt(Date.now())
     },
     finished,
+    sessionStartedAt,
   )
 
   // Distinct right-hand options, preserving first-seen order.
@@ -1400,7 +1411,7 @@ function MatchingRunner({
         backHref={backHref}
         correctCount={correctCount}
         total={total}
-        startedAt={startedAt}
+        startedAt={sessionStartedAt}
         finishedAt={finishedAt}
         mistakes={mistakes}
         homeworkId={homeworkId}

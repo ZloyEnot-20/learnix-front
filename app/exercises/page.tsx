@@ -10,10 +10,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Folder,
+  Lock,
   Mic,
   PenLine,
   SpellCheck,
 } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
+import { studentsApi } from "@/lib/api"
+import {
+  isCefrUnlocked,
+  requiredLevelFor,
+  type StudentLevel,
+} from "@/lib/gamification"
+import { LevelScale } from "@/components/student/level-scale"
 import {
   formatDuration,
   buildTopicSummaries,
@@ -140,8 +149,10 @@ function summariseLevels(levels: string[]): { display: string; cls: string } {
 }
 
 export default function ExercisesIndexPage() {
+  const { user } = useAuth()
   const [topics, setTopics] = useState<TopicSummary[]>([])
   const [loading, setLoading] = useState(true)
+  const [studentLevel, setStudentLevel] = useState<StudentLevel | null>(null)
 
   const refresh = async () => {
     const [exercises, metas] = await Promise.all([getExercises(), getTopicsMeta()])
@@ -151,6 +162,27 @@ export default function ExercisesIndexPage() {
   useEffect(() => {
     void refresh().finally(() => setLoading(false))
   }, [])
+
+  // Students get folder gating by level; staff see everything unlocked.
+  const isStudent = user?.role === "student"
+  useEffect(() => {
+    if (!isStudent || !user) {
+      setStudentLevel(null)
+      return
+    }
+    let cancelled = false
+    studentsApi
+      .level(user.id)
+      .then((res) => !cancelled && setStudentLevel(res))
+      .catch(() => !cancelled && setStudentLevel(null))
+    return () => {
+      cancelled = true
+    }
+  }, [isStudent, user])
+
+  const currentLevel = studentLevel?.level ?? Number.MAX_SAFE_INTEGER
+  const levelUnlocked = (cefr: string) =>
+    !isStudent || isCefrUnlocked(cefr, currentLevel)
 
   const grammarTopics = useMemo(
     () => topics.filter((t) => t.category === "grammar" || t.category === "vocabulary"),
@@ -259,6 +291,10 @@ export default function ExercisesIndexPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+        {isStudent && user && !selectedLevel && (
+          <LevelScale studentId={user.id} />
+        )}
+
         {loading && (
           <section>
             <div className="h-5 w-40 rounded-md bg-slate-200 animate-pulse" />
@@ -279,18 +315,23 @@ export default function ExercisesIndexPage() {
               className="mt-4 grid gap-3"
               style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
             >
-              {levelFolders.map((folder) => (
-                <LevelFolderCard
-                  key={folder.level}
-                  level={folder.level}
-                  label={folder.label}
-                  topicCount={folder.topics.length}
-                  exerciseCount={folder.exerciseCount}
-                  questionCount={folder.questionCount}
-                  wordCount={folder.wordCount}
-                  onOpen={() => setSelectedLevel(folder.level)}
-                />
-              ))}
+              {levelFolders.map((folder) => {
+                const locked = !levelUnlocked(folder.level)
+                return (
+                  <LevelFolderCard
+                    key={folder.level}
+                    level={folder.level}
+                    label={folder.label}
+                    topicCount={folder.topics.length}
+                    exerciseCount={folder.exerciseCount}
+                    questionCount={folder.questionCount}
+                    wordCount={folder.wordCount}
+                    locked={locked}
+                    requiredLevel={requiredLevelFor(folder.level)}
+                    onOpen={() => setSelectedLevel(folder.level)}
+                  />
+                )
+              })}
             </div>
           </section>
         )}
@@ -468,6 +509,8 @@ function LevelFolderCard({
   wordCount = 0,
   colorCls,
   comingSoon = false,
+  locked = false,
+  requiredLevel,
   onOpen,
 }: {
   level: string
@@ -479,18 +522,21 @@ function LevelFolderCard({
   wordCount?: number
   colorCls?: string
   comingSoon?: boolean
+  locked?: boolean
+  requiredLevel?: number
   onOpen: () => void
 }) {
   const cls = colorCls ?? LEVEL_PALETTE[level] ?? "bg-slate-100 text-slate-700"
+  const disabled = comingSoon || locked
   return (
     <button
       type="button"
-      onClick={comingSoon ? undefined : onOpen}
-      disabled={comingSoon}
-      aria-disabled={comingSoon}
+      onClick={disabled ? undefined : onOpen}
+      disabled={disabled}
+      aria-disabled={disabled}
       className={cn(
         "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
-        comingSoon
+        disabled
           ? "cursor-not-allowed opacity-60"
           : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
       )}
@@ -503,15 +549,21 @@ function LevelFolderCard({
             cls,
           )}
         >
-          <Folder className="h-6 w-6" />
+          {locked ? <Lock className="h-6 w-6" /> : <Folder className="h-6 w-6" />}
         </span>
         <div className="flex items-center gap-1.5">
+          {locked && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <Lock className="h-3 w-3" />
+              Lvl {requiredLevel}
+            </span>
+          )}
           {comingSoon && (
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
               Soon
             </span>
           )}
-          {(badge || !comingSoon) && (
+          {(badge || (!comingSoon && !locked)) && (
             <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
               {badge ?? level}
             </span>
@@ -525,11 +577,13 @@ function LevelFolderCard({
         <p className="mt-0.5 text-xs text-slate-500">
           {comingSoon
             ? "Coming soon"
-            : `${topicCount} topic${topicCount === 1 ? "" : "s"} · ${exerciseCount} exercise${
-                exerciseCount === 1 ? "" : "s"
-              } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
+            : locked
+              ? `Reach level ${requiredLevel} to unlock`
+              : `${topicCount} topic${topicCount === 1 ? "" : "s"} · ${exerciseCount} exercise${
+                  exerciseCount === 1 ? "" : "s"
+                } · ${questionCount} question${questionCount === 1 ? "" : "s"}`}
         </p>
-        {!comingSoon && wordCount > 0 && (
+        {!disabled && wordCount > 0 && (
           <p className="mt-0.5 text-xs text-slate-500">
             {wordCount} vocabulary word{wordCount === 1 ? "" : "s"}
           </p>

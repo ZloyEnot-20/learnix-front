@@ -96,7 +96,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   })
   const [loginSuggestions, setLoginSuggestions] = useState<string[]>([])
   const [loadingSuggestions, setLoadingSuggestions] = useState(false)
-  const [credentials, setCredentials] = useState<{ login: string; password: string } | null>(null)
+  const [confirmation, setConfirmation] = useState<{ login: string; code: string } | null>(null)
 
   useEffect(() => {
     const name = form.name.trim()
@@ -121,7 +121,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const resetCreateForm = () => {
     setForm({ name: "", login: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
     setLoginSuggestions([])
-    setCredentials(null)
+    setConfirmation(null)
   }
 
   const copyText = async (text: string, label: string) => {
@@ -166,7 +166,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
         monthlyFee: Number(form.monthlyFee) || 0,
         notes: form.notes.trim() || undefined,
       })
-      setCredentials(res.credentials)
+      setConfirmation(res.confirmation)
       toast({ title: "Student added", description: form.name })
       invalidateStudents()
       await refreshAll(true)
@@ -526,12 +526,13 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
         }}
       >
         <DialogContent>
-          {credentials ? (
+          {confirmation ? (
             <>
               <DialogHeader>
                 <DialogTitle>Student created</DialogTitle>
                 <DialogDescription>
-                  Share these credentials with the student. The password is shown only once.
+                  Give the student this confirmation code. They enter it in the
+                  Telegram bot and receive their login and password there.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
@@ -539,35 +540,41 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                   <div className="min-w-0">
                     <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Login</p>
                     <p className="truncate font-mono text-sm font-semibold text-slate-900">
-                      {credentials.login}
+                      {confirmation.login}
                     </p>
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => copyText(credentials.login, "Login")}
+                    onClick={() => copyText(confirmation.login, "Login")}
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Password</p>
-                    <p className="truncate font-mono text-sm font-semibold text-slate-900">
-                      {credentials.password}
+                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+                      Confirmation code
+                    </p>
+                    <p className="font-mono text-2xl font-bold tracking-[0.3em] text-slate-900">
+                      {confirmation.code}
                     </p>
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => copyText(credentials.password, "Password")}
+                    onClick={() => copyText(confirmation.code, "Code")}
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
+              <p className="px-1 text-xs text-slate-500">
+                The student opens the bot, taps “I’m a student”, and sends this
+                6-digit code to get their credentials. The code expires in 7 days.
+              </p>
               <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
                 <Button
                   onClick={() => {

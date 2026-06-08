@@ -27,6 +27,7 @@ import {
   ClipboardCopy,
   KeyRound,
   Phone,
+  RefreshCw,
   Send,
   Ticket,
   Trash2,
@@ -35,7 +36,13 @@ import {
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
-import { botApi, type BotInvite, type BotSubscriber } from "@/lib/api"
+import {
+  botApi,
+  studentsApi,
+  type BotInvite,
+  type BotSubscriber,
+  type StudentClaim,
+} from "@/lib/api"
 import { useAdminData } from "@/lib/admin-data-context"
 
 const TTL_OPTIONS = [
@@ -92,8 +99,10 @@ export default function TelegramBotSection() {
   const [ttl, setTtl] = useState<string>("72")
   const [invites, setInvites] = useState<BotInvite[]>([])
   const [subscribers, setSubscribers] = useState<BotSubscriber[]>([])
+  const [claims, setClaims] = useState<StudentClaim[]>([])
   const [loading, setLoading] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [regenerating, setRegenerating] = useState(false)
   const [pendingRevoke, setPendingRevoke] = useState<BotInvite | null>(null)
   const [pendingRemove, setPendingRemove] = useState<BotSubscriber | null>(null)
 
@@ -106,16 +115,19 @@ export default function TelegramBotSection() {
     if (!sid) {
       setInvites([])
       setSubscribers([])
+      setClaims([])
       return
     }
     setLoading(true)
     try {
-      const [inv, subs] = await Promise.all([
+      const [inv, subs, cls] = await Promise.all([
         botApi.listInvites(sid),
         botApi.listSubscribers(sid),
+        botApi.listClaims(sid),
       ])
       setInvites(inv)
       setSubscribers(subs)
+      setClaims(cls)
     } catch (err) {
       toast({
         title: "Could not load bot data",
@@ -153,6 +165,30 @@ export default function TelegramBotSection() {
       })
     } finally {
       setCreating(false)
+    }
+  }
+
+  const regenerateClaim = async () => {
+    if (!studentId) {
+      toast({ title: "Pick a student first", variant: "destructive" })
+      return
+    }
+    setRegenerating(true)
+    try {
+      const res = await studentsApi.regenerateClaim(studentId)
+      await refresh(studentId)
+      toast({
+        title: "New access code generated",
+        description: `Code ${res.code} — the student enters it in the bot.`,
+      })
+    } catch (err) {
+      toast({
+        title: "Could not generate code",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRegenerating(false)
     }
   }
 
@@ -279,6 +315,85 @@ export default function TelegramBotSection() {
           </p>
         </div>
       ) : (
+        <div className="space-y-5">
+        {/* Student access codes */}
+        <Card className="border-slate-200">
+          <CardContent className="space-y-3 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-slate-500" />
+                <h3 className="text-sm font-semibold text-slate-900">
+                  Student access codes
+                  <span className="ml-1.5 text-slate-400">({claims.length})</span>
+                </h3>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={regenerateClaim}
+                loading={regenerating}
+                className="gap-1.5"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                New code
+              </Button>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              A 6-digit one-time code the student enters in the bot to receive their
+              login and password. Generating a new code resets the student&apos;s password.
+            </p>
+            {loading && claims.length === 0 ? (
+              <p className="py-6 text-center text-sm text-slate-400">Loading…</p>
+            ) : claims.length === 0 ? (
+              <p className="py-6 text-center text-sm text-slate-400">
+                No access codes yet — generate one above.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {claims.map((c) => {
+                  const meta = STATUS_META[c.status]
+                  return (
+                    <li
+                      key={c.id}
+                      className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3"
+                    >
+                      <code className="rounded-lg bg-slate-900 px-2.5 py-1 font-mono text-sm font-bold tracking-[0.25em] text-white">
+                        {c.code}
+                      </code>
+                      <div className="min-w-0 flex-1">
+                        <span
+                          className={cn(
+                            "inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                            meta.cls,
+                          )}
+                        >
+                          {meta.label}
+                        </span>
+                        <p className="mt-0.5 text-[11px] text-slate-500">
+                          {c.status === "used"
+                            ? `Used ${formatDate(c.usedAt)}`
+                            : `Expires ${formatDate(c.expiresAt)}`}
+                        </p>
+                      </div>
+                      {c.status === "active" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => copyCode(c.code)}
+                          aria-label="Copy code"
+                          className="h-8 w-8 text-slate-400 hover:text-slate-900"
+                        >
+                          <ClipboardCopy className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+
         <div className="grid gap-5 lg:grid-cols-2">
           {/* Invites */}
           <Card className="border-slate-200">
@@ -421,6 +536,7 @@ export default function TelegramBotSection() {
               )}
             </CardContent>
           </Card>
+        </div>
         </div>
       )}
 

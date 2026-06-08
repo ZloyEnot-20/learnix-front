@@ -31,8 +31,6 @@ interface User {
   name: string
   role: UserRole
   isPremium: boolean
-  /** Student record id — same as user id for role=student. */
-  studentId?: string
   testHistory: TestResult[]
   completedSections: {
     reading: boolean
@@ -70,7 +68,6 @@ function toUser(u: AuthUser): User {
     name: u.name,
     role: u.role,
     isPremium: u.isPremium,
-    studentId: u.role === "student" ? u.id : undefined,
     testHistory: [],
     completedSections: { reading: true, listening: true, writing: true },
   }

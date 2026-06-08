@@ -147,7 +147,10 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent
+        className="!max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader className="sticky top-0 z-20 border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-lg font-bold text-white shadow-sm">

@@ -288,7 +288,10 @@ export function HomeworkDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent
+        className="!max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader className="border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5">
           <div className="flex items-start gap-4">
             <div

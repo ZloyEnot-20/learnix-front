@@ -7,12 +7,14 @@ import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import { BookOpen, Headphones, PenTool, Mic, LogOut, User, Gamepad2 } from "lucide-react"
 import Link from "next/link"
 import { NotificationsPanel } from "@/components/notifications-panel"
 import { StudentHomeworkSection } from "@/components/student/student-homework-section"
 import { StudentOverview } from "@/components/student/student-overview"
 import { EntryTestCard } from "@/components/student/entry-test-card"
+import { LevelScale } from "@/components/student/level-scale"
 
 export default function DashboardPage() {
   const { user, logout, isLoading } = useAuth()
@@ -30,11 +32,7 @@ export default function DashboardPage() {
   }, [user, isLoading, router])
 
   if (!mounted || isLoading || !user || user.role !== "student") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
-      </div>
-    )
+    return <DashboardSkeleton />
   }
 
   const testSections = [
@@ -127,7 +125,12 @@ export default function DashboardPage() {
           studentEmail={user.email}
         />
 
-        {/* Vocabulary Game — coming soon */}
+        {/* Level / progress scale */}
+        <div className="mb-8">
+          <LevelScale studentId={user.id} />
+        </div>
+
+        {/* Game Station */}
         <Card className="mb-8 overflow-hidden border-violet-200 bg-gradient-to-r from-violet-50 to-fuchsia-50">
           <CardContent className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
@@ -135,20 +138,15 @@ export default function DashboardPage() {
                 <Gamepad2 className="h-5 w-5" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-slate-900">Vocabulary Game</h3>
-                  <Badge variant="secondary" className="bg-violet-100 text-violet-700">
-                    Soon
-                  </Badge>
-                </div>
+                <h3 className="font-semibold text-slate-900">Game Station</h3>
                 <p className="text-sm text-slate-600">
-                  Review your words in a fun, game-based format.
+                  Play games by level to earn points and unlock harder folders.
                 </p>
               </div>
             </div>
-            <Button disabled variant="outline" className="cursor-not-allowed opacity-70">
-              Coming soon
-            </Button>
+            <Link href="/games">
+              <Button className="bg-violet-600 hover:bg-violet-700">Play now</Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -234,6 +232,67 @@ export default function DashboardPage() {
             )}
           </CardContent>
         </Card>
+      </main>
+    </div>
+  )
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <header className="bg-white border-b">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-end sm:justify-between">
+          <Skeleton className="hidden h-8 w-28 sm:block" />
+          <div className="flex items-center gap-4">
+            <div className="space-y-1.5 text-right">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-3 w-36" />
+            </div>
+            <Skeleton className="h-9 w-9 rounded-md" />
+            <Skeleton className="h-9 w-9 rounded-md" />
+            <Skeleton className="h-9 w-9 rounded-md" />
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-6 py-8">
+        <div className="mb-8 space-y-2">
+          <Skeleton className="h-8 w-72" />
+          <Skeleton className="h-4 w-56" />
+        </div>
+
+        {/* Level scale */}
+        <Skeleton className="mb-8 h-24 w-full rounded-2xl" />
+
+        {/* Game Station banner */}
+        <Skeleton className="mb-8 h-24 w-full rounded-xl" />
+
+        {/* Test sections */}
+        <div className="mb-8">
+          <Skeleton className="mb-4 h-7 w-44" />
+          <div className="grid gap-6 md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-10 w-10 rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-5 w-28" />
+                      <Skeleton className="h-3.5 w-48" />
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4 space-y-2">
+                    <Skeleton className="h-3.5 w-32" />
+                    <Skeleton className="h-3.5 w-28" />
+                  </div>
+                  <Skeleton className="h-10 w-full rounded-md" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   )

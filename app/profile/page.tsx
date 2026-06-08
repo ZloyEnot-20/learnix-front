@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
     let cancelled = false
     if (user.role === "student") {
-      const studentId = user.studentId ?? user.id
+      const studentId = user.id
       studentsApi
         .context(studentId)
         .then((ctx) => {
