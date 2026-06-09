@@ -21,6 +21,7 @@ import {
   Send,
   UserCog,
   ScrollText,
+  CreditCard,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
@@ -34,6 +35,8 @@ import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import UsersManager from "@/components/admin/users-manager"
 import AuditSection from "@/components/admin/audit-section"
+import OrgBillingSection from "@/components/admin/org-billing-section"
+import { OrgNewsBanner } from "@/components/admin/org-news-banner"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
@@ -53,12 +56,13 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   audit: { title: "Activity log", subtitle: "Who did what on the platform" },
   tests: { title: "IELTS Tests", subtitle: "Browse and remove existing tests" },
   homework: { title: "Homework", subtitle: "Assign tasks to groups and track submissions" },
-  control: { title: "Control works", subtitle: "Multi-section unit tests with custom topic order" },
+  control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Assign placement tests and grade writing" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
+  billing: { title: "Billing", subtitle: "Your organization subscription and platform payments" },
 }
 
 /** Section ids that map to a URL segment under /admin. */
@@ -81,7 +85,7 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
 const SUPER_ADMIN_ONLY_SECTIONS = new Set(["manage"])
 
 /** Section ids restricted to org admin (admin + super admin), not teachers. */
-const ADMIN_ONLY_SECTIONS = new Set(["users", "audit"])
+const ADMIN_ONLY_SECTIONS = new Set(["users", "audit", "billing"])
 
 function sectionFromSegment(segment: string | undefined, role: UserRole): string {
   if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
@@ -257,7 +261,7 @@ function AdminPanelContent() {
       items: [
         { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
         { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
-        { id: "control", label: "Control works", icon: Layers },
+        { id: "control", label: "Progress test", icon: Layers },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
       ],
     },
@@ -274,6 +278,7 @@ function AdminPanelContent() {
           {
             label: "Administration",
             items: [
+              ...(orgAdmin ? [{ id: "billing", label: "Billing", icon: CreditCard }] : []),
               ...(orgAdmin ? [{ id: "users", label: "Users", icon: UserCog }] : []),
               ...(orgAdmin ? [{ id: "audit", label: "Activity", icon: ScrollText }] : []),
               ...(superAdmin
@@ -302,6 +307,7 @@ function AdminPanelContent() {
           {totalTests} IELTS · {groups.length} groups · {students.length} students
         </Badge>
       }
+      topBanner={<OrgNewsBanner />}
       onLogout={logout}
     >
       {activeTab === "dashboard" && (
@@ -338,6 +344,7 @@ function AdminPanelContent() {
       )}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
+      {activeTab === "billing" && orgAdmin && <OrgBillingSection />}
     </AdminShell>
   )
 }

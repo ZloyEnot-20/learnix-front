@@ -301,7 +301,7 @@ export default function ControlWorkManager({
       setAdminTests(readAdminTests())
     } catch {
       toast({
-        title: "Failed to load control works",
+        title: "Failed to load progress tests",
         description: "Make sure the backend is running.",
         variant: "destructive",
       })
@@ -480,7 +480,7 @@ export default function ControlWorkManager({
         sectionOrder: enabledSections,
         sections: apiSections,
       })
-      toast({ title: "Control work assigned" })
+      toast({ title: "Progress test assigned" })
       setShowCreate(false)
       setForm({ title: "", groupId: "", dueDate: defaultDueDate(), unlimited: true, timeLimitMinutes: "45" })
       setSections(
@@ -530,14 +530,14 @@ export default function ControlWorkManager({
         </div>
         <Button onClick={() => setShowCreate(true)} className="bg-slate-900 hover:bg-slate-800">
           <Plus className="h-4 w-4 mr-2" />
-          New control work
+          New progress test
         </Button>
       </div>
 
       {items.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
           <Layers className="mx-auto h-8 w-8 text-slate-400" />
-          <p className="mt-2 font-medium text-slate-900">No control works yet</p>
+          <p className="mt-2 font-medium text-slate-900">No progress tests yet</p>
           <p className="text-sm text-slate-500">Create a unit test for a group.</p>
         </div>
       ) : (
@@ -647,7 +647,7 @@ export default function ControlWorkManager({
       >
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>New control work</DialogTitle>
+            <DialogTitle>New progress test</DialogTitle>
             <DialogDescription>
               Build a unit test: enable sections, set their order, pick topics manually or use Mix.
             </DialogDescription>
@@ -952,7 +952,7 @@ export default function ControlWorkManager({
       <ConfirmDialog
         open={!!pendingDelete}
         onOpenChange={(open) => !open && setPendingDelete(null)}
-        title="Delete this control work?"
+        title="Delete this progress test?"
         description={
           pendingDelete && (
             <>

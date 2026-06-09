@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/lib/auth-context"
+import { OrgBlockedGuard } from "@/components/org-blocked-guard"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { Suspense } from "react"
@@ -26,7 +27,9 @@ export default function RootLayout({
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <AuthProvider>
-          <Suspense>{children}</Suspense>
+          <OrgBlockedGuard>
+            <Suspense>{children}</Suspense>
+          </OrgBlockedGuard>
         </AuthProvider>
         <Toaster />
         <Analytics />

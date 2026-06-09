@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import { authApi, type AuthUser } from "./api"
+import { authApi, type AuthUser, type OrgStatus } from "./api"
 import { setTokens, clearTokens, getAccessToken } from "./api-client"
 
 export type UserRole = "super_admin" | "admin" | "teacher" | "student"
@@ -46,6 +46,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
+  orgStatus: OrgStatus
   login: (login: string, password: string) => Promise<User>
   register: (email: string, password: string, name: string) => Promise<User>
   logout: () => void
@@ -80,6 +81,7 @@ function toUser(u: AuthUser): User {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [orgStatus, setOrgStatus] = useState<OrgStatus>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   // Restore the session from the stored access token on mount.
@@ -91,8 +93,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return
       }
       try {
-        const { user: u } = await authApi.me()
-        if (!cancelled) setUser(toUser(u))
+        const { user: u, orgStatus: status } = await authApi.me()
+        if (!cancelled) {
+          setUser(toUser(u))
+          setOrgStatus(status ?? null)
+        }
       } catch {
         clearTokens()
       } finally {
@@ -110,6 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setTokens(res.accessToken, res.refreshToken)
     const next = toUser(res.user)
     setUser(next)
+    setOrgStatus(res.orgStatus ?? null)
     return next
   }
 
@@ -118,16 +124,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setTokens(res.accessToken, res.refreshToken)
     const next = toUser(res.user)
     setUser(next)
+    setOrgStatus(res.orgStatus ?? null)
     return next
   }
 
   const logout = () => {
     setUser(null)
+    setOrgStatus(null)
     clearTokens()
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, orgStatus, login, register, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

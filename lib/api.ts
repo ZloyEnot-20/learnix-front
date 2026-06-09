@@ -37,8 +37,10 @@ export interface AuthUser {
   role: "admin" | "teacher" | "student" | "super_admin"
   isPremium: boolean
 }
+export type OrgStatus = "active" | "blocked" | null
 export interface AuthResponse {
   user: AuthUser
+  orgStatus: OrgStatus
   accessToken: string
   refreshToken: string
 }
@@ -48,7 +50,7 @@ export const authApi = {
     api.post<AuthResponse>("/auth/login", { login, password }, false),
   register: (email: string, password: string, name: string) =>
     api.post<AuthResponse>("/auth/register", { email, password, name }, false),
-  me: () => api.get<{ user: AuthUser }>("/auth/me"),
+  me: () => api.get<{ user: AuthUser; orgStatus: OrgStatus }>("/auth/me"),
 }
 
 // ---------- Groups ----------
@@ -177,7 +179,7 @@ export const homeworkApi = {
     api.post<HomeworkSubmission>("/homework/attempt", { homeworkId, attempt }),
 }
 
-// ---------- Control works (unit tests) ----------
+// ---------- Progress tests (unit tests) ----------
 export const controlWorkApi = {
   list: () => api.get<ControlWork[]>("/control-works"),
   get: (id: string) => api.get<ControlWork>(`/control-works/${id}`),
@@ -399,6 +401,52 @@ export const notificationsApi = {
   markRead: (id: string, read = true) =>
     api.patch<NotificationItem>(`/notifications/${id}/read`, { read }),
   markAllRead: () => api.post("/notifications/read-all"),
+}
+
+// ---------- Organization (subscription & platform messages) ----------
+export interface OrgAnnouncement {
+  id: string
+  title: string
+  message: string
+  type: "news" | "maintenance"
+  severity: "info" | "warning" | "critical"
+  startsAt: string
+  endsAt: string | null
+}
+
+export interface OrgBillingInfo {
+  organization: {
+    id: string
+    name: string
+    subdomain: string
+    status: "active" | "blocked"
+    plan: "free" | "pro"
+    limits: { maxStudents: number; maxTeachers: number }
+    trialEndsAt: string | null
+  }
+  subscription: {
+    id: string
+    plan: "free" | "pro"
+    status: "trialing" | "active" | "past_due" | "canceled"
+    trialEndsAt: string | null
+    currentPeriodStart: string | null
+    currentPeriodEnd: string | null
+    canceledAt: string | null
+  } | null
+  payments: Array<{
+    id: string
+    amount: number
+    currency: string
+    status: "pending" | "paid" | "failed" | "refunded"
+    periodLabel: string
+    paidAt: string | null
+    createdAt: string
+  }>
+}
+
+export const orgApi = {
+  banner: () => api.get<OrgAnnouncement[]>("/org/banner"),
+  billing: () => api.get<OrgBillingInfo>("/org/billing"),
 }
 
 // ---------- Exercises catalogue ----------

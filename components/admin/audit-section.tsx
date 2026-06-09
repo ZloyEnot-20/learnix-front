@@ -38,7 +38,7 @@ const CATEGORY_META: Record<string, { label: string; cls: string }> = {
   students: { label: "Students", cls: "border-violet-200 bg-violet-50 text-violet-800" },
   groups: { label: "Groups", cls: "border-indigo-200 bg-indigo-50 text-indigo-800" },
   homework: { label: "Homework", cls: "border-emerald-200 bg-emerald-50 text-emerald-800" },
-  control_works: { label: "Control works", cls: "border-teal-200 bg-teal-50 text-teal-800" },
+  control_works: { label: "Progress test", cls: "border-teal-200 bg-teal-50 text-teal-800" },
   exercises: { label: "Content", cls: "border-amber-200 bg-amber-50 text-amber-800" },
   payments: { label: "Finance", cls: "border-lime-200 bg-lime-50 text-lime-800" },
   system: { label: "System", cls: "border-slate-200 bg-slate-50 text-slate-700" },
@@ -181,13 +181,13 @@ function describeEvent(log: AuditLogEntry): string {
     case "control_works.create": {
       const group = str(d?.groupName)
       const steps = num(d?.stepCount)
-      const parts = [`${who} created control work «${what ?? "new test"}»`]
+      const parts = [`${who} created progress test «${what ?? "new test"}»`]
       if (group) parts.push(`for group «${group}»`)
       if (steps != null) parts.push(`— ${steps} section${steps === 1 ? "" : "s"}`)
       return parts.join(" ")
     }
     case "control_works.delete":
-      return `${who} deleted control work «${what ?? "a test"}»`
+      return `${who} deleted progress test «${what ?? "a test"}»`
     case "payments.create": {
       const student = str(d?.studentName)
       const group = str(d?.groupName)
