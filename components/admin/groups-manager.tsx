@@ -27,6 +27,7 @@ import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { groupsApi } from "@/lib/api"
 import { CardGridSkeleton } from "./skeletons"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { StudentDetailModal } from "./student-detail-modal"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
@@ -71,6 +72,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   const [studentDetail, setStudentDetail] = useState<Student | null>(null)
   const [creating, setCreating] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [pendingDelete, setPendingDelete] = useState<Group | null>(null)
   const [addingStudent, setAddingStudent] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
 
@@ -143,13 +145,14 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     }
   }
 
-  const handleDeleteGroup = async (g: Group) => {
-    if (!confirm(`Delete group "${g.name}"? Students will be detached but kept.`)) return
+  const confirmDeleteGroup = async () => {
+    if (!pendingDelete) return
     setDeleting(true)
     try {
-      await groupsApi.remove(g.id)
+      await groupsApi.remove(pendingDelete.id)
       invalidateGroups()
       setSelectedGroupId(null)
+      setPendingDelete(null)
       const { groups: nextGroups } = await refreshAll(true)
       await loadSummaries(nextGroups, true)
       onChanged?.()
@@ -240,7 +243,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleDeleteGroup(selectedGroup)}
+                    onClick={() => setPendingDelete(selectedGroup)}
                     loading={deleting}
                     className="text-destructive hover:bg-destructive/10"
                   >
@@ -492,6 +495,23 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        title="Delete this group?"
+        description={
+          pendingDelete && (
+            <>
+              This will permanently remove{" "}
+              <span className="font-semibold text-foreground">{pendingDelete.name}</span>. Students
+              will be detached but kept.
+            </>
+          )
+        }
+        onConfirm={confirmDeleteGroup}
+        loading={deleting}
+      />
     </>
   )
 }

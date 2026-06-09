@@ -59,6 +59,7 @@ import { getExercises } from "@/lib/exercises-cache"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import { useToast } from "@/hooks/use-toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { cn } from "@/lib/utils"
 import { HomeworkStudentResults } from "./homework-student-results"
 import TopicStatsPanel from "./topic-stats-panel"
@@ -119,6 +120,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   const [showStats, setShowStats] = useState(false)
   const [assigning, setAssigning] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
+  const [pendingRemove, setPendingRemove] = useState<HomeworkAssignment | null>(null)
 
   const [search, setSearch] = useState("")
   const [groupFilter, setGroupFilter] = useState<string>("all")
@@ -358,11 +360,16 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     }
   }
 
-  const remove = async (hw: HomeworkAssignment) => {
-    if (!confirm(`Delete homework "${hw.title}" and all its submissions?`)) return
-    setRemovingId(hw.id)
+  const requestRemove = (hw: HomeworkAssignment) => {
+    setPendingRemove(hw)
+  }
+
+  const confirmRemove = async () => {
+    if (!pendingRemove) return
+    setRemovingId(pendingRemove.id)
     try {
-      await homeworkApi.remove(hw.id)
+      await homeworkApi.remove(pendingRemove.id)
+      setPendingRemove(null)
       await refresh()
       onChanged?.()
     } catch (err) {
@@ -618,7 +625,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                   refresh()
                   onChanged?.()
                 }}
-                onDelete={remove}
+                onDelete={requestRemove}
                 deletingId={removingId}
                 mode="active"
               />
@@ -689,7 +696,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                 refresh()
                 onChanged?.()
               }}
-              onDelete={remove}
+              onDelete={requestRemove}
               deletingId={removingId}
               mode="history"
             />
@@ -941,6 +948,23 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
           </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingRemove}
+        onOpenChange={(open) => !open && setPendingRemove(null)}
+        title="Delete this homework?"
+        description={
+          pendingRemove && (
+            <>
+              This will permanently remove{" "}
+              <span className="font-semibold text-foreground">{pendingRemove.title}</span> and all
+              its submissions.
+            </>
+          )
+        }
+        onConfirm={confirmRemove}
+        loading={!!pendingRemove && removingId === pendingRemove.id}
+      />
     </>
   )
 }

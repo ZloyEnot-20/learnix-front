@@ -28,7 +28,7 @@ import {
   type VocabDeck,
   type VocabWord,
 } from "@/lib/vocabulary-data"
-import { homeworkApi } from "@/lib/api"
+import { homeworkApi, analyticsApi } from "@/lib/api"
 import { invalidateMyHomework } from "@/lib/homework-cache"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
@@ -459,6 +459,7 @@ function Quiz({
   const [done, setDone] = useState(false)
   const startedAt = useRef(Date.now())
   const recorded = useRef(false)
+  const { user } = useAuth()
 
   const q = questions[index]
   const progress = Math.round((index / questions.length) * 100)
@@ -487,21 +488,41 @@ function Quiz({
     setPicked(null)
   }
 
-  // Record homework completion once the quiz is finished.
+  // Record completion once the quiz is finished.
   useEffect(() => {
     if (!done || recorded.current) return
     recorded.current = true
-    if (!homeworkId) return
-    void homeworkApi
-      .recordAttempt(homeworkId, {
-        totalQuestions: questions.length,
-        correctCount: correct,
-        durationSeconds: Math.round((Date.now() - startedAt.current) / 1000),
-        mistakes: [],
-      })
-      .then(() => invalidateMyHomework())
-      .catch(() => {})
-  }, [done, homeworkId, questions.length, correct])
+    if (homeworkId) {
+      void homeworkApi
+        .recordAttempt(homeworkId, {
+          totalQuestions: questions.length,
+          correctCount: correct,
+          durationSeconds: Math.round((Date.now() - startedAt.current) / 1000),
+          mistakes: [],
+        })
+        .then(() => invalidateMyHomework())
+        .catch(() => {})
+      return
+    }
+    if (user?.role === "student") {
+      void analyticsApi
+        .recordVocab({
+          deckSlug: deck.slug,
+          deckTitle: deck.title,
+          correct,
+          total: questions.length,
+          source: "game",
+          words: deck.words.map((w) => ({
+            term: w.term,
+            partOfSpeech: w.partOfSpeech,
+            definition: w.definition,
+            deckSlug: deck.slug,
+            deckTitle: deck.title,
+          })),
+        })
+        .catch(() => {})
+    }
+  }, [done, homeworkId, questions.length, correct, user?.role, deck])
 
   if (done) {
     return (

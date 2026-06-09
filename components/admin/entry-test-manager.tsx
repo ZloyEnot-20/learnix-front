@@ -48,6 +48,7 @@ import {
   READING_CRITERIA,
 } from "@/lib/entry-test-content"
 import { useToast } from "@/hooks/use-toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { cn } from "@/lib/utils"
 
 const STATUS_META: Record<EntryTestStatus, { label: string; cls: string }> = {
@@ -70,6 +71,8 @@ export default function EntryTestManager({
   const [assigning, setAssigning] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [pendingDelete, setPendingDelete] = useState<EntryTestSubmission | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   const refresh = async () => {
     try {
@@ -119,10 +122,12 @@ export default function EntryTestManager({
     }
   }
 
-  const remove = async (t: EntryTestSubmission) => {
-    if (!confirm(`Delete entry test for ${t.studentName}?`)) return
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
+    setDeleting(true)
     try {
-      await entryTestApi.remove(t.id)
+      await entryTestApi.remove(pendingDelete.id)
+      setPendingDelete(null)
       await refresh()
     } catch (err) {
       toast({
@@ -130,6 +135,8 @@ export default function EntryTestManager({
         description: err instanceof Error ? err.message : "Please try again.",
         variant: "destructive",
       })
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -226,7 +233,7 @@ export default function EntryTestManager({
                           )}
                         </td>
                         <td className="py-3 px-3 text-right" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" onClick={() => remove(t)} className="text-slate-400 hover:text-rose-600">
+                          <Button variant="ghost" size="sm" onClick={() => setPendingDelete(t)} className="text-slate-400 hover:text-rose-600">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </td>
@@ -288,6 +295,22 @@ export default function EntryTestManager({
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        title="Delete this entry test?"
+        description={
+          pendingDelete && (
+            <>
+              This will permanently remove the entry test for{" "}
+              <span className="font-semibold text-foreground">{pendingDelete.studentName}</span>.
+            </>
+          )
+        }
+        onConfirm={confirmDelete}
+        loading={deleting}
+      />
     </div>
   )
 }

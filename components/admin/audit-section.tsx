@@ -55,6 +55,8 @@ const ACTION_LABELS: Record<string, string> = {
   remove_member: "Removed from group",
   import_catalog: "Imported exercises",
   import_vocab: "Imported vocabulary",
+  mark_paid: "Marked paid",
+  mark_unpaid: "Unmarked payment",
 }
 
 type AuditDetails = Record<string, unknown>
@@ -198,6 +200,30 @@ function describeEvent(log: AuditLogEntry): string {
     }
     case "payments.update":
       return `${who} updated a payment record`
+    case "payments.mark_paid": {
+      const student = str(d?.studentName)
+      const group = str(d?.groupName)
+      const amount = num(d?.amount) ?? (what ? Number(what) : null)
+      const period = str(d?.periodLabel)
+      const parts = [`${who} marked payment as paid`]
+      if (amount != null && !Number.isNaN(amount)) parts.push(`(${amount})`)
+      if (student) parts.push(`for ${student}`)
+      if (group) parts.push(`— ${group}`)
+      if (period) parts.push(`[${period}]`)
+      return parts.join(" ")
+    }
+    case "payments.mark_unpaid": {
+      const student = str(d?.studentName)
+      const group = str(d?.groupName)
+      const amount = num(d?.amount) ?? (what ? Number(what) : null)
+      const period = str(d?.periodLabel)
+      const parts = [`${who} unmarked payment`]
+      if (amount != null && !Number.isNaN(amount)) parts.push(`(${amount})`)
+      if (student) parts.push(`for ${student}`)
+      if (group) parts.push(`— ${group}`)
+      if (period) parts.push(`[${period}]`)
+      return parts.join(" ")
+    }
     case "payments.delete":
       return `${who} deleted a payment record`
     case "exercises.import_catalog":

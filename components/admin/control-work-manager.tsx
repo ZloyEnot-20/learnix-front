@@ -69,6 +69,7 @@ import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import type { VocabDeck } from "@/lib/vocabulary-data"
 import { useToast } from "@/hooks/use-toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { cn } from "@/lib/utils"
 
 const SECTION_META: Record<
@@ -257,6 +258,7 @@ export default function ControlWorkManager({
   const [showCreate, setShowCreate] = useState(false)
   const [assigning, setAssigning] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<ControlWork | null>(null)
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
 
   const [grammarExercises, setGrammarExercises] = useState<GrammarExercise[]>([])
@@ -501,11 +503,12 @@ export default function ControlWorkManager({
     }
   }
 
-  const onDelete = async (cw: ControlWork) => {
-    if (!confirm(`Delete "${cw.title}"?`)) return
-    setDeletingId(cw.id)
+  const confirmDelete = async () => {
+    if (!pendingDelete) return
+    setDeletingId(pendingDelete.id)
     try {
-      await controlWorkApi.remove(cw.id)
+      await controlWorkApi.remove(pendingDelete.id)
+      setPendingDelete(null)
       await refresh()
       onChanged?.()
     } catch {
@@ -597,7 +600,7 @@ export default function ControlWorkManager({
                             loading={deletingId === cw.id}
                             onClick={(e) => {
                               e.stopPropagation()
-                              void onDelete(cw)
+                              setPendingDelete(cw)
                             }}
                             className="h-7 w-7 p-0 hover:text-rose-600"
                           >
@@ -945,6 +948,22 @@ export default function ControlWorkManager({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        title="Delete this control work?"
+        description={
+          pendingDelete && (
+            <>
+              This will permanently remove{" "}
+              <span className="font-semibold text-foreground">{pendingDelete.title}</span>.
+            </>
+          )
+        }
+        onConfirm={confirmDelete}
+        loading={!!pendingDelete && deletingId === pendingDelete.id}
+      />
     </div>
   )
 }

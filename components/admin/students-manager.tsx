@@ -41,6 +41,7 @@ import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 
 function initials(name: string): string {
   return name
@@ -66,6 +67,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [showDetail, setShowDetail] = useState(false)
   const [creating, setCreating] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
+  const [pendingRemove, setPendingRemove] = useState<{ id: string; name: string } | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
   const handleRefresh = async () => {
@@ -183,12 +185,17 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     }
   }
 
-  const remove = async (id: string, name: string) => {
-    if (!confirm(`Delete ${name}? This also removes their homework and payments.`)) return
-    setRemovingId(id)
+  const requestRemove = (id: string, name: string) => {
+    setPendingRemove({ id, name })
+  }
+
+  const confirmRemove = async () => {
+    if (!pendingRemove) return
+    setRemovingId(pendingRemove.id)
     try {
-      await studentsApi.remove(id)
+      await studentsApi.remove(pendingRemove.id)
       invalidateStudents()
+      setPendingRemove(null)
       await refreshAll(true)
       onChanged?.()
       toast({ title: "Student removed" })
@@ -500,7 +507,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => remove(s.id, s.name)}
+                              onClick={() => requestRemove(s.id, s.name)}
                               loading={removingId === s.id}
                               className="text-slate-400 hover:text-rose-600 hover:bg-rose-50"
                               aria-label={`Delete ${s.name}`}
@@ -722,6 +729,23 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingRemove}
+        onOpenChange={(open) => !open && setPendingRemove(null)}
+        title="Delete this student?"
+        description={
+          pendingRemove && (
+            <>
+              This will permanently remove{" "}
+              <span className="font-semibold text-foreground">{pendingRemove.name}</span>. Their
+              homework and payments will also be deleted.
+            </>
+          )
+        }
+        onConfirm={confirmRemove}
+        loading={!!pendingRemove && removingId === pendingRemove.id}
+      />
 
       <StudentDetailModal student={selected} open={showDetail} onOpenChange={setShowDetail} />
     </>

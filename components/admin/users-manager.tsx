@@ -40,6 +40,7 @@ import { TableSkeleton } from "./skeletons"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import { isSuperAdmin, type UserRole } from "@/lib/auth-context"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 
 const ROLE_META: Record<
   StaffRole,
@@ -93,6 +94,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
   const [editUser, setEditUser] = useState<StaffUser | null>(null)
   const [saving, setSaving] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
+  const [pendingRemove, setPendingRemove] = useState<StaffUser | null>(null)
   const [resettingId, setResettingId] = useState<string | null>(null)
   const [roleChangingId, setRoleChangingId] = useState<string | null>(null)
   const [credentials, setCredentials] = useState<{ login: string; password: string } | null>(null)
@@ -249,16 +251,21 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
     }
   }
 
-  const remove = async (user: StaffUser) => {
+  const requestRemove = (user: StaffUser) => {
     if (user.id === actorId) {
       toast({ title: "You cannot delete your own account", variant: "destructive" })
       return
     }
-    if (!confirm(`Delete ${user.name}? They will lose access immediately.`)) return
-    setRemovingId(user.id)
+    setPendingRemove(user)
+  }
+
+  const confirmRemove = async () => {
+    if (!pendingRemove) return
+    setRemovingId(pendingRemove.id)
     try {
-      await usersApi.remove(user.id)
+      await usersApi.remove(pendingRemove.id)
       toast({ title: "User removed" })
+      setPendingRemove(null)
       await refresh()
       onChanged?.()
     } catch (err) {
@@ -492,7 +499,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
                           className="h-8 w-8 p-0 hover:text-rose-600"
                           loading={removingId === user.id}
                           disabled={isSelf}
-                          onClick={() => void remove(user)}
+                          onClick={() => requestRemove(user)}
                           title="Delete"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -555,6 +562,23 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingRemove}
+        onOpenChange={(open) => !open && setPendingRemove(null)}
+        title="Delete this user?"
+        description={
+          pendingRemove && (
+            <>
+              This will permanently remove{" "}
+              <span className="font-semibold text-foreground">{pendingRemove.name}</span>. They
+              will lose access immediately.
+            </>
+          )
+        }
+        onConfirm={confirmRemove}
+        loading={!!pendingRemove && removingId === pendingRemove.id}
+      />
 
       <Dialog open={!!credentials} onOpenChange={(open) => !open && setCredentials(null)}>
         <DialogContent className="sm:max-w-md">
