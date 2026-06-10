@@ -14,6 +14,7 @@ import {
 } from 'react-hook-form'
 
 import { cn } from '@/lib/utils'
+import { validationHintStyles } from '@/components/ui/validation-hint'
 import { Label } from '@/components/ui/label'
 
 const Form = FormProvider
@@ -97,7 +98,7 @@ function FormLabel({
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn('data-[error=true]:text-destructive', className)}
+      className={cn('data-[error=true]:text-[#111827]', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -147,7 +148,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-destructive text-sm', className)}
+      className={cn(validationHintStyles, className)}
       {...props}
     >
       {body}

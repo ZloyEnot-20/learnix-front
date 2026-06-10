@@ -80,7 +80,7 @@ function VocabularyDeckInner() {
   }, [slug])
 
   const homeworkId = searchParams?.get("hw") ?? undefined
-  const isStudent = user?.role === "student"
+  const isStudent = user?.type === "student"
 
   const [mode, setMode] = useState<Mode>("menu")
   const [lang, setLang] = useState<TranslationLang>("uz")
@@ -504,7 +504,7 @@ function Quiz({
         .catch(() => {})
       return
     }
-    if (user?.role === "student") {
+    if (user?.type === "student") {
       void analyticsApi
         .recordVocab({
           deckSlug: deck.slug,
@@ -522,7 +522,7 @@ function Quiz({
         })
         .catch(() => {})
     }
-  }, [done, homeworkId, questions.length, correct, user?.role, deck])
+  }, [done, homeworkId, questions.length, correct, user?.type, deck])
 
   if (done) {
     return (

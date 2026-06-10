@@ -49,7 +49,7 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       const u = await signIn(loginValue, password)
-      router.push(redirectFor(u.role))
+      router.push(redirectFor(u.type))
     } catch {
       setError("Invalid login or password")
     } finally {
@@ -64,7 +64,7 @@ export default function LoginPage() {
     setPassword(demoPassword)
     try {
       const u = await signIn(demoEmail, demoPassword)
-      router.push(redirectFor(u.role))
+      router.push(redirectFor(u.type))
     } catch {
       setError("Demo login failed")
     } finally {
@@ -131,7 +131,7 @@ export default function LoginPage() {
 
           <div className="grid gap-2">
             {DEMO_ACCOUNTS.map((acc) => {
-              const meta = ROLE_META[acc.role]
+              const meta = ROLE_META[acc.type]
               if (!meta) return null
               const Icon = meta.Icon
               return (

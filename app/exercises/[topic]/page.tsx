@@ -110,7 +110,7 @@ export default function ExercisesTopicPage() {
   const { user } = useAuth()
   const { toast } = useToast()
 
-  const canAssign = user ? user.role !== "student" : false
+  const canAssign = user ? user.type !== "student" : false
 
   const [allExercises, setAllExercises] = useState<GrammarExercise[]>([])
   const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])

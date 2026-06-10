@@ -34,7 +34,7 @@ import {
   UserMinus,
   UserPlus,
 } from "lucide-react"
-import type { StaffRole, StaffUser } from "@/lib/admin-storage"
+import type { StaffType, StaffUser } from "@/lib/admin-storage"
 import { usersApi, studentsApi } from "@/lib/api"
 import { TableSkeleton } from "./skeletons"
 import { useToast } from "@/hooks/use-toast"
@@ -43,7 +43,7 @@ import { isSuperAdmin, type UserRole } from "@/lib/auth-context"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 
 const ROLE_META: Record<
-  StaffRole,
+  StaffType,
   { label: string; badge: string; icon: typeof ShieldCheck }
 > = {
   super_admin: {
@@ -52,7 +52,7 @@ const ROLE_META: Record<
     icon: ShieldCheck,
   },
   admin: {
-    label: "Admin",
+    label: "Organization admin",
     badge: "border-rose-200 bg-rose-50 text-rose-800",
     icon: ShieldCheck,
   },
@@ -74,20 +74,20 @@ function initials(name: string): string {
 }
 
 interface UsersManagerProps {
-  actorRole: UserRole
+  actorType: UserRole
   actorId: string
   onChanged?: () => void
 }
 
-export default function UsersManager({ actorRole, actorId, onChanged }: UsersManagerProps) {
+export default function UsersManager({ actorType, actorId, onChanged }: UsersManagerProps) {
   const { toast } = useToast()
-  const superAdmin = isSuperAdmin(actorRole)
+  const superAdmin = isSuperAdmin(actorType)
 
   const [users, setUsers] = useState<StaffUser[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [search, setSearch] = useState("")
-  const [roleFilter, setRoleFilter] = useState<"all" | StaffRole>("all")
+  const [typeFilter, setTypeFilter] = useState<"all" | StaffType>("all")
 
   const [showCreate, setShowCreate] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -106,10 +106,10 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
     name: "",
     login: "",
     email: "",
-    role: "teacher" as StaffRole,
+    type: "teacher" as StaffType,
   })
 
-  const creatableRoles: StaffRole[] = superAdmin
+  const creatableRoles: StaffType[] = superAdmin
     ? ["super_admin", "admin", "teacher"]
     : ["admin", "teacher"]
 
@@ -155,7 +155,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
   }, [form.name])
 
   const resetForm = () => {
-    setForm({ name: "", login: "", email: "", role: "teacher" })
+    setForm({ name: "", login: "", email: "", type: "teacher" })
     setLoginSuggestions([])
   }
 
@@ -171,7 +171,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return users.filter((u) => {
-      if (roleFilter !== "all" && u.role !== roleFilter) return false
+      if (typeFilter !== "all" && u.type !== typeFilter) return false
       if (!q) return true
       return (
         u.name.toLowerCase().includes(q) ||
@@ -179,13 +179,13 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
         (u.email?.toLowerCase().includes(q) ?? false)
       )
     })
-  }, [users, search, roleFilter])
+  }, [users, search, typeFilter])
 
   const counts = useMemo(
     () => ({
       total: users.length,
-      admins: users.filter((u) => u.role === "admin" || u.role === "super_admin").length,
-      teachers: users.filter((u) => u.role === "teacher").length,
+      admins: users.filter((u) => u.type === "admin" || u.type === "super_admin").length,
+      teachers: users.filter((u) => u.type === "teacher").length,
     }),
     [users],
   )
@@ -201,7 +201,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
       const res = await usersApi.create({
         name: form.name.trim(),
         login: form.login.trim().toLowerCase(),
-        role: form.role,
+        type: form.type,
         ...(trimmedEmail ? { email: trimmedEmail.toLowerCase() } : {}),
       })
       setCredentials({ login: res.user.login, password: res.temporaryPassword })
@@ -232,7 +232,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
       await usersApi.update(editUser.id, {
         name: form.name.trim(),
         login: form.login.trim().toLowerCase(),
-        role: form.role,
+        type: form.type,
         email: trimmedEmail ? trimmedEmail.toLowerCase() : "",
       })
       toast({ title: "User updated" })
@@ -301,15 +301,15 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
       toast({ title: "You cannot change your own role here", variant: "destructive" })
       return
     }
-    const nextRole: StaffRole = asTeacher ? "teacher" : "admin"
-    if (user.role === nextRole) return
-    if (user.role === "super_admin") {
+    const nextRole: StaffType = asTeacher ? "teacher" : "admin"
+    if (user.type === nextRole) return
+    if (user.type === "super_admin") {
       toast({ title: "Super admin role cannot be changed here", variant: "destructive" })
       return
     }
     setRoleChangingId(user.id)
     try {
-      await usersApi.update(user.id, { role: nextRole })
+      await usersApi.update(user.id, { type: nextRole })
       toast({
         title: asTeacher ? "Teacher assigned" : "Teacher role removed",
         description: user.name,
@@ -333,7 +333,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
       name: user.name,
       login: user.login,
       email: user.email ?? "",
-      role: user.role,
+      type: user.type,
     })
   }
 
@@ -383,7 +383,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
             className="pl-9"
           />
         </div>
-        <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as typeof roleFilter)}>
+        <Select value={typeFilter} onValueChange={(v) => settypeFilter(v as typeof typeFilter)}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="All roles" />
           </SelectTrigger>
@@ -416,12 +416,12 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
             </thead>
             <tbody>
               {filtered.map((user) => {
-                const meta = ROLE_META[user.role]
+                const meta = ROLE_META[user.type]
                 const RoleIcon = meta.icon
                 const isSelf = user.id === actorId
-                const isTeacher = user.role === "teacher"
+                const isTeacher = user.type === "teacher"
                 const canToggleTeacher =
-                  !isSelf && user.role !== "super_admin" && (user.role === "teacher" || user.role === "admin")
+                  !isSelf && user.type !== "super_admin" && (user.type === "teacher" || user.type === "admin")
 
                 return (
                   <tr key={user.id} className="border-b border-slate-100 hover:bg-slate-50/80">
@@ -550,7 +550,7 @@ export default function UsersManager({ actorRole, actorId, onChanged }: UsersMan
             creatableRoles={creatableRoles}
             loginSuggestions={loginSuggestions}
             loadingSuggestions={loadingSuggestions}
-            lockRole={editUser?.role === "super_admin" && !superAdmin}
+            lockRole={editUser?.type === "super_admin" && !superAdmin}
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditUser(null)}>
@@ -668,11 +668,11 @@ function UserFormFields({
   loadingSuggestions,
   lockRole,
 }: {
-  form: { name: string; login: string; email: string; role: StaffRole }
+  form: { name: string; login: string; email: string; type: StaffType }
   setForm: Dispatch<
-    SetStateAction<{ name: string; login: string; email: string; role: StaffRole }>
+    SetStateAction<{ name: string; login: string; email: string; type: StaffType }>
   >
-  creatableRoles: StaffRole[]
+  creatableRoles: StaffType[]
   loginSuggestions: string[]
   loadingSuggestions: boolean
   lockRole?: boolean
@@ -725,11 +725,11 @@ function UserFormFields({
         />
       </div>
       <div>
-        <Label>Role</Label>
+        <Label>Type</Label>
         <Select
-          value={form.role}
+          value={form.type}
           disabled={lockRole}
-          onValueChange={(v) => setForm((p) => ({ ...p, role: v as StaffRole }))}
+          onValueChange={(v) => setForm((p) => ({ ...p, type: v as StaffType }))}
         >
           <SelectTrigger className="mt-1">
             <SelectValue />

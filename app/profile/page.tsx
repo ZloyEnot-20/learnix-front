@@ -90,7 +90,7 @@ export default function ProfilePage() {
       router.push("/login")
     }
     // Staff (super admin / admin / teacher) belong in the admin panel.
-    if (!isLoading && user && user.role !== "student") {
+    if (!isLoading && user && user.type !== "student") {
       router.push("/admin")
     }
     if (!user) return
@@ -98,7 +98,7 @@ export default function ProfilePage() {
     setEmail(user.email)
 
     let cancelled = false
-    if (user.role === "student") {
+    if (user.type === "student") {
       const studentId = user.id
       studentsApi
         .context(studentId)
@@ -142,7 +142,7 @@ export default function ProfilePage() {
 
   const dirty = user ? name !== user.name || email !== user.email : false
 
-  if (isLoading || !user || user.role !== "student") {
+  if (isLoading || !user || user.type !== "student") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
@@ -195,7 +195,7 @@ export default function ProfilePage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <h1 className="text-2xl font-bold leading-tight text-slate-900">{user.name}</h1>
                     <Badge variant="secondary" className="capitalize">
-                      {user.role}
+                      {user.type}
                     </Badge>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-slate-500">

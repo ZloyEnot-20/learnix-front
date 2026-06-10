@@ -416,7 +416,7 @@ export default function AuditSection() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="font-medium text-slate-900">{log.actorName}</div>
-                        <div className="text-xs text-slate-500">{roleLabel(log.actorRole)}</div>
+                        <div className="text-xs text-slate-500">{roleLabel(log.actorType)}</div>
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant="outline" className={cn("text-[11px]", cat.cls)}>
@@ -493,7 +493,7 @@ function AuditDetailModal({
 
           <DetailSection title="Who">
             <DetailRow label="Name" value={log.actorName} />
-            <DetailRow label="Role" value={roleLabel(log.actorRole)} />
+            <DetailRow label="Role" value={roleLabel(log.actorType)} />
             {log.actorId && <DetailRow label="User ID" value={log.actorId} mono />}
           </DetailSection>
 

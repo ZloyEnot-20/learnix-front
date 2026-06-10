@@ -43,6 +43,8 @@ import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 
+const ENTRY_TEST_GROUP_NAME = "ENTRY TEST"
+
 function initials(name: string): string {
   return name
     .split(" ")
@@ -148,6 +150,25 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     })
   }, [students, search, groupFilter])
 
+  const entryTestGroupId = useMemo(
+    () => groups.find((g) => g.name === ENTRY_TEST_GROUP_NAME)?.id,
+    [groups],
+  )
+
+  const entryTestStudents = useMemo(() => {
+    if (!entryTestGroupId) return []
+    if (groupFilter !== "all" && groupFilter !== entryTestGroupId) return []
+    return filtered.filter((s) => s.groupId === entryTestGroupId)
+  }, [filtered, entryTestGroupId, groupFilter])
+
+  const regularStudents = useMemo(() => {
+    if (!entryTestGroupId || groupFilter === entryTestGroupId) return []
+    if (groupFilter === "all") {
+      return filtered.filter((s) => s.groupId !== entryTestGroupId)
+    }
+    return filtered
+  }, [filtered, entryTestGroupId, groupFilter])
+
   const submit = async () => {
     if (!form.name.trim() || !form.login.trim()) {
       toast({
@@ -157,9 +178,17 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
       })
       return
     }
+    const trimmedEmail = form.email.trim()
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      toast({
+        title: "Invalid email",
+        description: "Enter a valid email address or leave the field empty.",
+        variant: "destructive",
+      })
+      return
+    }
     setCreating(true)
     try {
-      const trimmedEmail = form.email.trim()
       const res = await studentsApi.create({
         name: form.name.trim(),
         login: form.login.trim().toLowerCase(),
@@ -378,7 +407,10 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
               <div>
                 <CardTitle>All students</CardTitle>
                 <CardDescription>
-                  {filtered.length} of {students.length} shown
+                  {regularStudents.length} of {students.length} shown
+                  {entryTestStudents.length > 0 && groupFilter === "all"
+                    ? ` · ${entryTestStudents.length} in Entry Test`
+                    : ""}
                 </CardDescription>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -428,7 +460,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
           <CardContent>
             {loading ? (
               <TableSkeleton rows={6} columns={6} />
-            ) : filtered.length === 0 ? (
+            ) : regularStudents.length === 0 && entryTestStudents.length === 0 ? (
               <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
                 <div className="rounded-full bg-white p-3 shadow-sm">
                   <Users className="h-6 w-6 text-slate-400" />
@@ -441,6 +473,57 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 </p>
               </div>
             ) : (
+              <div className="space-y-6">
+                {entryTestStudents.length > 0 && (
+                  <div className="overflow-x-auto rounded-xl border border-sky-200 bg-sky-50/30">
+                    <div className="border-b border-sky-200 px-4 py-3">
+                      <p className="text-sm font-semibold text-sky-900">Entry Test candidates</p>
+                      <p className="text-xs text-sky-700/80">
+                        Students in the {ENTRY_TEST_GROUP_NAME} group
+                      </p>
+                    </div>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-sky-100 text-left text-[11px] uppercase tracking-wider text-slate-500">
+                          <th className="py-3 px-3 font-semibold">Student</th>
+                          <th className="py-3 px-3 font-semibold">Phone</th>
+                          <th className="py-3 px-3 font-semibold">Joined</th>
+                          <th className="py-3 px-3 font-semibold text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {entryTestStudents.map((s) => (
+                          <tr
+                            key={s.id}
+                            onClick={() => openDetail(s)}
+                            className="cursor-pointer border-b border-sky-100/80 transition-colors hover:bg-sky-50/80"
+                          >
+                            <td className="py-3 px-3">
+                              <p className="font-medium text-slate-900">{s.name}</p>
+                              <p className="text-xs text-slate-500">{s.login}</p>
+                            </td>
+                            <td className="py-3 px-3 text-slate-700">{s.phone || "—"}</td>
+                            <td className="py-3 px-3 text-slate-600">
+                              {new Date(s.joinedAt).toLocaleDateString()}
+                            </td>
+                            <td className="py-3 px-3 text-right" onClick={(e) => e.stopPropagation()}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => requestRemove(s.id, s.name)}
+                                className="text-slate-400 hover:text-rose-600"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {regularStudents.length > 0 && (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -454,7 +537,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((s) => {
+                    {regularStudents.map((s) => {
                       const group = groups.find((g) => g.id === s.groupId)
                       return (
                         <tr
@@ -520,6 +603,8 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                     })}
                   </tbody>
                 </table>
+              </div>
+                )}
               </div>
             )}
           </CardContent>

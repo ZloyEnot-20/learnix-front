@@ -89,7 +89,7 @@ export default function GamesPage() {
   useEffect(() => {
     if (isLoading) return
     if (!user) router.push("/login")
-    else if (user.role !== "student") router.push("/admin")
+    else if (user.type !== "student") router.push("/admin")
   }, [user, isLoading, router])
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function GamesPage() {
   }, [])
 
   useEffect(() => {
-    if (!user || user.role !== "student") return
+    if (!user || user.type !== "student") return
     let cancelled = false
     studentsApi
       .level(user.id)
@@ -167,7 +167,7 @@ export default function GamesPage() {
     return map
   }, [vocabDecks, playableTopics])
 
-  if (!mounted || isLoading || !user || user.role !== "student") {
+  if (!mounted || isLoading || !user || user.type !== "student") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />

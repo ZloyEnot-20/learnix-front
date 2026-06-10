@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select"
 import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet } from "lucide-react"
 import type { Group, Student } from "@/lib/admin-storage"
+import { groupMemberCount, studentsInGroup } from "@/lib/admin-storage"
 import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { groupsApi } from "@/lib/api"
@@ -107,12 +108,12 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
 
   const groupStudents = useMemo(() => {
     if (!selectedGroup) return []
-    return students.filter((s) => selectedGroup.studentIds.includes(s.id))
+    return studentsInGroup(students, selectedGroup.id)
   }, [selectedGroup, students])
 
   const availableStudents = useMemo(() => {
     if (!selectedGroup) return []
-    return students.filter((s) => !selectedGroup.studentIds.includes(s.id))
+    return students.filter((s) => s.groupId !== selectedGroup.id)
   }, [selectedGroup, students])
 
   const submitGroup = async () => {
@@ -393,7 +394,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {groups.map((g) => {
-                const memberCount = g.studentIds.length
+                const memberCount = groupMemberCount(students, g.id)
                 const summary = summaryFor(g.id)
                 return (
                   <button

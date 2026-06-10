@@ -164,7 +164,7 @@ export default function ExercisesIndexPage() {
   }, [])
 
   // Students get folder gating by level; staff see everything unlocked.
-  const isStudent = user?.role === "student"
+  const isStudent = user?.type === "student"
   useEffect(() => {
     if (!isStudent || !user) {
       setStudentLevel(null)

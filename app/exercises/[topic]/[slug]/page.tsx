@@ -89,7 +89,7 @@ function ExerciseRunner() {
 
   const backHref = topic ? `/exercises/${topic}` : "/exercises"
   const homeworkId = searchParams?.get("hw") ?? undefined
-  const studentId = user?.role === "student" ? user.id : undefined
+  const studentId = user?.type === "student" ? user.id : undefined
   // Initialise the time limit from cached homework so there's no request when
   // opening an assignment that was just listed on the homework page.
   const [timeLimitMinutes, setTimeLimitMinutes] = useState<number | undefined>(

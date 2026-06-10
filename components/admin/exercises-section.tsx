@@ -65,6 +65,7 @@ import {
   type VocabDeck,
 } from "@/lib/vocabulary-data"
 import type { Group } from "@/lib/admin-storage"
+import { groupMemberCount } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
 import { useAdminData } from "@/lib/admin-data-context"
 import { useToast } from "@/hooks/use-toast"
@@ -1467,6 +1468,7 @@ function AssignVocabDialog({
   createdByName: string
 }) {
   const { toast } = useToast()
+  const { students } = useAdminData()
   const [groupId, setGroupId] = useState<string>("")
   const [dueDate, setDueDate] = useState<string>("")
   const [assigning, setAssigning] = useState(false)
@@ -1544,7 +1546,7 @@ function AssignVocabDialog({
                       <Users className="h-3.5 w-3.5 text-slate-400" />
                       {g.name}
                       <span className="text-xs text-slate-500">
-                        · {g.studentIds.length} student{g.studentIds.length === 1 ? "" : "s"}
+                        · {groupMemberCount(students, g.id)} student{groupMemberCount(students, g.id) === 1 ? "" : "s"}
                       </span>
                     </span>
                   </SelectItem>
@@ -1597,6 +1599,7 @@ function AssignDialog({
   createdByName: string
 }) {
   const { toast } = useToast()
+  const { students } = useAdminData()
   const [groupId, setGroupId] = useState<string>("")
   const [dueDate, setDueDate] = useState<string>("")
   const [unlimited, setUnlimited] = useState<boolean>(true)
@@ -1688,8 +1691,8 @@ function AssignDialog({
                       <Users className="h-3.5 w-3.5 text-slate-400" />
                       {g.name}
                       <span className="text-xs text-slate-500">
-                        · {g.studentIds.length} student
-                        {g.studentIds.length === 1 ? "" : "s"}
+                        · {groupMemberCount(students, g.id)} student
+                        {groupMemberCount(students, g.id) === 1 ? "" : "s"}
                       </span>
                     </span>
                   </SelectItem>

@@ -110,13 +110,11 @@ export function HomeworkStudentResults({
   // Build rows from preloaded data. Submissions are linked to this homework via
   // `Submission.homeworkId`, so everything is already in memory — no fetch.
   useEffect(() => {
-    const group = groups.find((g) => g.id === homework.groupId)
-    const memberIds = group?.studentIds ?? []
+    const members = students.filter((s) => s.groupId === homework.groupId)
 
-    const built: Row[] = memberIds
-      .map((sid) => {
-        const student = students.find((s) => s.id === sid)
-        if (!student) return null
+    const built: Row[] = members
+      .map((student) => {
+        const sid = student.id
         const sub = submissions.find((x) => x.studentId === sid)
         return {
           studentId: sid,

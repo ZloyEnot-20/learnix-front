@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
@@ -30,11 +32,14 @@ import {
   PenTool,
   Plus,
   Trash2,
+  Copy,
+  ExternalLink,
 } from "lucide-react"
-import type { Student } from "@/lib/admin-storage"
+
 import { useAdminData } from "@/lib/admin-data-context"
 import { TableSkeleton } from "./skeletons"
-import { entryTestApi } from "@/lib/api"
+import { entryTestApi, authApi } from "@/lib/api"
+import { invalidateStudents } from "@/lib/admin-cache"
 import type {
   EntryTestStatus,
   EntryTestSubmission,
@@ -50,6 +55,8 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { cn } from "@/lib/utils"
+import { formatPhoneDisplay, isValidPhone, normalizePhone, emptyUzPhoneDisplay } from "@/lib/phone"
+import { UzbekPhoneInput } from "@/components/ui/uzbek-phone-input"
 
 const STATUS_META: Record<EntryTestStatus, { label: string; cls: string }> = {
   assigned: { label: "Assigned", cls: "bg-slate-100 text-slate-700" },
@@ -59,25 +66,31 @@ const STATUS_META: Record<EntryTestStatus, { label: string; cls: string }> = {
 }
 
 export default function EntryTestManager({
-  createdByName,
+  createdByName: _createdByName,
 }: {
   createdByName: string
 }) {
   const { toast } = useToast()
-  const { students } = useAdminData()
+  const { refreshAll } = useAdminData()
   const [tests, setTests] = useState<EntryTestSubmission[]>([])
+  const [orgId, setOrgId] = useState<string | null>(null)
   const [showAssign, setShowAssign] = useState(false)
-  const [assignStudentId, setAssignStudentId] = useState("")
+  const [assignForm, setAssignForm] = useState({ name: "", phone: emptyUzPhoneDisplay() })
+  const [confirmation, setConfirmation] = useState<{ login: string; code: string } | null>(null)
   const [assigning, setAssigning] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [pendingDelete, setPendingDelete] = useState<EntryTestSubmission | null>(null)
   const [deleting, setDeleting] = useState(false)
 
+  const publicStartUrl =
+    typeof window !== "undefined" && orgId
+      ? `${window.location.origin}/entry-test/start?org=${encodeURIComponent(orgId)}`
+      : "/entry-test/start"
+
   const refresh = async () => {
     try {
-      const list = await entryTestApi.list()
-      setTests(list)
+      setTests(await entryTestApi.list("phone"))
     } catch {
       toast({
         title: "Failed to load entry tests",
@@ -88,8 +101,10 @@ export default function EntryTestManager({
       setLoading(false)
     }
   }
+
   useEffect(() => {
     void refresh()
+    void authApi.me().then(({ user }) => setOrgId(user.orgId ?? null)).catch(() => {})
   }, [])
 
   const selected = useMemo(
@@ -97,20 +112,44 @@ export default function EntryTestManager({
     [tests, selectedId],
   )
 
+  const resetAssignForm = () => {
+    setAssignForm({ name: "", phone: emptyUzPhoneDisplay() })
+    setConfirmation(null)
+  }
+
   const assign = async () => {
-    if (!assignStudentId) {
-      toast({ title: "Pick a student", variant: "destructive" })
+    const name = assignForm.name.trim()
+    const normalizedPhone = normalizePhone(assignForm.phone)
+    if (!name) {
+      toast({ title: "Name is required", variant: "warning" })
       return
     }
-    const student = students.find((s) => s.id === assignStudentId)
-    if (!student) return
+    if (!isValidPhone(normalizedPhone)) {
+      toast({
+        title: "Enter a valid Uzbekistan phone number",
+        description: "Format: +998 XX XXX XX XX",
+        variant: "warning",
+      })
+      return
+    }
+    if (tests.some((t) => t.phone === normalizedPhone)) {
+      toast({
+        title: "Phone number already registered",
+        description: "This number is already assigned to an entry test candidate.",
+        variant: "warning",
+      })
+      return
+    }
     setAssigning(true)
     try {
-      await entryTestApi.assign(student.id)
-      toast({ title: "Entry test assigned", description: student.name })
-      setShowAssign(false)
-      setAssignStudentId("")
-      await refresh()
+      const res = await entryTestApi.registerCandidate({ name, phone: normalizedPhone })
+      setConfirmation(res.confirmation)
+      toast({
+        title: "Entry test assigned",
+        description: `${res.student.name} · ${res.group.name} group`,
+      })
+      invalidateStudents()
+      await Promise.all([refresh(), refreshAll(true)])
     } catch (err) {
       toast({
         title: "Could not assign",
@@ -119,6 +158,24 @@ export default function EntryTestManager({
       })
     } finally {
       setAssigning(false)
+    }
+  }
+
+  const copyPublicLink = async () => {
+    try {
+      await navigator.clipboard.writeText(publicStartUrl)
+      toast({ title: "Link copied" })
+    } catch {
+      toast({ title: "Could not copy link", variant: "destructive" })
+    }
+  }
+
+  const copyText = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast({ title: `${label} copied` })
+    } catch {
+      toast({ title: "Could not copy", variant: "destructive" })
     }
   }
 
@@ -150,135 +207,162 @@ export default function EntryTestManager({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">
-            {counts.total} assigned
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-violet-800">
-            {counts.review} need grading
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-800">
-            {counts.graded} graded
-          </span>
-        </div>
-        <Button onClick={() => setShowAssign(true)} className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]">
-          <Plus className="h-4 w-4" />
-          Assign entry test
-        </Button>
-      </div>
-
       <Card>
         <CardHeader>
-          <CardTitle>Entry tests</CardTitle>
+          <CardTitle>Entry Test</CardTitle>
           <CardDescription>
-            Track placement-test progress and grade the writing task.
+            Create a candidate, assign the test, and add them to the ENTRY TEST group. The candidate
+            takes the test via the link below by entering their phone number.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          {loading && tests.length === 0 ? (
-            <TableSkeleton rows={5} columns={6} />
-          ) : tests.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
-              No entry tests assigned yet.
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-sky-200 bg-sky-50/50 px-3 py-2 text-sm">
+            <span className="truncate font-mono text-xs text-slate-600">{publicStartUrl}</span>
+            <Button variant="outline" size="sm" onClick={copyPublicLink} className="gap-1.5 shrink-0">
+              <Copy className="h-3.5 w-3.5" />
+              Copy
+            </Button>
+            <Button variant="outline" size="sm" asChild className="gap-1.5 shrink-0">
+              <a href={publicStartUrl} target="_blank" rel="noreferrer">
+                <ExternalLink className="h-3.5 w-3.5" />
+                Open
+              </a>
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">
+                {counts.total} candidates
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-violet-800">
+                {counts.review} awaiting review
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-800">
+                {counts.graded} graded
+              </span>
             </div>
-          ) : (
-            <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
-                    <th className="py-3 px-3 font-semibold">Student</th>
-                    <th className="py-3 px-3 font-semibold">Status</th>
-                    <th className="py-3 px-3 font-semibold">Grammar</th>
-                    <th className="py-3 px-3 font-semibold">Reading</th>
-                    <th className="py-3 px-3 font-semibold">Writing</th>
-                    <th className="py-3 px-3 w-10"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tests.map((t, idx) => {
-                    const meta = STATUS_META[t.status]
-                    return (
-                      <tr
-                        key={t.id}
-                        onClick={() => setSelectedId(t.id)}
-                        className={cn(
-                          "h-14 cursor-pointer border-b border-slate-100 transition-colors hover:bg-slate-200/50",
-                          idx % 2 === 1 ? "bg-slate-100/70" : "bg-white",
-                        )}
-                      >
-                        <td className="py-3 px-3 font-medium text-slate-900">{t.studentName}</td>
-                        <td className="py-3 px-3">
-                          <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold", meta.cls)}>
-                            {meta.label}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-slate-700">
-                          {t.mcCompleted
-                            ? `${t.mcScore}/${ENTRY_MC_TOTAL} · ${t.mcLevel}`
-                            : <span className="text-slate-400">—</span>}
-                        </td>
-                        <td className="py-3 px-3 text-slate-700">
-                          {t.readingCompleted
-                            ? `${t.readingScore}/${ENTRY_READING_TOTAL} · ${t.readingLevel}`
-                            : <span className="text-slate-400">—</span>}
-                        </td>
-                        <td className="py-3 px-3 text-slate-700">
-                          {t.writingLevel != null ? (
-                            <span className="font-semibold text-emerald-700">{t.writingLevel}</span>
-                          ) : t.writingSubmitted ? (
-                            <span className="text-violet-700">Needs grading</span>
-                          ) : (
-                            <span className="text-slate-400">—</span>
-                          )}
-                        </td>
-                        <td className="py-3 px-3 text-right" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" onClick={() => setPendingDelete(t)} className="text-slate-400 hover:text-rose-600">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+            <Button
+              onClick={() => {
+                resetAssignForm()
+                setShowAssign(true)
+              }}
+              className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+            >
+              <Plus className="h-4 w-4" />
+              Assign entry test
+            </Button>
+          </div>
+
+          <EntryTestTable
+            tests={tests}
+            loading={loading}
+            showPhone
+            onSelect={setSelectedId}
+            onDelete={setPendingDelete}
+          />
         </CardContent>
       </Card>
 
-      {/* Assign dialog */}
-      <Dialog open={showAssign} onOpenChange={setShowAssign}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Assign entry test</DialogTitle>
-            <DialogDescription>
-              Pick a student. The test will appear on their dashboard.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-1.5">
-            <Select value={assignStudentId} onValueChange={setAssignStudentId}>
-              <SelectTrigger>
-                <SelectValue placeholder={students.length === 0 ? "No students yet" : "Pick a student"} />
-              </SelectTrigger>
-              <SelectContent>
-                {students.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                    <span className="ml-1 text-xs text-slate-500 font-mono">· {s.login}</span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-            <Button onClick={assign} loading={assigning} disabled={students.length === 0} className="bg-[#C8102E] hover:bg-[#A00D25]">
-              Assign
-            </Button>
-            <Button variant="outline" onClick={() => setShowAssign(false)}>
-              Cancel
-            </Button>
-          </DialogFooter>
+      <Dialog
+        open={showAssign}
+        onOpenChange={(open) => {
+          setShowAssign(open)
+          if (!open) resetAssignForm()
+        }}
+      >
+        <DialogContent className="sm:max-w-lg">
+          {confirmation ? (
+            <>
+              <DialogHeader>
+                <DialogTitle>Candidate created</DialogTitle>
+                <DialogDescription>
+                  The student was added to the ENTRY TEST group. Share the login code for the Telegram bot.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-slate-500">Login</span>
+                  <div className="flex items-center gap-2">
+                    <code className="font-mono font-semibold">{confirmation.login}</code>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyText(confirmation.login, "Login")}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-slate-500">Confirmation code</span>
+                  <div className="flex items-center gap-2">
+                    <code className="font-mono text-lg font-bold tracking-widest">
+                      {confirmation.code}
+                    </code>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyText(confirmation.code, "Code")}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+                <Button
+                  onClick={() => {
+                    setShowAssign(false)
+                    resetAssignForm()
+                  }}
+                  className="bg-[#C8102E] hover:bg-[#A00D25]"
+                >
+                  Done
+                </Button>
+              </DialogFooter>
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle>Assign entry test</DialogTitle>
+                <DialogDescription>
+                  Enter the candidate&apos;s name and phone number. An account will be created, the test
+                  assigned, and the student added to the ENTRY TEST group.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="et-name">Name *</Label>
+                  <Input
+                    id="et-name"
+                    value={assignForm.name}
+                    onChange={(e) => setAssignForm((f) => ({ ...f, name: e.target.value }))}
+                    placeholder="Ali Valiyev"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="et-phone">Phone *</Label>
+                  <UzbekPhoneInput
+                    id="et-phone"
+                    value={assignForm.phone}
+                    onChange={(phone) => setAssignForm((f) => ({ ...f, phone }))}
+                  />
+                  <p className="text-xs text-slate-500">Uzbekistan format · +998 is fixed</p>
+                </div>
+              </div>
+              <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+                <Button onClick={assign} loading={assigning} className="bg-[#C8102E] hover:bg-[#A00D25]">
+                  Assign test
+                </Button>
+                <Button variant="outline" onClick={() => setShowAssign(false)}>
+                  Cancel
+                </Button>
+              </DialogFooter>
+            </>
+          )}
         </DialogContent>
       </Dialog>
 
@@ -315,6 +399,114 @@ export default function EntryTestManager({
   )
 }
 
+function EntryTestTable({
+  tests,
+  loading,
+  showPhone = false,
+  onSelect,
+  onDelete,
+}: {
+  tests: EntryTestSubmission[]
+  loading: boolean
+  showPhone?: boolean
+  onSelect: (id: string) => void
+  onDelete: (test: EntryTestSubmission) => void
+}) {
+  if (loading && tests.length === 0) {
+    return <TableSkeleton rows={5} columns={showPhone ? 7 : 6} />
+  }
+  if (tests.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
+        {showPhone ? "No phone candidates yet." : "No entry tests assigned yet."}
+      </div>
+    )
+  }
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
+            <th className="py-3 px-3 font-semibold">{showPhone ? "Candidate" : "Student"}</th>
+            {showPhone && <th className="py-3 px-3 font-semibold">Phone</th>}
+            <th className="py-3 px-3 font-semibold">Status</th>
+            <th className="py-3 px-3 font-semibold">Grammar</th>
+            <th className="py-3 px-3 font-semibold">Reading</th>
+            <th className="py-3 px-3 font-semibold">Writing</th>
+            <th className="py-3 px-3 w-10"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {tests.map((t, idx) => {
+            const meta = STATUS_META[t.status]
+            return (
+              <tr
+                key={t.id}
+                onClick={() => onSelect(t.id)}
+                className={cn(
+                  "h-14 cursor-pointer border-b border-slate-100 transition-colors hover:bg-slate-200/50",
+                  idx % 2 === 1 ? "bg-slate-100/70" : "bg-white",
+                )}
+              >
+                <td className="py-3 px-3 font-medium text-slate-900">{t.studentName}</td>
+                {showPhone && (
+                  <td className="py-3 px-3 font-mono text-xs text-slate-600">
+                    {t.phone ? formatPhoneDisplay(t.phone) : "—"}
+                  </td>
+                )}
+                <td className="py-3 px-3">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                      meta.cls,
+                    )}
+                  >
+                    {meta.label}
+                  </span>
+                </td>
+                <td className="py-3 px-3 text-slate-700">
+                  {t.mcCompleted ? (
+                    `${t.mcScore}/${ENTRY_MC_TOTAL} · ${t.mcLevel}`
+                  ) : (
+                    <span className="text-slate-400">—</span>
+                  )}
+                </td>
+                <td className="py-3 px-3 text-slate-700">
+                  {t.readingCompleted ? (
+                    `${t.readingScore}/${ENTRY_READING_TOTAL} · ${t.readingLevel}`
+                  ) : (
+                    <span className="text-slate-400">—</span>
+                  )}
+                </td>
+                <td className="py-3 px-3 text-slate-700">
+                  {t.writingLevel != null ? (
+                    <span className="font-semibold text-emerald-700">{t.writingLevel}</span>
+                  ) : t.writingSubmitted ? (
+                    <span className="text-violet-700">Needs grading</span>
+                  ) : (
+                    <span className="text-slate-400">—</span>
+                  )}
+                </td>
+                <td className="py-3 px-3 text-right" onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onDelete(t)}
+                    className="text-slate-400 hover:text-rose-600"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function EntryTestDetail({
   test,
   onGraded,
@@ -330,11 +522,11 @@ function EntryTestDetail({
   const [saving, setSaving] = useState(false)
   const submitGrade = async () => {
     if (!level) {
-      toast({ title: "Pick a writing level", variant: "destructive" })
+      toast({ title: "Pick a writing level", variant: "warning" })
       return
     }
     if (!overallLevel) {
-      toast({ title: "Overall level is required", variant: "destructive" })
+      toast({ title: "Overall level is required", variant: "warning" })
       return
     }
     setSaving(true)
@@ -358,6 +550,9 @@ function EntryTestDetail({
       <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100">
         <DialogTitle className="text-xl text-left">{test.studentName}</DialogTitle>
         <DialogDescription className="text-left">
+          {test.phone && (
+            <span className="mr-2 font-mono">{formatPhoneDisplay(test.phone)}</span>
+          )}
           Assigned by {test.assignedBy} · {new Date(test.assignedAt).toLocaleDateString()}
         </DialogDescription>
       </DialogHeader>

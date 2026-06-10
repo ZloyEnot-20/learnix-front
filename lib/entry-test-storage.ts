@@ -24,9 +24,13 @@ export type EntryTestStatus =
   | "awaiting_review"
   | "graded"
 
+export type EntryTestSource = "student" | "phone"
+
 export interface EntryTestSubmission {
   id: string
-  studentId: string
+  studentId?: string
+  source?: EntryTestSource
+  phone?: string
   studentName: string
   studentEmail?: string
   assignedAt: string

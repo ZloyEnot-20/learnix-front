@@ -3,14 +3,12 @@
 import { Fragment, useEffect, useMemo, useState, type ReactNode } from "react"
 import {
   DndContext,
-  DragOverlay,
   KeyboardSensor,
   PointerSensor,
   closestCenter,
   useSensor,
   useSensors,
   type DragEndEvent,
-  type DragStartEvent,
 } from "@dnd-kit/core"
 import {
   SortableContext,
@@ -145,43 +143,6 @@ function formatShortDateTime(iso: string) {
   })
 }
 
-const DROP_ANIMATION = {
-  duration: 280,
-  easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
-}
-
-function SectionDragPreview({
-  subject,
-  enabled,
-}: {
-  subject: ControlWorkSubject
-  enabled: boolean
-}) {
-  const meta = SECTION_META[subject]
-  const Icon = meta.icon
-
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-2 rounded-xl border p-3 shadow-2xl ring-2 ring-slate-200/80",
-        "scale-[1.02] rotate-[0.5deg] cursor-grabbing",
-        enabled ? "border-slate-300 bg-white" : "border-slate-200 bg-slate-50",
-      )}
-    >
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-500">
-        <GripVertical className="h-4 w-4" />
-      </span>
-      <span
-        className="flex h-7 w-7 items-center justify-center rounded-md"
-        style={{ backgroundColor: meta.color }}
-      >
-        <Icon className="h-3.5 w-3.5 text-slate-900/80" />
-      </span>
-      <span className="font-semibold text-slate-900">{meta.label}</span>
-    </div>
-  )
-}
-
 function SortableSectionCard({
   subject,
   enabled,
@@ -200,8 +161,9 @@ function SortableSectionCard({
   })
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition ?? "transform 280ms cubic-bezier(0.25, 1, 0.5, 1)",
+    transform: CSS.Translate.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
   }
 
   return (
@@ -209,9 +171,10 @@ function SortableSectionCard({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "rounded-xl border p-3 will-change-transform",
+        "rounded-xl border p-3",
         enabled ? "border-slate-300 bg-white" : "border-slate-200 bg-slate-50/80",
-        isDragging && "z-10 opacity-35 shadow-none",
+        isDragging &&
+          "cursor-grabbing shadow-2xl ring-2 ring-slate-200/80 scale-[1.02] rotate-[0.5deg]",
         !isDragging && "transition-[box-shadow,border-color] duration-200",
       )}
     >
@@ -238,7 +201,7 @@ function SortableSectionCard({
         </span>
         <span className="flex-1 font-semibold text-slate-900">{meta.label}</span>
       </div>
-      {children}
+      {!isDragging ? children : null}
     </div>
   )
 }
@@ -266,7 +229,6 @@ export default function ControlWorkManager({
   const [adminTests, setAdminTests] = useState<AdminTest[]>([])
 
   const [sectionOrder, setSectionOrder] = useState<ControlWorkSubject[]>(DEFAULT_ORDER)
-  const [activeSubject, setActiveSubject] = useState<ControlWorkSubject | null>(null)
   const [sections, setSections] = useState<Record<ControlWorkSubject, SectionConfig>>(() =>
     Object.fromEntries(
       DEFAULT_ORDER.map((s) => [s, defaultSectionConfig()]),
@@ -328,13 +290,8 @@ export default function ControlWorkManager({
     }))
   }
 
-  const handleSectionDragStart = (event: DragStartEvent) => {
-    setActiveSubject(event.active.id as ControlWorkSubject)
-  }
-
   const handleSectionDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-    setActiveSubject(null)
     if (!over || active.id === over.id) return
     setSectionOrder((prev) => {
       const oldIndex = prev.indexOf(active.id as ControlWorkSubject)
@@ -640,10 +597,7 @@ export default function ControlWorkManager({
 
       <Dialog
         open={showCreate}
-        onOpenChange={(open) => {
-          setShowCreate(open)
-          if (!open) setActiveSubject(null)
-        }}
+        onOpenChange={setShowCreate}
       >
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
@@ -721,9 +675,7 @@ export default function ControlWorkManager({
               <DndContext
                 sensors={sectionSensors}
                 collisionDetection={closestCenter}
-                onDragStart={handleSectionDragStart}
                 onDragEnd={handleSectionDragEnd}
-                onDragCancel={() => setActiveSubject(null)}
               >
                 <SortableContext items={sectionOrder} strategy={verticalListSortingStrategy}>
                   <div className="mt-2 space-y-2">
@@ -919,14 +871,6 @@ export default function ControlWorkManager({
                     })}
                   </div>
                 </SortableContext>
-                <DragOverlay dropAnimation={DROP_ANIMATION}>
-                  {activeSubject ? (
-                    <SectionDragPreview
-                      subject={activeSubject}
-                      enabled={sections[activeSubject]?.enabled ?? false}
-                    />
-                  ) : null}
-                </DragOverlay>
               </DndContext>
             </div>
 

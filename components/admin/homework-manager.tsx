@@ -52,6 +52,7 @@ import type {
   Student,
   Subject,
 } from "@/lib/admin-storage"
+import { groupMemberCount } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
 import { TableSkeleton } from "./skeletons"
 import { homeworkApi } from "@/lib/api"
@@ -730,7 +731,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                       <SelectItem key={g.id} value={g.id}>
                         {g.name}{" "}
                         <span className="text-xs text-slate-500">
-                          · {g.studentIds.length} student{g.studentIds.length === 1 ? "" : "s"}
+                          · {groupMemberCount(students, g.id)} student{groupMemberCount(students, g.id) === 1 ? "" : "s"}
                         </span>
                       </SelectItem>
                     ))}

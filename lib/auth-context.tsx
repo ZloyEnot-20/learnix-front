@@ -4,21 +4,35 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { authApi, type AuthUser, type OrgStatus } from "./api"
 import { setTokens, clearTokens, getAccessToken } from "./api-client"
 
-export type UserRole = "super_admin" | "admin" | "teacher" | "student"
+/** User type in the tenant `users` collection. */
+export type UserType = "super_admin" | "admin" | "teacher" | "student"
 
-/** Roles allowed into the admin panel. */
-export function canAccessAdmin(role: UserRole): boolean {
-  return role === "super_admin" || role === "admin" || role === "teacher"
+/** @deprecated Use UserType */
+export type UserRole = UserType
+
+export const USER_TYPE_LABELS: Record<UserType, string> = {
+  student: "Student",
+  teacher: "Teacher",
+  admin: "Organization admin",
+  super_admin: "Super admin",
 }
 
-/** Admin-level roles (super admin + admin). */
-export function isAdminRole(role: UserRole): boolean {
-  return role === "super_admin" || role === "admin"
+/** Types allowed into the admin panel. */
+export function canAccessAdmin(type: UserType): boolean {
+  return type === "super_admin" || type === "admin" || type === "teacher"
 }
+
+/** Admin-level types (super admin + org admin). */
+export function isAdminType(type: UserType): boolean {
+  return type === "super_admin" || type === "admin"
+}
+
+/** @deprecated Use isAdminType */
+export const isAdminRole = isAdminType
 
 /** Platform administration (content import, etc.). */
-export function isSuperAdmin(role: UserRole): boolean {
-  return role === "super_admin"
+export function isSuperAdmin(type: UserType): boolean {
+  return type === "super_admin"
 }
 
 interface TestResult {
@@ -34,7 +48,7 @@ interface User {
   login: string
   email: string
   name: string
-  role: UserRole
+  type: UserType
   isPremium: boolean
   testHistory: TestResult[]
   completedSections: {
@@ -60,10 +74,10 @@ export const DEMO_ACCOUNTS: Array<{
   email: string
   password: string
   name: string
-  role: UserRole
+  type: UserType
 }> = [
-  { email: "superadmin@ielts.com", password: "super123", name: "Super Admin", role: "super_admin" },
-  { email: "student@ielts.com", password: "student123", name: "Student", role: "student" },
+  { email: "superadmin@ielts.com", password: "super123", name: "Super Admin", type: "super_admin" },
+  { email: "student@ielts.com", password: "student123", name: "Student", type: "student" },
 ]
 
 function toUser(u: AuthUser): User {
@@ -72,7 +86,7 @@ function toUser(u: AuthUser): User {
     login: u.login || u.email,
     email: u.email,
     name: u.name,
-    role: u.role,
+    type: u.type,
     isPremium: u.isPremium,
     testHistory: [],
     completedSections: { reading: true, listening: true, writing: true },
@@ -84,7 +98,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [orgStatus, setOrgStatus] = useState<OrgStatus>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Restore the session from the stored access token on mount.
   useEffect(() => {
     let cancelled = false
     async function restore() {

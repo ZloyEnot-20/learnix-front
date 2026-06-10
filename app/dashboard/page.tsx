@@ -28,10 +28,10 @@ export default function DashboardPage() {
     if (isLoading) return
     if (!user) router.push("/login")
     // Staff (super admin / admin / teacher) belong in the admin panel.
-    else if (user.role !== "student") router.push("/admin")
+    else if (user.type !== "student") router.push("/admin")
   }, [user, isLoading, router])
 
-  if (!mounted || isLoading || !user || user.role !== "student") {
+  if (!mounted || isLoading || !user || user.type !== "student") {
     return <DashboardSkeleton />
   }
 

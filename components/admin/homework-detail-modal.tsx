@@ -115,12 +115,11 @@ export function HomeworkDetailModal({
         if (cancelled) return
         const group = groups.find((g) => g.id === homework.groupId)
         setGroupName(group?.name ?? "—")
-        const memberIds = group?.studentIds ?? []
+        const members = allStudents.filter((s) => s.groupId === homework.groupId)
 
-        const built: Row[] = memberIds
-          .map((sid) => {
-            const student = allStudents.find((s) => s.id === sid)
-            if (!student) return null
+        const built: Row[] = members
+          .map((student) => {
+            const sid = student.id
             const sub = submissions.find((x) => x.studentId === sid)
             return {
               studentId: sid,

@@ -9,9 +9,19 @@ export interface Group {
   name: string
   description?: string
   teacherId?: string
+  /** Computed by the API from User.groupId; prefer `studentsInGroup()` when students are loaded. */
   studentIds: string[]
   monthlyFee?: number
   createdAt: string
+}
+
+/** Group members — canonical membership is Student.groupId (User collection). */
+export function studentsInGroup(students: Student[], groupId: string): Student[] {
+  return students.filter((s) => s.groupId === groupId)
+}
+
+export function groupMemberCount(students: Student[], groupId: string): number {
+  return studentsInGroup(students, groupId).length
 }
 
 export interface Student {
@@ -26,14 +36,17 @@ export interface Student {
   notes?: string
 }
 
-export type StaffRole = "super_admin" | "admin" | "teacher"
+export type StaffType = "super_admin" | "admin" | "teacher"
+
+/** @deprecated Use StaffType */
+export type StaffType = StaffType
 
 export interface StaffUser {
   id: string
   login: string
   email: string
   name: string
-  role: StaffRole
+  type: StaffType
   isPremium?: boolean
 }
 

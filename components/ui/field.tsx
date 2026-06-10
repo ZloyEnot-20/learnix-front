@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
+import { validationHintStyles } from '@/components/ui/validation-hint'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 
@@ -55,7 +56,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 const fieldVariants = cva(
-  'group/field flex w-full gap-3 data-[invalid=true]:text-destructive',
+  'group/field flex w-full gap-3 data-[invalid=true]:text-[#111827]',
   {
     variants: {
       orientation: {
@@ -222,7 +223,7 @@ function FieldError({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn('text-destructive text-sm font-normal', className)}
+      className={cn(validationHintStyles, 'font-normal', className)}
       {...props}
     >
       {content}

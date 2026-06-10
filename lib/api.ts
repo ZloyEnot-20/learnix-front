@@ -18,7 +18,7 @@ import type {
   ControlWorkSubmission,
   StudentControlWorkEntry,
   StaffUser,
-  StaffRole,
+  StaffType,
 } from "./admin-storage"
 import type { EntryTestSubmission } from "./entry-test-storage"
 import type { TestResult } from "./test-results-storage"
@@ -31,10 +31,11 @@ import type { StudentLevel } from "./gamification"
 // ---------- Auth ----------
 export interface AuthUser {
   id: string
+  orgId?: string | null
   login: string
   email: string
   name: string
-  role: "admin" | "teacher" | "student" | "super_admin"
+  type: "admin" | "teacher" | "student" | "super_admin"
   isPremium: boolean
 }
 export type OrgStatus = "active" | "blocked" | null
@@ -94,9 +95,9 @@ export const studentsApi = {
 export const usersApi = {
   list: () => api.get<StaffUser[]>("/users"),
   get: (id: string) => api.get<StaffUser>(`/users/${id}`),
-  create: (input: { name: string; login: string; email?: string; role: StaffRole }) =>
+  create: (input: { name: string; login: string; email?: string; type: StaffType }) =>
     api.post<{ user: StaffUser; temporaryPassword: string }>("/users", input),
-  update: (id: string, patch: Partial<Pick<StaffUser, "name" | "login" | "email" | "role">>) =>
+  update: (id: string, patch: Partial<Pick<StaffUser, "name" | "login" | "email" | "type">>) =>
     api.patch<StaffUser>(`/users/${id}`, patch),
   resetPassword: (id: string) =>
     api.post<{ login: string; temporaryPassword: string }>(`/users/${id}/reset-password`),
@@ -110,7 +111,7 @@ export interface AuditLogEntry {
   category: string
   actorId: string | null
   actorName: string
-  actorRole: string | null
+  actorType: string | null
   targetType: string | null
   targetId: string | null
   targetLabel: string | null
@@ -226,11 +227,27 @@ export const controlWorkApi = {
 
 // ---------- Entry tests ----------
 export const entryTestApi = {
-  list: () => api.get<EntryTestSubmission[]>("/entry-tests"),
+  list: (source?: "student" | "phone") =>
+    api.get<EntryTestSubmission[]>(
+      source ? `/entry-tests?source=${source}` : "/entry-tests",
+    ),
   get: (id: string) => api.get<EntryTestSubmission>(`/entry-tests/${id}`),
   mine: () => api.get<EntryTestSubmission | null>("/entry-tests/mine"),
   assign: (studentId: string) =>
     api.post<EntryTestSubmission>("/entry-tests", { studentId }),
+  registerCandidate: (input: {
+    name: string
+    phone: string
+    login?: string
+    email?: string
+    notes?: string
+  }) =>
+    api.post<{
+      student: Student
+      entryTest: EntryTestSubmission
+      group: { id: string; name: string }
+      confirmation: { login: string; code: string; expiresAt: string }
+    }>("/entry-tests/register", input),
   remove: (id: string) => api.del(`/entry-tests/${id}`),
   saveMc: (id: string, answers: Record<number, string>, completed: boolean) =>
     api.patch<EntryTestSubmission>(`/entry-tests/${id}/mc`, { answers, completed }),
@@ -249,6 +266,50 @@ export const entryTestApi = {
       overallLevel,
       feedback,
     }),
+}
+
+/** Public entry test access by phone (no login). */
+export const entryTestPublicApi = {
+  lookup: (phone: string, orgId?: string) =>
+    api.post<EntryTestSubmission>(
+      "/entry-tests/public/lookup",
+      { phone, ...(orgId ? { orgId } : {}) },
+      false,
+    ),
+  saveMc: (
+    id: string,
+    phone: string,
+    answers: Record<number, string>,
+    completed: boolean,
+  ) =>
+    api.patch<EntryTestSubmission>(
+      `/entry-tests/public/${id}/mc`,
+      { phone, answers, completed },
+      false,
+    ),
+  saveReading: (
+    id: string,
+    phone: string,
+    answers: Record<number, number | boolean>,
+    completed: boolean,
+  ) =>
+    api.patch<EntryTestSubmission>(
+      `/entry-tests/public/${id}/reading`,
+      { phone, answers, completed },
+      false,
+    ),
+  saveWritingDraft: (id: string, phone: string, text: string) =>
+    api.patch<EntryTestSubmission>(
+      `/entry-tests/public/${id}/writing/draft`,
+      { phone, text },
+      false,
+    ),
+  submitWriting: (id: string, phone: string, text: string) =>
+    api.patch<EntryTestSubmission>(
+      `/entry-tests/public/${id}/writing/submit`,
+      { phone, text },
+      false,
+    ),
 }
 
 // ---------- Payments ----------

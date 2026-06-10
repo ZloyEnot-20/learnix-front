@@ -57,7 +57,7 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   tests: { title: "IELTS Tests", subtitle: "Browse and remove existing tests" },
   homework: { title: "Homework", subtitle: "Assign tasks to groups and track submissions" },
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
-  entry: { title: "Entry Test", subtitle: "Assign placement tests and grade writing" },
+  entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
@@ -189,18 +189,18 @@ function AdminPanelContent() {
   // The active section is derived from the URL (/admin or /admin/<section>),
   // so it is bookmarkable and reflected in the address bar.
   const segment = Array.isArray(params.section) ? params.section[0] : undefined
-  const activeTab = sectionFromSegment(segment, user?.role ?? "student")
+  const activeTab = sectionFromSegment(segment, user?.type ?? "student")
   const selectTab = (id: string) =>
     router.push(id === "dashboard" ? "/admin" : `/admin/${id}`)
-  const superAdmin = user ? isSuperAdmin(user.role) : false
-  const orgAdmin = user ? isAdminRole(user.role) : false
+  const superAdmin = user ? isSuperAdmin(user.type) : false
+  const orgAdmin = user ? isAdminRole(user.type) : false
 
   // Synchronous (localStorage) — no flicker, no request on navigation.
   const [totalTests, setTotalTests] = useState<number>(() => readTestCount())
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
-    if (!isLoading && (!user || !canAccessAdmin(user.role))) {
+    if (!isLoading && (!user || !canAccessAdmin(user.type))) {
       router.push(user ? "/dashboard" : "/login")
     }
   }, [user, isLoading, router])
@@ -212,10 +212,10 @@ function AdminPanelContent() {
       router.replace("/admin")
       return
     }
-    if (segment && SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(user.role)) {
+    if (segment && SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(user.type)) {
       router.replace("/admin")
     }
-    if (segment && ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(user.role)) {
+    if (segment && ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(user.type)) {
       router.replace("/admin")
     }
   }, [segment, user, router])
@@ -291,7 +291,7 @@ function AdminPanelContent() {
   ]
 
   const meta = SECTION_TITLES[activeTab] ?? SECTION_TITLES.dashboard
-  const role = roleBadge(user.role)
+  const role = roleBadge(user.type)
 
   return (
     <AdminShell
@@ -321,7 +321,7 @@ function AdminPanelContent() {
       {activeTab === "groups" && <GroupsManager canCreate onChanged={bump} />}
       {activeTab === "students" && <StudentsManager onChanged={bump} />}
       {activeTab === "users" && orgAdmin && (
-        <UsersManager actorRole={user.role} actorId={user.id} onChanged={bump} />
+        <UsersManager actorType={user.type} actorId={user.id} onChanged={bump} />
       )}
       {activeTab === "audit" && orgAdmin && <AuditSection />}
       {activeTab === "tests" && <TestsList onTestsChanged={bump} />}
@@ -369,7 +369,7 @@ export default function AdminPanel() {
     )
   }
 
-  if (!canAccessAdmin(user.role)) {
+  if (!canAccessAdmin(user.type)) {
     return (
       <StatusScreen
         code="403"
