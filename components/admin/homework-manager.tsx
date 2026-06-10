@@ -149,13 +149,12 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
 
   const refresh = async () => {
     try {
-      const [hw, subs, exercises] = await Promise.all([
-        homeworkApi.list(),
-        homeworkApi.submissions(),
+      const [check, exercises] = await Promise.all([
+        homeworkApi.check(),
         getExercises(true),
       ])
-      setHomework(hw)
-      setSubmissions(subs)
+      setHomework(check.assignments)
+      setSubmissions(check.records)
       setGrammarExercises(exercises)
     } catch {
       toast({

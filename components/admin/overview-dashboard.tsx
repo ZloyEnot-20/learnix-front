@@ -80,14 +80,13 @@ export default function OverviewDashboard({
   useEffect(() => {
     let cancelled = false
     Promise.all([
-      homeworkApi.list(),
-      homeworkApi.submissions(),
+      homeworkApi.check(),
       paymentsApi.list(),
     ])
-      .then(([hw, subs, p]) => {
+      .then(([check, p]) => {
         if (cancelled) return
-        setHomework(hw)
-        setSubmissions(subs)
+        setHomework(check.assignments)
+        setSubmissions(check.records)
         setPayments(p)
       })
       .catch(() => {})

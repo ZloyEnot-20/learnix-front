@@ -164,6 +164,11 @@ export const homeworkApi = {
     const qs = new URLSearchParams(params as Record<string, string>).toString()
     return api.get<HomeworkSubmission[]>(`/homework/submissions${qs ? `?${qs}` : ""}`)
   },
+  /** Homework check tab — assignments + all student records from Submission collection. */
+  check: () =>
+    api.get<{ assignments: HomeworkAssignment[]; records: HomeworkSubmission[] }>(
+      "/homework/check",
+    ),
   grade: (submissionId: string, patch: Partial<HomeworkSubmission>) =>
     api.patch<HomeworkSubmission>(`/homework/submissions/${submissionId}`, patch),
   details: (id: string) =>

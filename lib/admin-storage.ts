@@ -94,9 +94,13 @@ export interface HomeworkSubmission {
   homeworkId: string
   studentId: string
   topic?: string
+  subject?: Subject
   homeworkTitle?: string
   assignedAt?: string
+  lastEntryAt?: string
   entryCount?: number
+  violationCount?: number
+  elapsedSeconds?: number
   status: HomeworkStatus
   score?: number
   /** When the student opened/began the exercise. */
@@ -107,7 +111,13 @@ export interface HomeworkSubmission {
   integrityStatus?: "ok" | "cheating_suspicion" | "cheating_detected"
   pausedAt?: string
   pauseUsed?: boolean
-  violationCount?: number
+  events?: Array<{
+    at: string
+    type: string
+    reason?: string
+    entryCount?: number
+    metadata?: Record<string, unknown>
+  }>
 }
 
 export type PaymentStatus = "pending" | "paid" | "overdue"

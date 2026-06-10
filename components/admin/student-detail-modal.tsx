@@ -14,29 +14,16 @@ import {
   BookMarked,
   BookOpen,
   Calendar,
-  CheckCircle2,
   Clock,
   GraduationCap,
   Headphones,
-  LineChart as LineChartIcon,
   Mail,
   Mic,
   PenTool,
   Phone,
-  Target,
-  Trophy,
   Users,
   Wallet,
 } from "lucide-react"
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts"
 import type {
   Group,
   HomeworkAssignment,
@@ -66,6 +53,34 @@ const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
   graded: { label: "Graded", cls: "bg-emerald-100 text-emerald-800" },
 }
 
+function isCheatingFailed(sub: HomeworkSubmission): boolean {
+  return sub.integrityStatus === "cheating_detected" || sub.attempt?.failedDueToCheating === true
+}
+
+function submissionAccuracy(sub: HomeworkSubmission): number | null {
+  const attempt = sub.attempt
+  if (!attempt || attempt.totalQuestions <= 0) return null
+  return Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
+}
+
+function homeworkResultBadge(sub: HomeworkSubmission): { label: string; cls: string } {
+  if (isCheatingFailed(sub)) {
+    return { label: "Failed", cls: "bg-rose-100 text-rose-700" }
+  }
+  const accuracy = submissionAccuracy(sub)
+  if (accuracy != null && (sub.status === "submitted" || sub.status === "graded")) {
+    return { label: `${accuracy}%`, cls: accuracyClass(accuracy) }
+  }
+  return STATUS_LABEL[sub.status] ?? STATUS_LABEL.pending
+}
+
+function accuracyClass(pct: number): string {
+  if (pct >= 80) return "bg-emerald-100 text-emerald-800"
+  if (pct >= 60) return "bg-sky-100 text-sky-800"
+  if (pct >= 40) return "bg-amber-100 text-amber-800"
+  return "bg-rose-100 text-rose-800"
+}
+
 const PAYMENT_STATUS: Record<string, { label: string; cls: string }> = {
   paid: { label: "Paid", cls: "bg-emerald-100 text-emerald-800" },
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700" },
@@ -93,7 +108,6 @@ interface DetailData {
   group?: Group
   homeworkRows: Array<{ hw: HomeworkAssignment; sub: HomeworkSubmission }>
   payments: Payment[]
-  scoreSeries: Array<{ label: string; score: number }>
 }
 
 export function StudentDetailModal({ student, open, onOpenChange }: StudentDetailModalProps) {
@@ -131,9 +145,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
           (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime(),
         )
 
-        const scoreSeries = buildScoreSeries(student.id, progress.averageScore)
-
-        setData({ progress, group, homeworkRows, payments, scoreSeries })
+        setData({ progress, group, homeworkRows, payments })
       })
       .catch(() => {
         if (!cancelled) setData(null)
@@ -190,23 +202,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
         </DialogHeader>
 
         <div className="px-6 py-5 space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <StatCard
-              icon={Trophy}
-              label="Avg score"
-              value={data.progress.averageScore != null ? data.progress.averageScore.toFixed(1) : "—"}
-              accent="bg-amber-50 text-amber-700"
-            />
-            <StatCard
-              icon={Target}
-              label="Accuracy"
-              value={
-                data.progress.averageScore != null
-                  ? `${Math.round((data.progress.averageScore / 9) * 100)}%`
-                  : "—"
-              }
-              accent="bg-emerald-50 text-emerald-700"
-            />
+          <div className="grid grid-cols-2 gap-3">
             <StatCard
               icon={Clock}
               label="Pending HW"
@@ -223,65 +219,6 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
           </div>
 
           <section>
-            <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
-                MOCK IELTS score progress
-              </h3>
-              <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                <LineChartIcon className="h-3.5 w-3.5" />
-                Last 6 months
-              </span>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-3">
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart
-                  data={data.scoreSeries}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis
-                    dataKey="label"
-                    stroke="#94a3b8"
-                    fontSize={11}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    domain={[4, 9]}
-                    ticks={[4, 5, 6, 7, 8, 9]}
-                    stroke="#94a3b8"
-                    fontSize={11}
-                    tickLine={false}
-                    axisLine={false}
-                    width={28}
-                  />
-                  <Tooltip
-                    cursor={{ stroke: "#e2e8f0", strokeWidth: 1 }}
-                    contentStyle={{
-                      borderRadius: 12,
-                      border: "1px solid #e2e8f0",
-                      boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-                      fontSize: 12,
-                    }}
-                    formatter={(value: number) => [value.toFixed(1), "Band"]}
-                    labelStyle={{ color: "#475569", fontWeight: 600 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="score"
-                    stroke="#a4e64e"
-                    strokeWidth={3}
-                    dot={{ r: 4, fill: "#a4e64e", strokeWidth: 0 }}
-                    activeDot={{ r: 6, fill: "#16a34a" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </section>
-
-          <Separator />
-
-          <section>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
               Homework history
             </h3>
@@ -294,7 +231,8 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                 {data.homeworkRows.map(({ hw, sub }) => {
                   const meta = SUBJECT_META[hw.subject]
                   const Icon = meta.icon
-                  const statusMeta = STATUS_LABEL[sub.status] ?? STATUS_LABEL.pending
+                  const resultBadge = homeworkResultBadge(sub)
+                  const accuracy = submissionAccuracy(sub)
                   return (
                     <li
                       key={sub.id}
@@ -311,11 +249,12 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                           <p className="truncate text-sm font-semibold text-slate-900">{hw.title}</p>
                           <span
                             className={cn(
-                              "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
-                              statusMeta.cls,
+                              "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold tabular-nums",
+                              accuracy == null && "uppercase tracking-wide",
+                              resultBadge.cls,
                             )}
                           >
-                            {statusMeta.label}
+                            {resultBadge.label}
                           </span>
                         </div>
                         <p className="mt-0.5 text-xs text-slate-500 line-clamp-2">{hw.description}</p>
@@ -324,10 +263,9 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                             <Calendar className="h-3 w-3" />
                             Due {new Date(hw.dueAt).toLocaleDateString()}
                           </span>
-                          {typeof sub.score === "number" && (
-                            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
-                              <Target className="h-3 w-3" />
-                              Score {sub.score}
+                          {accuracy != null && sub.attempt && (
+                            <span className="inline-flex items-center gap-1 tabular-nums text-slate-600">
+                              {sub.attempt.correctCount}/{sub.attempt.totalQuestions} correct
                             </span>
                           )}
                           {sub.feedback && (
@@ -418,7 +356,7 @@ function StatCard({
   accent,
   compact = false,
 }: {
-  icon: typeof Trophy
+  icon: typeof Clock
   label: string
   value: string
   accent: string
@@ -443,34 +381,4 @@ function StatCard({
       </p>
     </div>
   )
-}
-
-function buildScoreSeries(
-  studentId: string,
-  averageScore: number | null,
-): Array<{ label: string; score: number }> {
-  const base = averageScore ?? 6.5
-  let seed = 0
-  for (let i = 0; i < studentId.length; i++) {
-    seed = ((seed << 5) - seed + studentId.charCodeAt(i)) | 0
-  }
-  const rand = () => {
-    seed = (seed * 9301 + 49297) % 233280
-    return seed / 233280
-  }
-  const series: Array<{ label: string; score: number }> = []
-  const now = new Date()
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const trend = (5 - i) * 0.15
-    const variance = (rand() - 0.5) * 0.8
-    const raw = base - 0.6 + trend + variance
-    const bounded = Math.max(4, Math.min(9, raw))
-    const score = Math.round(bounded * 2) / 2
-    series.push({
-      label: d.toLocaleDateString("en-US", { month: "short" }),
-      score,
-    })
-  }
-  return series
 }
