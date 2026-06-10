@@ -185,7 +185,13 @@ export default function ExercisesIndexPage() {
     !isStudent || isCefrUnlocked(cefr, currentLevel)
 
   const grammarTopics = useMemo(
-    () => topics.filter((t) => t.category === "grammar" || t.category === "vocabulary"),
+    () =>
+      topics.filter(
+        (t) =>
+          t.category === "grammar" ||
+          t.category === "vocabulary" ||
+          t.category === "speaking",
+      ),
     [topics],
   )
 

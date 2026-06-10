@@ -36,6 +36,8 @@ import type {
 import { getGroups } from "@/lib/admin-cache"
 import { homeworkApi, paymentsApi, studentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
+import { StudentDetailModalSkeleton } from "./skeletons"
+import { StudentIeltsProfileSection } from "./student-ielts-profile-section"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = {
   reading: { icon: BookOpen, color: "#c1bffd" },
@@ -112,13 +114,16 @@ interface DetailData {
 
 export function StudentDetailModal({ student, open, onOpenChange }: StudentDetailModalProps) {
   const [data, setData] = useState<DetailData | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (!student || !open) {
       setData(null)
+      setLoading(false)
       return
     }
     let cancelled = false
+    setLoading(true)
     Promise.all([
       studentsApi.progress(student.id),
       getGroups(),
@@ -150,12 +155,15 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
       .catch(() => {
         if (!cancelled) setData(null)
       })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
     return () => {
       cancelled = true
     }
   }, [student, open])
 
-  if (!student || !data) return null
+  if (!student) return null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -186,7 +194,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                     {student.phone}
                   </span>
                 )}
-                {data.group && (
+                {data?.group && (
                   <span className="inline-flex items-center gap-1">
                     <Users className="h-3.5 w-3.5" />
                     {data.group.name}
@@ -202,6 +210,16 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
         </DialogHeader>
 
         <div className="px-6 py-5 space-y-6">
+          <StudentIeltsProfileSection student={student} />
+
+          {loading ? (
+            <StudentDetailModalSkeleton />
+          ) : !data ? (
+            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+              Could not load student details
+            </div>
+          ) : (
+            <>
           <div className="grid grid-cols-2 gap-3">
             <StatCard
               icon={Clock}
@@ -335,6 +353,8 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                 </h3>
                 <p className="text-sm text-slate-700">{student.notes}</p>
               </section>
+            </>
+          )}
             </>
           )}
         </div>

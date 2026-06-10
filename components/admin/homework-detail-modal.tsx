@@ -84,6 +84,10 @@ function initials(name: string): string {
     .toUpperCase()
 }
 
+function isAudioUrl(value: string | undefined): boolean {
+  return !!value && /^https?:\/\//i.test(value)
+}
+
 export function HomeworkDetailModal({
   homework,
   open,
@@ -244,10 +248,13 @@ export function HomeworkDetailModal({
     const submittedAt = row.status === "submitted" || row.status === "graded"
       ? row.submission.submittedAt ?? new Date().toISOString()
       : undefined
+    const nextStatus =
+      homework?.subject === "speaking" && parsedScore != null ? "graded" : row.status
+
     setSavingId(row.studentId)
     try {
       await homeworkApi.grade(row.submission.id, {
-        status: row.status,
+        status: nextStatus,
         score: parsedScore,
         feedback: row.feedback.trim() || undefined,
         submittedAt,
@@ -455,9 +462,13 @@ export function HomeworkDetailModal({
                   ? Math.floor((new Date(submittedAt).getTime() - dueAt) / (24 * 60 * 60 * 1000))
                   : 0
                 const attempt = row.submission?.attempt
-                const accuracy = attempt && attempt.totalQuestions > 0
-                  ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
-                  : null
+                const isSpeaking = homework.subject === "speaking"
+                const speakingRecordings =
+                  attempt?.mistakes?.filter((m) => isAudioUrl(m.userAnswer)) ?? []
+                const accuracy =
+                  !isSpeaking && attempt && attempt.totalQuestions > 0
+                    ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
+                    : null
                 return (
                   <li
                     key={row.studentId}
@@ -526,10 +537,12 @@ export function HomeworkDetailModal({
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
                             <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                              Exercise result
+                              {isSpeaking ? "Speaking recordings" : "Exercise result"}
                             </span>
                             <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-900 ring-1 ring-slate-200">
-                              {attempt.correctCount}/{attempt.totalQuestions} correct
+                              {isSpeaking
+                                ? `${speakingRecordings.length}/${attempt.totalQuestions} submitted`
+                                : `${attempt.correctCount}/${attempt.totalQuestions} correct`}
                             </span>
                             {accuracy != null && (
                               <span
@@ -567,7 +580,31 @@ export function HomeworkDetailModal({
                             />
                           </div>
                         )}
-                        {attempt.mistakes.length > 0 ? (
+                        {isSpeaking ? (
+                          speakingRecordings.length > 0 ? (
+                            <ul className="mt-3 space-y-2">
+                              {speakingRecordings.map((m) => (
+                                <li
+                                  key={`${row.studentId}-${m.questionId}`}
+                                  className="rounded-lg border border-sky-100 bg-white px-3 py-2 text-xs"
+                                >
+                                  <p className="text-slate-700">
+                                    <span className="font-semibold text-slate-900">Q{m.questionId}.</span>{" "}
+                                    {m.prompt}
+                                  </p>
+                                  <audio
+                                    controls
+                                    preload="none"
+                                    src={m.userAnswer}
+                                    className="mt-2 h-8 w-full max-w-md"
+                                  />
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="mt-2 text-[11px] text-slate-500">No recordings submitted yet.</p>
+                          )
+                        ) : attempt.mistakes.length > 0 ? (
                           <div className="mt-3">
                             <button
                               type="button"
@@ -630,16 +667,31 @@ export function HomeworkDetailModal({
                       </div>
                     )}
 
-                    <div className="mt-3">
-                      <label className="text-[11px] uppercase tracking-wider text-slate-500">
-                        Feedback
-                      </label>
-                      <Input
-                        value={row.feedback}
-                        onChange={(e) => updateRow(row.studentId, { feedback: e.target.value })}
-                        placeholder="Optional notes for the student"
-                        className="mt-1"
-                      />
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      {homework.subject === "speaking" ? (
+                        <div>
+                          <label className="text-[11px] uppercase tracking-wider text-slate-500">
+                            Score (0–9)
+                          </label>
+                          <Input
+                            value={row.score}
+                            onChange={(e) => updateRow(row.studentId, { score: e.target.value })}
+                            placeholder="e.g. 6.5"
+                            className="mt-1"
+                          />
+                        </div>
+                      ) : null}
+                      <div className={homework.subject === "speaking" ? "" : "sm:col-span-2"}>
+                        <label className="text-[11px] uppercase tracking-wider text-slate-500">
+                          Feedback
+                        </label>
+                        <Input
+                          value={row.feedback}
+                          onChange={(e) => updateRow(row.studentId, { feedback: e.target.value })}
+                          placeholder="Optional notes for the student"
+                          className="mt-1"
+                        />
+                      </div>
                     </div>
 
                     <div className="mt-3 flex justify-end">

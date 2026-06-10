@@ -134,6 +134,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   const [assignForm, setAssignForm] = useState<{
     groupId: string
     dueDate: string
+    subject: Subject
     topic: string
     exerciseSlugs: string[]
     unlimited: boolean
@@ -141,6 +142,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   }>({
     groupId: "",
     dueDate: defaultDueDate(),
+    subject: "grammar",
     topic: "",
     exerciseSlugs: [],
     unlimited: true,
@@ -174,6 +176,13 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
     () => groupExercisesByTopic(grammarExercises).filter((t) => t.category === "grammar"),
     [grammarExercises],
   )
+
+  const speakingTopics = useMemo(
+    () => groupExercisesByTopic(grammarExercises).filter((t) => t.category === "speaking"),
+    [grammarExercises],
+  )
+
+  const assignableTopics = assignForm.subject === "speaking" ? speakingTopics : grammarTopics
 
   const topicExerciseList = useMemo(() => {
     if (!assignForm.topic) return []
@@ -323,7 +332,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
           homeworkApi.create({
             title: ex.title,
             description: ex.description,
-            subject: "grammar",
+            subject: assignForm.subject,
             groupId: assignForm.groupId,
             dueAt: dueIso,
             estimatedMinutes: Math.max(1, ex.estimatedTime),
@@ -344,6 +353,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
       setAssignForm({
         groupId: "",
         dueDate: defaultDueDate(),
+        subject: "grammar",
         topic: "",
         exerciseSlugs: [],
         unlimited: true,
@@ -790,6 +800,29 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
             </div>
 
             <div className="space-y-1.5">
+              <Label>Subject *</Label>
+              <Select
+                value={assignForm.subject}
+                onValueChange={(v) =>
+                  setAssignForm((p) => ({
+                    ...p,
+                    subject: v as Subject,
+                    topic: "",
+                    exerciseSlugs: [],
+                  }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="grammar">Grammar</SelectItem>
+                  <SelectItem value="speaking">Speaking</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
               <Label>Topic *</Label>
               <Select
                 value={assignForm.topic}
@@ -800,12 +833,12 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                 <SelectTrigger>
                   <SelectValue
                     placeholder={
-                      grammarTopics.length === 0 ? "No topics yet" : "Pick a topic"
+                      assignableTopics.length === 0 ? "No topics yet" : "Pick a topic"
                     }
                   />
                 </SelectTrigger>
                 <SelectContent>
-                  {grammarTopics.map((t) => (
+                  {assignableTopics.map((t) => (
                     <SelectItem key={t.topic} value={t.topic}>
                       {t.title}{" "}
                       <span className="text-xs text-slate-500">

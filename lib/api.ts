@@ -89,6 +89,54 @@ export const studentsApi = {
     api.get<{ groupName: string | null; teacherName: string | null }>(
       `/students/${id}/context`,
     ),
+  ieltsProfile: (id: string) => api.get<StudentIeltsProfile>(`/students/${id}/ielts-profile`),
+  ieltsSummaries: () => api.get<StudentIeltsSummary[]>("/students/ielts-summaries"),
+}
+
+export type IeltsReadinessStatus =
+  | "ready"
+  | "on_track"
+  | "at_risk"
+  | "not_ready"
+  | "insufficient_data"
+
+export interface StudentIeltsSkill {
+  skill: string
+  estimatedBand: number | null
+  source: "mock_test" | "homework" | "none"
+  attempts: number
+  lastBand: number | null
+  trend: "up" | "down" | "stable"
+  belowTarget: boolean
+}
+
+export interface StudentIeltsProfile {
+  targetBand: number | null
+  targetExamDate: string | null
+  overallBand: number | null
+  gapToTarget: number | null
+  readinessStatus: IeltsReadinessStatus
+  estimatedReadyDate: string | null
+  confidence: "high" | "medium" | "low"
+  daysToExam: number | null
+  skills: StudentIeltsSkill[]
+  learningHealth: {
+    completionRate: number | null
+    avgAccuracy: number | null
+    cheatingIncidents: number
+    weakestTopics: Array<{ topic: string; accuracy: number | null }>
+    entryLevel: string | null
+  }
+  bandHistory: Array<{ date: string; skill: string; band: number }>
+  recommendation: string
+}
+
+export interface StudentIeltsSummary {
+  studentId: string
+  overallBand: number | null
+  readinessStatus: IeltsReadinessStatus
+  targetExamDate: string | null
+  targetBand: number | null
 }
 
 // ---------- Staff users (org admin) ----------

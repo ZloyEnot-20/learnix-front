@@ -34,11 +34,12 @@ import {
   X,
 } from "lucide-react"
 import type { Group, Student } from "@/lib/admin-storage"
-import { studentsApi } from "@/lib/api"
+import { studentsApi, type StudentIeltsSummary } from "@/lib/api"
 import { invalidateStudents } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
+import { ReadinessBadge } from "./student-ielts-profile-section"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
 import { ConfirmDialog } from "@/components/confirm-dialog"
@@ -74,12 +75,29 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [pendingRemove, setPendingRemove] = useState<{ id: string; name: string } | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [ieltsSummaries, setIeltsSummaries] = useState<StudentIeltsSummary[]>([])
+
+  useEffect(() => {
+    if (!ready) return
+    studentsApi
+      .ieltsSummaries()
+      .then(setIeltsSummaries)
+      .catch(() => setIeltsSummaries([]))
+  }, [ready, students.length])
+
+  const ieltsByStudent = useMemo(() => {
+    const map = new Map<string, StudentIeltsSummary>()
+    for (const row of ieltsSummaries) map.set(row.studentId, row)
+    return map
+  }, [ieltsSummaries])
 
   const handleRefresh = async () => {
     setRefreshing(true)
     try {
       invalidateStudents()
       await refreshAll(true)
+      const summaries = await studentsApi.ieltsSummaries()
+      setIeltsSummaries(summaries)
       onChanged?.()
     } catch (err) {
       toast({
@@ -533,6 +551,8 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                       <th className="py-3 px-3 font-semibold">Group</th>
                       <th className="py-3 px-3 font-semibold">Phone</th>
                       <th className="py-3 px-3 font-semibold">Monthly fee</th>
+                      <th className="py-3 px-3 font-semibold">Est. band</th>
+                      <th className="py-3 px-3 font-semibold">Readiness</th>
                       <th className="py-3 px-3 font-semibold">Joined</th>
                       <th className="py-3 px-3 font-semibold text-right">Action</th>
                     </tr>
@@ -540,6 +560,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                   <tbody>
                     {regularStudents.map((s) => {
                       const group = groups.find((g) => g.id === s.groupId)
+                      const ielts = ieltsByStudent.get(s.id)
                       return (
                         <tr
                           key={s.id}
@@ -580,6 +601,16 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             {typeof s.monthlyFee === "number" && s.monthlyFee > 0
                               ? formatMoney(s.monthlyFee)
                               : "—"}
+                          </td>
+                          <td className="py-3 px-3 font-semibold tabular-nums text-slate-900">
+                            {ielts?.overallBand != null ? ielts.overallBand.toFixed(1) : "—"}
+                          </td>
+                          <td className="py-3 px-3">
+                            {ielts ? (
+                              <ReadinessBadge status={ielts.readinessStatus} />
+                            ) : (
+                              <span className="text-slate-400">—</span>
+                            )}
                           </td>
                           <td className="py-3 px-3 text-slate-600 tabular-nums">
                             {new Date(s.joinedAt).toLocaleDateString()}

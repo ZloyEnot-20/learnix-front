@@ -34,6 +34,8 @@ export interface Student {
   joinedAt: string
   monthlyFee?: number
   notes?: string
+  targetBand?: number | null
+  targetExamDate?: string | null
 }
 
 export type StaffType = "super_admin" | "admin" | "teacher"

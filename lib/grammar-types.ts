@@ -1,6 +1,6 @@
 export type GrammarDifficulty = "easy" | "medium" | "hard" | "mixed"
 
-export type GrammarCategory = "grammar" | "vocabulary"
+export type GrammarCategory = "grammar" | "vocabulary" | "speaking"
 
 export type GrammarExerciseType =
   | "fill-in-the-blank"
@@ -11,6 +11,7 @@ export type GrammarExerciseType =
   | "true-false"
   | "error-correction"
   | "word-order"
+  | "speaking"
 
 /** Display labels for each exercise type, in the order they should appear in filters. */
 export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
@@ -68,6 +69,8 @@ export interface GrammarQuestion {
   alternates?: string[][]
   explanation: string
   hint?: string
+  prepTimeSeconds?: number
+  speakTimeSeconds?: number
 }
 
 /** A subject/answer pair for matching exercises. */
