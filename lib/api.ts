@@ -3,7 +3,7 @@
  * stores). Components call these async functions instead of the old sync
  * `*-storage` helpers.
  */
-import { api } from "./api-client"
+import { api, apiUpload } from "./api-client"
 import type {
   Group,
   Student,
@@ -664,6 +664,16 @@ export const exercisesApi = {
   vocabDeck: (slug: string) => api.get<VocabDeck>(`/exercises/vocab/${slug}`),
   importVocab: (decks: VocabDeck[]) =>
     api.post<{ ok: boolean; decksWritten: number }>("/exercises/vocab/import", { decks }),
+}
+
+// ---------- Uploads ----------
+export const uploadsApi = {
+  speakingAudio: (blob: Blob) => {
+    const form = new FormData()
+    const ext = blob.type.includes("mp4") ? "m4a" : "webm"
+    form.append("audio", blob, `speaking-${Date.now()}.${ext}`)
+    return apiUpload<{ url: string; key: string }>("/uploads/speaking-audio", form)
+  },
 }
 
 // ---------- Test results ----------

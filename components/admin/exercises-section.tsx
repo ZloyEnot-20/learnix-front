@@ -273,7 +273,10 @@ export default function ExercisesSection({
 
   const grammarTopics = useMemo<TopicSummary[]>(() => {
     return buildTopicSummaries(exercises, topicsMeta).filter(
-      (t) => t.category === "grammar" || t.category === "vocabulary",
+      (t) =>
+        t.category === "grammar" ||
+        t.category === "vocabulary" ||
+        t.category === "speaking",
     )
   }, [exercises, topicsMeta])
 
@@ -1638,7 +1641,7 @@ function AssignDialog({
       await homeworkApi.create({
         title: exercise.title,
         description: exercise.description,
-        subject: "grammar",
+        subject: exercise.category === "speaking" ? "speaking" : "grammar",
         groupId,
         dueAt: new Date(dueDate).toISOString(),
         estimatedMinutes: Math.max(1, exercise.estimatedTime),

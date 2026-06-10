@@ -23,6 +23,7 @@ export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
   "error-correction": "Error correction",
   "word-order": "Word order",
   "true-false": "True / False",
+  speaking: "Speaking",
 }
 
 export const EXERCISE_TYPE_ORDER: GrammarExerciseType[] = [
@@ -34,6 +35,7 @@ export const EXERCISE_TYPE_ORDER: GrammarExerciseType[] = [
   "error-correction",
   "word-order",
   "true-false",
+  "speaking",
 ]
 
 export interface GrammarQuestion {

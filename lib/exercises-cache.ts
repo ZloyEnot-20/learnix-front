@@ -8,6 +8,7 @@
  */
 import { exercisesApi } from "./api"
 import { listGrammarExercises } from "./grammar-storage"
+import { mergeSpeakingExercises, mergeSpeakingTopics, SPEAKING_EXERCISES } from "./speaking-exercises"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import topicsMetaRaw from "./grammar-topics-meta.json"
@@ -71,11 +72,11 @@ export const getExercises = (force = false): Promise<GrammarExercise[]> =>
     async () => {
       try {
         const remote = await exercisesApi.list()
-        if (remote.length > 0) return mergeLocalExercises(remote)
+        if (remote.length > 0) return mergeSpeakingExercises(mergeLocalExercises(remote))
       } catch {
         /* fall through to seed */
       }
-      return listGrammarExercises()
+      return mergeSpeakingExercises(listGrammarExercises())
     },
     force,
   )
@@ -87,11 +88,11 @@ export const getTopicsMeta = (force = false): Promise<TopicMeta[]> =>
     async () => {
       try {
         const remote = await exercisesApi.topics()
-        if (remote.length > 0) return mergeCustomTopics(remote)
+        if (remote.length > 0) return mergeSpeakingTopics(mergeCustomTopics(remote))
       } catch {
         /* fall through to seed */
       }
-      return mergeCustomTopics(LOCAL_TOPICS)
+      return mergeSpeakingTopics(mergeCustomTopics(LOCAL_TOPICS))
     },
     force,
   )
@@ -109,7 +110,10 @@ export async function getExerciseBySlug(
   const found = list.find((e) => e.slug === slug || e.id === slug)
   if (found) return found
   // Last-resort local lookup (covers exercises not yet in the cache).
-  return listGrammarExercises().find((e) => e.slug === slug || e.id === slug)
+  return (
+    listGrammarExercises().find((e) => e.slug === slug || e.id === slug) ??
+    SPEAKING_EXERCISES.find((e) => e.slug === slug || e.id === slug)
+  )
 }
 
 /**
@@ -123,7 +127,10 @@ export function peekExerciseBySlug(slug: string): GrammarExercise | undefined {
     (e) => e.slug === slug || e.id === slug,
   )
   if (cached) return cached
-  return listGrammarExercises().find((e) => e.slug === slug || e.id === slug)
+  return (
+    listGrammarExercises().find((e) => e.slug === slug || e.id === slug) ??
+    SPEAKING_EXERCISES.find((e) => e.slug === slug || e.id === slug)
+  )
 }
 
 export function invalidateExercises(): void {

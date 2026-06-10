@@ -702,11 +702,13 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
   const lvl = summariseLevels(topic.levels)
   const empty = topic.exerciseCount === 0
   const disabled = empty || topic.comingSoon
+  const isSpeaking = topic.category === "speaking"
 
   const card = (
       <Card
         className={cn(
           "relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200",
+          isSpeaking && "border-rose-200/80",
           disabled
             ? "opacity-60"
             : "group-hover:-translate-y-1 group-hover:shadow-lg",
@@ -722,9 +724,18 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
             <div className="flex items-start gap-3 min-w-0 flex-1">
               <span
                 aria-hidden
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-200 to-amber-400 shadow-sm ring-1 ring-amber-300/50"
+                className={cn(
+                  "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl shadow-sm ring-1",
+                  isSpeaking
+                    ? "bg-gradient-to-br from-rose-200 to-rose-400 ring-rose-300/50"
+                    : "bg-gradient-to-br from-amber-200 to-amber-400 ring-amber-300/50",
+                )}
               >
-                <Folder className="h-5 w-5 text-amber-900 fill-amber-100" />
+                {isSpeaking ? (
+                  <Mic className="h-5 w-5 text-rose-900" />
+                ) : (
+                  <Folder className="h-5 w-5 text-amber-900 fill-amber-100" />
+                )}
               </span>
               <div className="min-w-0 space-y-2">
                 <h3 className="text-lg font-semibold text-slate-900">{topic.title}</h3>

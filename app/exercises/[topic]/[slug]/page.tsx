@@ -27,6 +27,7 @@ import {
 import { homeworkApi, analyticsApi } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
+import SpeakingRunner from "@/components/exercises/speaking-runner"
 
 /** Normalized review item shared between exercise types. */
 interface ReviewItem {
@@ -167,6 +168,8 @@ function ExerciseRunner() {
       return <ErrorCorrectionRunner {...common} />
     case "word-order":
       return <WordOrderRunner {...common} />
+    case "speaking":
+      return <SpeakingRunner {...common} />
     default:
       return <FillBlankRunner {...common} />
   }
