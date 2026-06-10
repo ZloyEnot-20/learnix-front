@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import type { Group, Payment, Student } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
+import { selectableGroups } from "@/lib/entry-test-group"
 import { CardGridSkeleton, StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
 import { paymentsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
@@ -46,6 +47,7 @@ interface FinanceManagerProps {
 export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   const { toast } = useToast()
   const { students, groups } = useAdminData()
+  const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [payments, setPayments] = useState<Payment[]>([])
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "unpaid">("all")
@@ -180,7 +182,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   }
 
   const groupSummary = useMemo(() => {
-    return groups.map((g) => {
+    return assignableGroups.map((g) => {
       const groupPayments = payments.filter((p) => p.groupId === g.id)
       const summary = { expectedTotal: 0, paidTotal: 0, overdueTotal: 0 }
       for (const p of groupPayments) {
@@ -190,7 +192,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
       }
       return { group: g, summary }
     })
-  }, [groups, payments])
+  }, [assignableGroups, payments])
 
   if (loading) {
     return (
@@ -401,7 +403,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All groups</SelectItem>
-                    {groups.map((g) => (
+                    {assignableGroups.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.name}
                       </SelectItem>

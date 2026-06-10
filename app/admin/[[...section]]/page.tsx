@@ -22,6 +22,7 @@ import {
   UserCog,
   ScrollText,
   CreditCard,
+  BarChart3,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
@@ -38,6 +39,7 @@ import AuditSection from "@/components/admin/audit-section"
 import OrgBillingSection from "@/components/admin/org-billing-section"
 import { OrgNewsBanner } from "@/components/admin/org-news-banner"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
+import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
 import { invalidateExercises } from "@/lib/exercises-cache"
@@ -55,7 +57,8 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   users: { title: "Users", subtitle: "Manage admins and teachers in your organization" },
   audit: { title: "Activity log", subtitle: "Who did what on the platform" },
   tests: { title: "IELTS Tests", subtitle: "Browse and remove existing tests" },
-  homework: { title: "Homework", subtitle: "Assign tasks to groups and track submissions" },
+  homework: { title: "Homework check", subtitle: "Review submissions and track completion" },
+  stats: { title: "Exercise statistics", subtitle: "Completion, cheating and failure rates per exercise" },
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
@@ -260,7 +263,8 @@ function AdminPanelContent() {
       label: "Teaching",
       items: [
         { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
-        { id: "homework", label: "Homework", icon: ClipboardList, badge: homeworkCount },
+        { id: "homework", label: "Homework check", icon: ClipboardList, badge: homeworkCount },
+        { id: "stats", label: "Statistics", icon: BarChart3 },
         { id: "control", label: "Progress test", icon: Layers },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
       ],
@@ -328,6 +332,7 @@ function AdminPanelContent() {
       {activeTab === "homework" && (
         <HomeworkManager createdByName={user.name} onChanged={bump} />
       )}
+      {activeTab === "stats" && <ExerciseStatsSection />}
       {activeTab === "control" && (
         <ControlWorkManager createdByName={user.name} onChanged={bump} />
       )}

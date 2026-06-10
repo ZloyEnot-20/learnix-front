@@ -60,6 +60,7 @@ import type {
   Group,
 } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
+import { selectableGroups } from "@/lib/entry-test-group"
 import { TableSkeleton } from "./skeletons"
 import { controlWorkApi, exercisesApi } from "@/lib/api"
 import { getExercises } from "@/lib/exercises-cache"
@@ -215,6 +216,7 @@ export default function ControlWorkManager({
 }) {
   const { toast } = useToast()
   const { groups } = useAdminData()
+  const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [items, setItems] = useState<ControlWork[]>([])
   const [submissions, setSubmissions] = useState<ControlWorkSubmission[]>([])
   const [loading, setLoading] = useState(true)
@@ -625,7 +627,7 @@ export default function ControlWorkManager({
                     <SelectValue placeholder="Select group" />
                   </SelectTrigger>
                   <SelectContent>
-                    {groups.map((g) => (
+                    {assignableGroups.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.name}
                       </SelectItem>

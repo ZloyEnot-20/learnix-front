@@ -55,6 +55,7 @@ import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/hooks/use-toast"
 import { CardGridSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
+import { selectableGroups } from "@/lib/entry-test-group"
 
 const DIFFICULTY_META: Record<
   GrammarExercise["difficulty"],
@@ -114,7 +115,7 @@ export default function ExercisesTopicPage() {
 
   const [allExercises, setAllExercises] = useState<GrammarExercise[]>([])
   const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
-  const [groups, setGroups] = useState<Group[]>(() => peekGroups() ?? [])
+  const [groups, setGroups] = useState<Group[]>(() => selectableGroups(peekGroups() ?? []))
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
   const [view, setView] = useState<"list" | "materials">("list")
@@ -142,7 +143,7 @@ export default function ExercisesTopicPage() {
   useEffect(() => {
     if (!canAssign) return
     getGroups()
-      .then(setGroups)
+      .then((loaded) => setGroups(selectableGroups(loaded)))
       .catch(() => {})
   }, [canAssign])
 

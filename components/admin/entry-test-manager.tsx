@@ -669,10 +669,10 @@ function EntryTestDetail({
           <div className="sm:w-56">
             <label className="text-sm font-bold text-slate-900">Overall level</label>
             <Select value={overallLevel} onValueChange={setOverallLevel}>
-              <SelectTrigger className="mt-1">
+              <SelectTrigger className="mt-1 w-full">
                 <SelectValue placeholder="Required · A1 – B2+" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent side="top" sideOffset={4} className="z-[100]">
                 {CEFR_LEVELS.map((lvl) => (
                   <SelectItem key={lvl} value={lvl}>
                     {lvl}

@@ -485,6 +485,11 @@ function StudentDetail({
               ? `Reason: ${attempt.cheatingReason.replace(/_/g, " ")}`
               : "The student left the app after using their pause."}
           </p>
+          {(row.submission?.entryCount ?? 0) > 0 && (
+            <p className="mt-1 text-xs text-red-700/80">
+              Session entries: {row.submission?.entryCount}
+            </p>
+          )}
           {row.submission?.submittedAt && (
             <p className="mt-2 text-[11px] text-red-700/80">
               Failed at {formatShortDateTime(row.submission.submittedAt)}

@@ -68,6 +68,7 @@ import type { Group } from "@/lib/admin-storage"
 import { groupMemberCount } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
 import { useAdminData } from "@/lib/admin-data-context"
+import { selectableGroups } from "@/lib/entry-test-group"
 import { useToast } from "@/hooks/use-toast"
 import { LevelFolderCardsSkeleton } from "./skeletons"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -244,6 +245,7 @@ export default function ExercisesSection({
 }: ExercisesSectionProps) {
   const { toast } = useToast()
   const { groups } = useAdminData()
+  const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
 
   const [exercises, setExercises] = useState<GrammarExercise[]>([])
   const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
@@ -513,7 +515,7 @@ export default function ExercisesSection({
 
         <AssignDialog
           exercise={assignTarget}
-          groups={groups}
+          groups={assignableGroups}
           open={!!assignTarget}
           onOpenChange={(open) => !open && setAssignTarget(null)}
           onAssigned={() => {
@@ -611,7 +613,7 @@ export default function ExercisesSection({
 
         <AssignVocabDialog
           deck={assignDeck}
-          groups={groups}
+          groups={assignableGroups}
           open={!!assignDeck}
           onOpenChange={(open) => !open && setAssignDeck(null)}
           onAssigned={() => {
@@ -705,7 +707,7 @@ export default function ExercisesSection({
 
         <AssignVocabDialog
           deck={assignDeck}
-          groups={groups}
+          groups={assignableGroups}
           open={!!assignDeck}
           onOpenChange={(open) => !open && setAssignDeck(null)}
           onAssigned={() => {
@@ -976,7 +978,7 @@ export default function ExercisesSection({
 
       <AssignDialog
         exercise={assignTarget}
-        groups={groups}
+        groups={assignableGroups}
         open={!!assignTarget}
         onOpenChange={(open) => !open && setAssignTarget(null)}
         onAssigned={() => {

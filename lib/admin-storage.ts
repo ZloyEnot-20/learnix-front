@@ -93,6 +93,10 @@ export interface HomeworkSubmission {
   id: string
   homeworkId: string
   studentId: string
+  topic?: string
+  homeworkTitle?: string
+  assignedAt?: string
+  entryCount?: number
   status: HomeworkStatus
   score?: number
   /** When the student opened/began the exercise. */
@@ -103,6 +107,7 @@ export interface HomeworkSubmission {
   integrityStatus?: "ok" | "cheating_suspicion" | "cheating_detected"
   pausedAt?: string
   pauseUsed?: boolean
+  violationCount?: number
 }
 
 export type PaymentStatus = "pending" | "paid" | "overdue"

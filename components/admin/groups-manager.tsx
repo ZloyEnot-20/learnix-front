@@ -26,6 +26,7 @@ import type { Group, Student } from "@/lib/admin-storage"
 import { groupMemberCount, studentsInGroup } from "@/lib/admin-storage"
 import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
+import { isEntryTestGroup, selectableGroups } from "@/lib/entry-test-group"
 import { groupsApi } from "@/lib/api"
 import { CardGridSkeleton } from "./skeletons"
 import { ConfirmDialog } from "@/components/confirm-dialog"
@@ -65,6 +66,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   const { toast } = useToast()
   const { students, groups, ready, refreshAll, refreshGroups, refreshStudents } =
     useAdminData()
+  const manageableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [summaries, setSummaries] = useState<Record<string, GroupSummary>>({})
   const [showCreate, setShowCreate] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
@@ -212,7 +214,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   }
 
   // ----- Detail view -----
-  if (selectedGroup) {
+  if (selectedGroup && !isEntryTestGroup(selectedGroup)) {
     const summary = summaryFor(selectedGroup.id)
     return (
       <>
@@ -370,7 +372,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <CardTitle>Groups</CardTitle>
-              <CardDescription>{groups.length} group{groups.length === 1 ? "" : "s"}</CardDescription>
+              <CardDescription>{manageableGroups.length} group{manageableGroups.length === 1 ? "" : "s"}</CardDescription>
             </div>
             {canCreate && (
               <Button onClick={() => setShowCreate(true)} className="bg-[#C8102E] hover:bg-[#A00D25]">
@@ -383,7 +385,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
         <CardContent>
           {!ready && groups.length === 0 ? (
             <CardGridSkeleton count={4} columns={2} />
-          ) : groups.length === 0 ? (
+          ) : manageableGroups.length === 0 ? (
             <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
               <div className="rounded-full bg-white p-3 shadow-sm">
                 <Users className="h-6 w-6 text-slate-400" />
@@ -393,7 +395,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {groups.map((g) => {
+              {manageableGroups.map((g) => {
                 const memberCount = groupMemberCount(students, g.id)
                 const summary = summaryFor(g.id)
                 return (

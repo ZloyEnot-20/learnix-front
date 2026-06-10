@@ -362,7 +362,31 @@ export interface StudentAnalyticsSummary {
     cheatingIncidents: number
     byReason: Record<string, number>
   }
-  homework: { completed: number; cheating: number }
+  homework: {
+    completed: number
+    cheating: number
+    failed?: number
+    byTopic?: Array<{
+      topic: string
+      assigned: number
+      completed: number
+      failed: number
+      cheating: number
+      totalEntries: number
+    }>
+    assignments?: Array<{
+      homeworkId: string
+      homeworkTitle?: string
+      topic?: string
+      status: string
+      integrityStatus: string
+      failedDueToCheating: boolean
+      entryCount: number
+      score: number | null
+      assignedAt?: string
+      submittedAt?: string
+    }>
+  }
   controlWorks: { completed: number; cheating: number }
   bySubject: Array<{
     subject: string
@@ -402,6 +426,65 @@ export interface StudentAnalyticsSummary {
   }>
 }
 
+export interface ExerciseAnalyticsRow {
+  slug: string
+  title: string
+  topic: string | null
+  subtopic: string | null
+  type: string | null
+  level: string | null
+  subject: string
+  assigned: number
+  started: number
+  completed: number
+  inProgress: number
+  pending: number
+  paused: number
+  cheating: number
+  failed: number
+  suspicion: number
+  timedOut: number
+  practiceAttempts: number
+  practiceTimeouts: number
+  completionRate: number | null
+  startedRate: number | null
+  cheatingRate: number | null
+  failureRate: number | null
+  suspicionRate: number | null
+  practiceAccuracy: number | null
+  avgScore: number | null
+}
+
+export interface ExerciseAnalyticsReport {
+  summary: {
+    exercisesTracked: number
+    totalAssigned: number
+    totalCompleted: number
+    totalCheating: number
+    totalFailed: number
+    totalPracticeAttempts: number
+    completionRate: number | null
+    cheatingRate: number | null
+    failureRate: number | null
+    weakestExercise: ExerciseAnalyticsRow | null
+    mostCheatingExercise: ExerciseAnalyticsRow | null
+  }
+  exercises: ExerciseAnalyticsRow[]
+  topics: Array<{
+    topic: string
+    label: string
+    assigned: number
+    completed: number
+    cheating: number
+    failed: number
+    practiceAttempts: number
+    completionRate: number | null
+    cheatingRate: number | null
+    failureRate: number | null
+    exercises: ExerciseAnalyticsRow[]
+  }>
+}
+
 export const analyticsApi = {
   record: (event: Omit<ExerciseResultEvent, "at"> & {
     source?: "game" | "homework" | "control_work"
@@ -419,6 +502,7 @@ export const analyticsApi = {
   }) => api.post("/analytics/vocab", input),
   topics: (studentId?: string) =>
     api.get<TopicStat[]>(`/analytics/topics${studentId ? `?studentId=${studentId}` : ""}`),
+  exerciseStats: () => api.get<ExerciseAnalyticsReport>("/analytics/exercises"),
   activity: (params?: {
     studentId?: string
     page?: number

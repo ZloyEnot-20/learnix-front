@@ -42,8 +42,11 @@ import { StudentDetailModal } from "./student-detail-modal"
 import { useToast } from "@/hooks/use-toast"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
 import { ConfirmDialog } from "@/components/confirm-dialog"
-
-const ENTRY_TEST_GROUP_NAME = "ENTRY TEST"
+import {
+  ENTRY_TEST_GROUP_NAME,
+  findEntryTestGroupId,
+  selectableGroups,
+} from "@/lib/entry-test-group"
 
 function initials(name: string): string {
   return name
@@ -150,10 +153,8 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     })
   }, [students, search, groupFilter])
 
-  const entryTestGroupId = useMemo(
-    () => groups.find((g) => g.name === ENTRY_TEST_GROUP_NAME)?.id,
-    [groups],
-  )
+  const entryTestGroupId = useMemo(() => findEntryTestGroupId(groups), [groups])
+  const filterGroups = useMemo(() => selectableGroups(groups), [groups])
 
   const entryTestStudents = useMemo(() => {
     if (!entryTestGroupId) return []
@@ -334,7 +335,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {groups.map((g) => {
+                {filterGroups.map((g) => {
                   const count = groupCounts.get(g.id) ?? 0
                   const isSelected = groupFilter === g.id
                   const isDimmed = groupFilter !== "all" && !isSelected
@@ -430,7 +431,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                   <SelectContent>
                     <SelectItem value="all">All groups</SelectItem>
                     <SelectItem value="none">No group</SelectItem>
-                    {groups.map((g) => (
+                    {filterGroups.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.name}
                       </SelectItem>
@@ -767,7 +768,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">No group</SelectItem>
-                        {groups.map((g) => (
+                        {filterGroups.map((g) => (
                           <SelectItem key={g.id} value={g.id}>
                             {g.name}
                           </SelectItem>

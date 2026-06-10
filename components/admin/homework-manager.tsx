@@ -63,7 +63,8 @@ import { useToast } from "@/hooks/use-toast"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { cn } from "@/lib/utils"
 import { HomeworkStudentResults } from "./homework-student-results"
-import TopicStatsPanel from "./topic-stats-panel"
+import ExerciseStatsPanel from "./exercise-stats-panel"
+import { selectableGroups } from "@/lib/entry-test-group"
 
 const DIFFICULTY_META: Record<
   GrammarExercise["difficulty"],
@@ -112,6 +113,7 @@ interface HomeworkManagerProps {
 export default function HomeworkManager({ createdByName, onChanged }: HomeworkManagerProps) {
   const { toast } = useToast()
   const { students, groups } = useAdminData()
+  const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
 
@@ -277,7 +279,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   }, [submissions])
 
   const groupStats = useMemo(() => {
-    return groups.map((g) => {
+    return assignableGroups.map((g) => {
       const groupRows = hwRows.filter((r) => r.homework.groupId === g.id)
       const total = groupRows.reduce((acc, r) => acc + r.total, 0)
       const done = groupRows.reduce((acc, r) => acc + r.done, 0)
@@ -286,7 +288,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
       const activeCount = groupRows.filter((r) => !r.isPast).length
       return { group: g, total, done, pending, pct, activeCount }
     })
-  }, [groups, hwRows])
+  }, [assignableGroups, hwRows])
 
   const submit = async () => {
     if (!assignForm.groupId) {
@@ -416,9 +418,6 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
               >
                 <BarChart3 className="h-4 w-4" />
                 Statistics
-                <span className="ml-1 inline-flex items-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
-                  Soon
-                </span>
               </Button>
               <Button
                 variant="outline"
@@ -665,7 +664,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All groups</SelectItem>
-                {groups.map((g) => (
+                {assignableGroups.map((g) => (
                   <SelectItem key={g.id} value={g.id}>
                     {g.name}
                   </SelectItem>
@@ -727,7 +726,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                     <SelectValue placeholder="Pick a group" />
                   </SelectTrigger>
                   <SelectContent>
-                    {groups.map((g) => (
+                    {assignableGroups.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.name}{" "}
                         <span className="text-xs text-slate-500">
@@ -929,23 +928,19 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
         </DialogContent>
       </Dialog>
 
-      {/* Topic statistics (preview / soon) */}
       <Dialog open={showStats} onOpenChange={setShowStats}>
         <DialogContent className="!max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-slate-500" />
-              Topic statistics
-              <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
-                Soon
-              </span>
+              Exercise statistics
             </DialogTitle>
             <DialogDescription>
-              Accuracy by topic and subtask — find where students struggle most.
+              Completion, cheating and failure rates per exercise and topic.
             </DialogDescription>
           </DialogHeader>
           <div className="overflow-y-auto pr-1">
-            <TopicStatsPanel />
+            <ExerciseStatsPanel />
           </div>
         </DialogContent>
       </Dialog>
