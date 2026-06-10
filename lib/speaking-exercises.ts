@@ -108,7 +108,6 @@ export function buildSpeakingCatalog(): { topics: TopicMeta[]; exercises: Gramma
       exerciseCount: 1,
       questionCount: prompts.length,
       totalMinutes: meta.estimatedTime,
-      color: "rose",
     })
 
     exercises.push({

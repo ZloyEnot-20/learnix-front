@@ -315,7 +315,12 @@ export default function ExercisesSection({
         wordCount: vocabDecks
           .filter((d) => clampToFixedLevel(primaryLevel([d.level])) === key)
           .reduce((acc, d) => acc + d.words.length, 0),
-        color: list.map((t) => colorBySlug.get(t.topic)).find(Boolean),
+        // Only grammar topic colours tint the level folder — speaking uses rose
+        // per-topic and must not override the fixed A1–C2 palette.
+        color: list
+          .filter((t) => t.category === "grammar")
+          .map((t) => colorBySlug.get(t.topic))
+          .find(Boolean),
       }
     })
   }, [grammarTopics, colorBySlug, vocabDecks])
