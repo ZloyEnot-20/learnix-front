@@ -10,7 +10,7 @@
  */
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:4000/api"
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://learnix-api.tw1.ru/api"
 
 const ACCESS_KEY = "ielts_access_token"
 const REFRESH_KEY = "ielts_refresh_token"
