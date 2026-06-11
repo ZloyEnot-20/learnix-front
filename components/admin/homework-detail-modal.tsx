@@ -598,6 +598,14 @@ export function HomeworkDetailModal({
                                     src={m.userAnswer}
                                     className="mt-2 h-8 w-full max-w-md"
                                   />
+                                  {m.transcription ? (
+                                    <div className="mt-2 rounded-md border border-slate-100 bg-slate-50 px-2 py-1.5">
+                                      <p className="text-[11px] text-slate-700">{m.transcription}</p>
+                                      <p className="mt-1 text-[10px] text-amber-700">
+                                        Auto-generated — may be inaccurate.
+                                      </p>
+                                    </div>
+                                  ) : null}
                                 </li>
                               ))}
                             </ul>

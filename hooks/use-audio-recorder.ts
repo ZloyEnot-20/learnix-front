@@ -30,6 +30,7 @@ export function useAudioRecorder() {
   }, [])
   const [blob, setBlob] = useState<Blob | null>(null)
   const [objectUrl, setObjectUrl] = useState<string | null>(null)
+  const objectUrlRef = useRef<string | null>(null)
   const [durationMs, setDurationMs] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -46,14 +47,24 @@ export function useAudioRecorder() {
   }, [])
 
   const revokeUrl = useCallback(() => {
-    if (objectUrl) URL.revokeObjectURL(objectUrl)
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current)
+    objectUrlRef.current = null
     setObjectUrl(null)
-  }, [objectUrl])
+  }, [])
 
   const reset = useCallback(async () => {
     clearTimer()
-    if (recorderRef.current && recorderRef.current.state !== "inactive") {
-      recorderRef.current.stop()
+    const rec = recorderRef.current
+    if (rec && rec.state !== "inactive") {
+      await new Promise<void>((resolve) => {
+        rec.onstop = () => resolve()
+        try {
+          rec.requestData()
+        } catch {
+          // requestData is optional for some mime types
+        }
+        rec.stop()
+      })
     }
     recorderRef.current = null
     stopStream()
@@ -75,9 +86,9 @@ export function useAudioRecorder() {
         recorderRef.current.stop()
       }
       stopStream()
-      if (objectUrl) URL.revokeObjectURL(objectUrl)
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current)
     }
-  }, [clearTimer, objectUrl, stopStream])
+  }, [clearTimer, stopStream])
 
   const start = useCallback(async () => {
     try {
@@ -97,6 +108,9 @@ export function useAudioRecorder() {
       }
       recorderRef.current = recorder
       recorder.start(250)
+      if (recorder.state !== "recording") {
+        throw new Error("MediaRecorder did not start")
+      }
       startedAtRef.current = Date.now()
       timerRef.current = setInterval(() => {
         const paused =
@@ -150,12 +164,18 @@ export function useAudioRecorder() {
         const mime = rec.mimeType || pickMimeType()
         const nextBlob = new Blob(chunksRef.current, { type: mime })
         const url = URL.createObjectURL(nextBlob)
+        objectUrlRef.current = url
         setBlob(nextBlob)
         setObjectUrl(url)
         setRecorderStatus("stopped")
         stopStream()
         recorderRef.current = null
         resolve(nextBlob)
+      }
+      try {
+        rec.requestData()
+      } catch {
+        // requestData is optional for some mime types
       }
       rec.stop()
     })

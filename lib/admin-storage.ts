@@ -76,6 +76,12 @@ export interface HomeworkMistake {
   userAnswer: string
   correctAnswer: string
   explanation?: string
+  /** Teacher IELTS band for a speaking recording (0–9). */
+  score?: number
+  /** Teacher feedback for a single speaking recording. */
+  feedback?: string
+  /** Auto-generated speech-to-text (Whisper) — may be inaccurate. */
+  transcription?: string
 }
 
 export interface HomeworkAttempt {

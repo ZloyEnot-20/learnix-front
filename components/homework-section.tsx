@@ -316,7 +316,9 @@ export function HomeworkSection({ items = MOCK_HOMEWORK }: { items?: HomeworkIte
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <CardTitle>Homework</CardTitle>
-            <CardDescription>Tasks assigned by your tutor</CardDescription>
+            <CardDescription>
+              {tab === "active" ? "Tasks assigned by your tutor" : "Homework history"}
+            </CardDescription>
           </div>
           {tab === "active" && active.length > 0 && (
             <span className="rounded-full bg-[#C8102E]/10 px-3 py-1 text-xs font-semibold text-[#C8102E]">

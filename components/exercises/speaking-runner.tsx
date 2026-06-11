@@ -178,6 +178,13 @@ export default function SpeakingRunner({
     setPlaying(false)
   }, [])
 
+  useEffect(() => {
+    stopPlayback()
+    void recorder.reset()
+    // Only re-run when advancing to the next question.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index])
+
   const playRecording = useCallback(() => {
     if (!recorder.objectUrl) return
     if (playing) {
@@ -200,8 +207,9 @@ export default function SpeakingRunner({
       recorder.resume()
       return
     }
+    stopPlayback()
     await recorder.start()
-  }, [recorder])
+  }, [recorder, stopPlayback])
 
   const handleStop = useCallback(async () => {
     await recorder.stop()

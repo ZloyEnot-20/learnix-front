@@ -37,6 +37,7 @@ export interface AuthUser {
   name: string
   type: "admin" | "teacher" | "student" | "super_admin"
   isPremium: boolean
+  avatarUrl?: string | null
 }
 export type OrgStatus = "active" | "blocked" | null
 export interface AuthResponse {
@@ -217,8 +218,18 @@ export const homeworkApi = {
     api.get<{ assignments: HomeworkAssignment[]; records: HomeworkSubmission[] }>(
       "/homework/check",
     ),
-  grade: (submissionId: string, patch: Partial<HomeworkSubmission>) =>
-    api.patch<HomeworkSubmission>(`/homework/submissions/${submissionId}`, patch),
+  grade: (
+    submissionId: string,
+    patch: Partial<HomeworkSubmission> & {
+      recordingGrades?: Array<{
+        questionId: number
+        score?: number
+        feedback?: string
+      }>
+    },
+  ) => api.patch<HomeworkSubmission>(`/homework/submissions/${submissionId}`, patch),
+  transcribe: (submissionId: string) =>
+    api.post<HomeworkSubmission>(`/homework/submissions/${submissionId}/transcribe`),
   details: (id: string) =>
     api.get<{
       homework: HomeworkAssignment
@@ -642,9 +653,15 @@ export interface OrgBillingInfo {
   }>
 }
 
+export interface OrgSettings {
+  allowScreenshots: boolean
+}
+
 export const orgApi = {
   banner: () => api.get<OrgAnnouncement[]>("/org/banner"),
   billing: () => api.get<OrgBillingInfo>("/org/billing"),
+  settings: () => api.get<OrgSettings>("/org/settings"),
+  updateSettings: (body: OrgSettings) => api.patch<OrgSettings>("/org/settings", body),
 }
 
 // ---------- Exercises catalogue ----------
@@ -723,4 +740,20 @@ export const botApi = {
   removeSubscriber: (id: string) => api.del(`/bot/subscribers/${id}`),
   listClaims: (studentId?: string) =>
     api.get<StudentClaim[]>(`/bot/claims${studentId ? `?studentId=${studentId}` : ""}`),
+}
+
+export interface SpeechServiceStatus {
+  configured: boolean
+  serviceUrl: string
+  model: string
+  language: string
+  online: boolean
+  loaded: boolean
+  status: string
+  error: string | null
+}
+
+export const speechApi = {
+  status: () => api.get<SpeechServiceStatus>("/speech/status"),
+  test: (url: string) => api.post<{ text: string; language: string }>("/speech/test", { url }),
 }

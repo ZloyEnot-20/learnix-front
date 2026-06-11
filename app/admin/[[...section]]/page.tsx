@@ -23,6 +23,8 @@ import {
   ScrollText,
   CreditCard,
   BarChart3,
+  Settings,
+  Mic,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
@@ -37,6 +39,8 @@ import FinanceManager from "@/components/admin/finance-manager"
 import UsersManager from "@/components/admin/users-manager"
 import AuditSection from "@/components/admin/audit-section"
 import OrgBillingSection from "@/components/admin/org-billing-section"
+import OrgSettingsSection from "@/components/admin/org-settings-section"
+import SpeechRecognitionSection from "@/components/admin/speech-recognition-section"
 import { OrgNewsBanner } from "@/components/admin/org-news-banner"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
@@ -66,6 +70,8 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
   billing: { title: "Billing", subtitle: "Your organization subscription and platform payments" },
+  settings: { title: "Settings", subtitle: "Organization preferences and homework policies" },
+  speech: { title: "Speech recognition", subtitle: "Whisper service status and transcription testing" },
 }
 
 /** Section ids that map to a URL segment under /admin. */
@@ -88,7 +94,7 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
 const SUPER_ADMIN_ONLY_SECTIONS = new Set(["manage"])
 
 /** Section ids restricted to org admin (admin + super admin), not teachers. */
-const ADMIN_ONLY_SECTIONS = new Set(["users", "audit", "billing"])
+const ADMIN_ONLY_SECTIONS = new Set(["users", "audit", "billing", "settings", "speech"])
 
 function sectionFromSegment(segment: string | undefined, role: UserRole): string {
   if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
@@ -282,6 +288,8 @@ function AdminPanelContent() {
           {
             label: "Administration",
             items: [
+              ...(orgAdmin ? [{ id: "settings", label: "Settings", icon: Settings }] : []),
+              ...(orgAdmin ? [{ id: "speech", label: "Speech recognition", icon: Mic }] : []),
               ...(orgAdmin ? [{ id: "billing", label: "Billing", icon: CreditCard }] : []),
               ...(orgAdmin ? [{ id: "users", label: "Users", icon: UserCog }] : []),
               ...(orgAdmin ? [{ id: "audit", label: "Activity", icon: ScrollText }] : []),
@@ -350,6 +358,8 @@ function AdminPanelContent() {
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
       {activeTab === "billing" && orgAdmin && <OrgBillingSection />}
+      {activeTab === "settings" && orgAdmin && <OrgSettingsSection />}
+      {activeTab === "speech" && orgAdmin && <SpeechRecognitionSection />}
     </AdminShell>
   )
 }

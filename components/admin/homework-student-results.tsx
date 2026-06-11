@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -15,9 +16,11 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
+  Award,
   CheckCircle2,
   ChevronRight,
   Clock,
+  RefreshCw,
   Save,
   Target,
   XCircle,
@@ -32,6 +35,11 @@ import type {
 import { homeworkApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
+import {
+  SpeakingRecordingReviewCard,
+  recordingGradesFromMistakes,
+  type RecordingGradeDraft,
+} from "@/components/admin/speaking-recording-review"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -67,8 +75,18 @@ interface Row {
   studentName: string
   submission?: HomeworkSubmission
   status: HomeworkStatus
+  score: string
   feedback: string
+  recordingGrades: RecordingGradeDraft[]
   dirty: boolean
+}
+
+function isAudioUrl(value: string | undefined): boolean {
+  return !!value && /^https?:\/\//i.test(value)
+}
+
+function speakingRecordingsCount(sub?: HomeworkSubmission): number {
+  return sub?.attempt?.mistakes?.filter((m) => isAudioUrl(m.userAnswer)).length ?? 0
 }
 
 type SortKey = "student" | "status" | "integrity" | "correct" | "submitted"
@@ -121,7 +139,9 @@ export function HomeworkStudentResults({
           studentName: student.name,
           submission: sub,
           status: (sub?.status ?? "pending") as HomeworkStatus,
+          score: sub?.score != null ? String(sub.score) : "",
           feedback: sub?.feedback ?? "",
+          recordingGrades: recordingGradesFromMistakes(sub?.attempt?.mistakes ?? []),
           dirty: false,
         }
       })
@@ -157,7 +177,9 @@ export function HomeworkStudentResults({
           cmp = integritySortRank(a.submission) - integritySortRank(b.submission)
           break
         case "correct":
-          cmp = accuracyOf(a.submission) - accuracyOf(b.submission)
+          cmp =
+            accuracyOf(a.submission, homework.subject) -
+            accuracyOf(b.submission, homework.subject)
           break
         case "submitted": {
           const subA = submittedSortTime(a.submission, dueAt)
@@ -169,7 +191,7 @@ export function HomeworkStudentResults({
       if (cmp !== 0) return cmp * dir
       return a.studentName.localeCompare(b.studentName, undefined, { sensitivity: "base" })
     })
-  }, [rows, homework.dueAt, sortKey, sortDir])
+  }, [rows, homework.dueAt, homework.subject, sortKey, sortDir])
 
   const counts = useMemo(() => {
     const c = { done: 0, working: 0, pending: 0, cheating: 0 }
@@ -188,6 +210,25 @@ export function HomeworkStudentResults({
     )
   }
 
+  const updateRecordingGrade = (
+    studentId: string,
+    questionId: number,
+    patch: Partial<RecordingGradeDraft>,
+  ) => {
+    setRows((prev) =>
+      prev.map((r) => {
+        if (r.studentId !== studentId) return r
+        return {
+          ...r,
+          dirty: true,
+          recordingGrades: r.recordingGrades.map((g) =>
+            g.questionId === questionId ? { ...g, ...patch } : g,
+          ),
+        }
+      }),
+    )
+  }
+
   const saveRow = async (row: Row) => {
     if (!row.submission) {
       toast({
@@ -197,10 +238,81 @@ export function HomeworkStudentResults({
       })
       return
     }
+    const isSpeakingHomework = homework.subject === "speaking"
+    const parsedScore = row.score.trim()
+      ? Number(row.score.replace(",", "."))
+      : undefined
+    if (parsedScore !== undefined && (Number.isNaN(parsedScore) || parsedScore < 0 || parsedScore > 9)) {
+      toast({
+        title: "Invalid score",
+        description: "Score must be between 0 and 9.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const recordingGrades: Array<{ questionId: number; score?: number; feedback?: string }> = []
+    for (const grade of row.recordingGrades) {
+      const trimmedScore = grade.score.trim()
+      const parsedRecordingScore = trimmedScore
+        ? Number(trimmedScore.replace(",", "."))
+        : undefined
+      if (
+        parsedRecordingScore !== undefined &&
+        (Number.isNaN(parsedRecordingScore) ||
+          parsedRecordingScore < 0 ||
+          parsedRecordingScore > 9)
+      ) {
+        toast({
+          title: "Invalid recording score",
+          description: `Question ${grade.questionId}: score must be between 0 and 9.`,
+          variant: "destructive",
+        })
+        return
+      }
+      const trimmedFeedback = grade.feedback.trim()
+      if (parsedRecordingScore != null || trimmedFeedback) {
+        recordingGrades.push({
+          questionId: grade.questionId,
+          score: parsedRecordingScore,
+          feedback: trimmedFeedback || undefined,
+        })
+      }
+    }
+
+    const hasRecordingGrades = recordingGrades.length > 0
+    const submittedAt =
+      row.status === "submitted" || row.status === "graded"
+        ? row.submission.submittedAt ?? new Date().toISOString()
+        : undefined
+    const nextStatus =
+      isSpeakingHomework && (parsedScore != null || hasRecordingGrades)
+        ? "graded"
+        : row.status
+
     setSavingId(row.studentId)
     try {
       await homeworkApi.grade(row.submission.id, {
+        status: nextStatus,
+        score: parsedScore,
         feedback: row.feedback.trim() || undefined,
+        submittedAt,
+        recordingGrades: hasRecordingGrades ? recordingGrades : undefined,
+      })
+      const updatedMistakes = row.submission.attempt?.mistakes.map((m) => {
+        const grade = row.recordingGrades.find((g) => g.questionId === m.questionId)
+        if (!grade) return m
+        const parsedRecordingScore = grade.score.trim()
+          ? Number(grade.score.replace(",", "."))
+          : undefined
+        return {
+          ...m,
+          score:
+            parsedRecordingScore != null && !Number.isNaN(parsedRecordingScore)
+              ? parsedRecordingScore
+              : undefined,
+          feedback: grade.feedback.trim() || undefined,
+        }
       })
       setRows((prev) =>
         prev.map((r) =>
@@ -208,8 +320,22 @@ export function HomeworkStudentResults({
             ? {
                 ...r,
                 dirty: false,
+                status: nextStatus,
+                recordingGrades: recordingGradesFromMistakes(updatedMistakes ?? []),
                 submission: r.submission
-                  ? { ...r.submission, feedback: r.feedback.trim() || undefined }
+                  ? {
+                      ...r.submission,
+                      status: nextStatus,
+                      score: parsedScore,
+                      feedback: row.feedback.trim() || undefined,
+                      submittedAt,
+                      attempt: r.submission.attempt
+                        ? {
+                            ...r.submission.attempt,
+                            mistakes: updatedMistakes ?? r.submission.attempt.mistakes,
+                          }
+                        : undefined,
+                    }
                   : undefined,
               }
             : r,
@@ -237,6 +363,7 @@ export function HomeworkStudentResults({
   }
 
   const dueAt = new Date(homework.dueAt).getTime()
+  const isSpeaking = homework.subject === "speaking"
 
   return (
     <div className="space-y-3">
@@ -274,7 +401,12 @@ export function HomeworkStudentResults({
               <SortableTh label="Student" active={sortKey === "student"} dir={sortDir} onSort={() => toggleSort("student")} />
               <SortableTh label="Status" active={sortKey === "status"} dir={sortDir} onSort={() => toggleSort("status")} />
               <SortableTh label="Integrity" active={sortKey === "integrity"} dir={sortDir} onSort={() => toggleSort("integrity")} />
-              <SortableTh label="Correct" active={sortKey === "correct"} dir={sortDir} onSort={() => toggleSort("correct")} />
+              <SortableTh
+                label={isSpeaking ? "Recordings" : "Correct"}
+                active={sortKey === "correct"}
+                dir={sortDir}
+                onSort={() => toggleSort("correct")}
+              />
               <SortableTh label="Submitted" active={sortKey === "submitted"} dir={sortDir} onSort={() => toggleSort("submitted")} />
               <th className="py-3 px-3 w-10"></th>
             </tr>
@@ -291,10 +423,12 @@ export function HomeworkStudentResults({
                   ? Math.floor((new Date(submittedAt).getTime() - dueAt) / (24 * 60 * 60 * 1000))
                   : 0
               const attempt = row.submission?.attempt
+              const recordingsCount = speakingRecordingsCount(row.submission)
               const accuracy =
-                attempt && attempt.totalQuestions > 0
+                !isSpeaking && attempt && attempt.totalQuestions > 0
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
+              const numericScore = row.submission?.score
               const canExpand =
                 !!attempt || cheatingFailed || row.status !== "pending"
               const isSelected = selectedId === row.studentId
@@ -343,6 +477,23 @@ export function HomeworkStudentResults({
                     <td className="py-3 px-3">
                       {cheatingFailed ? (
                         <span className="text-xs font-semibold text-red-700">—</span>
+                      ) : isSpeaking && attempt ? (
+                        <span className="inline-flex items-center gap-2">
+                          <span className="tabular-nums text-slate-700">
+                            {recordingsCount}/{attempt.totalQuestions}
+                          </span>
+                          {typeof numericScore === "number" && !Number.isNaN(numericScore) ? (
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
+                                bandClass(numericScore),
+                              )}
+                            >
+                              <Award className="h-3 w-3" />
+                              {numericScore.toFixed(1)}
+                            </span>
+                          ) : null}
+                        </span>
                       ) : attempt && accuracy != null ? (
                         <span className="inline-flex items-center gap-2">
                           <span className="tabular-nums text-slate-700">
@@ -396,7 +547,7 @@ export function HomeworkStudentResults({
 
       <Dialog open={!!selectedRow} onOpenChange={(open) => !open && setSelectedId(null)}>
         <DialogContent
-          className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0"
+          className="sm:max-w-3xl max-h-[85vh] flex flex-col p-0 gap-0"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {selectedRow && (
@@ -440,8 +591,11 @@ export function HomeworkStudentResults({
                 <div className="px-6 py-5">
                   <StudentDetail
                     row={selectedRow}
-                    onFeedback={updateRow}
+                    homework={homework}
+                    onUpdate={updateRow}
+                    onRecordingGradeChange={updateRecordingGrade}
                     onSave={saveRow}
+                    onChanged={onChanged}
                     saving={savingId === selectedRow.studentId}
                   />
                 </div>
@@ -456,21 +610,61 @@ export function HomeworkStudentResults({
 
 function StudentDetail({
   row,
-  onFeedback,
+  homework,
+  onUpdate,
+  onRecordingGradeChange,
   onSave,
+  onChanged,
   saving = false,
 }: {
   row: Row
-  onFeedback: (studentId: string, patch: Partial<Row>) => void
+  homework: HomeworkAssignment
+  onUpdate: (studentId: string, patch: Partial<Row>) => void
+  onRecordingGradeChange: (
+    studentId: string,
+    questionId: number,
+    patch: Partial<RecordingGradeDraft>,
+  ) => void
   onSave: (row: Row) => void
+  onChanged?: () => void
   saving?: boolean
 }) {
+  const { toast } = useToast()
+  const [transcribing, setTranscribing] = useState(false)
   const attempt = row.submission?.attempt
   const cheatingFailed = isCheatingFailed(row.submission)
+  const isSpeaking = homework.subject === "speaking"
+  const speakingRecordings =
+    attempt?.mistakes?.filter((m) => isAudioUrl(m.userAnswer)) ?? []
+  const missingTranscription = speakingRecordings.some((m) => !m.transcription?.trim())
   const accuracy =
-    attempt && attempt.totalQuestions > 0
+    !isSpeaking && attempt && attempt.totalQuestions > 0
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
       : null
+  const numericScore = row.submission?.score
+
+  const handleTranscribe = async () => {
+    const submissionId = row.submission?.id
+    if (!submissionId) return
+    setTranscribing(true)
+    try {
+      const updated = await homeworkApi.transcribe(submissionId)
+      onUpdate(row.studentId, {
+        submission: updated,
+        recordingGrades: recordingGradesFromMistakes(updated.attempt?.mistakes ?? []),
+      })
+      onChanged?.()
+      toast({ title: "Transcription complete" })
+    } catch (err) {
+      toast({
+        title: "Transcription failed",
+        description: err instanceof Error ? err.message : "Could not transcribe recordings",
+        variant: "destructive",
+      })
+    } finally {
+      setTranscribing(false)
+    }
+  }
 
   return (
     <div className="space-y-3">
@@ -501,11 +695,24 @@ function StudentDetail({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                Exercise result
+                {isSpeaking ? "Speaking recordings" : "Exercise result"}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-900 ring-1 ring-slate-200">
-                {attempt.correctCount}/{attempt.totalQuestions} correct
+                {isSpeaking
+                  ? `${speakingRecordings.length}/${attempt.totalQuestions} submitted`
+                  : `${attempt.correctCount}/${attempt.totalQuestions} correct`}
               </span>
+              {typeof numericScore === "number" && !Number.isNaN(numericScore) ? (
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
+                    bandClass(numericScore),
+                  )}
+                >
+                  <Award className="h-3 w-3" />
+                  {numericScore.toFixed(1)}
+                </span>
+              ) : null}
               {accuracy != null && (
                 <span
                   className={cn(
@@ -550,7 +757,53 @@ function StudentDetail({
               />
             </div>
           )}
-          {attempt.mistakes.length > 0 ? (
+          {isSpeaking ? (
+            speakingRecordings.length > 0 ? (
+              <>
+                {missingTranscription ? (
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-100 bg-amber-50 px-3 py-2">
+                    <p className="text-[11px] text-amber-900">
+                      Some recordings have no transcription yet.
+                    </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 border-amber-200 bg-white text-xs"
+                      onClick={() => void handleTranscribe()}
+                      disabled={transcribing}
+                    >
+                      <RefreshCw className={cn("mr-1.5 h-3.5 w-3.5", transcribing && "animate-spin")} />
+                      {transcribing ? "Transcribing…" : "Run transcription"}
+                    </Button>
+                  </div>
+                ) : null}
+              <ul className="mt-4 space-y-3">
+                {speakingRecordings.map((m, idx) => {
+                  const grade =
+                    row.recordingGrades.find((g) => g.questionId === m.questionId) ?? {
+                      questionId: m.questionId,
+                      score: "",
+                      feedback: "",
+                    }
+                  return (
+                    <SpeakingRecordingReviewCard
+                      key={`${row.studentId}-${m.questionId}`}
+                      mistake={m}
+                      grade={grade}
+                      index={idx}
+                      onChange={(patch) =>
+                        onRecordingGradeChange(row.studentId, m.questionId, patch)
+                      }
+                    />
+                  )
+                })}
+              </ul>
+              </>
+            ) : (
+              <p className="mt-2 text-[11px] text-slate-500">No recordings submitted yet.</p>
+            )
+          ) : attempt.mistakes.length > 0 ? (
             <ul className="mt-3 space-y-1.5">
               {attempt.mistakes.map((m) => (
                 <li
@@ -589,16 +842,35 @@ function StudentDetail({
         </div>
       )}
 
-      <div className="flex items-end gap-2">
-        <div className="flex-1">
-          <label className="text-[11px] uppercase tracking-wider text-slate-500">Feedback</label>
-          <Input
+      <div className={cn("grid gap-3", isSpeaking ? "sm:grid-cols-2" : "")}>
+        {isSpeaking ? (
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-slate-500">
+              Score (0–9)
+            </label>
+            <Input
+              value={row.score}
+              onChange={(e) => onUpdate(row.studentId, { score: e.target.value })}
+              placeholder="e.g. 6.5"
+              className="mt-1"
+            />
+          </div>
+        ) : null}
+        <div className={isSpeaking ? "" : "sm:col-span-2"}>
+          <label className="text-[11px] uppercase tracking-wider text-slate-500">
+            Overall feedback
+          </label>
+          <Textarea
             value={row.feedback}
-            onChange={(e) => onFeedback(row.studentId, { feedback: e.target.value })}
-            placeholder="Optional notes for the student"
-            className="mt-1"
+            onChange={(e) => onUpdate(row.studentId, { feedback: e.target.value })}
+            placeholder="Optional summary for the student"
+            rows={2}
+            className="mt-1 min-h-[72px] resize-y"
           />
         </div>
+      </div>
+
+      <div className="flex justify-end">
         <Button
           size="sm"
           onClick={() => onSave(row)}
@@ -614,9 +886,10 @@ function StudentDetail({
   )
 }
 
-function accuracyOf(sub?: HomeworkSubmission): number {
+function accuracyOf(sub?: HomeworkSubmission, subject?: HomeworkAssignment["subject"]): number {
   const a = sub?.attempt
   if (!a || a.totalQuestions === 0) return -1
+  if (subject === "speaking") return speakingRecordingsCount(sub) / a.totalQuestions
   return a.correctCount / a.totalQuestions
 }
 
@@ -670,6 +943,13 @@ function accuracyClass(pct: number): string {
   if (pct >= 80) return "bg-emerald-100 text-emerald-800"
   if (pct >= 60) return "bg-sky-100 text-sky-800"
   if (pct >= 40) return "bg-amber-100 text-amber-800"
+  return "bg-rose-100 text-rose-800"
+}
+
+function bandClass(score: number): string {
+  if (score >= 7) return "bg-emerald-100 text-emerald-800"
+  if (score >= 5.5) return "bg-sky-100 text-sky-800"
+  if (score >= 4) return "bg-amber-100 text-amber-800"
   return "bg-rose-100 text-rose-800"
 }
 
