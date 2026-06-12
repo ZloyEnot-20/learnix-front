@@ -12,6 +12,10 @@ export interface Group {
   /** Computed by the API from User.groupId; prefer `studentsInGroup()` when students are loaded. */
   studentIds: string[]
   monthlyFee?: number
+  /** JS weekday indices: 0 = Sun … 6 = Sat */
+  lessonWeekdays?: number[]
+  lessonStartTime?: string
+  lessonEndTime?: string
   createdAt: string
 }
 

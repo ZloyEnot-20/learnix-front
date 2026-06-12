@@ -21,13 +21,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet } from "lucide-react"
+import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet, Clock, Pencil } from "lucide-react"
 import type { Group, Student } from "@/lib/admin-storage"
 import { groupMemberCount, studentsInGroup } from "@/lib/admin-storage"
 import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { isEntryTestGroup, selectableGroups } from "@/lib/entry-test-group"
 import { groupsApi } from "@/lib/api"
+import { formatLessonSchedule } from "@/lib/lesson-schedule"
+import {
+  DEFAULT_LESSON_SCHEDULE,
+  LessonScheduleFields,
+  validateLessonScheduleForm,
+  type LessonScheduleFormValues,
+} from "./lesson-schedule-fields"
 import { CardGridSkeleton } from "./skeletons"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { StudentDetailModal } from "./student-detail-modal"
@@ -78,12 +85,40 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   const [pendingDelete, setPendingDelete] = useState<Group | null>(null)
   const [addingStudent, setAddingStudent] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
+  const [showEdit, setShowEdit] = useState(false)
+  const [updating, setUpdating] = useState(false)
 
   const [form, setForm] = useState({
     name: "",
     description: "",
     monthlyFee: 1_000_000,
+    ...DEFAULT_LESSON_SCHEDULE,
   })
+
+  const [editForm, setEditForm] = useState({
+    name: "",
+    description: "",
+    monthlyFee: 1_000_000,
+    ...DEFAULT_LESSON_SCHEDULE,
+  })
+
+  function groupToScheduleForm(group: Group): LessonScheduleFormValues {
+    return {
+      lessonWeekdays: group.lessonWeekdays ?? [],
+      lessonStartTime: group.lessonStartTime ?? "10:00",
+      lessonEndTime: group.lessonEndTime ?? "12:00",
+    }
+  }
+
+  function openEditDialog(group: Group) {
+    setEditForm({
+      name: group.name,
+      description: group.description ?? "",
+      monthlyFee: group.monthlyFee ?? 0,
+      ...groupToScheduleForm(group),
+    })
+    setShowEdit(true)
+  }
 
   const loadSummaries = async (groupList: Group[], force = false) => {
     const data = await getGroupSummaries(
@@ -123,16 +158,24 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       toast({ title: "Name required", variant: "destructive" })
       return
     }
+    const scheduleError = validateLessonScheduleForm(form)
+    if (scheduleError) {
+      toast({ title: scheduleError, variant: "destructive" })
+      return
+    }
     setCreating(true)
     try {
       await groupsApi.create({
         name: form.name.trim(),
         description: form.description.trim() || undefined,
         monthlyFee: Number(form.monthlyFee) || 0,
+        lessonWeekdays: form.lessonWeekdays,
+        lessonStartTime: form.lessonStartTime,
+        lessonEndTime: form.lessonEndTime,
       })
       invalidateGroups()
       toast({ title: "Group created" })
-      setForm({ name: "", description: "", monthlyFee: 1_000_000 })
+      setForm({ name: "", description: "", monthlyFee: 1_000_000, ...DEFAULT_LESSON_SCHEDULE })
       setShowCreate(false)
       const { groups: nextGroups } = await refreshAll(true)
       await loadSummaries(nextGroups, true)
@@ -145,6 +188,43 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       })
     } finally {
       setCreating(false)
+    }
+  }
+
+  const submitEditGroup = async () => {
+    if (!selectedGroup) return
+    if (!editForm.name.trim()) {
+      toast({ title: "Name required", variant: "destructive" })
+      return
+    }
+    const scheduleError = validateLessonScheduleForm(editForm)
+    if (scheduleError) {
+      toast({ title: scheduleError, variant: "destructive" })
+      return
+    }
+    setUpdating(true)
+    try {
+      await groupsApi.update(selectedGroup.id, {
+        name: editForm.name.trim(),
+        description: editForm.description.trim() || undefined,
+        monthlyFee: Number(editForm.monthlyFee) || 0,
+        lessonWeekdays: editForm.lessonWeekdays,
+        lessonStartTime: editForm.lessonStartTime,
+        lessonEndTime: editForm.lessonEndTime,
+      })
+      invalidateGroups()
+      toast({ title: "Group updated" })
+      setShowEdit(false)
+      await refreshGroups(true)
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not update group",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setUpdating(false)
     }
   }
 
@@ -216,6 +296,15 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   // ----- Detail view -----
   if (selectedGroup && !isEntryTestGroup(selectedGroup)) {
     const summary = summaryFor(selectedGroup.id)
+    const scheduleLabel = formatLessonSchedule(
+      selectedGroup.lessonWeekdays?.length
+        ? {
+            weekdays: selectedGroup.lessonWeekdays,
+            startTime: selectedGroup.lessonStartTime ?? "",
+            endTime: selectedGroup.lessonEndTime ?? "",
+          }
+        : null,
+    )
     return (
       <>
         <div className="space-y-4">
@@ -234,6 +323,10 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                   <CardDescription>{selectedGroup.description || "—"}</CardDescription>
                 </div>
                 <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => openEditDialog(selectedGroup)}>
+                    <Pencil className="h-4 w-4 mr-1.5" />
+                    Edit
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
@@ -257,6 +350,12 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
               </div>
             </CardHeader>
             <CardContent>
+              {scheduleLabel ? (
+                <div className="mb-4 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                  <Clock className="h-4 w-4 shrink-0 text-slate-500" />
+                  {scheduleLabel}
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                 <StatChip
                   icon={Users}
@@ -360,6 +459,61 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           open={!!studentDetail}
           onOpenChange={(open) => !open && setStudentDetail(null)}
         />
+
+        <Dialog open={showEdit} onOpenChange={setShowEdit}>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit group</DialogTitle>
+              <DialogDescription>Update group details and lesson schedule.</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="eg-name">Group name *</Label>
+                <Input
+                  id="eg-name"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="eg-desc">Description</Label>
+                <Textarea
+                  id="eg-desc"
+                  rows={2}
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="eg-fee">Default monthly fee (som)</Label>
+                <Input
+                  id="eg-fee"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  value={formatThousands(editForm.monthlyFee)}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, monthlyFee: parseDigits(e.target.value) })
+                  }
+                  className="tabular-nums"
+                />
+              </div>
+              <LessonScheduleFields
+                idPrefix="edit-schedule"
+                value={editForm}
+                onChange={(schedule) => setEditForm({ ...editForm, ...schedule })}
+              />
+            </div>
+            <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+              <Button onClick={submitEditGroup} loading={updating} className="bg-[#C8102E] hover:bg-[#A00D25]">
+                Save
+              </Button>
+              <Button variant="outline" onClick={() => setShowEdit(false)}>
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </>
     )
   }
@@ -398,6 +552,15 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
               {manageableGroups.map((g) => {
                 const memberCount = groupMemberCount(students, g.id)
                 const summary = summaryFor(g.id)
+                const scheduleLabel = formatLessonSchedule(
+                  g.lessonWeekdays?.length
+                    ? {
+                        weekdays: g.lessonWeekdays,
+                        startTime: g.lessonStartTime ?? "",
+                        endTime: g.lessonEndTime ?? "",
+                      }
+                    : null,
+                )
                 return (
                   <button
                     key={g.id}
@@ -434,8 +597,17 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                         />
                       </div>
                       <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-400">
-                        <CalendarDays className="h-3 w-3" />
-                        Created {new Date(g.createdAt).toLocaleDateString()}
+                        {scheduleLabel ? (
+                          <>
+                            <Clock className="h-3 w-3 shrink-0" />
+                            <span className="truncate">{scheduleLabel}</span>
+                          </>
+                        ) : (
+                          <>
+                            <CalendarDays className="h-3 w-3" />
+                            Created {new Date(g.createdAt).toLocaleDateString()}
+                          </>
+                        )}
                       </div>
                     </div>
                   </button>
@@ -447,7 +619,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       </Card>
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create a group</DialogTitle>
             <DialogDescription>Groups are used to assign homework and track payments.</DialogDescription>
@@ -487,6 +659,11 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                 className="tabular-nums"
               />
             </div>
+            <LessonScheduleFields
+              idPrefix="create-schedule"
+              value={form}
+              onChange={(schedule) => setForm({ ...form, ...schedule })}
+            />
           </div>
           <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
             <Button onClick={submitGroup} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">

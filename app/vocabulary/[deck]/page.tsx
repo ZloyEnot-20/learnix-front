@@ -368,20 +368,27 @@ function Flashcards({
         onExit={onExit}
       />
 
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setFlipped((f) => !f)}
-        className="relative block h-72 w-full [perspective:1200px]"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            setFlipped((f) => !f)
+          }
+        }}
+        className="relative block h-72 w-full cursor-pointer select-none [perspective:1200px]"
         aria-label="Flip card"
       >
         <div
           className={cn(
-            "relative h-full w-full rounded-3xl transition-transform duration-500 [transform-style:preserve-3d]",
+            "relative h-full w-full rounded-3xl transition-transform duration-500 will-change-transform [transform-style:preserve-3d]",
             flipped && "[transform:rotateY(180deg)]",
           )}
         >
           {/* Front */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl border border-violet-200 bg-white p-6 text-center shadow-sm [backface-visibility:hidden]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl border border-violet-200 bg-white p-6 text-center shadow-sm [backface-visibility:hidden] [transform:translateZ(0)]">
             <span className="rounded-full bg-violet-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-600">
               {card.partOfSpeech}
             </span>
@@ -392,13 +399,13 @@ function Flashcards({
             </span>
           </div>
           {/* Back */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50 p-6 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50 p-6 text-center [backface-visibility:hidden] [transform:rotateY(180deg)_translateZ(0)]">
             <p className="text-xl font-bold text-slate-900">{wordTranslation(card, lang)}</p>
             <p className="text-sm text-slate-600">{card.definition}</p>
             <p className="mt-1 text-sm italic text-slate-500">“{card.example}”</p>
           </div>
         </div>
-      </button>
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <Button

@@ -27,6 +27,7 @@ import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import type { VocabDeck } from "./vocabulary-data"
 import type { StudentLevel } from "./gamification"
+import type { StudentContextResponse } from "./lesson-schedule"
 
 // ---------- Auth ----------
 export interface AuthUser {
@@ -86,10 +87,7 @@ export const studentsApi = {
   remove: (id: string) => api.del(`/students/${id}`),
   progress: (id: string) => api.get<StudentProgress>(`/students/${id}/progress`),
   level: (id: string) => api.get<StudentLevel>(`/students/${id}/level`),
-  context: (id: string) =>
-    api.get<{ groupName: string | null; teacherName: string | null }>(
-      `/students/${id}/context`,
-    ),
+  context: (id: string) => api.get<StudentContextResponse>(`/students/${id}/context`),
   ieltsProfile: (id: string) => api.get<StudentIeltsProfile>(`/students/${id}/ielts-profile`),
   ieltsSummaries: () => api.get<StudentIeltsSummary[]>("/students/ielts-summaries"),
   sendNotification: (

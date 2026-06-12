@@ -1,7 +1,7 @@
 /**
  * Thin fetch wrapper around the backend REST API.
  *
- * - Reads the API base URL from NEXT_PUBLIC_API_URL (defaults to production API).
+ * - Reads the API base URL from NEXT_PUBLIC_API_URL (dev defaults to local backend).
  * - Stores the JWT access/refresh tokens in localStorage.
  * - Transparently refreshes an expired access token once per request.
  *
@@ -11,7 +11,9 @@
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
-  "https://learnix-api.tw1.ru/api"
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:4000/api"
+    : "https://learnix-api.tw1.ru/api")
 
 const ACCESS_KEY = "ielts_access_token"
 const REFRESH_KEY = "ielts_refresh_token"

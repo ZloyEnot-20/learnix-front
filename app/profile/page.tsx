@@ -28,6 +28,7 @@ import {
   BarChart3,
   BookOpen,
   Calendar,
+  Clock,
   CheckCircle2,
   ChevronRight,
   Flame,
@@ -48,6 +49,8 @@ import { TestResultsModal } from "@/components/test-results-modal"
 import { studentsApi, testResultsApi } from "@/lib/api"
 import StudentStatsPanel from "@/components/student/student-stats-panel"
 import { cn } from "@/lib/utils"
+import { formatLessonSchedule } from "@/lib/lesson-schedule"
+import type { LessonSchedule } from "@/lib/lesson-schedule"
 
 const TEST_COLORS = {
   reading: "#c1bffd",
@@ -84,6 +87,7 @@ export default function ProfilePage() {
   const [showStats, setShowStats] = useState(false)
   const [groupName, setGroupName] = useState<string | null>(null)
   const [teacherName, setTeacherName] = useState<string | null>(null)
+  const [lessonSchedule, setLessonSchedule] = useState<LessonSchedule | null>(null)
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -106,6 +110,7 @@ export default function ProfilePage() {
           if (cancelled) return
           setGroupName(ctx.groupName)
           setTeacherName(ctx.teacherName)
+          setLessonSchedule(ctx.lessonSchedule)
         })
         .catch(() => {})
     }
@@ -163,6 +168,7 @@ export default function ProfilePage() {
     year: "numeric",
     month: "long",
   })
+  const scheduleLabel = formatLessonSchedule(lessonSchedule)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -213,6 +219,12 @@ export default function ProfilePage() {
                       <span className="inline-flex items-center gap-1.5">
                         <GraduationCap className="h-3.5 w-3.5 shrink-0" />
                         {teacherName}
+                      </span>
+                    )}
+                    {scheduleLabel && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5 shrink-0" />
+                        {scheduleLabel}
                       </span>
                     )}
                     <span className="inline-flex items-center gap-1.5">
