@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useEffect, useMemo, useState } from "react"
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -1021,10 +1021,25 @@ function HomeworkTable({
   mode: "active" | "history"
 }) {
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
+  const [mountedIds, setMountedIds] = useState<Record<string, boolean>>({})
 
   const toggleExpanded = (homeworkId: string) => {
-    setExpandedIds((prev) => ({ ...prev, [homeworkId]: !prev[homeworkId] }))
+    const expanding = !expandedIds[homeworkId]
+    if (expanding) {
+      setMountedIds((prev) => ({ ...prev, [homeworkId]: true }))
+      setExpandedIds((prev) => ({ ...prev, [homeworkId]: true }))
+      return
+    }
+    setExpandedIds((prev) => ({ ...prev, [homeworkId]: false }))
   }
+
+  const unmountExpanded = useCallback((homeworkId: string) => {
+    setMountedIds((prev) => {
+      const next = { ...prev }
+      delete next[homeworkId]
+      return next
+    })
+  }, [])
 
   if (rows.length === 0) {
     return (
@@ -1184,10 +1199,14 @@ function HomeworkTable({
                     </div>
                   </td>
                 </tr>
-                {isExpanded && (
+                {mountedIds[row.homework.id] && (
                   <tr className="border-b border-blue-100 bg-blue-50/30">
                     <td colSpan={10} className="p-0">
-                      <ExpandableRowContent>
+                      <ExpandableRowContent
+                        open={isExpanded}
+                        onClosed={unmountExpanded}
+                        homeworkId={row.homework.id}
+                      >
                         <div className="px-3 py-4 sm:px-4">
                           <HomeworkStudentResults
                             homework={row.homework}
@@ -1212,18 +1231,44 @@ function HomeworkTable({
   )
 }
 
-/** Smoothly animates its content open (0 → full height) when mounted. */
-function ExpandableRowContent({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false)
+const EXPAND_ANIMATION_MS = 300
+
+/** Smoothly animates content open and closed (0 ↔ full height). */
+function ExpandableRowContent({
+  open,
+  homeworkId,
+  onClosed,
+  children,
+}: {
+  open: boolean
+  homeworkId: string
+  onClosed?: (homeworkId: string) => void
+  children: React.ReactNode
+}) {
+  const [animateOpen, setAnimateOpen] = useState(false)
+
   useEffect(() => {
-    const id = requestAnimationFrame(() => setOpen(true))
-    return () => cancelAnimationFrame(id)
-  }, [])
+    if (open) {
+      setAnimateOpen(false)
+      const id = requestAnimationFrame(() => setAnimateOpen(true))
+      return () => cancelAnimationFrame(id)
+    }
+    setAnimateOpen(false)
+  }, [open])
+
+  useEffect(() => {
+    if (open) return
+    const timer = window.setTimeout(() => onClosed?.(homeworkId), EXPAND_ANIMATION_MS)
+    return () => window.clearTimeout(timer)
+  }, [open, homeworkId, onClosed])
+
+  const expanded = open && animateOpen
+
   return (
     <div
       className={cn(
         "grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none",
-        open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+        expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
       )}
     >
       <div className="min-h-0 overflow-hidden">{children}</div>

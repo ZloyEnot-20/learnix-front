@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
+  Bell,
   BookMarked,
   BookOpen,
   Calendar,
@@ -38,6 +39,7 @@ import { homeworkApi, paymentsApi, studentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
 import { StudentDetailModalSkeleton } from "./skeletons"
 import { StudentIeltsProfileSection } from "./student-ielts-profile-section"
+import { SendStudentNotificationDialog } from "./send-student-notification-dialog"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = {
   reading: { icon: BookOpen, color: "#c1bffd" },
@@ -115,6 +117,7 @@ interface DetailData {
 export function StudentDetailModal({ student, open, onOpenChange }: StudentDetailModalProps) {
   const [data, setData] = useState<DetailData | null>(null)
   const [loading, setLoading] = useState(false)
+  const [showNotify, setShowNotify] = useState(false)
 
   useEffect(() => {
     if (!student || !open) {
@@ -168,10 +171,10 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="!max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0"
+        className="!max-w-5xl flex w-[95vw] max-h-[90vh] flex-col gap-0 overflow-hidden p-0"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <DialogHeader className="sticky top-0 z-20 border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5 shadow-sm">
+        <DialogHeader className="shrink-0 border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-lg font-bold text-white shadow-sm">
               {initials(student.name)}
@@ -209,7 +212,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-5 space-y-6">
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5 space-y-6">
           <StudentIeltsProfileSection student={student} />
 
           {loading ? (
@@ -359,12 +362,26 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
           )}
         </div>
 
-        <div className="flex justify-end gap-2 border-t bg-slate-50/60 px-6 py-3">
+        <div className="flex shrink-0 flex-wrap justify-end gap-2 border-t bg-slate-50 px-6 py-3 shadow-[0_-4px_12px_rgba(15,23,42,0.06)]">
+          <Button
+            variant="outline"
+            onClick={() => setShowNotify(true)}
+            className="gap-1.5"
+          >
+            <Bell className="h-4 w-4" />
+            Send notification
+          </Button>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Close
           </Button>
         </div>
       </DialogContent>
+
+      <SendStudentNotificationDialog
+        student={student}
+        open={showNotify}
+        onOpenChange={setShowNotify}
+      />
     </Dialog>
   )
 }

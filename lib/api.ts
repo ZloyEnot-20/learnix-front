@@ -92,6 +92,10 @@ export const studentsApi = {
     ),
   ieltsProfile: (id: string) => api.get<StudentIeltsProfile>(`/students/${id}/ielts-profile`),
   ieltsSummaries: () => api.get<StudentIeltsSummary[]>("/students/ielts-summaries"),
+  sendNotification: (
+    id: string,
+    input: { title: string; message: string; type?: "system" | "reminder" | "achievement" },
+  ) => api.post<NotificationItem>(`/students/${id}/notify`, input),
 }
 
 export type IeltsReadinessStatus =
@@ -230,6 +234,8 @@ export const homeworkApi = {
   ) => api.patch<HomeworkSubmission>(`/homework/submissions/${submissionId}`, patch),
   transcribe: (submissionId: string) =>
     api.post<HomeworkSubmission>(`/homework/submissions/${submissionId}/transcribe`),
+  retry: (submissionId: string) =>
+    api.post<HomeworkSubmission>(`/homework/submissions/${submissionId}/retry`),
   details: (id: string) =>
     api.get<{
       homework: HomeworkAssignment

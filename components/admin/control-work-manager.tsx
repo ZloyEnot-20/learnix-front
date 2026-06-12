@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useEffect, useMemo, useState, type ReactNode } from "react"
+import { Fragment, useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 import {
   DndContext,
   KeyboardSensor,
@@ -39,6 +39,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
   BookMarked,
   BookOpen,
   CalendarClock,
@@ -55,10 +58,13 @@ import {
 } from "lucide-react"
 import type {
   ControlWork,
+  ControlWorkStep,
   ControlWorkSubject,
   ControlWorkSubmission,
-  Group,
+  HomeworkStatus,
+  Student,
 } from "@/lib/admin-storage"
+import { studentsInGroup } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
 import { selectableGroups } from "@/lib/entry-test-group"
 import { TableSkeleton } from "./skeletons"
@@ -69,6 +75,7 @@ import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import type { VocabDeck } from "@/lib/vocabulary-data"
 import { useToast } from "@/hooks/use-toast"
 import { ConfirmDialog } from "@/components/confirm-dialog"
+import { ControlWorkStudentModal } from "@/components/admin/control-work-student-modal"
 import { cn } from "@/lib/utils"
 
 const SECTION_META: Record<
@@ -89,6 +96,108 @@ const DEFAULT_ORDER: ControlWorkSubject[] = [
   "listening",
   "writing",
 ]
+
+function uniqueSectionSubjects(steps: ControlWorkStep[]): ControlWorkSubject[] {
+  const seen = new Set<ControlWorkSubject>()
+  const ordered: ControlWorkSubject[] = []
+  for (const step of steps) {
+    if (seen.has(step.subject)) continue
+    seen.add(step.subject)
+    ordered.push(step.subject)
+  }
+  return ordered
+}
+
+function stepIndicesForSubject(steps: ControlWorkStep[], subject: ControlWorkSubject): number[] {
+  return steps.reduce<number[]>((acc, step, index) => {
+    if (step.subject === subject) acc.push(index)
+    return acc
+  }, [])
+}
+
+function formatSubjectCell(
+  sub: ControlWorkSubmission | undefined,
+  steps: ControlWorkStep[],
+  subject: ControlWorkSubject,
+): { label: string; tone: "muted" | "active" | "done" | "danger" } {
+  const indices = stepIndicesForSubject(steps, subject)
+  if (!sub || indices.length === 0) return { label: "—", tone: "muted" }
+
+  let correct = 0
+  let total = 0
+  let anyCompleted = false
+  let anyInProgress = false
+  let anyCheating = false
+
+  for (const idx of indices) {
+    const result = sub.stepResults?.[idx]
+    if (!result || result.status === "pending") {
+      if (sub.status === "in_progress" && sub.currentStep === idx) {
+        anyInProgress = true
+      }
+      continue
+    }
+    anyCompleted = true
+    if (result.attempt?.failedDueToCheating) {
+      anyCheating = true
+      continue
+    }
+    const stepTotal = result.attempt?.totalQuestions ?? 0
+    if (stepTotal > 0) {
+      total += stepTotal
+      correct += result.attempt?.correctCount ?? 0
+    }
+  }
+
+  if (anyCheating && total === 0 && !anyCompleted) {
+    return { label: "Cheating", tone: "danger" }
+  }
+  if (total > 0) {
+    return {
+      label: `${correct}/${total}`,
+      tone: anyInProgress ? "active" : "done",
+    }
+  }
+  if (anyCompleted) return { label: "Done", tone: "done" }
+  if (anyInProgress) return { label: "In progress", tone: "active" }
+  return { label: "—", tone: "muted" }
+}
+
+function SectionBadge({
+  subject,
+  label,
+  className,
+}: {
+  subject: ControlWorkSubject
+  label?: string
+  className?: string
+}) {
+  const meta = SECTION_META[subject]
+  const Icon = meta.icon
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold text-slate-900/80",
+        className,
+      )}
+      style={{ backgroundColor: meta.color }}
+    >
+      <Icon className="h-3 w-3 shrink-0" />
+      {label ?? meta.label}
+    </span>
+  )
+}
+
+function SectionColumnHeader({ subject }: { subject: ControlWorkSubject }) {
+  const meta = SECTION_META[subject]
+  const Icon = meta.icon
+  return (
+    <span className="inline-flex items-center justify-center gap-1">
+      <Icon className="h-3 w-3 shrink-0 text-slate-400" />
+      {meta.label}
+    </span>
+  )
+}
 
 interface SectionConfig {
   enabled: boolean
@@ -142,6 +251,347 @@ function formatShortDateTime(iso: string) {
     hour: "2-digit",
     minute: "2-digit",
   })
+}
+
+const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
+  pending: { label: "Not started", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
+  in_progress: { label: "In progress", cls: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
+  paused: { label: "Paused", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
+  submitted: { label: "Submitted", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
+  graded: { label: "Graded", cls: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
+}
+
+const CHEATING_STATUS_META = {
+  label: "Cheating",
+  cls: "bg-red-100 text-red-800",
+  dot: "bg-red-500",
+}
+
+const STATUS_RANK: Record<HomeworkStatus, number> = {
+  graded: 0,
+  submitted: 1,
+  in_progress: 2,
+  paused: 3,
+  pending: 4,
+}
+
+type ResultsSortKey = "student" | "status" | "overall" | ControlWorkSubject
+type SortDir = "asc" | "desc"
+
+function submissionStatusMeta(sub?: ControlWorkSubmission) {
+  if (sub?.integrityStatus === "cheating_detected") return CHEATING_STATUS_META
+  const status = (sub?.status ?? "pending") as HomeworkStatus
+  return STATUS_META[status]
+}
+
+function StatusBadge({ meta }: { meta: { label: string; cls: string; dot: string } }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap",
+        meta.cls,
+      )}
+    >
+      <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", meta.dot)} />
+      {meta.label}
+    </span>
+  )
+}
+
+function stepCellClass(tone: ReturnType<typeof formatSubjectCell>["tone"]) {
+  return cn(
+    "tabular-nums",
+    tone === "muted" && "text-slate-400",
+    tone === "active" && "font-medium text-amber-700",
+    tone === "done" && "font-medium text-slate-800",
+    tone === "danger" && "font-semibold text-red-700",
+  )
+}
+
+function submissionOverallPct(sub: ControlWorkSubmission | undefined): number | null {
+  if (!sub?.stepResults?.length) return null
+  let correct = 0
+  let total = 0
+  for (const sr of sub.stepResults) {
+    if (sr.status !== "completed" || !sr.attempt) continue
+    if (sr.attempt.failedDueToCheating) return null
+    total += sr.attempt.totalQuestions ?? 0
+    correct += sr.attempt.correctCount ?? 0
+  }
+  if (total <= 0) return null
+  return Math.round((correct / total) * 100)
+}
+
+function subjectAccuracyRatio(
+  sub: ControlWorkSubmission | undefined,
+  steps: ControlWorkStep[],
+  subject: ControlWorkSubject,
+): number {
+  const indices = stepIndicesForSubject(steps, subject)
+  let correct = 0
+  let total = 0
+  for (const idx of indices) {
+    const sr = sub?.stepResults?.[idx]
+    if (sr?.status !== "completed" || !sr.attempt) continue
+    const stepTotal = sr.attempt.totalQuestions ?? 0
+    if (stepTotal <= 0) continue
+    total += stepTotal
+    correct += sr.attempt.correctCount ?? 0
+  }
+  if (total <= 0) return -1
+  return correct / total
+}
+
+function statusSortRank(sub?: ControlWorkSubmission): number {
+  if (sub?.integrityStatus === "cheating_detected") return -1
+  const status = (sub?.status ?? "pending") as HomeworkStatus
+  return STATUS_RANK[status] ?? 99
+}
+
+function overallSortValue(sub?: ControlWorkSubmission): number {
+  const pct = submissionOverallPct(sub)
+  if (pct != null) return pct
+  if (sub?.status === "submitted" || sub?.status === "graded") return -0.5
+  return -1
+}
+
+function SortableTh({
+  label,
+  active,
+  dir,
+  onSort,
+  align = "left",
+  sticky = false,
+}: {
+  label: ReactNode
+  active: boolean
+  dir: SortDir
+  onSort: () => void
+  align?: "left" | "center"
+  sticky?: boolean
+}) {
+  const Icon = active ? (dir === "asc" ? ArrowUp : ArrowDown) : ArrowUpDown
+  return (
+    <th
+      className={cn(
+        "py-2 font-semibold align-middle",
+        align === "center" ? "px-2 text-center" : "px-3 text-left",
+        sticky && "sticky left-0 z-[1] bg-slate-50",
+      )}
+    >
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onSort()
+        }}
+        className={cn(
+          "inline-flex items-center gap-1 transition-colors hover:text-slate-800",
+          active && "text-slate-800",
+          align === "center" && "mx-auto",
+        )}
+      >
+        {label}
+        <Icon className={cn("h-3 w-3 shrink-0", active ? "text-slate-700" : "text-slate-400")} />
+      </button>
+    </th>
+  )
+}
+
+function accuracyClass(pct: number): string {
+  if (pct >= 80) return "bg-emerald-100 text-emerald-800"
+  if (pct >= 60) return "bg-sky-100 text-sky-800"
+  if (pct >= 40) return "bg-amber-100 text-amber-800"
+  return "bg-rose-100 text-rose-800"
+}
+
+function ControlWorkStudentResults({
+  cw,
+  students,
+  submissions,
+}: {
+  cw: ControlWork
+  students: Student[]
+  submissions: ControlWorkSubmission[]
+}) {
+  const sectionSubjects = useMemo(() => uniqueSectionSubjects(cw.steps), [cw.steps])
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [sortKey, setSortKey] = useState<ResultsSortKey>("status")
+  const [sortDir, setSortDir] = useState<SortDir>("asc")
+
+  const members = useMemo(
+    () => studentsInGroup(students, cw.groupId),
+    [students, cw.groupId],
+  )
+
+  const toggleSort = (key: ResultsSortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+      return
+    }
+    setSortKey(key)
+    if (key === "student" || key === "status") {
+      setSortDir("asc")
+    } else {
+      setSortDir("desc")
+    }
+  }
+
+  const sortedMembers = useMemo(() => {
+    const dir = sortDir === "asc" ? 1 : -1
+    return [...members].sort((a, b) => {
+      const subA = submissions.find((s) => s.studentId === a.id)
+      const subB = submissions.find((s) => s.studentId === b.id)
+      let cmp = 0
+
+      switch (sortKey) {
+        case "student":
+          cmp = a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+          break
+        case "status":
+          cmp = statusSortRank(subA) - statusSortRank(subB)
+          break
+        case "overall":
+          cmp = overallSortValue(subA) - overallSortValue(subB)
+          break
+        default:
+          cmp =
+            subjectAccuracyRatio(subA, cw.steps, sortKey) -
+            subjectAccuracyRatio(subB, cw.steps, sortKey)
+          break
+      }
+
+      if (cmp !== 0) return cmp * dir
+      return a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+    })
+  }, [members, submissions, cw.steps, sortKey, sortDir])
+
+  const selectedSubmission = useMemo(
+    () =>
+      selectedStudent
+        ? submissions.find((s) => s.studentId === selectedStudent.id)
+        : undefined,
+    [selectedStudent, submissions],
+  )
+
+  if (members.length === 0) {
+    return <p className="text-xs text-slate-500">No students in this group.</p>
+  }
+
+  return (
+    <>
+      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table className="w-full table-fixed text-xs">
+          <colgroup>
+            <col className="w-[28%]" />
+            <col className="w-28" />
+            {sectionSubjects.map((subject) => (
+              <col key={`${cw.id}-col-${subject}`} />
+            ))}
+            <col className="w-20" />
+          </colgroup>
+          <thead>
+            <tr className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+              <SortableTh
+                label="Student"
+                active={sortKey === "student"}
+                dir={sortDir}
+                onSort={() => toggleSort("student")}
+                sticky
+              />
+              <SortableTh
+                label="Status"
+                active={sortKey === "status"}
+                dir={sortDir}
+                onSort={() => toggleSort("status")}
+                align="center"
+              />
+              {sectionSubjects.map((subject) => (
+                <SortableTh
+                  key={`${cw.id}-head-${subject}`}
+                  label={<SectionColumnHeader subject={subject} />}
+                  active={sortKey === subject}
+                  dir={sortDir}
+                  onSort={() => toggleSort(subject)}
+                  align="center"
+                />
+              ))}
+              <SortableTh
+                label="Overall"
+                active={sortKey === "overall"}
+                dir={sortDir}
+                onSort={() => toggleSort("overall")}
+                align="center"
+              />
+            </tr>
+          </thead>
+          <tbody>
+            {sortedMembers.map((student) => {
+              const sub = submissions.find((s) => s.studentId === student.id)
+              const cheating = sub?.integrityStatus === "cheating_detected"
+              const overallPct = cheating ? null : submissionOverallPct(sub)
+              const statusMeta = submissionStatusMeta(sub)
+              return (
+                <tr
+                  key={student.id}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setSelectedStudent(student)
+                  }}
+                  className="group cursor-pointer border-b border-slate-100 last:border-0 hover:bg-slate-50/80"
+                >
+                  <td className="sticky left-0 z-[1] bg-white py-2 px-3 text-left align-middle group-hover:bg-slate-50">
+                    <div className="font-medium text-slate-900">{student.name}</div>
+                  </td>
+                  <td className="py-2 px-2 text-center align-middle">
+                    <StatusBadge meta={statusMeta} />
+                  </td>
+                  {sectionSubjects.map((subject) => {
+                    const cell = formatSubjectCell(sub, cw.steps, subject)
+                    return (
+                      <td
+                        key={`${student.id}-${subject}`}
+                        className="py-2 px-2 text-center align-middle"
+                      >
+                        <span className={stepCellClass(cell.tone)}>{cell.label}</span>
+                      </td>
+                    )
+                  })}
+                  <td className="py-2 px-2 text-center align-middle">
+                    {cheating ? (
+                      <span className="font-semibold text-red-700">—</span>
+                    ) : overallPct != null ? (
+                      <span
+                        className={cn(
+                          "inline-flex min-w-[2.75rem] justify-center rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums",
+                          accuracyClass(overallPct),
+                          sub?.status === "in_progress" && "opacity-80",
+                        )}
+                      >
+                        {overallPct}%
+                      </span>
+                    ) : sub?.status === "submitted" || sub?.status === "graded" ? (
+                      <span className="text-slate-600">Submitted</span>
+                    ) : (
+                      <span className="text-slate-400">—</span>
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <ControlWorkStudentModal
+        cw={cw}
+        student={selectedStudent}
+        submission={selectedSubmission}
+        open={!!selectedStudent}
+        onOpenChange={(open) => !open && setSelectedStudent(null)}
+      />
+    </>
+  )
 }
 
 function SortableSectionCard({
@@ -215,7 +665,7 @@ export default function ControlWorkManager({
   onChanged?: () => void
 }) {
   const { toast } = useToast()
-  const { groups } = useAdminData()
+  const { groups, students } = useAdminData()
   const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [items, setItems] = useState<ControlWork[]>([])
   const [submissions, setSubmissions] = useState<ControlWorkSubmission[]>([])
@@ -225,6 +675,25 @@ export default function ControlWorkManager({
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [pendingDelete, setPendingDelete] = useState<ControlWork | null>(null)
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
+  const [mountedIds, setMountedIds] = useState<Record<string, boolean>>({})
+
+  const toggleExpanded = (controlWorkId: string) => {
+    const expanding = !expandedIds[controlWorkId]
+    if (expanding) {
+      setMountedIds((prev) => ({ ...prev, [controlWorkId]: true }))
+      setExpandedIds((prev) => ({ ...prev, [controlWorkId]: true }))
+      return
+    }
+    setExpandedIds((prev) => ({ ...prev, [controlWorkId]: false }))
+  }
+
+  const unmountExpanded = useCallback((controlWorkId: string) => {
+    setMountedIds((prev) => {
+      const next = { ...prev }
+      delete next[controlWorkId]
+      return next
+    })
+  }, [])
 
   const [grammarExercises, setGrammarExercises] = useState<GrammarExercise[]>([])
   const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
@@ -477,7 +946,7 @@ export default function ControlWorkManager({
     }
   }
 
-  if (loading) return <TableSkeleton rows={5} columns={5} />
+  if (loading) return <TableSkeleton rows={5} columns={7} />
 
   return (
     <div className="space-y-4">
@@ -504,6 +973,7 @@ export default function ControlWorkManager({
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
+                <th className="py-3 px-3 font-semibold">Assigned by</th>
                 <th className="py-3 px-3 font-semibold">Title</th>
                 <th className="py-3 px-3 font-semibold">Group</th>
                 <th className="py-3 px-3 font-semibold">Sections</th>
@@ -521,28 +991,23 @@ export default function ControlWorkManager({
                 return (
                   <Fragment key={cw.id}>
                     <tr
-                      className="cursor-pointer border-b border-slate-100 hover:bg-slate-50"
-                      onClick={() =>
-                        setExpandedIds((p) => ({ ...p, [cw.id]: !p[cw.id] }))
-                      }
+                      className={cn(
+                        "cursor-pointer border-b transition-colors",
+                        isExpanded
+                          ? "border-slate-200 bg-slate-50/80 hover:bg-slate-50"
+                          : "border-slate-100 hover:bg-slate-50",
+                      )}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleExpanded(cw.id)}
                     >
+                      <td className="py-3 px-3 text-slate-700">{cw.createdBy || "—"}</td>
                       <td className="py-3 px-3 font-medium text-slate-900">{cw.title}</td>
                       <td className="py-3 px-3 text-slate-600">{group?.name ?? "—"}</td>
                       <td className="py-3 px-3">
                         <span className="inline-flex flex-wrap gap-1">
-                          {cw.steps.map((step, i) => {
-                            const meta = SECTION_META[step.subject]
-                            const Icon = meta.icon
-                            return (
-                              <span
-                                key={`${cw.id}-${i}`}
-                                className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700"
-                              >
-                                <Icon className="h-3 w-3" />
-                                {meta.label}
-                              </span>
-                            )
-                          })}
+                          {uniqueSectionSubjects(cw.steps).map((subject) => (
+                            <SectionBadge key={`${cw.id}-${subject}`} subject={subject} />
+                          ))}
                         </span>
                       </td>
                       <td className="py-3 px-3 text-xs text-slate-600">
@@ -567,25 +1032,29 @@ export default function ControlWorkManager({
                           </Button>
                           <ChevronRight
                             className={cn(
-                              "h-4 w-4 text-slate-400 transition-transform",
+                              "h-4 w-4 text-slate-400 transition-transform duration-300 ease-out",
                               isExpanded && "rotate-90",
                             )}
                           />
                         </div>
                       </td>
                     </tr>
-                    {isExpanded && (
+                    {mountedIds[cw.id] && (
                       <tr className="border-b border-slate-100 bg-slate-50/50">
-                        <td colSpan={6} className="px-4 py-3">
-                          <ol className="space-y-1 text-xs text-slate-600">
-                            {cw.steps.map((step, i) => (
-                              <li key={i} className="flex items-center gap-2">
-                                <span className="font-semibold text-slate-400">{i + 1}.</span>
-                                <span className="font-medium text-slate-800">{step.title}</span>
-                                <span className="text-slate-400">({SECTION_META[step.subject].label})</span>
-                              </li>
-                            ))}
-                          </ol>
+                        <td colSpan={7} className="p-0">
+                          <ExpandableRowContent
+                            open={isExpanded}
+                            rowId={cw.id}
+                            onClosed={unmountExpanded}
+                          >
+                            <div className="px-4 py-4">
+                              <ControlWorkStudentResults
+                                cw={cw}
+                                students={students}
+                                submissions={subs}
+                              />
+                            </div>
+                          </ExpandableRowContent>
                         </td>
                       </tr>
                     )}
@@ -743,12 +1212,12 @@ export default function ControlWorkManager({
                           <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
                             {grammarTopics.map((t) => (
                               <button
-                                key={t.slug}
+                                key={t.topic}
                                 type="button"
-                                onClick={() => toggleTopic("grammar", t.slug)}
+                                onClick={() => toggleTopic("grammar", t.topic)}
                                 className={cn(
                                   "rounded-full px-2 py-0.5 text-[11px] font-semibold transition-colors",
-                                  cfg.topicSlugs.includes(t.slug)
+                                  cfg.topicSlugs.includes(t.topic)
                                     ? "bg-amber-100 text-amber-900"
                                     : "bg-slate-100 text-slate-600 hover:bg-slate-200",
                                 )}
@@ -910,6 +1379,51 @@ export default function ControlWorkManager({
         onConfirm={confirmDelete}
         loading={!!pendingDelete && deletingId === pendingDelete.id}
       />
+    </div>
+  )
+}
+
+const EXPAND_ANIMATION_MS = 300
+
+/** Smoothly animates content open and closed (0 ↔ full height). */
+function ExpandableRowContent({
+  open,
+  rowId,
+  onClosed,
+  children,
+}: {
+  open: boolean
+  rowId: string
+  onClosed?: (rowId: string) => void
+  children: ReactNode
+}) {
+  const [animateOpen, setAnimateOpen] = useState(false)
+
+  useEffect(() => {
+    if (open) {
+      setAnimateOpen(false)
+      const id = requestAnimationFrame(() => setAnimateOpen(true))
+      return () => cancelAnimationFrame(id)
+    }
+    setAnimateOpen(false)
+  }, [open])
+
+  useEffect(() => {
+    if (open) return
+    const timer = window.setTimeout(() => onClosed?.(rowId), EXPAND_ANIMATION_MS)
+    return () => window.clearTimeout(timer)
+  }, [open, rowId, onClosed])
+
+  const expanded = open && animateOpen
+
+  return (
+    <div
+      className={cn(
+        "grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none",
+        expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+      )}
+    >
+      <div className="min-h-0 overflow-hidden">{children}</div>
     </div>
   )
 }

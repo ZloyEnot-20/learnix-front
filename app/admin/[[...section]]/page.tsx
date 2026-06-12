@@ -87,6 +87,7 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   exercises: ["groups"],
   finance: ["students", "groups"],
   bot: ["students"],
+  control: ["students", "groups"],
   // tests, manage — no shared list APIs
 }
 

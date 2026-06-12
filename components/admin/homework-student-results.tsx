@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Clock,
   RefreshCw,
+  RotateCcw,
   Save,
   Target,
   XCircle,
@@ -35,6 +36,7 @@ import type {
 import { homeworkApi } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import {
   SpeakingRecordingReviewCard,
   recordingGradesFromMistakes,
@@ -116,6 +118,8 @@ export function HomeworkStudentResults({
   const { toast } = useToast()
   const [rows, setRows] = useState<Row[]>([])
   const [savingId, setSavingId] = useState<string | null>(null)
+  const [retryingId, setRetryingId] = useState<string | null>(null)
+  const [pendingRetry, setPendingRetry] = useState<Row | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [sortKey, setSortKey] = useState<SortKey>("status")
   const [sortDir, setSortDir] = useState<SortDir>("asc")
@@ -227,6 +231,44 @@ export function HomeworkStudentResults({
         }
       }),
     )
+  }
+
+  const confirmRetry = async () => {
+    const row = pendingRetry
+    if (!row?.submission?.id) return
+    setRetryingId(row.studentId)
+    try {
+      const updated = await homeworkApi.retry(row.submission.id)
+      setRows((prev) =>
+        prev.map((r) =>
+          r.studentId === row.studentId
+            ? {
+                ...r,
+                submission: updated,
+                status: "pending",
+                score: "",
+                feedback: "",
+                recordingGrades: [],
+                dirty: false,
+              }
+            : r,
+        ),
+      )
+      setPendingRetry(null)
+      toast({
+        title: "Retry assigned",
+        description: `${row.studentName} can solve this homework again.`,
+      })
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not assign retry",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setRetryingId(null)
+    }
   }
 
   const saveRow = async (row: Row) => {
@@ -596,7 +638,9 @@ export function HomeworkStudentResults({
                     onRecordingGradeChange={updateRecordingGrade}
                     onSave={saveRow}
                     onChanged={onChanged}
+                    onRequestRetry={() => setPendingRetry(selectedRow)}
                     saving={savingId === selectedRow.studentId}
+                    retrying={retryingId === selectedRow.studentId}
                   />
                 </div>
               </ScrollArea>
@@ -604,6 +648,26 @@ export function HomeworkStudentResults({
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingRetry}
+        onOpenChange={(open) => !open && setPendingRetry(null)}
+        title="Assign retry for this student?"
+        description={
+          pendingRetry && (
+            <>
+              <span className="font-semibold text-foreground">{pendingRetry.studentName}</span> will
+              need to solve{" "}
+              <span className="font-semibold text-foreground">{homework.title}</span> again. Their
+              current attempt, score, and feedback will be cleared.
+            </>
+          )
+        }
+        confirmLabel="Assign retry"
+        destructive={false}
+        onConfirm={confirmRetry}
+        loading={!!pendingRetry && retryingId === pendingRetry.studentId}
+      />
     </div>
   )
 }
@@ -615,7 +679,9 @@ function StudentDetail({
   onRecordingGradeChange,
   onSave,
   onChanged,
+  onRequestRetry,
   saving = false,
+  retrying = false,
 }: {
   row: Row
   homework: HomeworkAssignment
@@ -627,7 +693,9 @@ function StudentDetail({
   ) => void
   onSave: (row: Row) => void
   onChanged?: () => void
+  onRequestRetry?: () => void
   saving?: boolean
+  retrying?: boolean
 }) {
   const { toast } = useToast()
   const [transcribing, setTranscribing] = useState(false)
@@ -642,6 +710,8 @@ function StudentDetail({
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
       : null
   const numericScore = row.submission?.score
+  const retryCount = retryCountFromEvents(row.submission)
+  const canRetry = canAssignRetry(row.submission)
 
   const handleTranscribe = async () => {
     const submissionId = row.submission?.id
@@ -870,12 +940,34 @@ function StudentDetail({
         </div>
       </div>
 
-      <div className="flex justify-end">
+      {retryCount > 0 && (
+        <p className="text-[11px] text-slate-500">
+          Retries assigned: <span className="font-semibold text-slate-700">{retryCount}</span>
+        </p>
+      )}
+
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {canRetry && onRequestRetry ? (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={onRequestRetry}
+            loading={retrying}
+            disabled={saving}
+            className="border-sky-200 text-sky-800 hover:bg-sky-50"
+          >
+            <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+            Assign retry
+          </Button>
+        ) : (
+          <span />
+        )}
         <Button
           size="sm"
           onClick={() => onSave(row)}
           loading={saving}
-          disabled={!row.dirty}
+          disabled={!row.dirty || retrying}
           className={cn("bg-emerald-600 hover:bg-emerald-700", !row.dirty && "opacity-50")}
         >
           <Save className="h-3.5 w-3.5 mr-1.5" />
@@ -998,6 +1090,20 @@ function StatusBadge({ meta }: { meta: { label: string; cls: string; dot: string
       {meta.label}
     </span>
   )
+}
+
+function canAssignRetry(sub?: HomeworkSubmission): boolean {
+  if (!sub) return false
+  return (
+    sub.status !== "pending" ||
+    !!sub.attempt ||
+    !!sub.startedAt ||
+    (sub.entryCount ?? 0) > 0
+  )
+}
+
+function retryCountFromEvents(sub?: HomeworkSubmission): number {
+  return sub?.events?.filter((e) => e.type === "retry").length ?? 0
 }
 
 function integrityDisplay(
