@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const backendUrl = (process.env.BACKEND_URL ?? "http://201.51.3.63").replace(/\/$/, "")
+const backendUrl = (process.env.BACKEND_URL ?? "https://learnix-api.tw1.ru").replace(/\/$/, "")
 
 const nextConfig = {
   eslint: {
