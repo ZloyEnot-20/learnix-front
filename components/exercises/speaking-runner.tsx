@@ -111,10 +111,10 @@ function SpeakingResults({
       <SpeakingHeader exercise={exercise} backHref={backHref} hideBack={!!homeworkId} />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         <Card className="overflow-hidden">
-          <div className="h-1.5 w-full bg-rose-500" />
+          <div className="h-1.5 w-full bg-sky-500" />
           <CardContent className="pt-8 pb-8">
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-rose-100 text-rose-700">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-sky-100 text-sky-700">
                 <Mic className="h-7 w-7" />
               </div>
               <h2 className="text-2xl font-bold text-slate-900">
@@ -129,7 +129,7 @@ function SpeakingResults({
                 </p>
               )}
               <Link href={homeworkId ? "/dashboard" : backHref} className="mt-4">
-                <Button className="gap-1.5 bg-blue-500 hover:bg-blue-600 text-white">
+                <Button className="gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground">
                   <ArrowLeft className="h-4 w-4" />
                   {homeworkId ? "Back to dashboard" : "Back to topic"}
                 </Button>
@@ -291,7 +291,7 @@ export default function SpeakingRunner({
         </div>
         <div className="h-1 w-full overflow-hidden rounded-full bg-slate-200">
           <div
-            className="h-full rounded-full bg-rose-500 transition-all"
+            className="h-full rounded-full bg-sky-500 transition-all"
             style={{ width: `${progressPct}%` }}
           />
         </div>
@@ -318,7 +318,7 @@ export default function SpeakingRunner({
                 <span
                   className={cn(
                     "h-2.5 w-2.5 rounded-full",
-                    recorder.isRecording && "bg-rose-500 animate-pulse",
+                    recorder.isRecording && "bg-sky-500 animate-pulse",
                     recorder.isPaused && "bg-amber-500",
                     !recorder.isRecording && !recorder.isPaused && "bg-slate-300",
                   )}
@@ -343,7 +343,7 @@ export default function SpeakingRunner({
                   className={cn(
                     "gap-2",
                     (recorder.isRecording || recorder.isPaused) &&
-                      "bg-rose-500 hover:bg-rose-600 text-white",
+                      "bg-sky-500 hover:bg-sky-600 text-white",
                   )}
                 >
                   {recorder.isRecording ? (
@@ -392,7 +392,7 @@ export default function SpeakingRunner({
               <Button
                 onClick={handleSubmitAnswer}
                 disabled={!canSubmit}
-                className="gap-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-200"
+                className="gap-2 bg-primary hover:bg-primary/90 disabled:bg-primary/30"
               >
                 {uploading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

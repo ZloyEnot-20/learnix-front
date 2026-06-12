@@ -301,7 +301,7 @@ export default function AdminTestForm({ onCreated }: AdminTestFormProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-[#C8102E]" />
+          <Sparkles className="h-5 w-5 text-primary" />
           Add New Test
         </CardTitle>
         <CardDescription>
@@ -451,7 +451,7 @@ export default function AdminTestForm({ onCreated }: AdminTestFormProps) {
                 </div>
               )}
 
-              <Button type="submit" className="w-full bg-[#C8102E] hover:bg-[#A00D25]">
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                 Create test
               </Button>
             </form>
@@ -495,7 +495,7 @@ export default function AdminTestForm({ onCreated }: AdminTestFormProps) {
                 )}
               </div>
 
-              <Button type="submit" className="w-full bg-[#C8102E] hover:bg-[#A00D25]">
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                 Import test from JSON
               </Button>
             </form>

@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { WEEKDAY_OPTIONS } from "@/lib/lesson-schedule"
+import { normalizeTimeInput, WEEKDAY_OPTIONS } from "@/lib/lesson-schedule"
 
 export interface LessonScheduleFormValues {
   lessonWeekdays: number[]
@@ -40,7 +40,7 @@ export function LessonScheduleFields({ value, onChange, idPrefix = "schedule" }:
                 className={cn(
                   "rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors",
                   active
-                    ? "border-[#C8102E] bg-[#C8102E] text-white"
+                    ? "border-primary bg-primary text-primary-foreground"
                     : "border-slate-200 bg-white text-slate-600 hover:border-slate-300",
                 )}
               >
@@ -57,7 +57,9 @@ export function LessonScheduleFields({ value, onChange, idPrefix = "schedule" }:
             id={`${idPrefix}-start`}
             type="time"
             value={value.lessonStartTime}
-            onChange={(e) => onChange({ ...value, lessonStartTime: e.target.value })}
+            onChange={(e) =>
+              onChange({ ...value, lessonStartTime: normalizeTimeInput(e.target.value) })
+            }
           />
         </div>
         <div className="space-y-1.5">
@@ -66,7 +68,9 @@ export function LessonScheduleFields({ value, onChange, idPrefix = "schedule" }:
             id={`${idPrefix}-end`}
             type="time"
             value={value.lessonEndTime}
-            onChange={(e) => onChange({ ...value, lessonEndTime: e.target.value })}
+            onChange={(e) =>
+              onChange({ ...value, lessonEndTime: normalizeTimeInput(e.target.value) })
+            }
           />
         </div>
       </div>
@@ -81,8 +85,18 @@ export function validateLessonScheduleForm(value: LessonScheduleFormValues): str
   return null
 }
 
+/** Fresh schedule fields for the create-group dialog — no days pre-selected. */
+export function createEmptyLessonSchedule(): LessonScheduleFormValues {
+  return {
+    lessonWeekdays: [],
+    lessonStartTime: "10:00",
+    lessonEndTime: "12:00",
+  }
+}
+
+/** Defaults when editing a group that has no schedule saved yet. */
 export const DEFAULT_LESSON_SCHEDULE: LessonScheduleFormValues = {
-  lessonWeekdays: [1, 3, 5],
+  lessonWeekdays: [],
   lessonStartTime: "10:00",
   lessonEndTime: "12:00",
 }

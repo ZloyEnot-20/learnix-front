@@ -163,7 +163,7 @@ export function NotificationsPanel() {
           {unreadCount > 0 && (
             <span
               aria-hidden
-              className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C8102E] px-1 text-[10px] font-semibold text-white ring-2 ring-white"
+              className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground ring-2 ring-white"
             >
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
@@ -244,7 +244,7 @@ export function NotificationsPanel() {
                             {!n.read && (
                               <span
                                 aria-hidden
-                                className="absolute left-1.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#C8102E]"
+                                className="absolute left-1.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-primary"
                               />
                             )}
                             <div

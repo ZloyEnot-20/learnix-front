@@ -625,7 +625,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
     <div className="space-y-5">
       <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4">
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-white shadow-sm">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-blue-600 text-white shadow-sm">
             <FileJson className="h-5 w-5" />
           </span>
           <div>
@@ -771,7 +771,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                   type="button"
                   onClick={createFolder}
                   loading={creatingFolder}
-                  className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+                  className="gap-1.5 bg-primary hover:bg-primary/90"
                 >
                   <FolderPlus className="h-4 w-4" />
                   Create folder
@@ -966,7 +966,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                       type="button"
                       onClick={importFromUrls}
                       loading={fetching}
-                      className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+                      className="gap-1.5 bg-primary hover:bg-primary/90"
                     >
                       <DownloadCloud className="h-4 w-4" />
                       Fetch &amp; save
@@ -1014,7 +1014,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                       type="button"
                       onClick={handleSave}
                       loading={saving}
-                      className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+                      className="gap-1.5 bg-primary hover:bg-primary/90"
                     >
                       <Save className="h-4 w-4" />
                       Validate &amp; save

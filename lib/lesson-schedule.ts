@@ -16,6 +16,28 @@ export const WEEKDAY_OPTIONS = [
   { value: 0, label: "Sun" },
 ] as const
 
+/** Normalize `<input type="time">` values to HH:mm (some browsers send HH:mm:ss). */
+export function normalizeTimeInput(time: string): string {
+  const match = time.trim().match(/^([01]\d|2[0-3]):([0-5]\d)/)
+  return match ? `${match[1]}:${match[2]}` : time.trim().slice(0, 5)
+}
+
+export function normalizeLessonSchedulePayload(
+  value: Pick<LessonScheduleFormShape, "lessonWeekdays" | "lessonStartTime" | "lessonEndTime">,
+): Pick<LessonScheduleFormShape, "lessonWeekdays" | "lessonStartTime" | "lessonEndTime"> {
+  return {
+    lessonWeekdays: [...new Set(value.lessonWeekdays.map(Number).filter((d) => d >= 0 && d <= 6))],
+    lessonStartTime: normalizeTimeInput(value.lessonStartTime),
+    lessonEndTime: normalizeTimeInput(value.lessonEndTime),
+  }
+}
+
+type LessonScheduleFormShape = {
+  lessonWeekdays: number[]
+  lessonStartTime: string
+  lessonEndTime: string
+}
+
 export function formatLessonSchedule(schedule: LessonSchedule | null | undefined): string | null {
   if (!schedule?.weekdays?.length || !schedule.startTime || !schedule.endTime) return null
   const days = [...schedule.weekdays]

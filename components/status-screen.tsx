@@ -39,7 +39,7 @@ export function StatusScreen({ code, icon, title, description, actions = [] }: S
 
       <div className={cn("relative z-10 flex flex-col items-center", code && "-mt-10 sm:-mt-16")}>
         {icon && (
-          <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#C8102E]/10 text-[#C8102E]">
+          <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             {icon}
           </div>
         )}
@@ -54,10 +54,10 @@ export function StatusScreen({ code, icon, title, description, actions = [] }: S
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {actions.map((action, idx) => {
               const className = cn(
-                "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8102E] focus-visible:ring-offset-2",
+                "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                 action.variant === "secondary"
                   ? "border border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
-                  : "bg-[#C8102E] text-white shadow-sm hover:bg-[#A00D25]",
+                  : "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
               )
               if (action.href) {
                 return (

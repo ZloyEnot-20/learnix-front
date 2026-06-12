@@ -43,7 +43,7 @@ export function EntryTestCard({ studentId }: { studentId: string }) {
         "mb-8 overflow-hidden",
         graded
           ? "border-emerald-300 bg-gradient-to-r from-emerald-50 to-emerald-100/60"
-          : "border-[#C8102E]/30 bg-gradient-to-r from-[#C8102E]/5 to-[#C8102E]/10",
+          : "border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10",
       )}
     >
       <CardContent className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
@@ -51,7 +51,7 @@ export function EntryTestCard({ studentId }: { studentId: string }) {
           <div
             className={cn(
               "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white",
-              graded ? "bg-emerald-600" : "bg-[#C8102E]",
+              graded ? "bg-emerald-600" : "bg-primary",
             )}
           >
             {allDone ? <CheckCircle2 className="h-5 w-5" /> : <ClipboardList className="h-5 w-5" />}
@@ -72,7 +72,7 @@ export function EntryTestCard({ studentId }: { studentId: string }) {
             className={cn(
               graded
                 ? "bg-emerald-600 hover:bg-emerald-700"
-                : "bg-[#C8102E] hover:bg-[#A00D25]",
+                : "bg-primary hover:bg-primary/90",
             )}
           >
             {graded ? "View results" : allDone ? "View" : sectionsDone > 0 ? "Continue" : "Start test"}

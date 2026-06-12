@@ -22,7 +22,7 @@ export default function EntryTestStartPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
         </div>
       }
     >
@@ -134,7 +134,7 @@ function EntryTestStartContent() {
         </div>
         <Card className="border-slate-200 shadow-sm">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#C8102E]/10 text-[#C8102E]">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <ClipboardList className="h-6 w-6" />
             </div>
             <CardTitle className="text-xl">{t("pageTitle")}</CardTitle>
@@ -150,7 +150,7 @@ function EntryTestStartContent() {
               <Button
                 type="submit"
                 loading={loading}
-                className="w-full bg-[#C8102E] hover:bg-[#A00D25]"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {t("continue")}
               </Button>

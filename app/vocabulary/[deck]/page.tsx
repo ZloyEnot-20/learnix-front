@@ -99,7 +99,7 @@ function VocabularyDeckInner() {
     if (deckLoading) {
       return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-50 px-6 text-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-[#C8102E]" />
+          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
           <p className="text-sm text-slate-500">Loading deck…</p>
         </div>
       )

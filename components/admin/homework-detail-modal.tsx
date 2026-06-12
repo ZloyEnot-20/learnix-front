@@ -320,7 +320,7 @@ export function HomeworkDetailModal({
                 <span
                   className={cn(
                     "inline-flex items-center gap-1",
-                    overdue && "font-semibold text-[#C8102E]",
+                    overdue && "font-semibold text-amber-600",
                   )}
                 >
                   <CalendarDays className="h-3.5 w-3.5" />
@@ -475,7 +475,7 @@ export function HomeworkDetailModal({
                     className="rounded-2xl border border-slate-200 bg-white p-4"
                   >
                     <div className="flex flex-wrap items-start gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-xs font-bold text-white">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-xs font-bold text-white">
                         {initials(row.studentName)}
                       </div>
                       <div className="min-w-0 flex-1">

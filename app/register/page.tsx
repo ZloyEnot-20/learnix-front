@@ -108,13 +108,13 @@ export default function RegisterPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" loading={submitting} className="w-full bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button type="submit" loading={submitting} className="w-full bg-primary hover:bg-primary/90">
               Create Account
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
             <span className="text-muted-foreground">Already have an account? </span>
-            <Link href="/login" className="text-[#C8102E] hover:underline font-medium">
+            <Link href="/login" className="text-primary hover:underline font-medium">
               Sign In
             </Link>
           </div>

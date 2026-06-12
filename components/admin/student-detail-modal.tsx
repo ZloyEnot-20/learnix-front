@@ -176,7 +176,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
       >
         <DialogHeader className="shrink-0 border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-lg font-bold text-white shadow-sm">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-lg font-bold text-white shadow-sm">
               {initials(student.name)}
             </div>
             <div className="min-w-0 flex-1">

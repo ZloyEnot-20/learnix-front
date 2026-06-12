@@ -237,7 +237,7 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
           <span
             className={cn(
               "inline-flex items-center gap-1",
-              due.overdue && "font-semibold text-[#C8102E]",
+              due.overdue && "font-semibold text-amber-600",
             )}
           >
             <CalendarDays className="h-3.5 w-3.5" />
@@ -283,12 +283,12 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
           )
         ) : hw.href ? (
           <Link href={hw.href}>
-            <Button size="sm" className="bg-[#C8102E] hover:bg-[#A00D25]">
+            <Button size="sm" className="bg-primary hover:bg-primary/90">
               {hw.status === "in_progress" ? "Continue" : "Start"}
             </Button>
           </Link>
         ) : (
-          <Button size="sm" className="bg-[#C8102E] hover:bg-[#A00D25]">
+          <Button size="sm" className="bg-primary hover:bg-primary/90">
             {hw.status === "in_progress" ? "Continue" : "Start"}
           </Button>
         )}
@@ -321,7 +321,7 @@ export function HomeworkSection({ items = MOCK_HOMEWORK }: { items?: HomeworkIte
             </CardDescription>
           </div>
           {tab === "active" && active.length > 0 && (
-            <span className="rounded-full bg-[#C8102E]/10 px-3 py-1 text-xs font-semibold text-[#C8102E]">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               {active.length} pending
             </span>
           )}

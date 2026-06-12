@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { brand } from "@/lib/brand-colors"
 import {
   AlertTriangle,
   ArrowDown,
@@ -349,7 +350,7 @@ export function StudentIeltsProfileSection({ student }: StudentIeltsProfileSecti
                 <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis domain={[4, 9]} stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip formatter={(value: number) => [value.toFixed(1), "Avg band"]} />
-                <Line type="monotone" dataKey="band" stroke="#C8102E" strokeWidth={2} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="band" stroke={brand.primary} strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           ) : (

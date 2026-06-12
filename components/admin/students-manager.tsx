@@ -467,7 +467,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 </Button>
                 <Button
                   onClick={() => setShowCreate(true)}
-                  className="bg-[#C8102E] hover:bg-[#A00D25]"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   <Plus className="h-4 w-4 mr-1.5" />
                   Add student
@@ -569,7 +569,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                         >
                           <td className="py-3 px-3">
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-xs font-bold text-white">
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-xs font-bold text-white">
                                 {initials(s.name)}
                               </div>
                               <div className="min-w-0">
@@ -706,7 +706,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                     setShowCreate(false)
                     resetCreateForm()
                   }}
-                  className="bg-[#C8102E] hover:bg-[#A00D25]"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   Done
                 </Button>
@@ -835,7 +835,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 </div>
               </div>
               <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-                <Button onClick={submit} loading={creating} className="bg-[#C8102E] hover:bg-[#A00D25]">
+                <Button onClick={submit} loading={creating} className="bg-primary hover:bg-primary/90">
                   Add student
                 </Button>
                 <Button variant="outline" onClick={() => setShowCreate(false)}>

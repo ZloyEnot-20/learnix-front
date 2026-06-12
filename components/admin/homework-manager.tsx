@@ -445,7 +445,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
               <Button
                 onClick={() => setShowCreate(true)}
                 disabled={groups.length === 0 || grammarExercises.length === 0}
-                className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+                className="gap-1.5 bg-primary hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4" />
                 Assign homework
@@ -944,7 +944,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
                 !assignForm.topic ||
                 assignForm.exerciseSlugs.length === 0
               }
-              className="bg-[#C8102E] hover:bg-[#A00D25]"
+              className="bg-primary hover:bg-primary/90"
             >
               Assign{" "}
               {assignForm.exerciseSlugs.length > 0
@@ -1115,7 +1115,7 @@ function HomeworkTable({
                       className={cn(
                         "inline-flex items-center gap-1.5 text-xs",
                         overdueActive
-                          ? "font-semibold text-[#C8102E]"
+                          ? "font-semibold text-amber-600"
                           : mode === "history"
                             ? "text-slate-500"
                             : "text-slate-700",

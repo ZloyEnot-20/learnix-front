@@ -36,7 +36,7 @@ export default function SpeakingBookingPage() {
   if (isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -112,7 +112,7 @@ export default function SpeakingBookingPage() {
                 </div>
               </div>
               <Link href="/dashboard">
-                <Button className="w-full bg-[#C8102E] hover:bg-[#A00D25]">Go to Dashboard</Button>
+                <Button className="w-full bg-primary hover:bg-primary/90">Go to Dashboard</Button>
               </Link>
             </CardContent>
           </Card>
@@ -203,7 +203,7 @@ export default function SpeakingBookingPage() {
                       disabled={!slot.available}
                       className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
                         selectedTime === slot.time
-                          ? "border-[#C8102E] bg-[#C8102E]/5"
+                          ? "border-primary bg-primary/5"
                           : slot.available
                             ? "border-gray-200 hover:border-gray-300 bg-white"
                             : "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
@@ -247,7 +247,7 @@ export default function SpeakingBookingPage() {
 
         {/* Booking Summary */}
         {selectedDate && selectedTime && (
-          <Card className="mt-8 border-[#C8102E]">
+          <Card className="mt-8 border-primary">
             <CardHeader>
               <CardTitle>Booking Summary</CardTitle>
             </CardHeader>
@@ -266,7 +266,7 @@ export default function SpeakingBookingPage() {
                   <p className="font-semibold">{timeSlots.find((s) => s.time === selectedTime)?.examiner}</p>
                 </div>
               </div>
-              <Button onClick={handleBooking} className="w-full bg-[#C8102E] hover:bg-[#A00D25] h-12 text-lg">
+              <Button onClick={handleBooking} className="w-full bg-primary hover:bg-primary/90 h-12 text-lg">
                 Confirm Booking
               </Button>
             </CardContent>
@@ -281,23 +281,23 @@ export default function SpeakingBookingPage() {
           <CardContent>
             <ul className="space-y-2 text-sm">
               <li className="flex items-start gap-2">
-                <span className="text-[#C8102E] mt-1">•</span>
+                <span className="text-primary mt-1">•</span>
                 <span>Please join the video call 5 minutes before your scheduled time</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#C8102E] mt-1">•</span>
+                <span className="text-primary mt-1">•</span>
                 <span>Ensure you have a stable internet connection and a quiet environment</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#C8102E] mt-1">•</span>
+                <span className="text-primary mt-1">•</span>
                 <span>You can reschedule or cancel up to 24 hours before your appointment</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#C8102E] mt-1">•</span>
+                <span className="text-primary mt-1">•</span>
                 <span>A confirmation email with the video call link will be sent to you</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#C8102E] mt-1">•</span>
+                <span className="text-primary mt-1">•</span>
                 <span>Have a valid ID ready for verification at the start of the test</span>
               </li>
             </ul>

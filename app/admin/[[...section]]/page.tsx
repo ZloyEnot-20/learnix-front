@@ -234,10 +234,10 @@ function AdminPanelContent() {
     setTotalTests(readTestCount())
   }, [refreshKey])
 
-  // Load only the shared lists this section needs (cached; no refetch on re-render).
+  // Load shared lists per section. Groups tab always refetches — schedule lives on each group doc.
   useEffect(() => {
     const keys = SECTION_LIST_NEEDS[activeTab]
-    if (keys?.length) void ensureLists(keys)
+    if (keys?.length) void ensureLists(keys, activeTab === "groups")
   }, [activeTab, ensureLists])
 
   /** Refresh exercise/topic catalogue after Manage exercises uploads — no people APIs. */
@@ -380,7 +380,7 @@ export default function AdminPanel() {
   if (isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }

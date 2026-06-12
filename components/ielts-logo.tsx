@@ -5,9 +5,9 @@ export function IELTSLogo({ className = "" }: { className?: string }) {
     <Link
       href="/"
       aria-label="Go to home page"
-      className={`inline-block font-bold text-2xl rounded-sm transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8102E] focus-visible:ring-offset-2 ${className}`}
+      className={`inline-block font-bold text-2xl rounded-sm transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${className}`}
     >
-      <span className="bg-[#C8102E] text-white px-3 py-1 tracking-tight">Learnix</span>
+      <span className="bg-primary text-primary-foreground px-3 py-1 tracking-tight">Learnix</span>
     </Link>
   )
 }

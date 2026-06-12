@@ -21,6 +21,7 @@ import type {
   StaffType,
 } from "./admin-storage"
 import type { EntryTestSubmission } from "./entry-test-storage"
+import type { StudentNotificationType } from "./notification-types"
 import type { TestResult } from "./test-results-storage"
 import type { ExerciseResultEvent, TopicStat } from "./grammar-analytics"
 import type { GrammarExercise } from "./grammar-types"
@@ -92,7 +93,7 @@ export const studentsApi = {
   ieltsSummaries: () => api.get<StudentIeltsSummary[]>("/students/ielts-summaries"),
   sendNotification: (
     id: string,
-    input: { title: string; message: string; type?: "system" | "reminder" | "achievement" },
+    input: { title: string; message: string; type: StudentNotificationType },
   ) => api.post<NotificationItem>(`/students/${id}/notify`, input),
 }
 

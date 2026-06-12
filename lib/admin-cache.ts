@@ -79,8 +79,9 @@ async function load<T>(
 export const getStudents = (force = false) =>
   load(studentsCache, () => studentsApi.list(), force)
 
-export const getGroups = (force = false) =>
-  load(groupsCache, () => groupsApi.list(), force)
+/** Always fetch the latest group list (schedule fields live on each group document). */
+export const getGroups = (_force = false) =>
+  load(groupsCache, () => groupsApi.list(), true)
 
 export const getHomeworkCount = (force = false) =>
   load(homeworkCountCache, async () => (await homeworkApi.list()).length, force)

@@ -111,7 +111,7 @@ export function MonthPicker({ value, onChange, className, ...rest }: MonthPicker
                 className={cn(
                   "rounded-md py-2 text-xs font-medium transition-colors",
                   isSelected
-                    ? "bg-[#C8102E] text-white shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-slate-700 hover:bg-slate-100",
                   !isSelected && isCurrent && "ring-1 ring-inset ring-slate-300",
                 )}

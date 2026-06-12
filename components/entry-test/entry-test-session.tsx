@@ -398,7 +398,7 @@ function SectionCard({
         <Button
           onClick={onClick}
           variant={done ? "outline" : "default"}
-          className={cn(!done && "bg-[#C8102E] hover:bg-[#A00D25]")}
+          className={cn(!done && "bg-primary hover:bg-primary/90")}
         >
           {actionLabel}
         </Button>
@@ -688,7 +688,7 @@ function ReadingSection({
                 onClick={finish}
                 loading={submitting}
                 disabled={!allAnswered}
-                className="w-full bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
+                className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50"
               >
                 {t("submitReading", { count: answeredCount, total })}
               </Button>
@@ -802,7 +802,7 @@ function WritingSection({
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={wordCount < 10}
-                className="bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
+                className="bg-primary hover:bg-primary/90 disabled:opacity-50"
               >
                 {t("submitWriting")}
               </Button>
@@ -898,7 +898,7 @@ function SectionShell({
           <h1 className="mt-2 text-2xl font-bold text-slate-900">{title}</h1>
           {total != null && (
             <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full rounded-full bg-[#C8102E] transition-all" style={{ width: `${pct}%` }} />
+              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
             </div>
           )}
         </div>
@@ -940,7 +940,7 @@ function NavRow({
           onClick={onFinish}
           loading={finishing}
           disabled={!canFinish}
-          className="bg-[#C8102E] hover:bg-[#A00D25] disabled:opacity-50"
+          className="bg-primary hover:bg-primary/90 disabled:opacity-50"
         >
           {t("submitSection")}
         </Button>

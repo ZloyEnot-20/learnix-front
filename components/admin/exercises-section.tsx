@@ -121,7 +121,7 @@ const SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800 ring-amber-200/70" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700 ring-violet-200/70" },
   { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
-  { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700 ring-rose-200/70" },
+  { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700 ring-emerald-200/70" },
 ]
 

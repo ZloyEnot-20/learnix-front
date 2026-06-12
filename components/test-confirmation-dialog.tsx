@@ -54,7 +54,7 @@ export function TestConfirmationDialog({
               onConfirm()
             }}
             disabled={confirming}
-            className="bg-[#C8102E] hover:bg-[#A00D25]"
+            className="bg-primary hover:bg-primary/90"
           >
             {confirming ? <Spinner aria-label="Loading" /> : "Submit Anyway"}
           </AlertDialogAction>

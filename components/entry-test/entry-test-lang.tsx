@@ -73,7 +73,7 @@ export function EntryTestLangToggle({ className }: { className?: string }) {
           className={cn(
             "rounded-full px-2.5 py-1 text-xs font-semibold transition-colors",
             lang === l.value
-              ? "bg-[#C8102E] text-white"
+              ? "bg-primary text-primary-foreground"
               : "text-slate-500 hover:text-slate-900",
           )}
         >

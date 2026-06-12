@@ -27,7 +27,7 @@ export default function PaymentPage() {
   if (isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -98,14 +98,14 @@ export default function PaymentPage() {
           <Button
             variant={selectedPlan === "monthly" ? "default" : "outline"}
             onClick={() => setSelectedPlan("monthly")}
-            className={selectedPlan === "monthly" ? "bg-[#C8102E] hover:bg-[#A00D25]" : ""}
+            className={selectedPlan === "monthly" ? "bg-primary hover:bg-primary/90" : ""}
           >
             Monthly
           </Button>
           <Button
             variant={selectedPlan === "yearly" ? "default" : "outline"}
             onClick={() => setSelectedPlan("yearly")}
-            className={selectedPlan === "yearly" ? "bg-[#C8102E] hover:bg-[#A00D25]" : ""}
+            className={selectedPlan === "yearly" ? "bg-primary hover:bg-primary/90" : ""}
           >
             Yearly
             {plans.yearly.savings && (
@@ -118,7 +118,7 @@ export default function PaymentPage() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Pricing Card */}
-          <Card className="border-2 border-[#C8102E]">
+          <Card className="border-2 border-primary">
             <CardHeader className="text-center pb-8">
               <div className="mb-4">
                 <Crown className="w-16 h-16 mx-auto text-yellow-600" />
@@ -136,7 +136,7 @@ export default function PaymentPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <Button onClick={handlePayment} className="w-full bg-[#C8102E] hover:bg-[#A00D25] h-12 text-lg">
+              <Button onClick={handlePayment} className="w-full bg-primary hover:bg-primary/90 h-12 text-lg">
                 Upgrade Now
               </Button>
               <p className="text-xs text-center text-muted-foreground mt-4">

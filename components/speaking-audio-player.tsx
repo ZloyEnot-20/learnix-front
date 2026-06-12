@@ -124,12 +124,12 @@ export function SpeakingAudioPlayer({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-sky-100 bg-gradient-to-br from-sky-50 via-white to-rose-50/60 p-3 shadow-sm",
+        "relative overflow-hidden rounded-xl border border-sky-100 bg-gradient-to-br from-sky-50 via-white to-sky-50/60 p-3 shadow-sm",
         className,
       )}
     >
       <div className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-sky-200/30 blur-2xl" />
-      <div className="pointer-events-none absolute -bottom-8 -left-4 h-16 w-16 rounded-full bg-rose-200/25 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-8 -left-4 h-16 w-16 rounded-full bg-sky-200/25 blur-2xl" />
 
       <div className="relative flex items-center gap-3">
         <button

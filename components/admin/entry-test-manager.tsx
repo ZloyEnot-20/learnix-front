@@ -247,7 +247,7 @@ export default function EntryTestManager({
                 resetAssignForm()
                 setShowAssign(true)
               }}
-              className="gap-1.5 bg-[#C8102E] hover:bg-[#A00D25]"
+              className="gap-1.5 bg-primary hover:bg-primary/90"
             >
               <Plus className="h-4 w-4" />
               Assign entry test
@@ -318,7 +318,7 @@ export default function EntryTestManager({
                     setShowAssign(false)
                     resetAssignForm()
                   }}
-                  className="bg-[#C8102E] hover:bg-[#A00D25]"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   Done
                 </Button>
@@ -354,7 +354,7 @@ export default function EntryTestManager({
                 </div>
               </div>
               <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
-                <Button onClick={assign} loading={assigning} className="bg-[#C8102E] hover:bg-[#A00D25]">
+                <Button onClick={assign} loading={assigning} className="bg-primary hover:bg-primary/90">
                   Assign test
                 </Button>
                 <Button variant="outline" onClick={() => setShowAssign(false)}>

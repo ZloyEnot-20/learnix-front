@@ -190,7 +190,7 @@ export function AdminShell({
 
       <div className="border-t border-slate-200 px-3 py-3">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#C8102E] to-[#A00D25] text-xs font-bold text-white">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-xs font-bold text-white">
             {initials(user.name)}
           </div>
           <div className="min-w-0 flex-1">

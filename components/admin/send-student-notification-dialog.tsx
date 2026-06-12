@@ -13,9 +13,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Bell } from "lucide-react"
 import type { Student } from "@/lib/admin-storage"
 import { studentsApi } from "@/lib/api"
+import {
+  DEFAULT_STUDENT_NOTIFICATION_TYPE,
+  STUDENT_NOTIFICATION_TYPE_OPTIONS,
+  type StudentNotificationType,
+} from "@/lib/notification-types"
+import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
 interface SendStudentNotificationDialogProps {
@@ -32,12 +39,14 @@ export function SendStudentNotificationDialog({
   const { toast } = useToast()
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
+  const [type, setType] = useState<StudentNotificationType>(DEFAULT_STUDENT_NOTIFICATION_TYPE)
   const [sending, setSending] = useState(false)
 
   useEffect(() => {
     if (!open) {
       setTitle("")
       setMessage("")
+      setType(DEFAULT_STUDENT_NOTIFICATION_TYPE)
       setSending(false)
     }
   }, [open])
@@ -60,6 +69,7 @@ export function SendStudentNotificationDialog({
       await studentsApi.sendNotification(student.id, {
         title: trimmedTitle,
         message: trimmedMessage,
+        type,
       })
       toast({
         title: "Notification sent",
@@ -114,6 +124,35 @@ export function SendStudentNotificationDialog({
               maxLength={1000}
             />
           </div>
+          <div className="space-y-2">
+            <Label>Notification type</Label>
+            <RadioGroup
+              value={type}
+              onValueChange={(value) => setType(value as StudentNotificationType)}
+              className="gap-2"
+            >
+              {STUDENT_NOTIFICATION_TYPE_OPTIONS.map((option) => (
+                <label
+                  key={option.value}
+                  htmlFor={`notify-type-${option.value}`}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors",
+                    type === option.value
+                      ? "border-slate-400 bg-slate-50"
+                      : "border-slate-200 hover:border-slate-300",
+                  )}
+                >
+                  <RadioGroupItem value={option.value} id={`notify-type-${option.value}`} />
+                  <span
+                    className="h-4 w-4 shrink-0 rounded-full border border-black/10"
+                    style={{ backgroundColor: option.color }}
+                    aria-hidden
+                  />
+                  <span className="text-sm font-medium text-slate-800">{option.label}</span>
+                </label>
+              ))}
+            </RadioGroup>
+          </div>
         </div>
 
         <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
@@ -123,7 +162,7 @@ export function SendStudentNotificationDialog({
           <Button
             onClick={submit}
             loading={sending}
-            className="bg-[#C8102E] hover:bg-[#A00D25]"
+            className="bg-primary hover:bg-primary/90"
           >
             Send notification
           </Button>

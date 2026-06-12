@@ -41,7 +41,7 @@ export default function ListeningTestPage() {
   if (isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -212,7 +212,7 @@ export default function ListeningTestPage() {
             </Button>
 
             {currentPart === totalParts - 1 ? (
-              <Button variant="default" onClick={handleSubmit} loading={submitting} className="bg-[#C8102E] hover:bg-[#A00D24]">
+              <Button variant="default" onClick={handleSubmit} loading={submitting} className="bg-primary hover:bg-primary/90">
                 Submit Test
               </Button>
             ) : (

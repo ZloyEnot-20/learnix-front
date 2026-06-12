@@ -150,7 +150,7 @@ export default function ProfilePage() {
   if (isLoading || !user || user.type !== "student") {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -187,14 +187,14 @@ export default function ProfilePage() {
       <main className="container mx-auto px-6 py-8 max-w-6xl">
         {/* Hero */}
         <section className="mb-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-          <div className="relative h-24 bg-gradient-to-br from-[#C8102E] via-[#9a0b22] to-[#5b0613]">
+          <div className="relative h-24 bg-gradient-to-br from-sky-500 via-blue-600 to-blue-800">
             <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_25%_30%,white,transparent_45%),radial-gradient(circle_at_75%_60%,white,transparent_40%)]" />
           </div>
           <div className="relative z-10 px-6 pb-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               {/* Identity */}
               <div className="flex items-start gap-4">
-                <div className="-mt-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-white to-slate-100 text-2xl font-bold text-[#C8102E] shadow-md ring-4 ring-white">
+                <div className="-mt-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-white to-slate-100 text-2xl font-bold text-primary shadow-md ring-4 ring-white">
                   {initials(user.name)}
                 </div>
                 <div className="min-w-0 pt-3">
@@ -326,7 +326,7 @@ export default function ProfilePage() {
                   onClick={handleSave}
                   disabled={!dirty}
                   className={cn(
-                    "bg-[#C8102E] hover:bg-[#A00D25]",
+                    "bg-primary hover:bg-primary/90",
                     !dirty && "opacity-50",
                   )}
                 >
@@ -411,7 +411,7 @@ export default function ProfilePage() {
                   Reading, Listening, Writing or Speaking — try any section from the dashboard.
                 </p>
                 <Link href="/dashboard" className="mt-4 inline-block">
-                  <Button size="sm" className="bg-[#C8102E] hover:bg-[#A00D25]">
+                  <Button size="sm" className="bg-primary hover:bg-primary/90">
                     Go to dashboard
                   </Button>
                 </Link>
