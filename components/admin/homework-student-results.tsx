@@ -34,9 +34,19 @@ import type {
   Student,
 } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
+import {
+  daysPastDue,
+  endOfDueDay,
+  isDuePassed,
+} from "@/lib/homework-dates"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { ConfirmDialog } from "@/components/confirm-dialog"
+import {
+  buildHomeworkStudentRows,
+  hasSubmissionResults,
+  type HomeworkStudentRow,
+} from "@/lib/build-homework-student-rows"
 import {
   SpeakingRecordingReviewCard,
   recordingGradesFromMistakes,
@@ -63,6 +73,12 @@ const FAILED_STATUS_META = {
   dot: "bg-red-500",
 } as const
 
+const OVERDUE_STATUS_META = {
+  label: "Overdue",
+  cls: "bg-rose-100 text-rose-800",
+  dot: "bg-rose-500",
+} as const
+
 // Lower number = appears earlier. Completed first, not completed last.
 const STATUS_RANK: Record<HomeworkStatus, number> = {
   graded: 0,
@@ -72,16 +88,7 @@ const STATUS_RANK: Record<HomeworkStatus, number> = {
   pending: 4,
 }
 
-interface Row {
-  studentId: string
-  studentName: string
-  submission?: HomeworkSubmission
-  status: HomeworkStatus
-  score: string
-  feedback: string
-  recordingGrades: RecordingGradeDraft[]
-  dirty: boolean
-}
+type Row = HomeworkStudentRow
 
 function isAudioUrl(value: string | undefined): boolean {
   return !!value && /^https?:\/\//i.test(value)
@@ -123,37 +130,57 @@ export function HomeworkStudentResults({
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [sortKey, setSortKey] = useState<SortKey>("status")
   const [sortDir, setSortDir] = useState<SortDir>("asc")
+  const [detailLoadingId, setDetailLoadingId] = useState<string | null>(null)
 
   const selectedRow = useMemo(
     () => rows.find((r) => r.studentId === selectedId) ?? null,
     [rows, selectedId],
   )
 
-  // Build rows from preloaded data. Submissions are linked to this homework via
-  // `Submission.homeworkId`, so everything is already in memory — no fetch.
+  // Build rows: current group members + anyone with a submission (e.g. former members).
   useEffect(() => {
-    const members = students.filter((s) => s.groupId === homework.groupId)
-
-    const built: Row[] = members
-      .map((student) => {
-        const sid = student.id
-        const sub = submissions.find((x) => x.studentId === sid)
-        return {
-          studentId: sid,
-          studentName: student.name,
-          submission: sub,
-          status: (sub?.status ?? "pending") as HomeworkStatus,
-          score: sub?.score != null ? String(sub.score) : "",
-          feedback: sub?.feedback ?? "",
-          recordingGrades: recordingGradesFromMistakes(sub?.attempt?.mistakes ?? []),
-          dirty: false,
-        }
-      })
-      .filter(Boolean) as Row[]
-
-    setRows(built)
+    setRows(buildHomeworkStudentRows(students, submissions, homework.groupId))
     setSelectedId(null)
   }, [homework, students, groups, submissions])
+
+  // Load full submission (with attempt) when opening the detail modal if missing.
+  useEffect(() => {
+    if (!selectedId || !selectedRow?.submission?.id) return
+    const sub = selectedRow.submission
+    if (sub.attempt && hasSubmissionResults(sub)) return
+    if (sub.status !== "submitted" && sub.status !== "graded") return
+
+    let cancelled = false
+    setDetailLoadingId(selectedId)
+    homeworkApi
+      .submissions({ homeworkId: homework.id, studentId: selectedId })
+      .then((freshSubs) => {
+        if (cancelled || freshSubs.length === 0) return
+        const fresh = freshSubs[0]
+        setRows((prev) =>
+          prev.map((r) =>
+            r.studentId === selectedId
+              ? {
+                  ...r,
+                  submission: fresh,
+                  status: fresh.status as HomeworkStatus,
+                  score: fresh.score != null ? String(fresh.score) : r.score,
+                  feedback: fresh.feedback ?? r.feedback,
+                  recordingGrades: recordingGradesFromMistakes(fresh.attempt?.mistakes ?? []),
+                }
+              : r,
+          ),
+        )
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setDetailLoadingId(null)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [selectedId, homework.id, selectedRow?.submission?.id, selectedRow?.submission?.status])
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -165,7 +192,7 @@ export function HomeworkStudentResults({
   }
 
   const sortedRows = useMemo(() => {
-    const dueAt = new Date(homework.dueAt).getTime()
+    const dueEnd = endOfDueDay(homework.dueAt)
     const dir = sortDir === "asc" ? 1 : -1
 
     return [...rows].sort((a, b) => {
@@ -175,7 +202,7 @@ export function HomeworkStudentResults({
           cmp = a.studentName.localeCompare(b.studentName, undefined, { sensitivity: "base" })
           break
         case "status":
-          cmp = statusSortRank(a) - statusSortRank(b)
+          cmp = statusSortRank(a, homework.dueAt) - statusSortRank(b, homework.dueAt)
           break
         case "integrity":
           cmp = integritySortRank(a.submission) - integritySortRank(b.submission)
@@ -186,8 +213,8 @@ export function HomeworkStudentResults({
             accuracyOf(b.submission, homework.subject)
           break
         case "submitted": {
-          const subA = submittedSortTime(a.submission, dueAt)
-          const subB = submittedSortTime(b.submission, dueAt)
+          const subA = submittedSortTime(a.submission, dueEnd)
+          const subB = submittedSortTime(b.submission, dueEnd)
           cmp = subA - subB
           break
         }
@@ -198,15 +225,16 @@ export function HomeworkStudentResults({
   }, [rows, homework.dueAt, homework.subject, sortKey, sortDir])
 
   const counts = useMemo(() => {
-    const c = { done: 0, working: 0, pending: 0, cheating: 0 }
+    const c = { done: 0, working: 0, pending: 0, overdue: 0, cheating: 0 }
     for (const r of rows) {
       if (isCheatingFailed(r.submission)) c.cheating += 1
       if (r.status === "submitted" || r.status === "graded") c.done += 1
       else if (r.status === "in_progress" || r.status === "paused") c.working += 1
+      else if (isOverdueRow(r, homework.dueAt)) c.overdue += 1
       else c.pending += 1
     }
     return c
-  }, [rows])
+  }, [rows, homework.dueAt])
 
   const updateRow = (studentId: string, patch: Partial<Row>) => {
     setRows((prev) =>
@@ -404,7 +432,6 @@ export function HomeworkStudentResults({
     )
   }
 
-  const dueAt = new Date(homework.dueAt).getTime()
   const isSpeaking = homework.subject === "speaking"
 
   return (
@@ -424,6 +451,12 @@ export function HomeworkStudentResults({
           <Clock className="h-3 w-3" />
           {counts.working} in progress
         </span>
+        {counts.overdue > 0 && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-rose-800">
+            <AlertTriangle className="h-3 w-3" />
+            {counts.overdue} overdue
+          </span>
+        )}
         <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">
           <XCircle className="h-3 w-3" />
           {counts.pending} not started
@@ -455,15 +488,10 @@ export function HomeworkStudentResults({
           </thead>
           <tbody>
             {sortedRows.map((row, idx) => {
-              const sMeta = displayStatusMeta(row.status, row.submission)
-              const submittedAt = row.submission?.submittedAt
-              const startedAt = row.submission?.startedAt
+              const sMeta = displayStatusMeta(row.status, row.submission, homework.dueAt)
               const cheatingFailed = isCheatingFailed(row.submission)
               const integrity = integrityDisplay(row.submission)
-              const lateBy =
-                submittedAt && dueAt
-                  ? Math.floor((new Date(submittedAt).getTime() - dueAt) / (24 * 60 * 60 * 1000))
-                  : 0
+              const submissionLabel = submissionTimeLabel(row.submission, homework.dueAt)
               const attempt = row.submission?.attempt
               const recordingsCount = speakingRecordingsCount(row.submission)
               const accuracy =
@@ -471,8 +499,7 @@ export function HomeworkStudentResults({
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
               const numericScore = row.submission?.score
-              const canExpand =
-                !!attempt || cheatingFailed || row.status !== "pending"
+              const canExpand = !!row.submission
               const isSelected = selectedId === row.studentId
               const rowBg = isSelected
                 ? "bg-blue-50/60"
@@ -555,27 +582,21 @@ export function HomeworkStudentResults({
                       )}
                     </td>
                     <td className="py-3 px-3 text-slate-600">
-                      {submittedAt ? (
-                        <span className="inline-flex flex-col gap-0.5 whitespace-nowrap">
-                          <span className="text-xs">{formatShortDateTime(submittedAt)}</span>
-                          {lateBy > 0 ? (
-                            <span className="text-[11px] font-semibold text-rose-600">
-                              {lateBy}d late
-                            </span>
-                          ) : (
-                            <span className="text-[11px] text-emerald-600">on time</span>
-                          )}
+                      <span className="inline-flex flex-col gap-0.5 whitespace-nowrap">
+                        <span className={cn("text-xs", submissionLabel.primaryCls)}>
+                          {submissionLabel.primary}
                         </span>
-                      ) : startedAt ? (
-                        <span className="inline-flex flex-col gap-0.5 whitespace-nowrap">
-                          <span className="text-xs text-slate-500">
-                            Started {formatShortDateTime(startedAt)}
+                        {submissionLabel.secondary && (
+                          <span
+                            className={cn(
+                              "text-[11px] font-semibold",
+                              submissionLabel.secondaryCls ?? "text-slate-400",
+                            )}
+                          >
+                            {submissionLabel.secondary}
                           </span>
-                          <span className="text-[11px] italic text-slate-400">in progress</span>
-                        </span>
-                      ) : (
-                        <span className="text-xs italic text-slate-400">Not submitted</span>
-                      )}
+                        )}
+                      </span>
                     </td>
                     <td className="py-3 px-3 text-right text-slate-400">
                       {canExpand && <ChevronRight className="h-4 w-4" />}
@@ -597,7 +618,7 @@ export function HomeworkStudentResults({
               <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2 flex-wrap">
                   <StatusBadge
-                    meta={displayStatusMeta(selectedRow.status, selectedRow.submission)}
+                    meta={displayStatusMeta(selectedRow.status, selectedRow.submission, homework.dueAt)}
                   />
                   {selectedRow.submission && integrityDisplay(selectedRow.submission) && (
                     <span
@@ -634,6 +655,7 @@ export function HomeworkStudentResults({
                   <StudentDetail
                     row={selectedRow}
                     homework={homework}
+                    loadingDetails={detailLoadingId === selectedRow.studentId}
                     onUpdate={updateRow}
                     onRecordingGradeChange={updateRecordingGrade}
                     onSave={saveRow}
@@ -675,6 +697,7 @@ export function HomeworkStudentResults({
 function StudentDetail({
   row,
   homework,
+  loadingDetails = false,
   onUpdate,
   onRecordingGradeChange,
   onSave,
@@ -696,6 +719,7 @@ function StudentDetail({
   onRequestRetry?: () => void
   saving?: boolean
   retrying?: boolean
+  loadingDetails?: boolean
 }) {
   const { toast } = useToast()
   const [transcribing, setTranscribing] = useState(false)
@@ -712,6 +736,11 @@ function StudentDetail({
   const numericScore = row.submission?.score
   const retryCount = retryCountFromEvents(row.submission)
   const canRetry = canAssignRetry(row.submission)
+  const overdueMissed = isOverdueRow(row, homework.dueAt)
+  const submittedLate =
+    row.submission?.submittedAt &&
+    isDuePassed(homework.dueAt) &&
+    new Date(row.submission.submittedAt).getTime() > endOfDueDay(homework.dueAt)
 
   const handleTranscribe = async () => {
     const submissionId = row.submission?.id
@@ -738,7 +767,24 @@ function StudentDetail({
 
   return (
     <div className="space-y-3">
-      {cheatingFailed ? (
+      {loadingDetails && (
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-4 text-center text-sm text-slate-500">
+          Loading submission details…
+        </div>
+      )}
+
+      {overdueMissed && !row.submission?.submittedAt && (
+        <OverdueNotice homework={homework} submission={row.submission} status={row.status} />
+      )}
+
+      {submittedLate && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+          Submitted after the due date ({daysPastDue(homework.dueAt)} day
+          {daysPastDue(homework.dueAt) === 1 ? "" : "s"} late)
+        </div>
+      )}
+
+      {cheatingFailed && (
         <div className="rounded-xl border border-red-200 bg-red-50 p-3">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-red-700" />
@@ -760,7 +806,9 @@ function StudentDetail({
             </p>
           )}
         </div>
-      ) : attempt ? (
+      )}
+
+      {hasSubmissionResults(row.submission) && attempt ? (
         <div className="rounded-xl border border-slate-200 bg-white p-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -899,16 +947,31 @@ function StudentDetail({
                 </li>
               ))}
             </ul>
-          ) : (
+          ) : attempt.totalQuestions > 0 && attempt.correctCount >= attempt.totalQuestions ? (
             <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700">
               <CheckCircle2 className="h-3 w-3" />
               All answers correct
             </p>
-          )}
+          ) : attempt.totalQuestions > 0 ? (
+            <p className="mt-2 text-[11px] text-slate-500">
+              {attempt.correctCount}/{attempt.totalQuestions} answered — individual mistakes
+              were not stored for this attempt.
+            </p>
+          ) : null}
+        </div>
+      ) : hasSubmissionResults(row.submission) ? (
+        <SubmittedSummary submission={row.submission!} />
+      ) : overdueMissed ? (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-3 text-[11px] text-slate-500">
+          <p>No submission recorded before the deadline.</p>
+        </div>
+      ) : row.status === "pending" ? (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-3 text-[11px] text-slate-500">
+          <p>Student has not started this homework yet.</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-500">
-          No detailed attempt recorded for this submission.
+        <div className="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-3 text-[11px] text-slate-500">
+          <p>No detailed attempt recorded for this submission.</p>
         </div>
       )}
 
@@ -985,9 +1048,73 @@ function accuracyOf(sub?: HomeworkSubmission, subject?: HomeworkAssignment["subj
   return a.correctCount / a.totalQuestions
 }
 
-function statusSortRank(row: Row): number {
+function statusSortRank(row: Row, dueAt: string): number {
   if (isCheatingFailed(row.submission)) return -1
+  if (isOverdueRow(row, dueAt)) return STATUS_RANK.pending - 0.5
   return STATUS_RANK[row.status] ?? 99
+}
+
+function isOverdueRow(row: Row, dueAt: string): boolean {
+  if (row.status === "submitted" || row.status === "graded") return false
+  if (isCheatingFailed(row.submission)) return false
+  if (!isDuePassed(dueAt)) return false
+  return !row.submission?.submittedAt
+}
+
+function submissionTimeLabel(
+  submission: HomeworkSubmission | undefined,
+  dueAt: string,
+): {
+  primary: string
+  secondary?: string
+  primaryCls?: string
+  secondaryCls?: string
+} {
+  const day = 24 * 60 * 60 * 1000
+  const dueEnd = endOfDueDay(dueAt)
+  const overdue = isDuePassed(dueAt)
+  const submittedAt = submission?.submittedAt
+  const startedAt = submission?.startedAt
+
+  if (submittedAt) {
+    const lateBy = Math.floor((new Date(submittedAt).getTime() - dueEnd) / day)
+    return {
+      primary: formatShortDateTime(submittedAt),
+      secondary: lateBy > 0 ? `${lateBy}d late` : "on time",
+      secondaryCls: lateBy > 0 ? "text-rose-600" : "text-emerald-600",
+    }
+  }
+
+  if (startedAt) {
+    const daysLate = daysPastDue(dueAt)
+    return {
+      primary: `Started ${formatShortDateTime(startedAt)}`,
+      secondary: overdue
+        ? daysLate > 0
+          ? `${daysLate}d overdue · in progress`
+          : "overdue · in progress"
+        : "in progress",
+      secondaryCls: overdue ? "text-rose-600" : "text-slate-400 italic",
+    }
+  }
+
+  if (overdue) {
+    const daysLate = daysPastDue(dueAt)
+    return {
+      primary: "Overdue",
+      secondary:
+        daysLate > 0
+          ? `${daysLate}d past deadline · not started`
+          : "past deadline · not started",
+      primaryCls: "font-semibold text-rose-700",
+      secondaryCls: "text-rose-600",
+    }
+  }
+
+  return {
+    primary: "Not started",
+    primaryCls: "italic text-slate-400",
+  }
 }
 
 function integritySortRank(sub?: HomeworkSubmission): number {
@@ -1064,6 +1191,69 @@ function formatShortDateTime(iso: string): string {
   })
 }
 
+function OverdueNotice({
+  homework,
+  submission,
+  status,
+}: {
+  homework: HomeworkAssignment
+  submission?: HomeworkSubmission
+  status: HomeworkStatus
+}) {
+  return (
+    <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-3 text-[11px] text-rose-900">
+      <p className="inline-flex items-center gap-1.5 font-semibold text-rose-800">
+        <AlertTriangle className="h-3.5 w-3.5" />
+        {status === "in_progress" || status === "paused" ? "Overdue · in progress" : "Missed deadline"}
+      </p>
+      <p className="mt-1">
+        Due {new Date(homework.dueAt).toLocaleDateString()} · {daysPastDue(homework.dueAt)} day
+        {daysPastDue(homework.dueAt) === 1 ? "" : "s"} overdue
+      </p>
+      {submission?.assignedAt && (
+        <p className="mt-1">Assigned {formatShortDateTime(submission.assignedAt)}</p>
+      )}
+      {submission?.startedAt && (
+        <p className="mt-1">Started {formatShortDateTime(submission.startedAt)}</p>
+      )}
+      {(submission?.entryCount ?? 0) > 0 && !submission?.submittedAt && (
+        <p className="mt-1">
+          Opened {submission.entryCount} time{submission.entryCount === 1 ? "" : "s"} but not
+          submitted
+        </p>
+      )}
+    </div>
+  )
+}
+
+function SubmittedSummary({ submission }: { submission: HomeworkSubmission }) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-sm">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        Submission summary
+      </p>
+      {submission.submittedAt && (
+        <p className="mt-2 text-slate-700">
+          Submitted {formatShortDateTime(submission.submittedAt)}
+        </p>
+      )}
+      {typeof submission.score === "number" && !Number.isNaN(submission.score) && (
+        <p className="mt-1 tabular-nums text-slate-700">
+          Score: <span className="font-semibold">{submission.score.toFixed(1)}</span>
+        </p>
+      )}
+      {submission.feedback && (
+        <p className="mt-2 text-xs text-slate-600">{submission.feedback}</p>
+      )}
+      {!submission.attempt && (
+        <p className="mt-2 text-[11px] text-slate-500">
+          Detailed answer breakdown is not available for this submission.
+        </p>
+      )}
+    </div>
+  )
+}
+
 function isCheatingFailed(sub?: HomeworkSubmission): boolean {
   return (
     sub?.integrityStatus === "cheating_detected" || sub?.attempt?.failedDueToCheating === true
@@ -1073,8 +1263,18 @@ function isCheatingFailed(sub?: HomeworkSubmission): boolean {
 function displayStatusMeta(
   status: HomeworkStatus,
   submission?: HomeworkSubmission,
+  dueAt?: string,
 ): { label: string; cls: string; dot: string } {
   if (isCheatingFailed(submission)) return FAILED_STATUS_META
+  if (
+    dueAt &&
+    isDuePassed(dueAt) &&
+    status !== "submitted" &&
+    status !== "graded" &&
+    !submission?.submittedAt
+  ) {
+    return OVERDUE_STATUS_META
+  }
   return STATUS_META[status] ?? STATUS_META.pending
 }
 

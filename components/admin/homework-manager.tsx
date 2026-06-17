@@ -56,6 +56,11 @@ import { groupMemberCount } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
 import { TableSkeleton } from "./skeletons"
 import { homeworkApi } from "@/lib/api"
+import {
+  dueDateToEndOfDayIso,
+  endOfDueDay,
+  isHomeworkPast,
+} from "@/lib/homework-dates"
 import { getExercises } from "@/lib/exercises-cache"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
@@ -239,7 +244,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
         cheating,
         done,
         pct,
-        isPast: new Date(hw.dueAt).getTime() < now,
+        isPast: isHomeworkPast(hw, subs, now),
       }
     })
   }, [homework, submissions, groups])
@@ -321,7 +326,7 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
       return
     }
     const timeLimitMinutes = assignForm.unlimited ? undefined : parsedLimit
-    const dueIso = new Date(assignForm.dueDate).toISOString()
+    const dueIso = dueDateToEndOfDayIso(assignForm.dueDate)
     const exercises = assignForm.exerciseSlugs
       .map((slug) => grammarExercises.find((e) => e.slug === slug))
       .filter((e): e is GrammarExercise => Boolean(e))
@@ -1070,12 +1075,11 @@ function HomeworkTable({
           {rows.map((row, idx) => {
             const subjectMeta = SUBJECT_META[row.homework.subject] ?? DEFAULT_SUBJECT_META
             const SubjectIcon = subjectMeta.icon
-            const due = new Date(row.homework.dueAt)
             const overdueActive =
               mode === "active" &&
-              due.getTime() < Date.now() &&
+              endOfDueDay(row.homework.dueAt) < Date.now() &&
               row.done < row.total
-            const dueLabel = formatDue(due, mode)
+            const dueLabel = formatDue(row.homework.dueAt, mode)
             const isExpanded = !!expandedIds[row.homework.id]
             return (
               <Fragment key={row.homework.id}>
@@ -1336,11 +1340,12 @@ function Mini({ label, value, cls }: { label: string; value: string; cls: string
   )
 }
 
-function formatDue(due: Date, mode: "active" | "history") {
+function formatDue(dueAt: string, mode: "active" | "history") {
   const now = Date.now()
-  const diff = due.getTime() - now
+  const dueEnd = endOfDueDay(dueAt)
+  const diff = dueEnd - now
   const day = 24 * 60 * 60 * 1000
-  const dateStr = due.toLocaleDateString()
+  const dateStr = new Date(dueAt).toLocaleDateString()
   if (mode === "active") {
     if (diff < 0) return `Overdue · ${dateStr}`
     const days = Math.ceil(diff / day)
@@ -1349,7 +1354,7 @@ function formatDue(due: Date, mode: "active" | "history") {
     if (days <= 7) return `In ${days}d · ${dateStr}`
     return dateStr
   }
-  const daysAgo = Math.floor((now - due.getTime()) / day)
+  const daysAgo = Math.floor((now - dueEnd) / day)
   if (daysAgo === 0) return `Today · ${dateStr}`
   if (daysAgo === 1) return `1 day ago · ${dateStr}`
   if (daysAgo <= 30) return `${daysAgo}d ago · ${dateStr}`

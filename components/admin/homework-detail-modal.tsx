@@ -37,6 +37,7 @@ import type {
 } from "@/lib/admin-storage"
 import { useAdminData } from "@/lib/admin-data-context"
 import { homeworkApi } from "@/lib/api"
+import { buildHomeworkStudentRows } from "@/lib/build-homework-student-rows"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
@@ -119,24 +120,7 @@ export function HomeworkDetailModal({
         if (cancelled) return
         const group = groups.find((g) => g.id === homework.groupId)
         setGroupName(group?.name ?? "—")
-        const members = allStudents.filter((s) => s.groupId === homework.groupId)
-
-        const built: Row[] = members
-          .map((student) => {
-            const sid = student.id
-            const sub = submissions.find((x) => x.studentId === sid)
-            return {
-              studentId: sid,
-              studentName: student.name,
-              submission: sub,
-              status: (sub?.status ?? "pending") as HomeworkStatus,
-              score: sub?.score != null ? String(sub.score) : "",
-              feedback: sub?.feedback ?? "",
-              dirty: false,
-            }
-          })
-          .filter(Boolean) as Row[]
-
+        const built = buildHomeworkStudentRows(allStudents, submissions, homework.groupId)
         setRows(built)
         setFilter("all")
         setExpanded({})
