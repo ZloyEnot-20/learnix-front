@@ -40,6 +40,7 @@ import { homeworkApi } from "@/lib/api"
 import { buildHomeworkStudentRows } from "@/lib/build-homework-student-rows"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
+import { isPodcastHomework, PODCAST_SUBJECT_COLOR } from "@/lib/podcast-data"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string; label: string }> = {
   reading: { icon: BookOpen, color: "#c1bffd", label: "Reading" },
@@ -48,6 +49,13 @@ const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string; labe
   speaking: { icon: Mic, color: "#9fcffb", label: "Speaking" },
   grammar: { icon: GraduationCap, color: "#fcd5a4", label: "Grammar" },
   vocabulary: { icon: BookMarked, color: "#d8b4fe", label: "Vocabulary" },
+}
+
+function homeworkSubjectMeta(homework: HomeworkAssignment) {
+  if (isPodcastHomework(homework.subject, homework.exerciseSlug)) {
+    return { icon: Headphones, color: PODCAST_SUBJECT_COLOR, label: "Podcast" }
+  }
+  return SUBJECT_META[homework.subject]
 }
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
@@ -197,7 +205,7 @@ export function HomeworkDetailModal({
 
   if (!homework) return null
 
-  const meta = SUBJECT_META[homework.subject]
+  const meta = homeworkSubjectMeta(homework)
   const Icon = meta.icon
   const overdue = new Date(homework.dueAt).getTime() < Date.now()
 

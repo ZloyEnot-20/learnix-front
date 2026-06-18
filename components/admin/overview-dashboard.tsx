@@ -4,8 +4,6 @@ import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-  BarChart,
-  Bar,
   Cell,
   XAxis,
   YAxis,
@@ -19,14 +17,12 @@ import {
   AlertTriangle,
   BookOpen,
   CalendarClock,
+  CalendarDays,
   CheckCircle2,
   ClipboardCheck,
   ClipboardList,
   Coins,
-  Headphones,
   Layers,
-  Mic,
-  PenTool,
   TrendingUp,
   Users,
   Wallet,
@@ -42,83 +38,64 @@ import { useAdminData } from "@/lib/admin-data-context"
 import { StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
 import { homeworkApi, paymentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
-
-interface AdminTestRecord {
-  testId: string
-  type: "reading" | "listening" | "writing" | "speaking"
-  title: string
-}
-
-const TEST_TYPES = [
-  { key: "reading", label: "Reading", Icon: BookOpen, color: "#c1bffd" },
-  { key: "listening", label: "Listening", Icon: Headphones, color: "#ffcc3e" },
-  { key: "writing", label: "Writing", Icon: PenTool, color: "#a7e237" },
-  { key: "speaking", label: "Speaking", Icon: Mic, color: "#9fcffb" },
-] as const
-
-type TestType = (typeof TEST_TYPES)[number]["key"]
+import { TeacherLessonsCalendar } from "./teacher-lessons-calendar"
+import { groupToLessonSchedule, todayDateString, upcomingScheduledLessons } from "@/lib/lesson-schedule"
 
 interface Props {
   refreshKey?: number
   onSelectTab?: (id: string) => void
   /** Accent colour for the role (teacher → violet, admin → red). */
   accent?: "rose" | "violet"
+  /** Teachers see teaching tools (calendar, homework) — not finance. */
+  variant?: "admin" | "teacher"
 }
 
 export default function OverviewDashboard({
   refreshKey = 0,
   onSelectTab,
   accent = "rose",
+  variant = "admin",
 }: Props) {
+  const isTeacher = variant === "teacher"
   const { students, groups } = useAdminData()
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
-  const [tests, setTests] = useState<AdminTestRecord[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([
+    const requests: [Promise<{ assignments: HomeworkAssignment[]; records: HomeworkSubmission[] }>, Promise<Payment[]>?] = [
       homeworkApi.check(),
-      paymentsApi.list(),
-    ])
-      .then(([check, p]) => {
+    ]
+    if (!isTeacher) {
+      requests.push(paymentsApi.list())
+    }
+
+    Promise.all(requests)
+      .then((results) => {
         if (cancelled) return
+        const [check, p] = results
         setHomework(check.assignments)
         setSubmissions(check.records)
-        setPayments(p)
+        if (p) setPayments(p)
+        else setPayments([])
       })
       .catch(() => {})
       .finally(() => {
         if (!cancelled) setLoading(false)
       })
 
-    try {
-      const raw = JSON.parse(localStorage.getItem("adminTests") || "{}") as Record<string, AdminTestRecord>
-      setTests(Object.values(raw))
-    } catch {
-      setTests([])
-    }
     return () => {
       cancelled = true
     }
-  }, [refreshKey])
+  }, [refreshKey, isTeacher])
 
   const now = Date.now()
   const day = 1000 * 60 * 60 * 24
 
   const accentRing = accent === "violet" ? "ring-violet-200" : "ring-rose-200"
   const accentChip = accent === "violet" ? "bg-violet-50 text-violet-700" : "bg-rose-50 text-rose-700"
-
-  const testStats = useMemo(() => {
-    const counts: Record<TestType, number> = { reading: 0, listening: 0, writing: 0, speaking: 0 }
-    for (const t of tests) {
-      if (t && (t.type as TestType) in counts) counts[t.type as TestType] += 1
-    }
-    return counts
-  }, [tests])
-  const totalTests = Object.values(testStats).reduce((a, b) => a + b, 0)
 
   const studentStats = useMemo(() => {
     const total = students.length
@@ -208,11 +185,20 @@ export default function OverviewDashboard({
 
   const upcomingHomework = useMemo(() => homeworkStats.upcoming.slice(0, 5), [homeworkStats])
 
-  const testsChartData = TEST_TYPES.map((t) => ({
-    name: t.label,
-    count: testStats[t.key],
-    color: t.color,
-  }))
+  const groupsWithSchedule = useMemo(
+    () => groups.filter((g) => groupToLessonSchedule(g)),
+    [groups],
+  )
+
+  const lessonsThisWeek = useMemo(() => {
+    const today = todayDateString()
+    const end = new Date()
+    end.setDate(end.getDate() + 6)
+    const endStr = `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, "0")}-${String(end.getDate()).padStart(2, "0")}`
+    return upcomingScheduledLessons(groupsWithSchedule, today, 6).filter(
+      (s) => s.date <= endStr,
+    ).length
+  }, [groupsWithSchedule])
 
   const submissionPieData = [
     { name: "Pending", value: submissionStats.pending, color: "#cbd5e1" },
@@ -230,11 +216,15 @@ export default function OverviewDashboard({
   if (loading) {
     return (
       <div className="space-y-6">
-        <StatCardsSkeleton count={5} />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <TableCardSkeleton rows={5} columns={3} />
-          <TableCardSkeleton rows={5} columns={3} />
-        </div>
+        <StatCardsSkeleton count={isTeacher ? 4 : 5} />
+        {isTeacher ? (
+          <TableCardSkeleton rows={8} columns={3} />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <TableCardSkeleton rows={5} columns={3} />
+            <TableCardSkeleton rows={5} columns={3} />
+          </div>
+        )}
       </div>
     )
   }
@@ -242,7 +232,12 @@ export default function OverviewDashboard({
   return (
     <div className="space-y-6">
       {/* KPI strip */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-4",
+          isTeacher ? "md:grid-cols-4" : "md:grid-cols-3 xl:grid-cols-5",
+        )}
+      >
         <Kpi
           icon={Users}
           label="Students"
@@ -259,38 +254,78 @@ export default function OverviewDashboard({
           accent="bg-violet-50 text-violet-700"
           onClick={() => onSelectTab?.("groups")}
         />
-        <Kpi
-          icon={Wallet}
-          label="Collected (30d)"
-          value={formatMoney(paymentStats.collectedThisMonth)}
-          sub={`${paymentStats.rate}% collection rate`}
-          accent="bg-emerald-50 text-emerald-700"
-          onClick={() => onSelectTab?.("finance")}
-        />
-        <Kpi
-          icon={AlertTriangle}
-          label="Overdue"
-          value={formatMoney(paymentStats.overdue)}
-          sub={paymentStats.overdue > 0 ? "needs attention" : "all caught up"}
-          accent={paymentStats.overdue > 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-700"}
-          onClick={() => onSelectTab?.("finance")}
-        />
-        <Kpi
-          icon={ClipboardCheck}
-          label="To grade"
-          value={submissionStats.needGrading}
-          sub={
-            submissionStats.avgScore !== null
-              ? `avg ${submissionStats.avgScore} · ${submissionStats.completionRate}% completion`
-              : `${submissionStats.completionRate}% completion`
-          }
-          accent="bg-amber-50 text-amber-700"
-          onClick={() => onSelectTab?.("homework")}
-        />
+        {isTeacher ? (
+          <>
+            <Kpi
+              icon={CalendarDays}
+              label="Lessons this week"
+              value={lessonsThisWeek}
+              sub={
+                groupsWithSchedule.length > 0
+                  ? `${groupsWithSchedule.length} group${groupsWithSchedule.length === 1 ? "" : "s"} with schedule`
+                  : "no schedules set"
+              }
+              accent="bg-sky-50 text-sky-700"
+              onClick={() => onSelectTab?.("groups")}
+            />
+            <Kpi
+              icon={ClipboardCheck}
+              label="To grade"
+              value={submissionStats.needGrading}
+              sub={
+                submissionStats.avgScore !== null
+                  ? `avg ${submissionStats.avgScore} · ${submissionStats.completionRate}% completion`
+                  : `${submissionStats.completionRate}% completion`
+              }
+              accent="bg-amber-50 text-amber-700"
+              onClick={() => onSelectTab?.("homework")}
+            />
+          </>
+        ) : (
+          <>
+            <Kpi
+              icon={Wallet}
+              label="Collected (30d)"
+              value={formatMoney(paymentStats.collectedThisMonth)}
+              sub={`${paymentStats.rate}% collection rate`}
+              accent="bg-emerald-50 text-emerald-700"
+              onClick={() => onSelectTab?.("finance")}
+            />
+            <Kpi
+              icon={AlertTriangle}
+              label="Overdue"
+              value={formatMoney(paymentStats.overdue)}
+              sub={paymentStats.overdue > 0 ? "needs attention" : "all caught up"}
+              accent={paymentStats.overdue > 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-700"}
+              onClick={() => onSelectTab?.("finance")}
+            />
+            <Kpi
+              icon={ClipboardCheck}
+              label="To grade"
+              value={submissionStats.needGrading}
+              sub={
+                submissionStats.avgScore !== null
+                  ? `avg ${submissionStats.avgScore} · ${submissionStats.completionRate}% completion`
+                  : `${submissionStats.completionRate}% completion`
+              }
+              accent="bg-amber-50 text-amber-700"
+              onClick={() => onSelectTab?.("homework")}
+            />
+          </>
+        )}
       </div>
 
+      {isTeacher && (
+        <TeacherLessonsCalendar
+          groups={groups}
+          students={students}
+          onOpenGroups={() => onSelectTab?.("groups")}
+        />
+      )}
+
       {/* Financial + Homework status */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={cn("grid grid-cols-1 gap-6", !isTeacher && "lg:grid-cols-2")}>
+        {!isTeacher && (
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -363,8 +398,9 @@ export default function OverviewDashboard({
             </div>
           </CardContent>
         </Card>
+        )}
 
-        <Card>
+        <Card className={cn(isTeacher && "lg:col-span-1")}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -489,59 +525,113 @@ export default function OverviewDashboard({
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-rose-600" />
-              Overdue payments
-            </CardTitle>
-            <CardDescription>
-              {overduePayments.length === 0
-                ? "All students up to date"
-                : `${overduePayments.length} student${overduePayments.length === 1 ? "" : "s"} late`}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {overduePayments.length === 0 ? (
-              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">
-                <CheckCircle2 className="h-4 w-4" />
-                Nothing to chase right now.
-              </div>
-            ) : (
-              <ul className="divide-y divide-slate-100">
-                {overduePayments.map((p) => {
-                  const student = studentById.get(p.studentId)
-                  const group = groupById.get(p.groupId)
-                  const due = new Date(p.dueDate)
-                  const daysOverdue = Math.ceil((now - due.getTime()) / day)
-                  return (
-                    <li
-                      key={p.id}
-                      className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-slate-900">
-                          {student?.name ?? "Unknown student"}
-                        </p>
-                        <p className="truncate text-xs text-slate-500">
-                          {group?.name ?? "Unknown"} · {p.periodLabel}
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-sm font-semibold tabular-nums text-rose-700">
-                          {formatMoney(p.amount)}
-                        </p>
-                        <p className="text-[11px] text-rose-500">
-                          {daysOverdue} day{daysOverdue === 1 ? "" : "s"} late
-                        </p>
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+        {isTeacher ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-violet-600" />
+                Overdue homework
+              </CardTitle>
+              <CardDescription>
+                {homeworkStats.overdue > 0
+                  ? `${homeworkStats.overdue} assignment${homeworkStats.overdue === 1 ? "" : "s"} past due`
+                  : "All deadlines on track"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {homeworkStats.overdue === 0 ? (
+                <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">
+                  <CheckCircle2 className="h-4 w-4" />
+                  No overdue assignments right now.
+                </div>
+              ) : (
+                <ul className="divide-y divide-slate-100">
+                  {homework
+                    .filter((h) => new Date(h.dueAt).getTime() < now)
+                    .sort((a, b) => new Date(b.dueAt).getTime() - new Date(a.dueAt).getTime())
+                    .slice(0, 5)
+                    .map((h) => {
+                      const group = groupById.get(h.groupId)
+                      const due = new Date(h.dueAt)
+                      const daysOverdue = Math.ceil((now - due.getTime()) / day)
+                      return (
+                        <li
+                          key={h.id}
+                          className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-slate-900">{h.title}</p>
+                            <p className="truncate text-xs text-slate-500">
+                              {group?.name ?? "Unknown group"} · {h.subject}
+                            </p>
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <p className="text-xs font-semibold text-rose-700">
+                              {daysOverdue} day{daysOverdue === 1 ? "" : "s"} late
+                            </p>
+                          </div>
+                        </li>
+                      )
+                    })}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-rose-600" />
+                Overdue payments
+              </CardTitle>
+              <CardDescription>
+                {overduePayments.length === 0
+                  ? "All students up to date"
+                  : `${overduePayments.length} student${overduePayments.length === 1 ? "" : "s"} late`}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {overduePayments.length === 0 ? (
+                <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Nothing to chase right now.
+                </div>
+              ) : (
+                <ul className="divide-y divide-slate-100">
+                  {overduePayments.map((p) => {
+                    const student = studentById.get(p.studentId)
+                    const group = groupById.get(p.groupId)
+                    const due = new Date(p.dueDate)
+                    const daysOverdue = Math.ceil((now - due.getTime()) / day)
+                    return (
+                      <li
+                        key={p.id}
+                        className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-slate-900">
+                            {student?.name ?? "Unknown student"}
+                          </p>
+                          <p className="truncate text-xs text-slate-500">
+                            {group?.name ?? "Unknown"} · {p.periodLabel}
+                          </p>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <p className="text-sm font-semibold tabular-nums text-rose-700">
+                            {formatMoney(p.amount)}
+                          </p>
+                          <p className="text-[11px] text-rose-500">
+                            {daysOverdue} day{daysOverdue === 1 ? "" : "s"} late
+                          </p>
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Tests distribution & group breakdown */}
@@ -553,34 +643,36 @@ export default function OverviewDashboard({
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-slate-700" />
                   IELTS test catalogue
+                  <Badge
+                    variant="secondary"
+                    className="text-[10px] font-semibold uppercase tracking-wide"
+                  >
+                    Soon
+                  </Badge>
                 </CardTitle>
                 <CardDescription>
-                  {totalTests} test{totalTests === 1 ? "" : "s"} across 4 skills
+                  Reading, Listening, Writing and Speaking tests are coming soon
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={testsChartData} barSize={48}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} allowDecimals={false} />
-                <Tooltip
-                  cursor={{ fill: "rgba(148, 163, 184, 0.1)" }}
-                  contentStyle={{
-                    borderRadius: 12,
-                    border: "1px solid #e2e8f0",
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-                  }}
-                />
-                <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-                  {testsChartData.map((entry) => (
-                    <Cell key={entry.name} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
+              <p className="font-medium text-slate-900">IELTS tests are not available yet</p>
+              <p className="max-w-sm text-sm text-slate-500">
+                You&apos;ll be able to create and manage full practice tests from the IELTS Tests
+                section once this feature launches.
+              </p>
+              {onSelectTab && (
+                <button
+                  type="button"
+                  onClick={() => onSelectTab("tests")}
+                  className="mt-2 text-sm font-medium text-slate-700 underline-offset-2 hover:underline"
+                >
+                  Open IELTS Tests
+                </button>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -616,7 +708,9 @@ export default function OverviewDashboard({
                       </Badge>
                     </div>
                     <p className="mt-1 text-xs text-slate-500">
-                      {groupHomework} homework · {formatMoney((g.monthlyFee ?? 0) * groupStudents)} / mo
+                      {isTeacher
+                        ? `${groupHomework} homework assignment${groupHomework === 1 ? "" : "s"}`
+                        : `${groupHomework} homework · ${formatMoney((g.monthlyFee ?? 0) * groupStudents)} / mo`}
                     </p>
                   </button>
                 )

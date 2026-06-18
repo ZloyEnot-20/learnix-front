@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth, redirectAfterAuth } from "@/lib/auth-context"
 import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -38,8 +38,8 @@ export default function RegisterPage() {
 
     setSubmitting(true)
     try {
-      await register(email, password, name)
-      router.push("/dashboard")
+      const u = await register(email, password, name)
+      router.push(redirectAfterAuth(u.type))
     } catch (err) {
       const message =
         err instanceof Error && err.message

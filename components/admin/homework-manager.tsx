@@ -70,6 +70,7 @@ import { cn } from "@/lib/utils"
 import { HomeworkStudentResults } from "./homework-student-results"
 import ExerciseStatsPanel from "./exercise-stats-panel"
 import { selectableGroups } from "@/lib/entry-test-group"
+import { isPodcastHomework, PODCAST_SUBJECT_COLOR } from "@/lib/podcast-data"
 
 const DIFFICULTY_META: Record<
   GrammarExercise["difficulty"],
@@ -95,6 +96,13 @@ const DEFAULT_SUBJECT_META = {
   icon: ClipboardList,
   color: "#e2e8f0",
 } as const
+
+function homeworkSubjectMeta(homework: HomeworkAssignment) {
+  if (isPodcastHomework(homework.subject, homework.exerciseSlug)) {
+    return { label: "Podcast", icon: Headphones, color: PODCAST_SUBJECT_COLOR }
+  }
+  return SUBJECT_META[homework.subject] ?? DEFAULT_SUBJECT_META
+}
 
 interface HwRow {
   homework: HomeworkAssignment
@@ -1073,7 +1081,7 @@ function HomeworkTable({
         </thead>
         <tbody>
           {rows.map((row, idx) => {
-            const subjectMeta = SUBJECT_META[row.homework.subject] ?? DEFAULT_SUBJECT_META
+            const subjectMeta = homeworkSubjectMeta(row.homework)
             const SubjectIcon = subjectMeta.icon
             const overdueActive =
               mode === "active" &&

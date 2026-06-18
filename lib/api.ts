@@ -4,6 +4,7 @@
  * `*-storage` helpers.
  */
 import { api, apiUpload } from "./api-client"
+import type { PodcastEpisode } from "./podcast-data"
 import type {
   Group,
   Student,
@@ -11,6 +12,9 @@ import type {
   HomeworkSubmission,
   HomeworkAttempt,
   Payment,
+  LessonSession,
+  AttendanceRecord,
+  AttendanceStatus,
   StudentHomeworkEntry,
   StudentProgress,
   ControlWork,
@@ -151,6 +155,8 @@ export const usersApi = {
     api.post<{ user: StaffUser; temporaryPassword: string }>("/users", input),
   update: (id: string, patch: Partial<Pick<StaffUser, "name" | "login" | "email" | "type">>) =>
     api.patch<StaffUser>(`/users/${id}`, patch),
+  updatePermissions: (id: string, permissions: string[]) =>
+    api.patch<StaffUser>(`/users/${id}/permissions`, { permissions }),
   resetPassword: (id: string) =>
     api.post<{ login: string; temporaryPassword: string }>(`/users/${id}/reset-password`),
   remove: (id: string) => api.del(`/users/${id}`),
@@ -391,7 +397,8 @@ export const paymentsApi = {
   update: (id: string, patch: Partial<Payment>) =>
     api.patch<Payment>(`/payments/${id}`, patch),
   remove: (id: string) => api.del(`/payments/${id}`),
-  markPaid: (id: string) => api.post<Payment>(`/payments/${id}/paid`),
+  markPaid: (id: string, paidAmount?: number) =>
+    api.post<Payment>(`/payments/${id}/paid`, paidAmount != null ? { paidAmount } : undefined),
   markUnpaid: (id: string) => api.post<Payment>(`/payments/${id}/unpaid`),
   groupSummary: (groupId: string) =>
     api.get<{
@@ -401,6 +408,42 @@ export const paymentsApi = {
       pendingTotal: number
     }>(`/payments/group/${groupId}/summary`),
 }
+
+// ---------- Lessons & attendance ----------
+export const lessonsApi = {
+  list: (params: { groupId: string; month?: string }) => {
+    const qs = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params).filter(([, v]) => v != null && v !== ""),
+      ) as Record<string, string>,
+    ).toString()
+    return api.get<LessonSession[]>(`/lessons?${qs}`)
+  },
+  get: (id: string) => api.get<LessonSession>(`/lessons/${id}`),
+  create: (input: {
+    groupId: string
+    date: string
+    topic?: string
+    notes?: string
+  }) => api.post<LessonSession>("/lessons", input),
+  update: (
+    id: string,
+    patch: {
+      topic?: string
+      notes?: string
+      canceled?: boolean
+      cancelReason?: string
+      attendance?: AttendanceRecord[]
+    },
+  ) => api.patch<LessonSession>(`/lessons/${id}`, patch),
+  remove: (id: string, options?: { scope?: "single" | "weekday-future" }) => {
+    const scope = options?.scope ?? "single"
+    const qs = scope === "single" ? "" : `?scope=${scope}`
+    return api.del<{ ok: boolean; deletedCount: number }>(`/lessons/${id}${qs}`)
+  },
+}
+
+export type { AttendanceStatus, AttendanceRecord, LessonSession }
 
 // ---------- Analytics ----------
 export interface StudentActivityItem {
@@ -686,6 +729,12 @@ export const exercisesApi = {
   vocabDeck: (slug: string) => api.get<VocabDeck>(`/exercises/vocab/${slug}`),
   importVocab: (decks: VocabDeck[]) =>
     api.post<{ ok: boolean; decksWritten: number }>("/exercises/vocab/import", { decks }),
+  podcasts: () => api.get<PodcastEpisode[]>("/exercises/podcasts"),
+  podcast: (slug: string) => api.get<PodcastEpisode>(`/exercises/podcasts/${slug}`),
+  importPodcasts: (podcasts: PodcastEpisode[]) =>
+    api.post<{ ok: boolean; podcastsWritten: number }>("/exercises/podcasts/import", { podcasts }),
+  uploadPodcast: (form: FormData) =>
+    apiUpload<{ ok: boolean; podcast: PodcastEpisode }>("/exercises/podcasts/upload", form),
 }
 
 // ---------- Uploads ----------

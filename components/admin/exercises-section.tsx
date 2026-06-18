@@ -30,6 +30,7 @@ import {
   Eye,
   FileText,
   Folder,
+  Headphones,
   Infinity,
   ListChecks,
   Mic,
@@ -64,6 +65,14 @@ import {
   vocabHomeworkSlug,
   type VocabDeck,
 } from "@/lib/vocabulary-data"
+import {
+  listPodcasts,
+  fetchPodcasts,
+  onPodcastsInvalidate,
+  podcastHomeworkSlug,
+  podcastHasWords,
+  type PodcastEpisode,
+} from "@/lib/podcast-data"
 import type { Group } from "@/lib/admin-storage"
 import { groupMemberCount } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
@@ -120,6 +129,7 @@ interface SubjectFolder {
 const SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800 ring-amber-200/70" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700 ring-violet-200/70" },
+  { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-indigo-100 text-indigo-700 ring-indigo-200/70" },
   { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700 ring-emerald-200/70" },
@@ -257,7 +267,9 @@ export default function ExercisesSection({
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
+  const [assignPodcast, setAssignPodcast] = useState<PodcastEpisode | null>(null)
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
+  const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -293,6 +305,13 @@ export default function ExercisesSection({
     const reload = () => void fetchVocabDecks().then(setVocabDecks)
     reload()
     return onVocabDecksInvalidate(reload)
+  }, [])
+
+  const [podcasts, setPodcasts] = useState<PodcastEpisode[]>(() => listPodcasts())
+  useEffect(() => {
+    const reload = () => void fetchPodcasts().then(setPodcasts)
+    reload()
+    return onPodcastsInvalidate(reload)
   }, [])
 
   // Exactly the six fixed levels, with their content folded in. Topics/decks
@@ -331,6 +350,13 @@ export default function ExercisesSection({
         ? vocabDecks.filter((d) => clampToFixedLevel(primaryLevel([d.level])) === selectedLevel)
         : [],
     [selectedLevel, vocabDecks],
+  )
+  const podcastsForLevel = useMemo(
+    () =>
+      selectedLevel
+        ? podcasts.filter((p) => clampToFixedLevel(primaryLevel([p.level])) === selectedLevel)
+        : [],
+    [selectedLevel, podcasts],
   )
   const activeLevelFolder = useMemo(
     () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
@@ -376,7 +402,14 @@ export default function ExercisesSection({
   const searchHits = useMemo(() => {
     const query = deferredSearch.trim().toLowerCase()
     // Only search once the query is meaningful (3+ chars) to avoid noise/lag.
-    if (query.length < 3) return { query: "", topics: [] as TopicSummary[], exercises: [] as GrammarExercise[] }
+    if (query.length < 3) {
+      return {
+        query: "",
+        topics: [] as TopicSummary[],
+        exercises: [] as GrammarExercise[],
+        podcasts: [] as PodcastEpisode[],
+      }
+    }
     const topics = grammarTopics.filter((t) =>
       `${t.title} ${t.topic} ${t.description ?? ""} ${t.levels.join(" ")}`
         .toLowerCase()
@@ -387,15 +420,21 @@ export default function ExercisesSection({
         .toLowerCase()
         .includes(query),
     )
-    return { query, topics, exercises: exerciseHits }
-  }, [deferredSearch, grammarTopics, exercises])
+    const podcastHits = podcasts.filter((p) =>
+      `${p.title} ${p.slug} ${p.topic} ${p.description ?? ""} ${p.level}`
+        .toLowerCase()
+        .includes(query),
+    )
+    return { query, topics, exercises: exerciseHits, podcasts: podcastHits }
+  }, [deferredSearch, grammarTopics, exercises, podcasts])
 
   // ─── Level folders view (top level) ──────────────────────────────────────
   if (!selectedTopic && !selectedLevel) {
     const query = searchHits.query
     const topicResults = searchHits.topics
     const exerciseResults = searchHits.exercises
-    const totalMatches = topicResults.length + exerciseResults.length
+    const podcastResults = searchHits.podcasts
+    const totalMatches = podcastResults.length + topicResults.length + exerciseResults.length
     return (
       <div className="space-y-6">
         {loading ? (
@@ -455,6 +494,32 @@ export default function ExercisesSection({
                 </div>
               ) : (
                 <div className="space-y-6">
+                  {podcastResults.length > 0 && (
+                    <div className="space-y-2.5 duration-300 animate-in fade-in-0 slide-in-from-bottom-1">
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Podcasts · {podcastResults.length}
+                      </h3>
+                      <div
+                        className="grid gap-3"
+                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
+                      >
+                        {podcastResults.map((episode) => (
+                          <PodcastSearchCard
+                            key={episode.slug}
+                            episode={episode}
+                            onOpenFolder={() => {
+                              setLevelSearch("")
+                              setSelectedLevel(clampToFixedLevel(primaryLevel([episode.level])))
+                              setSelectedCategory("podcasts")
+                            }}
+                            onPreview={() => setPreviewPodcast(episode)}
+                            onAssign={canAssign ? () => setAssignPodcast(episode) : undefined}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {topicResults.length > 0 && (
                     <div className="space-y-2.5 duration-300 animate-in fade-in-0 slide-in-from-bottom-1">
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -538,6 +603,23 @@ export default function ExercisesSection({
           open={!!previewTarget}
           onOpenChange={(open) => !open && setPreviewTarget(null)}
         />
+        <PodcastPreviewDialog
+          episode={previewPodcast}
+          open={!!previewPodcast}
+          onOpenChange={(open) => !open && setPreviewPodcast(null)}
+        />
+        <AssignPodcastDialog
+          episode={assignPodcast}
+          groups={assignableGroups}
+          open={!!assignPodcast}
+          onOpenChange={(open) => !open && setAssignPodcast(null)}
+          onAssigned={() => {
+            toast({ title: "Podcast assigned to group" })
+            setAssignPodcast(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
       </div>
     )
   }
@@ -552,6 +634,16 @@ export default function ExercisesSection({
           lines: [
             `${vocabDecksForLevel.length} deck${vocabDecksForLevel.length === 1 ? "" : "s"}`,
             `${words} word${words === 1 ? "" : "s"}`,
+          ],
+        }
+      }
+      if (id === "podcasts") {
+        const withWords = podcastsForLevel.filter((p) => podcastHasWords(p)).length
+        return {
+          count: podcastsForLevel.length,
+          lines: [
+            `${podcastsForLevel.length} episode${podcastsForLevel.length === 1 ? "" : "s"}`,
+            withWords > 0 ? `${withWords} with vocabulary` : "Listening practice",
           ],
         }
       }
@@ -639,8 +731,13 @@ export default function ExercisesSection({
   if (!selectedTopic && selectedLevel && selectedCategory) {
     const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
     const isVocab = selectedCategory === "vocabulary"
+    const isPodcasts = selectedCategory === "podcasts"
     const topics = levelTopics.filter((t) => t.category === selectedCategory)
-    const count = isVocab ? vocabDecksForLevel.length : topics.length
+    const count = isVocab
+      ? vocabDecksForLevel.length
+      : isPodcasts
+        ? podcastsForLevel.length
+        : topics.length
     const levelLabel = selectedLevel
     return (
       <div className="space-y-5">
@@ -660,7 +757,8 @@ export default function ExercisesSection({
         <div>
           <h2 className="text-2xl font-bold text-slate-900">{subject?.label ?? selectedCategory}</h2>
           <p className="mt-1 text-sm text-slate-500">
-            {levelLabel} · {count} {isVocab ? "deck" : "topic"}
+            {levelLabel} · {count}{" "}
+            {isVocab ? "deck" : isPodcasts ? "podcast" : "topic"}
             {count === 1 ? "" : "s"}
           </p>
         </div>
@@ -696,6 +794,21 @@ export default function ExercisesSection({
               />
             ))}
           </div>
+        ) : isPodcasts ? (
+          <div
+            className="grid gap-3 justify-center"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
+          >
+            {podcastsForLevel.map((p) => (
+              <PodcastCard
+                key={p.slug}
+                episode={p}
+                canAssign={canAssign}
+                onAssign={() => setAssignPodcast(p)}
+                onPreview={() => setPreviewPodcast(p)}
+              />
+            ))}
+          </div>
         ) : (
           <div
             className="grid gap-3 justify-center"
@@ -713,6 +826,12 @@ export default function ExercisesSection({
           onOpenChange={(open) => !open && setPreviewDeck(null)}
         />
 
+        <PodcastPreviewDialog
+          episode={previewPodcast}
+          open={!!previewPodcast}
+          onOpenChange={(open) => !open && setPreviewPodcast(null)}
+        />
+
         <AssignVocabDialog
           deck={assignDeck}
           groups={assignableGroups}
@@ -721,6 +840,19 @@ export default function ExercisesSection({
           onAssigned={() => {
             toast({ title: "Vocabulary repetition assigned" })
             setAssignDeck(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
+
+        <AssignPodcastDialog
+          episode={assignPodcast}
+          groups={assignableGroups}
+          open={!!assignPodcast}
+          onOpenChange={(open) => !open && setAssignPodcast(null)}
+          onAssigned={() => {
+            toast({ title: "Podcast assigned to group" })
+            setAssignPodcast(null)
             onHomeworkAssigned?.()
           }}
           createdByName={createdByName}
@@ -1319,7 +1451,369 @@ function VocabPreviewDialog({
   )
 }
 
+function PodcastCard({
+  episode,
+  canAssign,
+  onAssign,
+  onPreview,
+}: {
+  episode: PodcastEpisode
+  canAssign: boolean
+  onAssign: () => void
+  onPreview: () => void
+}) {
+  const hasWords = podcastHasWords(episode)
+  return (
+    <div className="flex h-full flex-col rounded-3xl border border-indigo-200/80 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
+        <div className="flex items-start gap-3 min-w-0 flex-1">
+          <span
+            aria-hidden
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white shadow-sm"
+          >
+            <Headphones className="h-5 w-5" />
+          </span>
+          <div className="min-w-0 space-y-2">
+            <h3 className="text-lg font-semibold text-slate-900">{episode.title}</h3>
+            <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+              <span className="rounded-full bg-slate-100 px-2.5 py-1">{episode.topic}</span>
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 capitalize">
+                {episode.difficulty}
+              </span>
+              {episode.durationMinutes > 0 && (
+                <span className="rounded-full bg-slate-100 px-2.5 py-1">
+                  {episode.durationMinutes} min
+                </span>
+              )}
+              {hasWords && (
+                <span className="rounded-full bg-violet-100 px-2.5 py-1 text-violet-700">
+                  {episode.words.length} words
+                </span>
+              )}
+              {!hasWords && (
+                <span className="rounded-full bg-slate-100 px-2.5 py-1">Listen only</span>
+              )}
+            </div>
+          </div>
+        </div>
+        <span className="shrink-0 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+          {episode.level}
+        </span>
+      </div>
+      <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-600">
+        {episode.description || "Listening podcast episode."}
+      </p>
+      <div className="mt-4 flex gap-2">
+        {canAssign && (
+          <Button
+            size="sm"
+            onClick={onAssign}
+            className="flex-1 gap-1.5 bg-blue-500 hover:bg-blue-600 text-white h-9"
+          >
+            <UserPlus className="h-4 w-4" />
+            Assign
+          </Button>
+        )}
+        <Button size="sm" variant="outline" onClick={onPreview} className="gap-1.5 h-9">
+          <Eye className="h-4 w-4" />
+          Preview
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function PodcastPreviewDialog({
+  episode,
+  open,
+  onOpenChange,
+}: {
+  episode: PodcastEpisode | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const hasWords = episode ? podcastHasWords(episode) : false
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Headphones className="h-4 w-4 text-indigo-500" />
+            {episode?.title ?? "Podcast"}
+          </DialogTitle>
+          <DialogDescription>
+            {episode ? (
+              <>
+                <span className="font-medium text-slate-900">
+                  {episode.topic} · {episode.level}
+                </span>
+                <span className="text-slate-500 capitalize"> · {episode.difficulty}</span>
+                {episode.durationMinutes > 0 && (
+                  <span className="text-slate-500"> · {episode.durationMinutes} min</span>
+                )}
+              </>
+            ) : (
+              "Podcast preview"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        {episode?.audioUrl && (
+          <audio controls className="w-full" src={episode.audioUrl}>
+            Your browser does not support audio playback.
+          </audio>
+        )}
+        {episode?.description && (
+          <p className="text-sm text-slate-600">{episode.description}</p>
+        )}
+        {hasWords && (
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Words · {episode!.words.length}
+            </h4>
+            <div className="max-h-48 space-y-2 overflow-y-auto pr-1">
+              {episode!.words.map((entry, i) => (
+                <div
+                  key={`${entry.word}-${i}`}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                >
+                  <span className="font-medium text-slate-900">{entry.word}</span>
+                  {entry.definition && (
+                    <p className="mt-1 text-slate-600">{entry.definition}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function AssignPodcastDialog({
+  episode,
+  groups,
+  open,
+  onOpenChange,
+  onAssigned,
+  createdByName,
+}: {
+  episode: PodcastEpisode | null
+  groups: Group[]
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onAssigned: () => void
+  createdByName: string
+}) {
+  const { toast } = useToast()
+  const { students } = useAdminData()
+  const [groupId, setGroupId] = useState<string>("")
+  const [dueDate, setDueDate] = useState<string>("")
+  const [assigning, setAssigning] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    setGroupId("")
+    setDueDate(new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString().slice(0, 10))
+  }, [open])
+
+  const submit = async () => {
+    if (!episode) return
+    if (!groupId) {
+      toast({ title: "Pick a group", variant: "destructive" })
+      return
+    }
+    if (!dueDate) {
+      toast({ title: "Pick a due date", variant: "destructive" })
+      return
+    }
+    setAssigning(true)
+    try {
+      const extras: string[] = []
+      if (podcastHasWords(episode)) extras.push("vocabulary review")
+      await homeworkApi.create({
+        title: `Podcast: ${episode.title}`,
+        description:
+          extras.length > 0
+            ? `Listen to the episode, then review the vocabulary.`
+            : `Listen to the podcast episode "${episode.title}".`,
+        subject: "listening",
+        groupId,
+        dueAt: new Date(dueDate).toISOString(),
+        estimatedMinutes: Math.max(5, episode.durationMinutes || 10),
+        createdBy: createdByName,
+        exerciseSlug: podcastHomeworkSlug(episode.slug),
+      })
+      onAssigned()
+    } catch (err) {
+      toast({
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-slate-500" />
+            Assign podcast
+          </DialogTitle>
+          <DialogDescription>
+            {episode ? (
+              <>
+                <span className="font-medium text-slate-900">{episode.title}</span>
+                <span className="text-slate-500"> · {episode.level}</span>
+              </>
+            ) : (
+              "Pick a group and a due date"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label>Group *</Label>
+            <Select value={groupId} onValueChange={setGroupId}>
+              <SelectTrigger>
+                <SelectValue placeholder={groups.length === 0 ? "No groups yet" : "Pick a group"} />
+              </SelectTrigger>
+              <SelectContent>
+                {groups.map((g) => (
+                  <SelectItem key={g.id} value={g.id}>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5 text-slate-400" />
+                      {g.name}
+                      <span className="text-xs text-slate-500">
+                        · {groupMemberCount(students, g.id)} student
+                        {groupMemberCount(students, g.id) === 1 ? "" : "s"}
+                      </span>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="assign-podcast-due">Due date *</Label>
+            <Input
+              id="assign-podcast-due"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+          <Button
+            onClick={submit}
+            disabled={assigning || !episode}
+            className="gap-1.5 bg-blue-500 hover:bg-blue-600"
+          >
+            {assigning ? "Assigning…" : "Assign to group"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 /** Compact exercise card shown directly in global search results. */
+function PodcastSearchCard({
+  episode,
+  onOpenFolder,
+  onPreview,
+  onAssign,
+}: {
+  episode: PodcastEpisode
+  onOpenFolder: () => void
+  onPreview: () => void
+  onAssign?: () => void
+}) {
+  const diff = DIFFICULTY_META[episode.difficulty as GrammarExercise["difficulty"]] ?? DIFFICULTY_META.easy
+  const hasWords = podcastHasWords(episode)
+  return (
+    <Card className="h-full overflow-hidden border-indigo-200/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md">
+      <CardContent className="flex h-full flex-col gap-3 p-4">
+        <div className="flex items-start justify-between gap-2">
+          <button
+            type="button"
+            onClick={onOpenFolder}
+            className="text-left text-[11px] font-medium uppercase tracking-wider text-indigo-600 hover:text-indigo-900"
+          >
+            Podcast
+          </button>
+          <span
+            className={cn(
+              "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold ring-1",
+              levelBadgeClass(episode.level),
+            )}
+          >
+            {episode.level}
+          </span>
+        </div>
+
+        <h4 className="text-sm font-bold leading-snug text-slate-900">{episode.title}</h4>
+
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+          <span className="rounded-md bg-slate-50 px-2 py-0.5">{episode.topic}</span>
+          {episode.durationMinutes > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-0.5">
+              <Clock className="h-3 w-3 text-slate-400" />
+              <span className="tabular-nums">{episode.durationMinutes} min</span>
+            </span>
+          )}
+          {hasWords && (
+            <span className="rounded-md bg-violet-50 px-2 py-0.5 text-violet-700">
+              {episode.words.length} words
+            </span>
+          )}
+          <span
+            className={cn(
+              "ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-semibold ring-1",
+              diff.cls,
+            )}
+          >
+            <span className={cn("h-1.5 w-1.5 rounded-full", diff.dot)} />
+            {diff.label}
+          </span>
+        </div>
+
+        <div className="mt-auto flex gap-2 pt-1">
+          {onAssign && (
+            <Button
+              size="sm"
+              onClick={onAssign}
+              className="h-8 flex-1 gap-1.5 bg-blue-500 text-white hover:bg-blue-600"
+            >
+              <UserPlus className="h-3.5 w-3.5" />
+              Assign
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onPreview}
+            className={cn("h-8 gap-1.5", !onAssign && "ml-auto")}
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Preview
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 function ExerciseSearchCard({
   exercise: ex,
   onOpenTopic,

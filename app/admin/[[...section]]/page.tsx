@@ -47,6 +47,7 @@ import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
 import { invalidateExercises } from "@/lib/exercises-cache"
+import { invalidatePodcasts } from "@/lib/podcast-data"
 import {
   AdminDataProvider,
   useAdminData,
@@ -60,13 +61,13 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   students: { title: "Students", subtitle: "Manage student profiles" },
   users: { title: "Users", subtitle: "Manage admins and teachers in your organization" },
   audit: { title: "Activity log", subtitle: "Who did what on the platform" },
-  tests: { title: "IELTS Tests", subtitle: "Browse and remove existing tests" },
+  tests: { title: "IELTS Tests", subtitle: "Full practice tests — coming soon" },
   homework: { title: "Homework check", subtitle: "Review submissions and track completion" },
   stats: { title: "Exercise statistics", subtitle: "Completion, cheating and failure rates per exercise" },
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
-  manage: { title: "Manage exercises", subtitle: "Add questions, topics, tests and vocabulary via JSON" },
+  manage: { title: "Manage exercises", subtitle: "Add questions, topics and vocabulary via JSON" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
   billing: { title: "Billing", subtitle: "Your organization subscription and platform payments" },
@@ -91,15 +92,20 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   // tests, manage — no shared list APIs
 }
 
-/** Section ids restricted to super admin. */
-const SUPER_ADMIN_ONLY_SECTIONS = new Set(["manage"])
+/** Platform content import — org admin and super admin. */
+function canManageExercises(type: UserRole): boolean {
+  return isAdminRole(type)
+}
+
+/** Section ids restricted to org admin / super admin (not teachers). */
+const CONTENT_MANAGE_SECTIONS = new Set(["manage"])
 
 /** Section ids restricted to org admin (admin + super admin), not teachers. */
 const ADMIN_ONLY_SECTIONS = new Set(["users", "audit", "billing", "settings", "speech"])
 
 function sectionFromSegment(segment: string | undefined, role: UserRole): string {
   if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
-  if (SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(role)) {
+  if (CONTENT_MANAGE_SECTIONS.has(segment) && !canManageExercises(role)) {
     return "dashboard"
   }
   if (ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(role)) {
@@ -130,66 +136,6 @@ function roleBadge(role: string) {
   }
 }
 
-const DEFAULT_TESTS = {
-  "reading-001": {
-    testId: "reading-001",
-    title: "IELTS Academic Reading",
-    type: "reading",
-    partCount: 3,
-    totalTime: 60,
-    createdAt: "",
-    parts: [],
-  },
-  "listening-001": {
-    testId: "listening-001",
-    title: "IELTS Academic Listening",
-    type: "listening",
-    partCount: 4,
-    totalTime: 30,
-    createdAt: "",
-    parts: [],
-  },
-  "writing-001": {
-    testId: "writing-001",
-    title: "IELTS Academic Writing",
-    type: "writing",
-    partCount: 2,
-    totalTime: 60,
-    createdAt: "",
-    parts: [],
-  },
-  "speaking-001": {
-    testId: "speaking-001",
-    title: "IELTS Speaking",
-    type: "speaking",
-    partCount: 3,
-    totalTime: 15,
-    createdAt: "",
-    parts: [],
-  },
-}
-
-/** Reads the test count from localStorage, seeding defaults on first run. */
-function readTestCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const saved = JSON.parse(localStorage.getItem("adminTests") || "{}")
-    if (Object.keys(saved).length === 0) {
-      const seeded = Object.fromEntries(
-        Object.entries(DEFAULT_TESTS).map(([id, t]) => [
-          id,
-          { ...t, createdAt: new Date().toISOString() },
-        ]),
-      )
-      localStorage.setItem("adminTests", JSON.stringify(seeded))
-      return Object.keys(seeded).length
-    }
-    return Object.keys(saved).length
-  } catch {
-    return 0
-  }
-}
-
 function AdminPanelContent() {
   const { user, logout, isLoading } = useAuth()
   const { students, groups, homeworkCount, ensureLists } = useAdminData()
@@ -204,9 +150,9 @@ function AdminPanelContent() {
     router.push(id === "dashboard" ? "/admin" : `/admin/${id}`)
   const superAdmin = user ? isSuperAdmin(user.type) : false
   const orgAdmin = user ? isAdminRole(user.type) : false
+  const manageExercises = user ? canManageExercises(user.type) : false
+  const isTeacher = user?.type === "teacher"
 
-  // Synchronous (localStorage) — no flicker, no request on navigation.
-  const [totalTests, setTotalTests] = useState<number>(() => readTestCount())
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
@@ -222,17 +168,14 @@ function AdminPanelContent() {
       router.replace("/admin")
       return
     }
-    if (segment && SUPER_ADMIN_ONLY_SECTIONS.has(segment) && !isSuperAdmin(user.type)) {
+    if (segment && CONTENT_MANAGE_SECTIONS.has(segment) && !canManageExercises(user.type)) {
       router.replace("/admin")
+      return
     }
     if (segment && ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(user.type)) {
       router.replace("/admin")
     }
   }, [segment, user, router])
-
-  useEffect(() => {
-    setTotalTests(readTestCount())
-  }, [refreshKey])
 
   // Load shared lists per section. Groups tab always refetches — schedule lives on each group doc.
   useEffect(() => {
@@ -243,6 +186,7 @@ function AdminPanelContent() {
   /** Refresh exercise/topic catalogue after Manage exercises uploads — no people APIs. */
   const bumpCatalog = () => {
     invalidateExercises()
+    invalidatePodcasts()
   }
 
   const bump = () => {
@@ -269,11 +213,14 @@ function AdminPanelContent() {
     {
       label: "Teaching",
       items: [
-        { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: totalTests },
+        { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: "Soon" },
         { id: "homework", label: "Homework check", icon: ClipboardList, badge: homeworkCount },
         { id: "stats", label: "Statistics", icon: BarChart3 },
         { id: "control", label: "Progress test", icon: Layers },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
+        ...(manageExercises
+          ? [{ id: "manage", label: "Manage exercises", icon: FileJson }]
+          : []),
       ],
     },
     {
@@ -294,9 +241,6 @@ function AdminPanelContent() {
               ...(orgAdmin ? [{ id: "billing", label: "Billing", icon: CreditCard }] : []),
               ...(orgAdmin ? [{ id: "users", label: "Users", icon: UserCog }] : []),
               ...(orgAdmin ? [{ id: "audit", label: "Activity", icon: ScrollText }] : []),
-              ...(superAdmin
-                ? [{ id: "manage", label: "Manage exercises", icon: FileJson }]
-                : []),
             ],
           } satisfies NavSection,
         ]
@@ -304,12 +248,24 @@ function AdminPanelContent() {
   ]
 
   const meta = SECTION_TITLES[activeTab] ?? SECTION_TITLES.dashboard
+  const pageMeta =
+    activeTab === "dashboard" && isTeacher
+      ? {
+          title: "Overview",
+          subtitle: "Your schedule, groups and homework at a glance",
+        }
+      : activeTab === "finance" && isTeacher
+        ? {
+            title: "Finance",
+            subtitle: "Payments and revenue for your groups",
+          }
+        : meta
   const role = roleBadge(user.type)
 
   return (
     <AdminShell
-      title={meta.title}
-      subtitle={meta.subtitle}
+      title={pageMeta.title}
+      subtitle={pageMeta.subtitle}
       sections={sections}
       active={activeTab}
       onSelect={selectTab}
@@ -317,7 +273,7 @@ function AdminPanelContent() {
       role={role}
       headerExtras={
         <Badge variant="secondary" className="hidden text-[11px] md:inline-flex">
-          {totalTests} IELTS · {groups.length} groups · {students.length} students
+          {groups.length} groups · {students.length} students
         </Badge>
       }
       topBanner={<OrgNewsBanner />}
@@ -327,7 +283,8 @@ function AdminPanelContent() {
         <OverviewDashboard
           refreshKey={refreshKey}
           onSelectTab={selectTab}
-          accent="rose"
+          accent={isTeacher ? "violet" : "rose"}
+          variant={isTeacher ? "teacher" : "admin"}
         />
       )}
 
@@ -337,7 +294,7 @@ function AdminPanelContent() {
         <UsersManager actorType={user.type} actorId={user.id} onChanged={bump} />
       )}
       {activeTab === "audit" && orgAdmin && <AuditSection />}
-      {activeTab === "tests" && <TestsList onTestsChanged={bump} />}
+      {activeTab === "tests" && <TestsList />}
       {activeTab === "homework" && (
         <HomeworkManager createdByName={user.name} onChanged={bump} />
       )}
@@ -353,7 +310,7 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
-      {activeTab === "manage" && superAdmin && (
+      {activeTab === "manage" && manageExercises && (
         <ManageContentSection onChanged={bumpCatalog} />
       )}
       {activeTab === "bot" && <TelegramBotSection />}

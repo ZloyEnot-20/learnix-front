@@ -49,8 +49,7 @@ import { TestResultsModal } from "@/components/test-results-modal"
 import { studentsApi, testResultsApi } from "@/lib/api"
 import StudentStatsPanel from "@/components/student/student-stats-panel"
 import { cn } from "@/lib/utils"
-import { formatLessonSchedule } from "@/lib/lesson-schedule"
-import type { LessonSchedule } from "@/lib/lesson-schedule"
+import { formatLessonSchedule, type LessonSchedule } from "@/lib/lesson-schedule"
 
 const TEST_COLORS = {
   reading: "#c1bffd",
@@ -168,7 +167,6 @@ export default function ProfilePage() {
     year: "numeric",
     month: "long",
   })
-  const scheduleLabel = formatLessonSchedule(lessonSchedule)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -204,30 +202,30 @@ export default function ProfilePage() {
                       {user.type}
                     </Badge>
                   </div>
-                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-slate-500">
-                    <span className="inline-flex items-center gap-1.5">
+                  <div className="mt-2 flex flex-col items-start gap-1.5 text-sm text-slate-500 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1.5">
+                    <span className="inline-flex max-w-full items-center gap-1.5">
                       <Mail className="h-3.5 w-3.5 shrink-0" />
                       {user.email}
                     </span>
                     {groupName && (
-                      <span className="inline-flex items-center gap-1.5">
+                      <span className="inline-flex max-w-full items-center gap-1.5">
                         <Users className="h-3.5 w-3.5 shrink-0" />
                         {groupName}
                       </span>
                     )}
                     {teacherName && (
-                      <span className="inline-flex items-center gap-1.5">
+                      <span className="inline-flex max-w-full items-center gap-1.5">
                         <GraduationCap className="h-3.5 w-3.5 shrink-0" />
                         {teacherName}
                       </span>
                     )}
-                    {scheduleLabel && (
-                      <span className="inline-flex items-center gap-1.5">
+                    {lessonSchedule && (
+                      <span className="inline-flex max-w-full items-center gap-1.5">
                         <Clock className="h-3.5 w-3.5 shrink-0" />
-                        {scheduleLabel}
+                        {formatLessonSchedule(lessonSchedule)}
                       </span>
                     )}
-                    <span className="inline-flex items-center gap-1.5">
+                    <span className="inline-flex max-w-full items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5 shrink-0" />
                       Member since {memberSince}
                     </span>

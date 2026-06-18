@@ -20,6 +20,8 @@ interface CacheEntry<T> {
   data?: T
   fetchedAt?: number
   inflight?: Promise<T>
+  /** Bumped on invalidate so stale in-flight responses cannot overwrite fresh data. */
+  generation?: number
 }
 
 const studentsCache: CacheEntry<Student[]> = {}
@@ -52,6 +54,17 @@ function isFresh<T>(entry: CacheEntry<T>): boolean {
   )
 }
 
+function bumpCacheGeneration<T>(cache: CacheEntry<T>): void {
+  cache.generation = (cache.generation ?? 0) + 1
+}
+
+function invalidateCacheEntry<T>(cache: CacheEntry<T>): void {
+  bumpCacheGeneration(cache)
+  cache.data = undefined
+  cache.fetchedAt = undefined
+  cache.inflight = undefined
+}
+
 async function load<T>(
   cache: CacheEntry<T>,
   fetcher: () => Promise<T>,
@@ -61,10 +74,13 @@ async function load<T>(
   // Always share one in-flight request (avoids duplicate calls from Strict Mode / parallel effects).
   if (cache.inflight) return cache.inflight
 
+  const generation = cache.generation ?? 0
   const promise = fetcher()
     .then((data) => {
-      cache.data = data
-      cache.fetchedAt = Date.now()
+      if ((cache.generation ?? 0) === generation) {
+        cache.data = data
+        cache.fetchedAt = Date.now()
+      }
       return data
     })
     .finally(() => {
@@ -92,40 +108,26 @@ export const peekGroups = (): Group[] | undefined => groupsCache.data
 export const peekHomeworkCount = (): number | undefined => homeworkCountCache.data
 
 export function invalidateStudents(): void {
-  studentsCache.data = undefined
-  studentsCache.fetchedAt = undefined
-  studentsCache.inflight = undefined
+  invalidateCacheEntry(studentsCache)
   dispatchInvalidate("students")
 }
 
 export function invalidateGroups(): void {
-  groupsCache.data = undefined
-  groupsCache.fetchedAt = undefined
-  groupsCache.inflight = undefined
-  studentsCache.data = undefined
-  studentsCache.fetchedAt = undefined
-  studentsCache.inflight = undefined
+  invalidateCacheEntry(groupsCache)
+  invalidateCacheEntry(studentsCache)
   invalidateGroupSummaries()
   dispatchInvalidate("groups")
 }
 
 export function invalidateHomeworkCount(): void {
-  homeworkCountCache.data = undefined
-  homeworkCountCache.fetchedAt = undefined
-  homeworkCountCache.inflight = undefined
+  invalidateCacheEntry(homeworkCountCache)
   dispatchInvalidate("homework-count")
 }
 
 export function invalidateAdminData(): void {
-  studentsCache.data = undefined
-  studentsCache.fetchedAt = undefined
-  studentsCache.inflight = undefined
-  groupsCache.data = undefined
-  groupsCache.fetchedAt = undefined
-  groupsCache.inflight = undefined
-  homeworkCountCache.data = undefined
-  homeworkCountCache.fetchedAt = undefined
-  homeworkCountCache.inflight = undefined
+  invalidateCacheEntry(studentsCache)
+  invalidateCacheEntry(groupsCache)
+  invalidateCacheEntry(homeworkCountCache)
   invalidateGroupSummaries()
   dispatchInvalidate("all")
 }

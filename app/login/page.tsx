@@ -2,26 +2,13 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { DEMO_ACCOUNTS, useAuth, type UserRole } from "@/lib/auth-context"
+import { useAuth, redirectAfterAuth } from "@/lib/auth-context"
 import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { ShieldAlert, User } from "lucide-react"
 import Link from "next/link"
-
-const ROLE_META: Partial<Record<UserRole, { label: string; Icon: typeof User; accent: string }>> = {
-  super_admin: { label: "Super Admin", Icon: ShieldAlert, accent: "text-amber-700 bg-amber-50 border-amber-200" },
-  student: { label: "Student", Icon: User, accent: "text-sky-700 bg-sky-50 border-sky-200" },
-}
-
-function redirectFor(role: UserRole): string {
-  // All staff roles (super admin / admin / teacher) live in the admin panel.
-  if (role !== "student") return "/admin"
-  return "/dashboard"
-}
 
 export default function LoginPage() {
   const [loginValue, setLoginValue] = useState("")
@@ -49,24 +36,9 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       const u = await signIn(loginValue, password)
-      router.push(redirectFor(u.type))
+      router.push(redirectAfterAuth(u.type))
     } catch {
       setError("Invalid login or password")
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const handleDemoLogin = async (demoEmail: string, demoPassword: string) => {
-    setError("")
-    setSubmitting(true)
-    setLoginValue(demoEmail)
-    setPassword(demoPassword)
-    try {
-      const u = await signIn(demoEmail, demoPassword)
-      router.push(redirectFor(u.type))
-    } catch {
-      setError("Demo login failed")
     } finally {
       setSubmitting(false)
     }
@@ -120,46 +92,6 @@ export default function LoginPage() {
               Sign In
             </Button>
           </form>
-
-          <div className="my-6 flex items-center gap-3">
-            <Separator className="flex-1" />
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
-              Quick login
-            </span>
-            <Separator className="flex-1" />
-          </div>
-
-          <div className="grid gap-2">
-            {DEMO_ACCOUNTS.map((acc) => {
-              const meta = ROLE_META[acc.type]
-              if (!meta) return null
-              const Icon = meta.Icon
-              return (
-                <button
-                  key={acc.email}
-                  type="button"
-                  disabled={submitting}
-                  onClick={() => handleDemoLogin(acc.email, acc.password)}
-                  className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left transition-all hover:border-slate-300 hover:shadow-sm disabled:opacity-60 disabled:pointer-events-none"
-                >
-                  <span
-                    className={`flex h-9 w-9 items-center justify-center rounded-lg border ${meta.accent}`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold text-slate-900">
-                      Sign in as {meta.label}
-                    </span>
-                    <span className="block truncate text-xs text-slate-500">{acc.email}</span>
-                  </span>
-                  <span className="text-xs font-medium text-slate-400 group-hover:text-slate-700">
-                    →
-                  </span>
-                </button>
-              )
-            })}
-          </div>
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>

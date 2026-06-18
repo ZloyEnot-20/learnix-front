@@ -22,12 +22,14 @@ import {
 } from "@/components/ui/select"
 import {
   Copy,
+  EllipsisVertical,
   GraduationCap,
   KeyRound,
   Pencil,
   Plus,
   RefreshCw,
   Search,
+  Shield,
   ShieldCheck,
   Trash2,
   UserCog,
@@ -39,8 +41,21 @@ import { usersApi, studentsApi } from "@/lib/api"
 import { TableSkeleton } from "./skeletons"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
-import { isSuperAdmin, type UserRole } from "@/lib/auth-context"
+import { isSuperAdmin, isAdminRole, type UserRole } from "@/lib/auth-context"
 import { ConfirmDialog } from "@/components/confirm-dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  STAFF_PERMISSION_CATALOG,
+  type StaffPermissionKey,
+} from "@/lib/staff-permissions"
 
 const ROLE_META: Record<
   StaffType,
@@ -82,6 +97,7 @@ interface UsersManagerProps {
 export default function UsersManager({ actorType, actorId, onChanged }: UsersManagerProps) {
   const { toast } = useToast()
   const superAdmin = isSuperAdmin(actorType)
+  const orgAdmin = isAdminRole(actorType)
 
   const [users, setUsers] = useState<StaffUser[]>([])
   const [loading, setLoading] = useState(true)
@@ -98,6 +114,13 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
   const [resettingId, setResettingId] = useState<string | null>(null)
   const [roleChangingId, setRoleChangingId] = useState<string | null>(null)
   const [credentials, setCredentials] = useState<{ login: string; password: string } | null>(null)
+
+  const [permissionsUser, setPermissionsUser] = useState<StaffUser | null>(null)
+  const [permissionsDraft, setPermissionsDraft] = useState<Record<StaffPermissionKey, boolean>>(
+    {} as Record<StaffPermissionKey, boolean>,
+  )
+  const [permissionsLoading, setPermissionsLoading] = useState(false)
+  const [permissionsSaving, setPermissionsSaving] = useState(false)
 
   const [loginSuggestions, setLoginSuggestions] = useState<string[]>([])
   const [loadingSuggestions, setLoadingSuggestions] = useState(false)
@@ -337,6 +360,53 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
     })
   }
 
+  const openPermissions = async (user: StaffUser) => {
+    setPermissionsUser(user)
+    setPermissionsLoading(true)
+    try {
+      const fresh = await usersApi.get(user.id)
+      const granted = new Set(fresh.permissions ?? [])
+      const draft = {} as Record<StaffPermissionKey, boolean>
+      for (const item of STAFF_PERMISSION_CATALOG) {
+        draft[item.key] = granted.has(item.key)
+      }
+      setPermissionsDraft(draft)
+      setPermissionsUser(fresh)
+    } catch (err) {
+      toast({
+        title: "Could not load permissions",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+      setPermissionsUser(null)
+    } finally {
+      setPermissionsLoading(false)
+    }
+  }
+
+  const savePermissions = async () => {
+    if (!permissionsUser) return
+    setPermissionsSaving(true)
+    try {
+      const permissions = STAFF_PERMISSION_CATALOG.filter((p) => permissionsDraft[p.key]).map(
+        (p) => p.key,
+      )
+      await usersApi.updatePermissions(permissionsUser.id, permissions)
+      toast({ title: "Permissions saved", description: permissionsUser.name })
+      setPermissionsUser(null)
+      await refresh()
+      onChanged?.()
+    } catch (err) {
+      toast({
+        title: "Could not save permissions",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setPermissionsSaving(false)
+    }
+  }
+
   if (loading) return <TableSkeleton rows={5} columns={5} />
 
   return (
@@ -383,7 +453,7 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
             className="pl-9"
           />
         </div>
-        <Select value={typeFilter} onValueChange={(v) => settypeFilter(v as typeof typeFilter)}>
+        <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as typeof typeFilter)}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="All roles" />
           </SelectTrigger>
@@ -411,6 +481,7 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
                 <th className="px-3 py-3 font-semibold">Login</th>
                 <th className="px-3 py-3 font-semibold">Email</th>
                 <th className="px-3 py-3 font-semibold">Role</th>
+                {superAdmin && <th className="px-3 py-3 font-semibold">Access</th>}
                 <th className="px-3 py-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
@@ -422,6 +493,12 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
                 const isTeacher = user.type === "teacher"
                 const canToggleTeacher =
                   !isSelf && user.type !== "super_admin" && (user.type === "teacher" || user.type === "admin")
+
+                const canManagePermissions =
+                  orgAdmin &&
+                  !isSelf &&
+                  user.type !== "super_admin" &&
+                  (user.type === "teacher" || superAdmin)
 
                 return (
                   <tr key={user.id} className="border-b border-slate-100 hover:bg-slate-50/80">
@@ -444,66 +521,82 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
                         {meta.label}
                       </Badge>
                     </td>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center justify-end gap-1">
-                        {canToggleTeacher && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            loading={roleChangingId === user.id}
-                            onClick={() => void setTeacherRole(user, !isTeacher)}
-                            className={cn(
-                              "h-8 px-2 text-xs",
-                              isTeacher
-                                ? "text-slate-600 hover:text-slate-900"
-                                : "text-violet-700 hover:text-violet-900",
-                            )}
-                            title={isTeacher ? "Remove teacher role" : "Make teacher"}
-                          >
-                            {isTeacher ? (
-                              <>
-                                <UserMinus className="mr-1 h-3.5 w-3.5" />
-                                Remove teacher
-                              </>
-                            ) : (
-                              <>
-                                <UserPlus className="mr-1 h-3.5 w-3.5" />
-                                Make teacher
-                              </>
-                            )}
-                          </Button>
+                    {orgAdmin && (
+                      <td className="px-3 py-3">
+                        {(user.permissions?.length ?? 0) > 0 ? (
+                          <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-800">
+                            {user.permissions!.length} extra
+                          </Badge>
+                        ) : user.type === "teacher" ? (
+                          <span className="text-xs text-slate-400">Own groups only</span>
+                        ) : (
+                          <span className="text-xs text-slate-400">Full access</span>
                         )}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          loading={resettingId === user.id}
-                          onClick={() => void resetPassword(user)}
-                          title="Reset password"
-                        >
-                          <KeyRound className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          disabled={isSelf}
-                          onClick={() => openEdit(user)}
-                          title="Edit"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:text-rose-600"
-                          loading={removingId === user.id}
-                          disabled={isSelf}
-                          onClick={() => requestRemove(user)}
-                          title="Delete"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                      </td>
+                    )}
+                    <td className="px-3 py-3">
+                      <div className="flex justify-end">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              aria-label="User actions"
+                            >
+                              <EllipsisVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-52">
+                            <DropdownMenuItem
+                              disabled={isSelf}
+                              onClick={() => openEdit(user)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                              Edit profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={resettingId === user.id}
+                              onClick={() => void resetPassword(user)}
+                            >
+                              <KeyRound className="h-4 w-4" />
+                              Reset password
+                            </DropdownMenuItem>
+                            {canToggleTeacher && (
+                              <DropdownMenuItem
+                                disabled={roleChangingId === user.id}
+                                onClick={() => void setTeacherRole(user, !isTeacher)}
+                              >
+                                {isTeacher ? (
+                                  <>
+                                    <UserMinus className="h-4 w-4" />
+                                    Remove teacher role
+                                  </>
+                                ) : (
+                                  <>
+                                    <UserPlus className="h-4 w-4" />
+                                    Make teacher
+                                  </>
+                                )}
+                              </DropdownMenuItem>
+                            )}
+                            {canManagePermissions && (
+                              <DropdownMenuItem onClick={() => void openPermissions(user)}>
+                                <Shield className="h-4 w-4" />
+                                Manage access
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              variant="destructive"
+                              disabled={isSelf || removingId === user.id}
+                              onClick={() => requestRemove(user)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete user
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </td>
                   </tr>
@@ -580,6 +673,71 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
         loading={!!pendingRemove && removingId === pendingRemove.id}
       />
 
+      <Dialog open={!!permissionsUser} onOpenChange={(open) => !open && setPermissionsUser(null)}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Manage access</DialogTitle>
+            <DialogDescription>
+              Grant extra capabilities to{" "}
+              <span className="font-medium text-foreground">{permissionsUser?.name}</span>.
+              Teachers without grants only see their assigned groups and students.
+            </DialogDescription>
+          </DialogHeader>
+          {permissionsLoading ? (
+            <PermissionsTableSkeleton />
+          ) : (
+            <div className="max-h-[min(60vh,28rem)] overflow-auto rounded-lg border border-slate-200">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-slate-50">
+                  <tr className="border-b border-slate-200 text-left text-[11px] uppercase tracking-wider text-slate-500">
+                    <th className="px-3 py-2.5 font-semibold">Permission</th>
+                    <th className="px-3 py-2.5 font-semibold text-center w-24">Denied</th>
+                    <th className="px-3 py-2.5 font-semibold text-center w-24">Granted</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {STAFF_PERMISSION_CATALOG.map((item) => (
+                    <tr key={item.key} className="border-b border-slate-100 last:border-0">
+                      <td className="px-3 py-3">
+                        <p className="font-medium text-slate-900">{item.label}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{item.description}</p>
+                      </td>
+                      <td colSpan={2} className="px-3 py-3">
+                        <RadioGroup
+                          value={permissionsDraft[item.key] ? "granted" : "denied"}
+                          onValueChange={(v) =>
+                            setPermissionsDraft((prev) => ({
+                              ...prev,
+                              [item.key]: v === "granted",
+                            }))
+                          }
+                          className="grid grid-cols-2"
+                        >
+                          <div className="flex justify-center">
+                            <RadioGroupItem value="denied" aria-label={`Deny ${item.label}`} />
+                          </div>
+                          <div className="flex justify-center">
+                            <RadioGroupItem value="granted" aria-label={`Grant ${item.label}`} />
+                          </div>
+                        </RadioGroup>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPermissionsUser(null)}>
+              Cancel
+            </Button>
+            <Button onClick={() => void savePermissions()} loading={permissionsSaving} disabled={permissionsLoading}>
+              Save permissions
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={!!credentials} onOpenChange={(open) => !open && setCredentials(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -623,6 +781,22 @@ export default function UsersManager({ actorType, actorId, onChanged }: UsersMan
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+function PermissionsTableSkeleton() {
+  return (
+    <div className="space-y-2 rounded-lg border border-slate-200 p-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="grid grid-cols-[1fr_6rem] items-center gap-3">
+          <div className="space-y-1.5">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-3 w-full max-w-sm" />
+          </div>
+          <Skeleton className="h-4 w-16 justify-self-center" />
+        </div>
+      ))}
     </div>
   )
 }

@@ -21,11 +21,19 @@ export interface Group {
 
 /** Group members — canonical membership is Student.groupId (User collection). */
 export function studentsInGroup(students: Student[], groupId: string): Student[] {
-  return students.filter((s) => s.groupId === groupId)
+  const id = String(groupId)
+  return students.filter((s) => s.groupId != null && String(s.groupId) === id)
 }
 
 export function groupMemberCount(students: Student[], groupId: string): number {
   return studentsInGroup(students, groupId).length
+}
+
+/** Effective monthly fee: stored on student or inherited from their group. */
+export function studentMonthlyFee(student: Student, group?: Group | null): number {
+  if (typeof student.monthlyFee === "number") return student.monthlyFee
+  if (typeof group?.monthlyFee === "number") return group.monthlyFee
+  return 0
 }
 
 export interface Student {
@@ -36,6 +44,8 @@ export interface Student {
   phone?: string
   groupId?: string
   joinedAt: string
+  /** When the student was assigned to the current group (for attendance). */
+  groupJoinedAt?: string
   monthlyFee?: number
   notes?: string
   targetBand?: number | null
@@ -54,6 +64,7 @@ export interface StaffUser {
   name: string
   type: StaffType
   isPremium?: boolean
+  permissions?: string[]
 }
 
 export type HomeworkStatus = "pending" | "in_progress" | "paused" | "submitted" | "graded"
@@ -99,6 +110,17 @@ export interface HomeworkAttempt {
   timedOut?: boolean
   /** How many questions the student actually reached before time ran out. */
   answeredCount?: number
+  listeningStats?: {
+    totalListenSeconds: number
+    seekCount: number
+    rewindCount: number
+    forwardCount: number
+    seeks: Array<{ fromSeconds: number; toSeconds: number; atMs: number }>
+    listenedSegments?: Array<{ startSeconds: number; endSeconds: number }>
+    podcastDurationSeconds: number
+    completedListening: boolean
+    wordsReviewed: number
+  }
 }
 
 export interface HomeworkSubmission {
@@ -132,18 +154,42 @@ export interface HomeworkSubmission {
   }>
 }
 
-export type PaymentStatus = "pending" | "paid" | "overdue"
+export type PaymentStatus = "pending" | "partial" | "paid" | "overdue"
 
 export interface Payment {
   id: string
   studentId: string
   groupId: string
   amount: number
+  paidAmount?: number
   periodLabel: string
   dueDate: string
   paidDate?: string
   status: PaymentStatus
   notes?: string
+}
+
+export type AttendanceStatus = "present" | "absent" | "late" | "excused"
+
+export interface AttendanceRecord {
+  studentId: string
+  status?: AttendanceStatus
+  notes?: string
+}
+
+export interface LessonSession {
+  id: string
+  groupId: string
+  date: string
+  topic?: string
+  notes?: string
+  fromSchedule?: boolean
+  canceled?: boolean
+  cancelReason?: string
+  attendanceMarked?: boolean
+  attendance: AttendanceRecord[]
+  createdAt: string
+  updatedAt: string
 }
 
 export interface StudentHomeworkEntry {

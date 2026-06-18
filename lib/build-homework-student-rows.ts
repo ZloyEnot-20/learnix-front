@@ -72,7 +72,8 @@ export function hasSubmissionResults(sub?: HomeworkSubmission): boolean {
       (attempt.mistakes?.length ?? 0) > 0 ||
       attempt.timedOut ||
       attempt.failedDueToCheating ||
-      typeof attempt.answeredCount === "number"
+      typeof attempt.answeredCount === "number" ||
+      !!attempt.listeningStats?.completedListening
     )
   }
   return sub.status === "submitted" || sub.status === "graded"

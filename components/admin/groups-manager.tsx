@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,25 +22,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet, Clock, Pencil } from "lucide-react"
-import type { Group, Student } from "@/lib/admin-storage"
+import { Plus, Trash2, Users, UserPlus, ArrowLeft, CalendarDays, Wallet, Clock, Pencil, Phone, Search } from "lucide-react"
+import type { Group, LessonSession, Payment, StaffUser, Student } from "@/lib/admin-storage"
 import { groupMemberCount, studentsInGroup } from "@/lib/admin-storage"
 import { getGroupSummaries, invalidateGroups } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { isEntryTestGroup, selectableGroups } from "@/lib/entry-test-group"
-import { groupsApi } from "@/lib/api"
-import { formatLessonSchedule, normalizeLessonSchedulePayload } from "@/lib/lesson-schedule"
+import { groupsApi, lessonsApi, paymentsApi, usersApi } from "@/lib/api"
+import { normalizeLessonSchedulePayload, filterLessonsForSchedule, groupToLessonSchedule } from "@/lib/lesson-schedule"
+import { LessonScheduleDisplay } from "@/components/lesson-schedule-display"
 import {
   createEmptyLessonSchedule,
   LessonScheduleFields,
   validateLessonScheduleForm,
   type LessonScheduleFormValues,
 } from "./lesson-schedule-fields"
-import { CardGridSkeleton } from "./skeletons"
-import { ConfirmDialog } from "@/components/confirm-dialog"
+import { CardGridSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
+import { GroupAttendancePanel } from "./group-attendance-panel"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth, isAdminType } from "@/lib/auth-context"
 import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
+import {
+  attendanceRateBadgeCls,
+  computeStudentAttendanceRates,
+} from "@/lib/attendance-stats"
+import {
+  currentPeriodMonth,
+  PAYMENT_STATUS_META,
+  periodMonthOf,
+} from "@/lib/payment-period"
 
 interface GroupSummary {
   expectedTotal: number
@@ -71,27 +83,51 @@ interface GroupsManagerProps {
 
 export default function GroupsManager({ canCreate = true, onChanged }: GroupsManagerProps) {
   const { toast } = useToast()
-  const { students, groups, ready, refreshAll, refreshGroups, refreshStudents } =
+  const { user } = useAuth()
+  const showTeacherPicker = user ? isAdminType(user.type) : false
+  const router = useRouter()
+  const params = useParams<{ section?: string[] }>()
+  const { students, groups, ready, refreshAll, refreshGroups, refreshStudents, patchGroup, patchStudent } =
     useAdminData()
   const manageableGroups = useMemo(() => selectableGroups(groups), [groups])
+  const selectedGroupId = useMemo(() => {
+    const parts = Array.isArray(params.section) ? params.section : []
+    if (parts[0] !== "groups" || !parts[1]) return null
+    return parts[1]
+  }, [params.section])
+  const openGroup = useCallback(
+    (id: string) => {
+      router.push(`/admin/groups/${id}`)
+    },
+    [router],
+  )
   const [summaries, setSummaries] = useState<Record<string, GroupSummary>>({})
   const [showCreate, setShowCreate] = useState(false)
-  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
   const [showAddStudent, setShowAddStudent] = useState(false)
   const [studentToAdd, setStudentToAdd] = useState("")
   const [studentDetail, setStudentDetail] = useState<Student | null>(null)
   const [creating, setCreating] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [pendingDelete, setPendingDelete] = useState<Group | null>(null)
   const [addingStudent, setAddingStudent] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [showEdit, setShowEdit] = useState(false)
   const [updating, setUpdating] = useState(false)
+  const [studentSearch, setStudentSearch] = useState("")
+  const [attendanceScheduleRevision, setAttendanceScheduleRevision] = useState(0)
+  const closeGroup = useCallback(() => {
+    setStudentSearch("")
+    router.push("/admin/groups")
+  }, [router])
+  const [groupLessons, setGroupLessons] = useState<LessonSession[]>([])
+  const [groupPayments, setGroupPayments] = useState<Payment[]>([])
+  const [studentMetaLoading, setStudentMetaLoading] = useState(false)
+  const [teachers, setTeachers] = useState<StaffUser[]>([])
+  const [teachersLoading, setTeachersLoading] = useState(false)
 
   type GroupFormState = {
     name: string
     description: string
     monthlyFee: number
+    teacherId: string
   } & LessonScheduleFormValues
 
   const createEmptyGroupForm = useCallback(
@@ -99,6 +135,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       name: "",
       description: "",
       monthlyFee: 1_000_000,
+      teacherId: "",
       ...createEmptyLessonSchedule(),
     }),
     [],
@@ -122,6 +159,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       name: fromList.name,
       description: fromList.description ?? "",
       monthlyFee: fromList.monthlyFee ?? 0,
+      teacherId: fromList.teacherId ?? "",
       ...groupToScheduleForm(fromList),
     })
     setShowEdit(true)
@@ -136,6 +174,33 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     setShowCreate(false)
     setForm(createEmptyGroupForm())
   }
+
+  const loadTeachers = useCallback(async () => {
+    if (!showTeacherPicker) return
+    setTeachersLoading(true)
+    try {
+      const users = await usersApi.list()
+      setTeachers(users.filter((u) => u.type === "teacher"))
+    } catch {
+      setTeachers([])
+    } finally {
+      setTeachersLoading(false)
+    }
+  }, [showTeacherPicker])
+
+  useEffect(() => {
+    void loadTeachers()
+  }, [loadTeachers])
+
+  useEffect(() => {
+    if (showCreate || showEdit) void loadTeachers()
+  }, [showCreate, showEdit, loadTeachers])
+
+  const teacherNameById = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const teacher of teachers) map.set(teacher.id, teacher.name)
+    return map
+  }, [teachers])
 
   const loadSummaries = async (groupList: Group[], force = false) => {
     const data = await getGroupSummaries(
@@ -164,6 +229,14 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     [groups, selectedGroupId],
   )
 
+  useEffect(() => {
+    if (!selectedGroupId || !ready) return
+    const group = groups.find((g) => g.id === selectedGroupId)
+    if (!group || isEntryTestGroup(group)) {
+      router.replace("/admin/groups")
+    }
+  }, [selectedGroupId, groups, ready, router])
+
   const groupStudents = useMemo(() => {
     if (!selectedGroup) return []
     return studentsInGroup(students, selectedGroup.id)
@@ -171,8 +244,58 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
 
   const availableStudents = useMemo(() => {
     if (!selectedGroup) return []
-    return students.filter((s) => s.groupId !== selectedGroup.id)
+    const groupId = String(selectedGroup.id)
+    return students.filter((s) => String(s.groupId ?? "") !== groupId)
   }, [selectedGroup, students])
+
+  const filteredGroupStudents = useMemo(() => {
+    const q = studentSearch.trim().toLowerCase()
+    if (!q) return groupStudents
+    return groupStudents.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        s.login.toLowerCase().includes(q) ||
+        (s.email?.toLowerCase().includes(q) ?? false) ||
+        (s.phone?.toLowerCase().includes(q) ?? false),
+    )
+  }, [groupStudents, studentSearch])
+
+  const loadStudentMeta = useCallback(async (groupOverride?: Group) => {
+    const group = groupOverride ?? selectedGroup
+    if (!group || isEntryTestGroup(group)) return
+    setStudentMetaLoading(true)
+    try {
+      const weekdays = group.lessonWeekdays ?? []
+      const [lessons, payments] = await Promise.all([
+        lessonsApi.list({ groupId: group.id }),
+        paymentsApi.list({ groupId: group.id }),
+      ])
+      setGroupLessons(filterLessonsForSchedule(lessons, weekdays))
+      setGroupPayments(payments)
+    } catch {
+      setGroupLessons([])
+      setGroupPayments([])
+    } finally {
+      setStudentMetaLoading(false)
+    }
+  }, [selectedGroup])
+
+  useEffect(() => {
+    void loadStudentMeta()
+  }, [loadStudentMeta])
+
+  const attendanceByStudent = useMemo(
+    () => computeStudentAttendanceRates(
+      groupLessons,
+      groupStudents.map((s) => ({
+        id: s.id,
+        groupJoinedAt: s.groupJoinedAt ?? s.joinedAt,
+      })),
+    ),
+    [groupLessons, groupStudents],
+  )
+
+  const paymentPeriod = currentPeriodMonth()
 
   const submitGroup = async () => {
     if (!form.name.trim()) {
@@ -184,6 +307,10 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       toast({ title: scheduleError, variant: "destructive" })
       return
     }
+    if (showTeacherPicker && !form.teacherId) {
+      toast({ title: "Select a teacher", variant: "destructive" })
+      return
+    }
     setCreating(true)
     try {
       const schedule = normalizeLessonSchedulePayload(form)
@@ -191,6 +318,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
         name: form.name.trim(),
         description: form.description.trim() || undefined,
         monthlyFee: Number(form.monthlyFee) || 0,
+        ...(showTeacherPicker ? { teacherId: form.teacherId } : {}),
         ...schedule,
       })
       invalidateGroups()
@@ -221,19 +349,27 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       toast({ title: scheduleError, variant: "destructive" })
       return
     }
+    if (showTeacherPicker && !editForm.teacherId) {
+      toast({ title: "Select a teacher", variant: "destructive" })
+      return
+    }
     setUpdating(true)
     try {
       const schedule = normalizeLessonSchedulePayload(editForm)
-      await groupsApi.update(selectedGroup.id, {
+      const updated = await groupsApi.update(selectedGroup.id, {
         name: editForm.name.trim(),
         description: editForm.description.trim() || undefined,
         monthlyFee: Number(editForm.monthlyFee) || 0,
+        ...(showTeacherPicker ? { teacherId: editForm.teacherId } : {}),
         ...schedule,
       })
+      patchGroup(updated)
       invalidateGroups()
       toast({ title: "Group updated" })
       setShowEdit(false)
+      setAttendanceScheduleRevision((n) => n + 1)
       await refreshGroups(true)
+      await loadStudentMeta(updated)
       onChanged?.()
     } catch (err) {
       toast({
@@ -246,33 +382,19 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
     }
   }
 
-  const confirmDeleteGroup = async () => {
-    if (!pendingDelete) return
-    setDeleting(true)
-    try {
-      await groupsApi.remove(pendingDelete.id)
-      invalidateGroups()
-      setSelectedGroupId(null)
-      setPendingDelete(null)
-      const { groups: nextGroups } = await refreshAll(true)
-      await loadSummaries(nextGroups, true)
-      onChanged?.()
-    } catch (err) {
-      toast({
-        title: "Could not delete group",
-        description: err instanceof Error ? err.message : "Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setDeleting(false)
-    }
-  }
-
   const handleAddStudentToGroup = async () => {
     if (!selectedGroup || !studentToAdd) return
+    const previousStudent = students.find((s) => s.id === studentToAdd)
     setAddingStudent(true)
     try {
       await groupsApi.addMember(selectedGroup.id, studentToAdd)
+      patchStudent(studentToAdd, {
+        groupId: selectedGroup.id,
+        groupJoinedAt: new Date().toISOString(),
+        ...(typeof selectedGroup.monthlyFee === "number"
+          ? { monthlyFee: selectedGroup.monthlyFee }
+          : {}),
+      })
       invalidateGroups()
       setStudentToAdd("")
       setShowAddStudent(false)
@@ -281,6 +403,13 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
       onChanged?.()
       toast({ title: "Student added to group" })
     } catch (err) {
+      if (previousStudent) {
+        patchStudent(studentToAdd, {
+          groupId: previousStudent.groupId,
+          groupJoinedAt: previousStudent.groupJoinedAt,
+          monthlyFee: previousStudent.monthlyFee,
+        })
+      }
       toast({
         title: "Could not add student",
         description: err instanceof Error ? err.message : "Please try again.",
@@ -312,135 +441,293 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   }
 
   // ----- Detail view -----
+  if (selectedGroupId && !selectedGroup) {
+    if (!ready) {
+      return (
+        <div className="space-y-5">
+          <div className="h-8 w-36 rounded-md bg-slate-100 animate-pulse" />
+          <div className="h-44 rounded-2xl bg-slate-100 animate-pulse" />
+          <TableSkeleton rows={6} columns={4} />
+        </div>
+      )
+    }
+    return null
+  }
+
   if (selectedGroup && !isEntryTestGroup(selectedGroup)) {
     const summary = summaryFor(selectedGroup.id)
-    const scheduleLabel = formatLessonSchedule(
-      selectedGroup.lessonWeekdays?.length
-        ? {
-            weekdays: selectedGroup.lessonWeekdays,
-            startTime: selectedGroup.lessonStartTime ?? "",
-            endTime: selectedGroup.lessonEndTime ?? "",
-          }
-        : null,
-    )
+    const schedule = groupToLessonSchedule(selectedGroup)
     return (
       <>
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setSelectedGroupId(null)}>
-              <ArrowLeft className="h-4 w-4 mr-1.5" />
-              Back to groups
-            </Button>
+        <div className="space-y-5">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={closeGroup}
+            className="-ml-2 text-slate-600 hover:text-slate-900"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1.5" />
+            Back to groups
+          </Button>
+
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-violet-50/80 via-white to-sky-50/60 p-6 shadow-sm">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-violet-300/20 blur-3xl"
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-sky-300/20 blur-2xl"
+            />
+            <div className="relative flex flex-wrap items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+                    {selectedGroup.name}
+                  </h1>
+                  <span className="inline-flex items-center rounded-full bg-white/80 px-2.5 py-0.5 text-xs font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+                    <Users className="mr-1 h-3 w-3" />
+                    {groupStudents.length} student{groupStudents.length === 1 ? "" : "s"}
+                  </span>
+                </div>
+                {selectedGroup.description ? (
+                  <p className="mt-1.5 max-w-2xl text-sm text-slate-600">
+                    {selectedGroup.description}
+                  </p>
+                ) : null}
+                {showTeacherPicker && selectedGroup.teacherId ? (
+                  <p className="mt-1.5 text-sm text-slate-600">
+                    Teacher:{" "}
+                    <span className="font-medium text-slate-800">
+                      {teacherNameById.get(selectedGroup.teacherId) ?? "—"}
+                    </span>
+                  </p>
+                ) : null}
+                {schedule ? (
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-violet-200/80 bg-white/70 px-3 py-1.5 shadow-sm">
+                    <Clock className="h-4 w-4 shrink-0 text-violet-500" />
+                    <LessonScheduleDisplay schedule={schedule} />
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => openEditDialog(selectedGroup)}>
+                  <Pencil className="h-4 w-4 mr-1.5" />
+                  Edit
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => setShowAddStudent(true)}
+                  disabled={availableStudents.length === 0}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  <UserPlus className="h-4 w-4 mr-1.5" />
+                  Add student
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+              <StatChip
+                icon={Users}
+                label="Students"
+                value={String(groupStudents.length)}
+                cls="bg-sky-50 text-sky-700"
+              />
+              <StatChip
+                icon={Wallet}
+                label="Expected"
+                value={formatMoney(summary.expectedTotal)}
+                cls="bg-slate-100 text-slate-700"
+              />
+              <StatChip
+                icon={Wallet}
+                label="Collected"
+                value={formatMoney(summary.paidTotal)}
+                cls="bg-emerald-50 text-emerald-700"
+              />
+              <StatChip
+                icon={Wallet}
+                label="Overdue"
+                value={formatMoney(summary.overdueTotal)}
+                cls={summary.overdueTotal > 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-700"}
+              />
+            </div>
           </div>
 
           <Card>
             <CardHeader>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <CardTitle className="text-xl">{selectedGroup.name}</CardTitle>
-                  <CardDescription>{selectedGroup.description || "—"}</CardDescription>
+                  <CardTitle>Students</CardTitle>
+                  <CardDescription>
+                    {filteredGroupStudents.length} of {groupStudents.length} shown
+                  </CardDescription>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => openEditDialog(selectedGroup)}>
-                    <Pencil className="h-4 w-4 mr-1.5" />
-                    Edit
-                  </Button>
+                {groupStudents.length > 0 && (
+                  <div className="relative w-full sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      value={studentSearch}
+                      onChange={(e) => setStudentSearch(e.target.value)}
+                      placeholder="Search students…"
+                      className="pl-9"
+                    />
+                  </div>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {groupStudents.length === 0 ? (
+                <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
+                  <div className="rounded-full bg-white p-3 shadow-sm">
+                    <Users className="h-6 w-6 text-slate-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">No students yet</p>
+                    <p className="mt-1 text-sm text-slate-500">
+                      Add students to start tracking payments and attendance.
+                    </p>
+                  </div>
                   <Button
-                    variant="outline"
                     size="sm"
                     onClick={() => setShowAddStudent(true)}
                     disabled={availableStudents.length === 0}
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <UserPlus className="h-4 w-4 mr-1.5" />
                     Add student
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPendingDelete(selectedGroup)}
-                    loading={deleting}
-                    className="text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="h-4 w-4 mr-1.5" />
-                    Delete
-                  </Button>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {scheduleLabel ? (
-                <div className="mb-4 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
-                  <Clock className="h-4 w-4 shrink-0 text-slate-500" />
-                  {scheduleLabel}
-                </div>
-              ) : null}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                <StatChip
-                  icon={Users}
-                  label="Students"
-                  value={String(groupStudents.length)}
-                  cls="bg-sky-50 text-sky-700"
-                />
-                <StatChip
-                  icon={Wallet}
-                  label="Expected"
-                  value={formatMoney(summary.expectedTotal)}
-                  cls="bg-slate-100 text-slate-700"
-                />
-                <StatChip
-                  icon={Wallet}
-                  label="Collected"
-                  value={formatMoney(summary.paidTotal)}
-                  cls="bg-emerald-50 text-emerald-700"
-                />
-                <StatChip
-                  icon={Wallet}
-                  label="Overdue"
-                  value={formatMoney(summary.overdueTotal)}
-                  cls={summary.overdueTotal > 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-700"}
-                />
-              </div>
-
-              {groupStudents.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500">
-                  No students in this group yet.
+              ) : studentMetaLoading ? (
+                <TableSkeleton rows={Math.max(groupStudents.length, 4)} columns={7} />
+              ) : filteredGroupStudents.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+                  No students match your search.
                 </div>
               ) : (
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {groupStudents.map((s) => (
-                    <li
-                      key={s.id}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setStudentDetail(s)}
-                        className="flex flex-1 items-center gap-3 text-left"
-                      >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-xs font-bold text-white">
-                          {initials(s.name)}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate font-semibold text-slate-900">{s.name}</p>
-                          <p className="truncate text-xs text-slate-500">{s.email}</p>
-                        </div>
-                      </button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveStudent(s.id)}
-                        loading={removingId === s.id}
-                        className="text-slate-400 hover:text-rose-600"
-                        aria-label={`Remove ${s.name} from group`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50/80 text-left text-[11px] uppercase tracking-wider text-slate-500">
+                        <th className="py-3 px-3 font-semibold">Student</th>
+                        <th className="py-3 px-3 font-semibold">Phone</th>
+                        <th className="py-3 px-3 font-semibold">Monthly fee</th>
+                        <th className="py-3 px-3 font-semibold">Payment</th>
+                        <th className="py-3 px-3 font-semibold">Attendance</th>
+                        <th className="py-3 px-3 font-semibold">Joined</th>
+                        <th className="py-3 px-3 font-semibold text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredGroupStudents.map((s) => {
+                        const payment = groupPayments.find(
+                          (p) =>
+                            p.studentId === s.id && periodMonthOf(p) === paymentPeriod,
+                        )
+                        const paymentMeta = payment
+                          ? PAYMENT_STATUS_META[payment.status]
+                          : { label: "No invoice", cls: "bg-slate-50 text-slate-400 border border-dashed border-slate-200" }
+                        const attendance = attendanceByStudent.get(s.id)
+                        return (
+                        <tr
+                          key={s.id}
+                          onClick={() => setStudentDetail(s)}
+                          className="cursor-pointer border-b border-slate-100 transition-colors hover:bg-slate-50/80"
+                        >
+                          <td className="py-3 px-3">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-blue-600 text-xs font-bold text-white">
+                                {initials(s.name)}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="truncate font-medium text-slate-900">{s.name}</p>
+                                <p className="truncate text-xs text-slate-500">
+                                  {s.login}
+                                  {s.email ? ` · ${s.email}` : ""}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3 px-3 text-slate-600 tabular-nums">
+                            {s.phone ? (
+                              <span className="inline-flex items-center gap-1">
+                                <Phone className="h-3 w-3 text-slate-400" />
+                                {s.phone}
+                              </span>
+                            ) : (
+                              "—"
+                            )}
+                          </td>
+                          <td className="py-3 px-3 tabular-nums text-slate-700">
+                            {formatMoney(s.monthlyFee ?? selectedGroup.monthlyFee ?? 0)}
+                          </td>
+                          <td className="py-3 px-3">
+                            <span
+                              className={cn(
+                                "inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium",
+                                paymentMeta.cls,
+                              )}
+                            >
+                              {paymentMeta.label}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3">
+                            {attendance?.rate != null ? (
+                              <span
+                                className={cn(
+                                  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums",
+                                  attendanceRateBadgeCls(attendance.rate),
+                                )}
+                                title={`${attendance.attended} of ${attendance.total} lessons`}
+                              >
+                                {attendance.rate}%
+                              </span>
+                            ) : (
+                              <span className="text-xs text-slate-400">—</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-3 text-slate-600">
+                            {new Date(s.groupJoinedAt ?? s.joinedAt).toLocaleDateString()}
+                          </td>
+                          <td
+                            className="py-3 px-3 text-right"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveStudent(s.id)}
+                              loading={removingId === s.id}
+                              className="text-slate-400 hover:text-rose-600"
+                              aria-label={`Remove ${s.name} from group`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </CardContent>
           </Card>
+
+          <GroupAttendancePanel
+            group={selectedGroup}
+            lessonWeekdays={selectedGroup.lessonWeekdays ?? []}
+            students={groupStudents}
+            scheduleRevision={attendanceScheduleRevision}
+            onLessonsChanged={loadStudentMeta}
+            onGroupScheduleChanged={async (updated) => {
+              if (updated) patchGroup(updated)
+              setAttendanceScheduleRevision((n) => n + 1)
+              await refreshGroups(true)
+              await loadStudentMeta(updated ?? selectedGroup)
+            }}
+          />
         </div>
 
         <Dialog open={showAddStudent} onOpenChange={setShowAddStudent}>
@@ -516,6 +803,15 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                   className="tabular-nums"
                 />
               </div>
+              {showTeacherPicker ? (
+                <TeacherSelectField
+                  id="eg-teacher"
+                  value={editForm.teacherId}
+                  teachers={teachers}
+                  loading={teachersLoading}
+                  onChange={(teacherId) => setEditForm({ ...editForm, teacherId })}
+                />
+              ) : null}
               <LessonScheduleFields
                 idPrefix="edit-schedule"
                 value={editForm}
@@ -570,20 +866,12 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
               {manageableGroups.map((g) => {
                 const memberCount = groupMemberCount(students, g.id)
                 const summary = summaryFor(g.id)
-                const scheduleLabel = formatLessonSchedule(
-                  g.lessonWeekdays?.length
-                    ? {
-                        weekdays: g.lessonWeekdays,
-                        startTime: g.lessonStartTime ?? "",
-                        endTime: g.lessonEndTime ?? "",
-                      }
-                    : null,
-                )
+                const schedule = groupToLessonSchedule(g)
                 return (
                   <button
                     key={g.id}
                     type="button"
-                    onClick={() => setSelectedGroupId(g.id)}
+                    onClick={() => openGroup(g.id)}
                     className={cn(
                       "group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all",
                       "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2",
@@ -600,6 +888,11 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                           <p className="mt-0.5 text-xs text-slate-500 line-clamp-2">
                             {g.description || "No description"}
                           </p>
+                          {showTeacherPicker && g.teacherId ? (
+                            <p className="mt-1 text-xs text-slate-500">
+                              Teacher: {teacherNameById.get(g.teacherId) ?? "—"}
+                            </p>
+                          ) : null}
                         </div>
                         <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
                           {memberCount} student{memberCount === 1 ? "" : "s"}
@@ -615,10 +908,10 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                         />
                       </div>
                       <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-400">
-                        {scheduleLabel ? (
+                        {schedule ? (
                           <>
                             <Clock className="h-3 w-3 shrink-0" />
-                            <span className="truncate">{scheduleLabel}</span>
+                            <LessonScheduleDisplay schedule={schedule} size="xs" timeClassName="text-slate-500" />
                           </>
                         ) : (
                           <>
@@ -683,6 +976,15 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
                 className="tabular-nums"
               />
             </div>
+            {showTeacherPicker ? (
+              <TeacherSelectField
+                id="g-teacher"
+                value={form.teacherId}
+                teachers={teachers}
+                loading={teachersLoading}
+                onChange={(teacherId) => setForm({ ...form, teacherId })}
+              />
+            ) : null}
             <LessonScheduleFields
               idPrefix="create-schedule"
               value={form}
@@ -699,24 +1001,48 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <ConfirmDialog
-        open={!!pendingDelete}
-        onOpenChange={(open) => !open && setPendingDelete(null)}
-        title="Delete this group?"
-        description={
-          pendingDelete && (
-            <>
-              This will permanently remove{" "}
-              <span className="font-semibold text-foreground">{pendingDelete.name}</span>. Students
-              will be detached but kept.
-            </>
-          )
-        }
-        onConfirm={confirmDeleteGroup}
-        loading={deleting}
-      />
     </>
+  )
+}
+
+function TeacherSelectField({
+  id,
+  value,
+  teachers,
+  loading,
+  onChange,
+}: {
+  id: string
+  value: string
+  teachers: StaffUser[]
+  loading: boolean
+  onChange: (teacherId: string) => void
+}) {
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={id}>Assigned teacher *</Label>
+      {loading ? (
+        <div className="h-10 animate-pulse rounded-md bg-slate-100" aria-hidden />
+      ) : teachers.length === 0 ? (
+        <p className="text-sm text-amber-700">
+          No teachers in this organization. Add a teacher in Users first.
+        </p>
+      ) : (
+        <Select value={value || undefined} onValueChange={onChange}>
+          <SelectTrigger id={id}>
+            <SelectValue placeholder="Select a teacher" />
+          </SelectTrigger>
+          <SelectContent>
+            {teachers.map((teacher) => (
+              <SelectItem key={teacher.id} value={teacher.id}>
+                {teacher.name}
+                {teacher.login ? ` (@${teacher.login})` : ""}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
   )
 }
 

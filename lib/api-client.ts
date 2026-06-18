@@ -12,8 +12,8 @@
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
   (process.env.NODE_ENV === "development"
-    ? "http://localhost:4000/api"
-    : "https://learnix-api.tw1.ru/api")
+    ? "http://localhost:5000/api"
+    : "https://learnix-api.xyz/api")
 
 const ACCESS_KEY = "ielts_access_token"
 const REFRESH_KEY = "ielts_refresh_token"

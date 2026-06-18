@@ -25,6 +25,8 @@ interface MonthPickerProps {
   value: string
   onChange: (value: string) => void
   className?: string
+  /** Show previous/next month arrows on either side of the trigger. */
+  showArrows?: boolean
   "aria-label"?: string
 }
 
@@ -38,8 +40,15 @@ function toValue(year: number, month: number): string {
   return `${year}-${String(month + 1).padStart(2, "0")}`
 }
 
+export function shiftMonth(value: string, delta: number): string {
+  const parsed = parseValue(value)
+  if (!parsed) return value
+  const next = new Date(parsed.year, parsed.month + delta, 1)
+  return toValue(next.getFullYear(), next.getMonth())
+}
+
 /** Branded month selector: a trigger button + popover with a year stepper and month grid. */
-export function MonthPicker({ value, onChange, className, ...rest }: MonthPickerProps) {
+export function MonthPicker({ value, onChange, className, showArrows = false, ...rest }: MonthPickerProps) {
   const [open, setOpen] = useState(false)
   const parsed = parseValue(value)
   const now = new Date()
@@ -58,7 +67,10 @@ export function MonthPicker({ value, onChange, className, ...rest }: MonthPicker
     setOpen(false)
   }
 
-  return (
+  const stepperBtn =
+    "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-input bg-background text-slate-500 shadow-sm transition-colors hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+
+  const picker = (
     <Popover
       open={open}
       onOpenChange={(next) => {
@@ -72,11 +84,12 @@ export function MonthPicker({ value, onChange, className, ...rest }: MonthPicker
           aria-label={rest["aria-label"] ?? "Select month"}
           className={cn(
             "inline-flex h-10 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium text-slate-900 shadow-sm transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            className,
+            showArrows && "min-w-0 flex-1 justify-center",
+            !showArrows && className,
           )}
         >
-          <CalendarDays className="h-4 w-4 text-slate-400" />
-          <span className="tabular-nums">{label}</span>
+          <CalendarDays className="h-4 w-4 shrink-0 text-slate-400" />
+          <span className="truncate tabular-nums">{label}</span>
         </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-64 p-3">
@@ -123,5 +136,29 @@ export function MonthPicker({ value, onChange, className, ...rest }: MonthPicker
         </div>
       </PopoverContent>
     </Popover>
+  )
+
+  if (!showArrows) return picker
+
+  return (
+    <div className={cn("flex w-full items-center gap-1", className)}>
+      <button
+        type="button"
+        aria-label="Previous month"
+        onClick={() => onChange(shiftMonth(value, -1))}
+        className={stepperBtn}
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      {picker}
+      <button
+        type="button"
+        aria-label="Next month"
+        onClick={() => onChange(shiftMonth(value, 1))}
+        className={stepperBtn}
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </div>
   )
 }

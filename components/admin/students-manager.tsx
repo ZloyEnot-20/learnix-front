@@ -34,6 +34,7 @@ import {
   X,
 } from "lucide-react"
 import type { Group, Student } from "@/lib/admin-storage"
+import { studentMonthlyFee } from "@/lib/admin-storage"
 import { studentsApi, type StudentIeltsSummary } from "@/lib/api"
 import { invalidateStudents } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
@@ -41,7 +42,7 @@ import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
 import { ReadinessBadge } from "./student-ielts-profile-section"
 import { useToast } from "@/hooks/use-toast"
-import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
+import { cn, formatMoney } from "@/lib/utils"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import {
   ENTRY_TEST_GROUP_NAME,
@@ -116,7 +117,6 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     email: "",
     phone: "",
     groupId: "",
-    monthlyFee: 1_000_000,
     notes: "",
   })
   const [loginSuggestions, setLoginSuggestions] = useState<string[]>([])
@@ -144,10 +144,17 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   }, [form.name])
 
   const resetCreateForm = () => {
-    setForm({ name: "", login: "", email: "", phone: "", groupId: "", monthlyFee: 1_000_000, notes: "" })
+    setForm({ name: "", login: "", email: "", phone: "", groupId: "", notes: "" })
     setLoginSuggestions([])
     setConfirmation(null)
   }
+
+  const selectedGroup = useMemo(
+    () => (form.groupId ? groups.find((g) => g.id === form.groupId) : undefined),
+    [form.groupId, groups],
+  )
+  const selectedGroupFee =
+    typeof selectedGroup?.monthlyFee === "number" ? selectedGroup.monthlyFee : null
 
   const copyText = async (text: string, label: string) => {
     try {
@@ -160,7 +167,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return students.filter((s) => {
-      if (groupFilter !== "all" && (s.groupId ?? "none") !== groupFilter) return false
+      if (groupFilter !== "all" && String(s.groupId ?? "none") !== groupFilter) return false
       if (!q) return true
       return (
         s.name.toLowerCase().includes(q) ||
@@ -177,13 +184,14 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const entryTestStudents = useMemo(() => {
     if (!entryTestGroupId) return []
     if (groupFilter !== "all" && groupFilter !== entryTestGroupId) return []
-    return filtered.filter((s) => s.groupId === entryTestGroupId)
+    return filtered.filter((s) => s.groupId != null && String(s.groupId) === entryTestGroupId)
   }, [filtered, entryTestGroupId, groupFilter])
 
   const regularStudents = useMemo(() => {
-    if (!entryTestGroupId || groupFilter === entryTestGroupId) return []
+    if (groupFilter === entryTestGroupId && entryTestGroupId) return []
+    if (!entryTestGroupId) return filtered
     if (groupFilter === "all") {
-      return filtered.filter((s) => s.groupId !== entryTestGroupId)
+      return filtered.filter((s) => String(s.groupId ?? "") !== entryTestGroupId)
     }
     return filtered
   }, [filtered, entryTestGroupId, groupFilter])
@@ -214,7 +222,6 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
         ...(trimmedEmail ? { email: trimmedEmail.toLowerCase() } : {}),
         ...(form.phone.trim() ? { phone: form.phone.trim() } : {}),
         groupId: form.groupId || undefined,
-        monthlyFee: Number(form.monthlyFee) || 0,
         notes: form.notes.trim() || undefined,
       })
       setConfirmation(res.confirmation)
@@ -266,7 +273,10 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const totals = useMemo(() => {
     const inGroup = students.filter((s) => Boolean(s.groupId)).length
     const fees = students
-      .map((s) => s.monthlyFee ?? 0)
+      .map((s) => {
+        const group = s.groupId ? groups.find((g) => g.id === s.groupId) : undefined
+        return studentMonthlyFee(s, group)
+      })
       .filter((f) => f > 0)
     const avgFee = fees.length
       ? Math.round(fees.reduce((a, b) => a + b, 0) / fees.length)
@@ -277,7 +287,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
       unassigned: students.length - inGroup,
       avgFee,
     }
-  }, [students])
+  }, [students, groups])
 
   const groupCounts = useMemo(() => {
     const map = new Map<string, number>()
@@ -598,9 +608,10 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             {s.phone || "—"}
                           </td>
                           <td className="py-3 px-3 font-semibold tabular-nums text-slate-900">
-                            {typeof s.monthlyFee === "number" && s.monthlyFee > 0
-                              ? formatMoney(s.monthlyFee)
-                              : "—"}
+                            {(() => {
+                              const fee = studentMonthlyFee(s, group)
+                              return fee > 0 ? formatMoney(fee) : "—"
+                            })()}
                           </td>
                           <td className="py-3 px-3 font-semibold tabular-nums text-slate-900">
                             {ielts?.overallBand != null ? ielts.overallBand.toFixed(1) : "—"}
@@ -808,19 +819,19 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                     </Select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="s-fee">Monthly fee (som)</Label>
-                    <Input
-                      id="s-fee"
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="off"
-                      value={formatThousands(form.monthlyFee)}
-                      onChange={(e) =>
-                        setForm({ ...form, monthlyFee: parseDigits(e.target.value) })
-                      }
-                      placeholder="1 000 000"
-                      className="tabular-nums"
-                    />
+                    <Label>Monthly fee</Label>
+                    <div
+                      className={cn(
+                        "flex h-10 items-center rounded-md border border-input bg-muted/40 px-3 text-sm tabular-nums",
+                        !form.groupId && "text-muted-foreground",
+                      )}
+                    >
+                      {form.groupId
+                        ? selectedGroupFee != null && selectedGroupFee > 0
+                          ? `${formatMoney(selectedGroupFee)} / mo (from group)`
+                          : "Set in group settings"
+                        : "Select a group"}
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-1.5">

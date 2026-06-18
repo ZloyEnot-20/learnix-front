@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const backendUrl = (
   process.env.BACKEND_URL ??
-  (process.env.NODE_ENV === "development" ? "http://localhost:4000" : "https://learnix-api.tw1.ru")
+  (process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://learnix-api.xyz")
 ).replace(/\/$/, "")
 
 const nextConfig = {

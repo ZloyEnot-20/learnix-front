@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Folder,
+  Headphones,
   Lock,
   Mic,
   PenLine,
@@ -35,6 +36,13 @@ import {
   onVocabDecksInvalidate,
   type VocabDeck,
 } from "@/lib/vocabulary-data"
+import {
+  listPodcasts,
+  fetchPodcasts,
+  onPodcastsInvalidate,
+  podcastHasWords,
+  type PodcastEpisode,
+} from "@/lib/podcast-data"
 import { LevelFolderCardsSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 
@@ -80,6 +88,7 @@ interface SubjectFolder {
 const SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700" },
+  { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-indigo-100 text-indigo-700" },
   { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700" },
@@ -202,6 +211,13 @@ export default function ExercisesIndexPage() {
     return onVocabDecksInvalidate(reload)
   }, [])
 
+  const [podcasts, setPodcasts] = useState<PodcastEpisode[]>(() => listPodcasts())
+  useEffect(() => {
+    const reload = () => void fetchPodcasts().then(setPodcasts)
+    reload()
+    return onPodcastsInvalidate(reload)
+  }, [])
+
   // Exactly the six fixed levels with their content folded in.
   const levelFolders = useMemo(() => {
     const topicsByLevel = new Map<string, TopicSummary[]>()
@@ -239,6 +255,13 @@ export default function ExercisesIndexPage() {
         : [],
     [selectedLevel, vocabDecks],
   )
+  const podcastsForLevel = useMemo(
+    () =>
+      selectedLevel
+        ? podcasts.filter((p) => clampToFixedLevel(primaryLevel([p.level])) === selectedLevel)
+        : [],
+    [selectedLevel, podcasts],
+  )
   const levelTopics = useMemo(
     () => activeLevelFolder?.topics ?? [],
     [activeLevelFolder],
@@ -257,6 +280,17 @@ export default function ExercisesIndexPage() {
         lines: [
           `${decks.length} deck${decks.length === 1 ? "" : "s"}`,
           `${words} word${words === 1 ? "" : "s"}`,
+        ],
+      }
+    }
+    if (categoryId === "podcasts") {
+      const episodes = podcasts.filter((p) => clampToFixedLevel(primaryLevel([p.level])) === level)
+      const withWords = episodes.filter((p) => podcastHasWords(p)).length
+      return {
+        count: episodes.length,
+        lines: [
+          `${episodes.length} episode${episodes.length === 1 ? "" : "s"}`,
+          withWords > 0 ? `${withWords} with words` : "Listening",
         ],
       }
     }
@@ -393,8 +427,13 @@ export default function ExercisesIndexPage() {
             {(() => {
               const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
               const isVocab = selectedCategory === "vocabulary"
+              const isPodcasts = selectedCategory === "podcasts"
               const topics = levelTopics.filter((t) => t.category === selectedCategory)
-              const count = isVocab ? vocabDecksForLevel.length : topics.length
+              const count = isVocab
+                ? vocabDecksForLevel.length
+                : isPodcasts
+                  ? podcastsForLevel.length
+                  : topics.length
               const levelLabel = selectedLevel
               return (
                 <>
@@ -415,7 +454,8 @@ export default function ExercisesIndexPage() {
                     {subject?.label ?? selectedCategory}
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
-                    {levelLabel} · {count} {isVocab ? "deck" : "topic"}
+                    {levelLabel} · {count}{" "}
+                    {isVocab ? "deck" : isPodcasts ? "podcast" : "topic"}
                     {count === 1 ? "" : "s"}
                   </p>
                   <Button
@@ -442,6 +482,15 @@ export default function ExercisesIndexPage() {
                     >
                       {vocabDecksForLevel.map((d) => (
                         <VocabDeckCard key={d.slug} deck={d} />
+                      ))}
+                    </div>
+                  ) : isPodcasts ? (
+                    <div
+                      className="mt-4 grid gap-4 justify-center"
+                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
+                    >
+                      {podcastsForLevel.map((p) => (
+                        <PodcastCard key={p.slug} episode={p} />
                       ))}
                     </div>
                   ) : (
@@ -695,6 +744,58 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
         </CardContent>
       </Card>
     </Link>
+  )
+}
+
+function PodcastCard({ episode }: { episode: PodcastEpisode }) {
+  const hasWords = podcastHasWords(episode)
+  return (
+    <Card className="relative h-full rounded-3xl border-indigo-200/80 bg-white">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
+          <div className="flex items-start gap-3 min-w-0 flex-1">
+            <span
+              aria-hidden
+              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white shadow-sm"
+            >
+              <Headphones className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 space-y-2">
+              <h3 className="text-lg font-semibold text-slate-900">{episode.title}</h3>
+              <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                  {episode.topic}
+                </span>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium capitalize">
+                  {episode.difficulty}
+                </span>
+                {hasWords && (
+                  <span className="rounded-full bg-violet-100 px-2.5 py-1 font-medium text-violet-700">
+                    {episode.words.length} words
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <span className="shrink-0 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+            {episode.level}
+          </span>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-600">
+          {episode.description || "Listen to this podcast episode."}
+        </p>
+        {episode.audioUrl && (
+          <audio controls className="mt-4 w-full" src={episode.audioUrl} preload="none">
+            Your browser does not support audio playback.
+          </audio>
+        )}
+        {hasWords && (
+          <p className="mt-3 text-xs text-slate-500">
+            Finish listening to see {episode.words.length} words.
+          </p>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 

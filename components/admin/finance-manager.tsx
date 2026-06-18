@@ -3,7 +3,17 @@
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { MonthPicker } from "@/components/ui/month-picker"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   Select,
   SelectContent,
@@ -23,22 +33,29 @@ import {
   Wallet,
   X,
 } from "lucide-react"
-import type { Group, Payment, Student } from "@/lib/admin-storage"
+import type { FinanceMonthRow } from "@/lib/finance"
+import {
+  buildFinanceMonthRow,
+  defaultPeriodMonth,
+  dueDateForPeriodMonth,
+  findPaymentForMonth,
+  formatPeriodLabel,
+  shiftMonth,
+  summarizeFinanceRows,
+} from "@/lib/finance"
 import { useAdminData } from "@/lib/admin-data-context"
 import { selectableGroups } from "@/lib/entry-test-group"
 import { CardGridSkeleton, StatCardsSkeleton, TableCardSkeleton } from "./skeletons"
 import { paymentsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
-import { cn, formatMoney } from "@/lib/utils"
+import { cn, formatMoney, formatThousands, parseDigits } from "@/lib/utils"
 
-const STATUS_META: Record<
-  Payment["status"],
-  { label: string; cls: string; dot: string }
-> = {
+const STATUS_META = {
   paid: { label: "Paid", cls: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
-  pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
+  partial: { label: "Partial", cls: "bg-sky-100 text-sky-800", dot: "bg-sky-500" },
+  pending: { label: "Not paid", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
   overdue: { label: "Overdue", cls: "bg-rose-100 text-rose-700", dot: "bg-rose-500" },
-}
+} as const
 
 interface FinanceManagerProps {
   onChanged?: () => void
@@ -48,17 +65,26 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   const { toast } = useToast()
   const { students, groups } = useAdminData()
   const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
-  const [payments, setPayments] = useState<Payment[]>([])
+  const scopedGroupIds = useMemo(() => new Set(groups.map((g) => g.id)), [groups])
+  const scopedStudents = useMemo(
+    () => students.filter((s) => s.groupId && scopedGroupIds.has(s.groupId)),
+    [students, scopedGroupIds],
+  )
+  const [payments, setPayments] = useState<Awaited<ReturnType<typeof paymentsApi.list>>>([])
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "unpaid">("all")
   const [selectedMonth, setSelectedMonth] = useState<string>(defaultPeriodMonth())
   const [togglingIds, setTogglingIds] = useState<Set<string>>(() => new Set())
   const [loading, setLoading] = useState(true)
+  const [paymentRow, setPaymentRow] = useState<FinanceMonthRow | null>(null)
+  const [paymentInput, setPaymentInput] = useState(0)
+  const [recording, setRecording] = useState(false)
 
   const refresh = async () => {
     try {
       const p = await paymentsApi.list()
-      setPayments(p)
+      const allowed = new Set(groups.map((g) => g.id))
+      setPayments(p.filter((row) => row.groupId && allowed.has(row.groupId)))
     } catch {
       toast({
         title: "Failed to load finance data",
@@ -71,84 +97,104 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
   }
   useEffect(() => {
     void refresh()
-  }, [])
+  }, [groups])
 
-  /**
-   * One row per student (scoped to the group filter) for the selected month,
-   * joined with their payment record for that month if it exists.
-   */
-  const monthRows = useMemo(() => {
-    const monthPast = isMonthInPast(selectedMonth)
-    const rows = students
-      .filter((s) => !!s.groupId)
-      .filter((s) => (groupFilter === "all" ? true : s.groupId === groupFilter))
-      .map((student) => {
-        const payment = payments.find(
-          (p) => p.studentId === student.id && periodMonthOf(p) === selectedMonth,
-        )
-        const group = groups.find((g) => g.id === student.groupId)
-        const paid = payment?.status === "paid"
-        const amount =
-          payment?.amount ?? student.monthlyFee ?? group?.monthlyFee ?? 0
-        const status: "paid" | "unpaid" = paid ? "paid" : "unpaid"
-        return { student, group, payment, paid, amount, status, monthPast }
-      })
-      .filter((r) => (statusFilter === "all" ? true : r.status === statusFilter))
+  const allMonthRows = useMemo(() => {
+    const rows: FinanceMonthRow[] = []
+    for (const student of scopedStudents.filter((s) => !!s.groupId)) {
+      if (groupFilter !== "all" && student.groupId !== groupFilter) continue
+      const group = groups.find((g) => g.id === student.groupId)
+      const payment = findPaymentForMonth(payments, student.id, selectedMonth)
+      const row = buildFinanceMonthRow(student, group, payment, selectedMonth)
+      if (row) rows.push(row)
+    }
     return rows.sort((a, b) => a.student.name.localeCompare(b.student.name))
-  }, [students, groups, payments, groupFilter, statusFilter, selectedMonth])
+  }, [scopedStudents, groups, payments, groupFilter, selectedMonth])
+
+  const billableRowsForMonth = useMemo(() => {
+    const rows: FinanceMonthRow[] = []
+    for (const student of scopedStudents.filter((s) => !!s.groupId)) {
+      const group = groups.find((g) => g.id === student.groupId)
+      const payment = findPaymentForMonth(payments, student.id, selectedMonth)
+      const row = buildFinanceMonthRow(student, group, payment, selectedMonth)
+      if (row) rows.push(row)
+    }
+    return rows
+  }, [scopedStudents, groups, payments, selectedMonth])
+
+  const monthRows = useMemo(() => {
+    return allMonthRows.filter((row) => {
+      if (statusFilter === "all") return true
+      if (statusFilter === "paid") return row.status === "paid"
+      return row.status !== "paid"
+    })
+  }, [allMonthRows, statusFilter])
 
   const totals = useMemo(() => {
-    let expected = 0
-    let collected = 0
-    let pending = 0
-    let overdue = 0
-    for (const p of payments) {
-      expected += p.amount
-      if (p.status === "paid") collected += p.amount
-      else if (p.status === "overdue") overdue += p.amount
-      else pending += p.amount
-    }
-    return { expected, collected, pending, overdue }
-  }, [payments])
+    const source =
+      groupFilter === "all"
+        ? billableRowsForMonth
+        : billableRowsForMonth.filter((r) => r.student.groupId === groupFilter)
+    return summarizeFinanceRows(source)
+  }, [billableRowsForMonth, groupFilter])
 
-  /** Mark a student as paid for the selected month (creating a record if needed). */
-  const markStudentPaid = async (row: {
-    student: Student
-    group?: Group
-    payment?: Payment
-    amount: number
-  }) => {
-    if (!row.student.groupId) {
-      toast({ title: "Student must belong to a group", variant: "destructive" })
+  const groupSummary = useMemo(() => {
+    return assignableGroups.map((g) => {
+      const rows = billableRowsForMonth.filter((r) => r.student.groupId === g.id)
+      return { group: g, summary: summarizeFinanceRows(rows), count: rows.length }
+    })
+  }, [assignableGroups, billableRowsForMonth])
+
+  const openPaymentDialog = (row: FinanceMonthRow) => {
+    setPaymentRow(row)
+    setPaymentInput(row.remaining > 0 ? row.remaining : row.expected)
+  }
+
+  const recordPayment = async () => {
+    if (!paymentRow?.student.groupId) return
+    const amount = Math.max(0, paymentInput)
+    if (amount <= 0) {
+      toast({ title: "Enter a payment amount", variant: "destructive" })
       return
     }
-    const id = row.student.id
+    if (amount > paymentRow.remaining && paymentRow.remaining > 0) {
+      toast({
+        title: "Amount exceeds balance",
+        description: `Remaining: ${formatMoney(paymentRow.remaining)}`,
+        variant: "destructive",
+      })
+      return
+    }
+
+    const id = paymentRow.student.id
+    setRecording(true)
     setTogglingIds((prev) => new Set(prev).add(id))
     try {
-      if (row.payment) {
-        const updated = await paymentsApi.markPaid(row.payment.id)
+      if (paymentRow.payment) {
+        const updated = await paymentsApi.markPaid(paymentRow.payment.id, amount)
         setPayments((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
       } else {
-        const [year, month] = selectedMonth.split("-").map(Number)
-        const dueIso = new Date(year, month - 1, 5).toISOString()
         const created = await paymentsApi.create({
-          studentId: row.student.id,
-          groupId: row.student.groupId,
-          amount: Math.max(0, row.amount),
+          studentId: paymentRow.student.id,
+          groupId: paymentRow.student.groupId,
+          amount: paymentRow.expected,
+          paidAmount: amount,
           periodLabel: formatPeriodLabel(selectedMonth),
-          dueDate: dueIso,
-          status: "paid",
+          dueDate: dueDateForPeriodMonth(selectedMonth),
         })
         setPayments((prev) => [...prev, created])
       }
+      setPaymentRow(null)
       onChanged?.()
+      toast({ title: "Payment recorded" })
     } catch (err) {
       toast({
-        title: "Could not update payment",
+        title: "Could not record payment",
         description: err instanceof Error ? err.message : "Please try again.",
         variant: "destructive",
       })
     } finally {
+      setRecording(false)
       setTogglingIds((prev) => {
         const next = new Set(prev)
         next.delete(id)
@@ -157,8 +203,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
     }
   }
 
-  /** Revert a paid record back to unpaid for the selected month. */
-  const unmarkStudent = async (row: { student: Student; payment?: Payment }) => {
+  const unmarkStudent = async (row: FinanceMonthRow) => {
     if (!row.payment) return
     const id = row.student.id
     setTogglingIds((prev) => new Set(prev).add(id))
@@ -168,7 +213,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
       onChanged?.()
     } catch (err) {
       toast({
-        title: "Could not update payment",
+        title: "Could not reset payment",
         description: err instanceof Error ? err.message : "Please try again.",
         variant: "destructive",
       })
@@ -180,19 +225,6 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
       })
     }
   }
-
-  const groupSummary = useMemo(() => {
-    return assignableGroups.map((g) => {
-      const groupPayments = payments.filter((p) => p.groupId === g.id)
-      const summary = { expectedTotal: 0, paidTotal: 0, overdueTotal: 0 }
-      for (const p of groupPayments) {
-        summary.expectedTotal += p.amount
-        if (p.status === "paid") summary.paidTotal += p.amount
-        else if (p.status === "overdue") summary.overdueTotal += p.amount
-      }
-      return { group: g, summary }
-    })
-  }, [assignableGroups, payments])
 
   if (loading) {
     return (
@@ -211,7 +243,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
           <div className="mb-3">
             <h2 className="text-sm font-semibold text-slate-900">Platform totals</h2>
             <p className="text-xs text-slate-500">
-              Aggregated across all groups · {groups.length} group{groups.length === 1 ? "" : "s"}
+              {formatPeriodLabel(selectedMonth)} · group fee × active students
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -252,7 +284,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
               <div>
                 <CardTitle>By group</CardTitle>
                 <CardDescription>
-                  Click a group to filter the payments list below
+                  {formatPeriodLabel(selectedMonth)} · fee × students who joined this month or earlier
                 </CardDescription>
               </div>
               {groupFilter !== "all" && (
@@ -273,10 +305,13 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
               <p className="text-sm text-slate-500">No groups yet.</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {groupSummary.map(({ group, summary }) => {
-                  const rate = summary.expectedTotal ? Math.round((summary.paidTotal / summary.expectedTotal) * 100) : 0
+                {groupSummary.map(({ group, summary, count }) => {
+                  const rate = summary.expected
+                    ? Math.round((summary.collected / summary.expected) * 100)
+                    : 0
                   const isSelected = groupFilter === group.id
                   const isDimmed = groupFilter !== "all" && !isSelected
+                  const fee = group.monthlyFee ?? 0
                   return (
                     <button
                       key={group.id}
@@ -298,17 +333,15 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                         </span>
                       )}
                       <div className={cn("flex items-start justify-between gap-2", isSelected && "pr-20")}>
-                        <h3
-                          className={cn(
-                            "truncate font-semibold",
-                            isSelected ? "text-slate-900" : "text-slate-900",
-                          )}
-                        >
-                          {group.name}
-                        </h3>
+                        <div className="min-w-0">
+                          <h3 className="truncate font-semibold text-slate-900">{group.name}</h3>
+                          <p className="mt-0.5 text-[11px] text-slate-500">
+                            {formatMoney(fee)} × {count} student{count === 1 ? "" : "s"}
+                          </p>
+                        </div>
                         {!isSelected && (
-                          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
-                            {rate}% paid
+                          <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                            {rate}% collected
                           </span>
                         )}
                       </div>
@@ -319,20 +352,14 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                         />
                       </div>
                       <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-                        <Mini label="Expected" value={formatMoney(summary.expectedTotal)} cls="text-slate-700" />
-                        <Mini label="Collected" value={formatMoney(summary.paidTotal)} cls="text-emerald-700" />
+                        <Mini label="Expected" value={formatMoney(summary.expected)} cls="text-slate-700" />
+                        <Mini label="Collected" value={formatMoney(summary.collected)} cls="text-emerald-700" />
                         <Mini
                           label="Overdue"
-                          value={formatMoney(summary.overdueTotal)}
-                          cls={summary.overdueTotal > 0 ? "text-rose-700" : "text-slate-400"}
+                          value={formatMoney(summary.overdue)}
+                          cls={summary.overdue > 0 ? "text-rose-700" : "text-slate-400"}
                         />
                       </div>
-                      {isSelected && (
-                        <div className="mt-3 flex items-center gap-1.5 text-[11px] font-medium text-slate-700">
-                          <Filter className="h-3 w-3" />
-                          Showing payments for this group
-                        </div>
-                      )}
                     </button>
                   )
                 })}
@@ -366,7 +393,7 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                   )}
                 </CardTitle>
                 <CardDescription>
-                  Pick a month, then mark each student as paid ·{" "}
+                  Students appear from their join month · partial payments supported ·{" "}
                   <span className="font-medium text-slate-700">
                     {formatPeriodLabel(selectedMonth)}
                   </span>
@@ -410,14 +437,17 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                     ))}
                   </SelectContent>
                 </Select>
-                <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}
+                >
                   <SelectTrigger className="w-40">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All students</SelectItem>
-                    <SelectItem value="paid">Paid</SelectItem>
-                    <SelectItem value="unpaid">Not paid</SelectItem>
+                    <SelectItem value="paid">Fully paid</SelectItem>
+                    <SelectItem value="unpaid">Not fully paid</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -428,9 +458,9 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
               <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
                 <p className="font-medium text-slate-900">No students to show</p>
                 <p className="text-sm text-slate-500">
-                  {students.filter((s) => !!s.groupId).length === 0
+                  {scopedStudents.filter((s) => !!s.groupId).length === 0
                     ? "Assign students to a group first."
-                    : "Adjust the group or status filter."}
+                    : "No billable students for this month or filter."}
                 </p>
               </div>
             ) : (
@@ -441,17 +471,14 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                       <th className="py-3 px-3 font-semibold">Student</th>
                       <th className="py-3 px-3 font-semibold">Group</th>
                       <th className="py-3 px-3 font-semibold">Amount</th>
+                      <th className="py-3 px-3 font-semibold">Paid</th>
                       <th className="py-3 px-3 font-semibold">Status</th>
                       <th className="py-3 px-3 font-semibold text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {monthRows.map((row, idx) => {
-                      const meta = row.paid
-                        ? STATUS_META.paid
-                        : row.monthPast
-                          ? STATUS_META.overdue
-                          : STATUS_META.pending
+                      const meta = STATUS_META[row.status]
                       return (
                         <tr
                           key={row.student.id}
@@ -465,7 +492,22 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                           </td>
                           <td className="py-3 px-3 text-slate-600">{row.group?.name ?? "—"}</td>
                           <td className="py-3 px-3 font-semibold tabular-nums text-slate-900">
-                            {row.amount > 0 ? formatMoney(row.amount) : "—"}
+                            {row.expected > 0 ? formatMoney(row.expected) : "—"}
+                          </td>
+                          <td className="py-3 px-3 tabular-nums text-slate-700">
+                            {row.paidAmount > 0 ? (
+                              <span>
+                                {formatMoney(row.paidAmount)}
+                                {row.remaining > 0 && (
+                                  <span className="text-slate-400">
+                                    {" "}
+                                    / {formatMoney(row.expected)}
+                                  </span>
+                                )}
+                              </span>
+                            ) : (
+                              "—"
+                            )}
                           </td>
                           <td className="py-3 px-3">
                             <span
@@ -475,11 +517,11 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                               )}
                             >
                               <span className={cn("h-1.5 w-1.5 rounded-full", meta.dot)} />
-                              {row.paid ? "Paid" : "Not paid"}
+                              {meta.label}
                             </span>
                           </td>
                           <td className="py-3 px-3 text-right">
-                            {row.paid ? (
+                            {row.status === "paid" ? (
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -487,17 +529,17 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
                                 loading={togglingIds.has(row.student.id)}
                               >
                                 <Undo2 className="h-3.5 w-3.5 mr-1.5" />
-                                Unmark
+                                Reset
                               </Button>
                             ) : (
                               <Button
                                 size="sm"
-                                onClick={() => markStudentPaid(row)}
+                                onClick={() => openPaymentDialog(row)}
                                 loading={togglingIds.has(row.student.id)}
                                 className="bg-emerald-600 hover:bg-emerald-700"
                               >
-                                <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
-                                Mark paid
+                                <Wallet className="h-3.5 w-3.5 mr-1.5" />
+                                {row.status === "partial" ? "Add payment" : "Record payment"}
                               </Button>
                             )}
                           </td>
@@ -511,6 +553,50 @@ export default function FinanceManager({ onChanged }: FinanceManagerProps) {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={!!paymentRow} onOpenChange={(open) => !open && setPaymentRow(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Record payment</DialogTitle>
+            <DialogDescription>
+              {paymentRow && (
+                <>
+                  {paymentRow.student.name} · {formatPeriodLabel(selectedMonth)} · expected{" "}
+                  {formatMoney(paymentRow.expected)}
+                  {paymentRow.paidAmount > 0 && (
+                    <> · already paid {formatMoney(paymentRow.paidAmount)}</>
+                  )}
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label htmlFor="pay-amount">Amount (som)</Label>
+            <Input
+              id="pay-amount"
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              value={formatThousands(paymentInput)}
+              onChange={(e) => setPaymentInput(parseDigits(e.target.value))}
+              className="tabular-nums"
+            />
+            {paymentRow && paymentRow.remaining > 0 && (
+              <p className="text-xs text-slate-500">
+                Remaining balance: {formatMoney(paymentRow.remaining)}
+              </p>
+            )}
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setPaymentRow(null)}>
+              Cancel
+            </Button>
+            <Button onClick={recordPayment} loading={recording} className="bg-emerald-600 hover:bg-emerald-700">
+              Save payment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
@@ -545,45 +631,3 @@ function Mini({ label, value, cls }: { label: string; value: string; cls: string
     </div>
   )
 }
-
-function defaultPeriodMonth(): string {
-  const d = new Date()
-  const year = d.getFullYear()
-  const month = String(d.getMonth() + 1).padStart(2, "0")
-  return `${year}-${month}`
-}
-
-/** Shift a `YYYY-MM` month string by the given number of months. */
-function shiftMonth(periodMonth: string, delta: number): string {
-  const [year, month] = periodMonth.split("-").map(Number)
-  if (!year || !month) return defaultPeriodMonth()
-  const d = new Date(year, month - 1 + delta, 1)
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
-}
-
-/** The `YYYY-MM` period a payment belongs to, derived from its due date. */
-function periodMonthOf(p: Payment): string {
-  const d = new Date(p.dueDate)
-  const month = String(d.getMonth() + 1).padStart(2, "0")
-  return `${d.getFullYear()}-${month}`
-}
-
-/** True when the given `YYYY-MM` month is earlier than the current month. */
-function isMonthInPast(periodMonth: string): boolean {
-  const [year, month] = periodMonth.split("-").map(Number)
-  if (!year || !month) return false
-  const now = new Date()
-  const current = now.getFullYear() * 12 + now.getMonth()
-  return year * 12 + (month - 1) < current
-}
-
-function formatPeriodLabel(periodMonth: string): string {
-  if (!periodMonth) return "—"
-  const [year, month] = periodMonth.split("-").map(Number)
-  if (!year || !month) return "—"
-  return new Date(year, month - 1, 1).toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  })
-}
-

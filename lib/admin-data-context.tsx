@@ -31,6 +31,10 @@ interface AdminDataContextValue {
   ready: boolean
   refreshStudents: (force?: boolean) => Promise<Student[]>
   refreshGroups: (force?: boolean) => Promise<Group[]>
+  /** Merge a single group after PATCH so schedule fields update immediately in open views. */
+  patchGroup: (group: Group) => void
+  /** Merge a single student after group membership changes. */
+  patchStudent: (studentId: string, patch: Partial<Student>) => void
   /** Fetch only the lists a section needs (uses cache + in-flight dedup). */
   ensureLists: (keys: AdminListKey[], force?: boolean) => Promise<void>
   refreshAll: (force?: boolean) => Promise<{ students: Student[]; groups: Group[] }>
@@ -60,6 +64,16 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     const data = await getGroups(force)
     setGroups(data)
     return data
+  }, [])
+
+  const patchGroup = useCallback((group: Group) => {
+    setGroups((prev) => prev.map((g) => (g.id === group.id ? { ...g, ...group } : g)))
+  }, [])
+
+  const patchStudent = useCallback((studentId: string, patch: Partial<Student>) => {
+    setStudents((prev) =>
+      prev.map((s) => (s.id === studentId ? { ...s, ...patch } : s)),
+    )
   }, [])
 
   const refreshHomeworkCount = useCallback(async (force = false) => {
@@ -129,6 +143,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ready,
       refreshStudents,
       refreshGroups,
+      patchGroup,
+      patchStudent,
       ensureLists,
       refreshAll,
     }),
@@ -139,6 +155,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ready,
       refreshStudents,
       refreshGroups,
+      patchGroup,
+      patchStudent,
       ensureLists,
       refreshAll,
     ],

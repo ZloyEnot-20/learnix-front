@@ -97,6 +97,8 @@ const DEFAULT_ORDER: ControlWorkSubject[] = [
   "writing",
 ]
 
+const IELTS_SKILL_SECTIONS = new Set<ControlWorkSubject>(["reading", "listening", "writing"])
+
 function uniqueSectionSubjects(steps: ControlWorkStep[]): ControlWorkSubject[] {
   const seen = new Set<ControlWorkSubject>()
   const ordered: ControlWorkSubject[] = []
@@ -209,12 +211,6 @@ interface SectionConfig {
   testId: string
 }
 
-interface AdminTest {
-  testId: string
-  title: string
-  type: string
-}
-
 function defaultSectionConfig(): SectionConfig {
   return {
     enabled: false,
@@ -231,16 +227,6 @@ function defaultDueDate() {
   const d = new Date()
   d.setDate(d.getDate() + 7)
   return d.toISOString().slice(0, 10)
-}
-
-function readAdminTests(): AdminTest[] {
-  if (typeof window === "undefined") return []
-  try {
-    const saved = JSON.parse(localStorage.getItem("adminTests") || "{}")
-    return Object.values(saved) as AdminTest[]
-  } catch {
-    return []
-  }
 }
 
 function formatShortDateTime(iso: string) {
@@ -598,11 +584,13 @@ function SortableSectionCard({
   subject,
   enabled,
   onEnabledChange,
+  comingSoon = false,
   children,
 }: {
   subject: ControlWorkSubject
   enabled: boolean
   onEnabledChange: (checked: boolean) => void
+  comingSoon?: boolean
   children: ReactNode
 }) {
   const meta = SECTION_META[subject]
@@ -643,7 +631,11 @@ function SortableSectionCard({
         >
           <GripVertical className="h-4 w-4" />
         </button>
-        <Checkbox checked={enabled} onCheckedChange={(c) => onEnabledChange(c === true)} />
+        <Checkbox
+          checked={enabled}
+          disabled={comingSoon}
+          onCheckedChange={(c) => !comingSoon && onEnabledChange(c === true)}
+        />
         <span
           className="flex h-7 w-7 items-center justify-center rounded-md"
           style={{ backgroundColor: meta.color }}
@@ -651,6 +643,11 @@ function SortableSectionCard({
           <Icon className="h-3.5 w-3.5 text-slate-900/80" />
         </span>
         <span className="flex-1 font-semibold text-slate-900">{meta.label}</span>
+        {comingSoon && (
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+            Soon
+          </span>
+        )}
       </div>
       {!isDragging ? children : null}
     </div>
@@ -697,7 +694,6 @@ export default function ControlWorkManager({
 
   const [grammarExercises, setGrammarExercises] = useState<GrammarExercise[]>([])
   const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
-  const [adminTests, setAdminTests] = useState<AdminTest[]>([])
 
   const [sectionOrder, setSectionOrder] = useState<ControlWorkSubject[]>(DEFAULT_ORDER)
   const [sections, setSections] = useState<Record<ControlWorkSubject, SectionConfig>>(() =>
@@ -731,7 +727,6 @@ export default function ControlWorkManager({
       setSubmissions(subs)
       setGrammarExercises(exercises)
       setVocabDecks(decks)
-      setAdminTests(readAdminTests())
     } catch {
       toast({
         title: "Failed to load progress tests",
@@ -747,7 +742,9 @@ export default function ControlWorkManager({
     void refresh()
   }, [])
 
-  const enabledSections = sectionOrder.filter((s) => sections[s]?.enabled)
+  const enabledSections = sectionOrder.filter(
+    (s) => sections[s]?.enabled && !IELTS_SKILL_SECTIONS.has(s),
+  )
 
   const sectionSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -825,8 +822,6 @@ export default function ControlWorkManager({
     }
   }
 
-  const testsFor = (type: string) => adminTests.filter((t) => t.type === type)
-
   const submit = async () => {
     if (!form.title.trim()) {
       toast({ title: "Enter a title", variant: "destructive" })
@@ -878,17 +873,7 @@ export default function ControlWorkManager({
           apiSections.vocabulary = { mode: "manual", deckSlugs: cfg.deckSlugs }
         }
       }
-      if (subject === "reading" || subject === "listening" || subject === "writing") {
-        if (!cfg.testId) {
-          toast({ title: `${SECTION_META[subject].label}: pick a test`, variant: "destructive" })
-          return
-        }
-        const test = adminTests.find((t) => t.testId === cfg.testId)
-        apiSections[subject] = {
-          testId: cfg.testId,
-          testTitle: test?.title ?? cfg.testId,
-        }
-      }
+      if (IELTS_SKILL_SECTIONS.has(subject)) continue
     }
 
     const parsedLimit = Number.parseInt(form.timeLimitMinutes, 10)
@@ -1165,8 +1150,13 @@ export default function ControlWorkManager({
                         <SortableSectionCard
                           key={subject}
                           subject={subject}
-                          enabled={cfg.enabled}
-                          onEnabledChange={(checked) => patchSection(subject, { enabled: checked })}
+                          comingSoon={IELTS_SKILL_SECTIONS.has(subject)}
+                          enabled={
+                            IELTS_SKILL_SECTIONS.has(subject) ? false : cfg.enabled
+                          }
+                          onEnabledChange={(checked) =>
+                            patchSection(subject, { enabled: checked })
+                          }
                         >
                           {cfg.enabled && subject === "grammar" && (
                         <div className="mt-3 space-y-2 border-t border-slate-100 pt-3">
@@ -1309,34 +1299,6 @@ export default function ControlWorkManager({
                           )}
                         </div>
                       )}
-
-                      {cfg.enabled &&
-                        (subject === "reading" ||
-                          subject === "listening" ||
-                          subject === "writing") && (
-                          <div className="mt-3 border-t border-slate-100 pt-3">
-                            <Select
-                              value={cfg.testId || undefined}
-                              onValueChange={(v) => patchSection(subject, { testId: v })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder={`Select ${meta.label} test`} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {testsFor(subject).map((t) => (
-                                  <SelectItem key={t.testId} value={t.testId}>
-                                    {t.title}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            {testsFor(subject).length === 0 && (
-                              <p className="mt-1 text-[11px] text-amber-700">
-                                No {meta.label} tests in IELTS Tests — add one first.
-                              </p>
-                            )}
-                          </div>
-                        )}
                         </SortableSectionCard>
                       )
                     })}

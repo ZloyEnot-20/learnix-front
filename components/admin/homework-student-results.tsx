@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
+  Headphones,
   RefreshCw,
   RotateCcw,
   Save,
@@ -52,6 +53,8 @@ import {
   recordingGradesFromMistakes,
   type RecordingGradeDraft,
 } from "@/components/admin/speaking-recording-review"
+import { PodcastListenCoverageBar } from "@/components/admin/podcast-listen-coverage-bar"
+import { listenedCoveragePercent, resolveListenedSegments } from "@/lib/podcast-listening"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -92,6 +95,13 @@ type Row = HomeworkStudentRow
 
 function isAudioUrl(value: string | undefined): boolean {
   return !!value && /^https?:\/\//i.test(value)
+}
+
+function formatListenDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  if (m > 0) return `${m}m ${s}s`
+  return `${s}s`
 }
 
 function speakingRecordingsCount(sub?: HomeworkSubmission): number {
@@ -433,6 +443,7 @@ export function HomeworkStudentResults({
   }
 
   const isSpeaking = homework.subject === "speaking"
+  const isListening = homework.subject === "listening"
 
   return (
     <div className="space-y-3">
@@ -477,7 +488,7 @@ export function HomeworkStudentResults({
               <SortableTh label="Status" active={sortKey === "status"} dir={sortDir} onSort={() => toggleSort("status")} />
               <SortableTh label="Integrity" active={sortKey === "integrity"} dir={sortDir} onSort={() => toggleSort("integrity")} />
               <SortableTh
-                label={isSpeaking ? "Recordings" : "Correct"}
+                label={isSpeaking ? "Recordings" : isListening ? "Listening" : "Correct"}
                 active={sortKey === "correct"}
                 dir={sortDir}
                 onSort={() => toggleSort("correct")}
@@ -495,7 +506,7 @@ export function HomeworkStudentResults({
               const attempt = row.submission?.attempt
               const recordingsCount = speakingRecordingsCount(row.submission)
               const accuracy =
-                !isSpeaking && attempt && attempt.totalQuestions > 0
+                !isSpeaking && !isListening && attempt && attempt.totalQuestions > 0
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
               const numericScore = row.submission?.score
@@ -562,6 +573,15 @@ export function HomeworkStudentResults({
                               {numericScore.toFixed(1)}
                             </span>
                           ) : null}
+                        </span>
+                      ) : isListening && attempt?.listeningStats ? (
+                        <span className="inline-flex flex-col gap-0.5 text-xs">
+                          <span className="tabular-nums text-slate-700">
+                            {formatListenDuration(attempt.listeningStats.totalListenSeconds)}
+                          </span>
+                          <span className="text-[10px] text-slate-500">
+                            {attempt.listeningStats.seekCount} seeks
+                          </span>
                         </span>
                       ) : attempt && accuracy != null ? (
                         <span className="inline-flex items-center gap-2">
@@ -726,11 +746,21 @@ function StudentDetail({
   const attempt = row.submission?.attempt
   const cheatingFailed = isCheatingFailed(row.submission)
   const isSpeaking = homework.subject === "speaking"
+  const isListening = homework.subject === "listening"
+  const listeningStats = attempt?.listeningStats
+  const podcastDurationSeconds = listeningStats?.podcastDurationSeconds ?? 0
+  const listenCoveragePct =
+    podcastDurationSeconds > 0 && listeningStats
+      ? listenedCoveragePercent(
+          resolveListenedSegments(listeningStats),
+          podcastDurationSeconds,
+        )
+      : null
   const speakingRecordings =
     attempt?.mistakes?.filter((m) => isAudioUrl(m.userAnswer)) ?? []
   const missingTranscription = speakingRecordings.some((m) => !m.transcription?.trim())
   const accuracy =
-    !isSpeaking && attempt && attempt.totalQuestions > 0
+    !isSpeaking && !isListening && attempt && attempt.totalQuestions > 0
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
       : null
   const numericScore = row.submission?.score
@@ -813,12 +843,18 @@ function StudentDetail({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                {isSpeaking ? "Speaking recordings" : "Exercise result"}
+                {isSpeaking
+                  ? "Speaking recordings"
+                  : isListening
+                    ? "Listening result"
+                    : "Exercise result"}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-900 ring-1 ring-slate-200">
                 {isSpeaking
                   ? `${speakingRecordings.length}/${attempt.totalQuestions} submitted`
-                  : `${attempt.correctCount}/${attempt.totalQuestions} correct`}
+                  : isListening && listeningStats
+                    ? formatListenDuration(listeningStats.totalListenSeconds)
+                    : `${attempt.correctCount}/${attempt.totalQuestions} correct`}
               </span>
               {typeof numericScore === "number" && !Number.isNaN(numericScore) ? (
                 <span
@@ -875,7 +911,83 @@ function StudentDetail({
               />
             </div>
           )}
-          {isSpeaking ? (
+          {isListening && listeningStats ? (
+            <div className="mt-3 space-y-3">
+              <div className="grid gap-2 sm:grid-cols-2">
+                <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 px-3 py-2.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-indigo-800">
+                    <Clock className="h-3.5 w-3.5" />
+                    Total listened
+                  </div>
+                  <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                    {formatListenDuration(listeningStats.totalListenSeconds)}
+                  </p>
+                  {listenCoveragePct != null && listeningStats ? (
+                    <div className="mt-2.5 space-y-2 rounded-md border border-indigo-100/80 bg-white/70 px-2.5 py-2">
+                      <div className="flex items-end justify-between gap-3">
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                            Episode length
+                          </p>
+                          <p className="mt-0.5 text-sm font-bold tabular-nums text-slate-800">
+                            {formatListenDuration(podcastDurationSeconds)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                            Coverage
+                          </p>
+                          <p
+                            className={cn(
+                              "mt-0.5 text-xl font-bold tabular-nums leading-none",
+                              listenCoveragePct >= 80
+                                ? "text-emerald-600"
+                                : listenCoveragePct >= 50
+                                  ? "text-indigo-600"
+                                  : "text-amber-600",
+                            )}
+                          >
+                            {listenCoveragePct}%
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <PodcastListenCoverageBar
+                          durationSeconds={podcastDurationSeconds}
+                          segments={listeningStats.listenedSegments}
+                          totalListenSeconds={listeningStats.totalListenSeconds}
+                        />
+                        <div className="flex items-center justify-between text-[10px] tabular-nums text-slate-500">
+                          <span>
+                            {formatListenDuration(listeningStats.totalListenSeconds)} listened
+                          </span>
+                          <span>{formatListenDuration(podcastDurationSeconds)} total</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+                <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 px-3 py-2.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-indigo-800">
+                    <Headphones className="h-3.5 w-3.5" />
+                    Seeks &amp; rewinds
+                  </div>
+                  <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                    {listeningStats.seekCount}
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    {listeningStats.rewindCount} backward · {listeningStats.forwardCount} forward
+                  </p>
+                </div>
+              </div>
+              {listeningStats.wordsReviewed > 0 ? (
+                <p className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700">
+                  <CheckCircle2 className="h-3 w-3" />
+                  {listeningStats.wordsReviewed} words reviewed after listening
+                </p>
+              ) : null}
+            </div>
+          ) : isSpeaking ? (
             speakingRecordings.length > 0 ? (
               <>
                 {missingTranscription ? (
@@ -1045,6 +1157,10 @@ function accuracyOf(sub?: HomeworkSubmission, subject?: HomeworkAssignment["subj
   const a = sub?.attempt
   if (!a || a.totalQuestions === 0) return -1
   if (subject === "speaking") return speakingRecordingsCount(sub) / a.totalQuestions
+  if (subject === "listening") {
+    if (a.listeningStats?.completedListening) return 1
+    return -1
+  }
   return a.correctCount / a.totalQuestions
 }
 

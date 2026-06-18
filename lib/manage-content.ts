@@ -3,12 +3,14 @@ import { saveGrammarExercise } from "./grammar-storage"
 import { invalidateExercises } from "./exercises-cache"
 import { saveCustomTopic } from "./topic-storage"
 import { invalidateVocabDecks } from "./vocabulary-data"
+import { invalidatePodcasts } from "./podcast-data"
 import { exercisesApi } from "./api"
 import type { GrammarExercise } from "./grammar-types"
 import type { TopicMeta } from "./grammar-utils"
 import type { VocabDeck } from "./vocabulary-data"
+import type { PodcastEpisode, PodcastWord } from "./podcast-data"
 
-export type ContentKind = "exercise" | "topic" | "test" | "vocabulary"
+export type ContentKind = "exercise" | "topic" | "vocabulary" | "podcast"
 
 /** A simple slug used for ids and storage keys. */
 const slug = z.string().min(1).max(200)
@@ -91,19 +93,6 @@ const topicSchema = z.object({
   totalMinutes: z.number().int().nonnegative().default(0),
   color: z.string().max(40).optional(),
 }) as unknown as z.ZodType<TopicMeta>
-
-// ─── IELTS test ──────────────────────────────────────────────────────────────
-const testSchema = z.object({
-  testId: slug,
-  title: z.string().min(1).max(300),
-  type: z.enum(["reading", "listening", "writing", "speaking"]),
-  totalTime: z.number().int().positive(),
-  partCount: z.number().int().nonnegative().optional(),
-  description: z.string().max(2000).optional(),
-  parts: z.array(z.any()).optional().default([]),
-})
-
-type TestInput = z.infer<typeof testSchema>
 
 // ─── Vocabulary deck ─────────────────────────────────────────────────────────
 const VALID_POS = new Set(["noun", "verb", "adjective", "adverb", "phrase"])
@@ -188,11 +177,59 @@ const vocabDeckSchema = z
     }
   }) as unknown as z.ZodType<VocabDeck>
 
+const podcastWord = z
+  .object({
+    word: z.string().optional(),
+    term: z.string().optional(),
+    definition: z.string().optional().default(""),
+    meaning: z.string().optional(),
+  })
+  .superRefine((raw, ctx) => {
+    if (!(raw.word || raw.term || "").trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "word is required" })
+    }
+  })
+  .transform((raw) => ({
+    word: (raw.word || raw.term || "").trim(),
+    definition: (raw.definition || raw.meaning || "").trim(),
+  })) as unknown as z.ZodType<PodcastWord>
+
+const podcastSchema = z
+  .object({
+    id: slug.optional(),
+    slug: slug.optional(),
+    title: z.string().min(1).max(200),
+    topic: z.string().min(1).max(200),
+    description: z.string().max(2000).default(""),
+    level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).default("A1"),
+    difficulty: z.enum(["easy", "medium", "hard"]).default("easy"),
+    audioUrl: z.string().min(1).max(2000),
+    durationMinutes: z.number().nonnegative().default(0),
+    words: z.array(podcastWord).optional().default([]),
+  })
+  .transform((p) => {
+    const podcastSlug =
+      (p.slug && String(p.slug).trim()) ||
+      (p.id != null && String(p.id).trim()) ||
+      p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+    return {
+      slug: podcastSlug,
+      title: p.title,
+      topic: p.topic,
+      description: p.description,
+      level: p.level,
+      difficulty: p.difficulty,
+      audioUrl: p.audioUrl,
+      durationMinutes: p.durationMinutes,
+      words: p.words ?? [],
+    }
+  }) as unknown as z.ZodType<PodcastEpisode>
+
 const SCHEMAS: Record<ContentKind, z.ZodTypeAny> = {
   exercise: exerciseSchema,
   topic: topicSchema,
-  test: testSchema,
   vocabulary: vocabDeckSchema,
+  podcast: podcastSchema,
 }
 
 export interface ParseResult<T> {
@@ -263,18 +300,11 @@ export async function saveContent(kind: ContentKind, items: unknown[]): Promise<
       invalidateVocabDecks()
       return decks.length
     }
-    case "test": {
-      if (typeof window === "undefined") return 0
-      const saved = JSON.parse(localStorage.getItem("adminTests") || "{}")
-      for (const t of items as TestInput[]) {
-        saved[t.testId] = {
-          ...t,
-          partCount: t.partCount ?? (Array.isArray(t.parts) ? t.parts.length : 0),
-          createdAt: new Date().toISOString(),
-        }
-      }
-      localStorage.setItem("adminTests", JSON.stringify(saved))
-      return (items as TestInput[]).length
+    case "podcast": {
+      const podcasts = items as PodcastEpisode[]
+      await exercisesApi.importPodcasts(podcasts)
+      invalidatePodcasts()
+      return podcasts.length
     }
   }
 }
@@ -334,19 +364,6 @@ export const CONTENT_EXAMPLES: Record<ContentKind, string> = {
     null,
     2,
   ),
-  test: JSON.stringify(
-    {
-      testId: "reading-002",
-      title: "IELTS Academic Reading 2",
-      type: "reading",
-      totalTime: 60,
-      partCount: 3,
-      description: "Three passages, 40 questions.",
-      parts: [],
-    },
-    null,
-    2,
-  ),
   vocabulary: JSON.stringify(
     {
       slug: "travel",
@@ -371,6 +388,30 @@ export const CONTENT_EXAMPLES: Record<ContentKind, string> = {
           example: "Don't forget your luggage.",
           translation: "багаж",
           translationUz: "yuk",
+        },
+      ],
+    },
+    null,
+    2,
+  ),
+  podcast: JSON.stringify(
+    {
+      slug: "morning-routine",
+      title: "A Morning Routine",
+      topic: "Daily life",
+      description: "Anna describes her typical morning.",
+      level: "A2",
+      difficulty: "easy",
+      audioUrl: "https://example.com/audio/morning-routine.mp3",
+      durationMinutes: 4,
+      words: [
+        {
+          word: "routine",
+          definition: "a regular way of doing things",
+        },
+        {
+          word: "rush hour",
+          definition: "the busiest time on roads and public transport",
         },
       ],
     },

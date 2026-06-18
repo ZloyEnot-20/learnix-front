@@ -22,6 +22,12 @@ export function canAccessAdmin(type: UserType): boolean {
   return type === "super_admin" || type === "admin" || type === "teacher"
 }
 
+/** Post-login route for the web app. */
+export function redirectAfterAuth(type: UserType): string {
+  if (type !== "student") return "/admin"
+  return "/mobile-only"
+}
+
 /** Admin-level types (super admin + org admin). */
 export function isAdminType(type: UserType): boolean {
   return type === "super_admin" || type === "admin"
@@ -68,17 +74,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-/** Quick-login accounts created by the backend `npm run seed`. */
-export const DEMO_ACCOUNTS: Array<{
-  email: string
-  password: string
-  name: string
-  type: UserType
-}> = [
-  { email: "superadmin@ielts.com", password: "super123", name: "Super Admin", type: "super_admin" },
-  { email: "student@ielts.com", password: "student123", name: "Student", type: "student" },
-]
 
 function toUser(u: AuthUser): User {
   return {

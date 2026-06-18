@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { normalizeTimeInput, WEEKDAY_OPTIONS } from "@/lib/lesson-schedule"
+import { normalizeTimeInput, WEEKDAY_BADGE_CLASSES, WEEKDAY_OPTIONS } from "@/lib/lesson-schedule"
 
 export interface LessonScheduleFormValues {
   lessonWeekdays: number[]
@@ -40,7 +40,7 @@ export function LessonScheduleFields({ value, onChange, idPrefix = "schedule" }:
                 className={cn(
                   "rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors",
                   active
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? WEEKDAY_BADGE_CLASSES[day]
                     : "border-slate-200 bg-white text-slate-600 hover:border-slate-300",
                 )}
               >

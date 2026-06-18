@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth, redirectAfterAuth } from "@/lib/auth-context"
 
 export default function HomePage() {
   const { user, isLoading } = useAuth()
@@ -11,7 +11,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!isLoading) {
       if (user) {
-        router.push("/dashboard")
+        router.push(redirectAfterAuth(user.type))
       } else {
         router.push("/login")
       }

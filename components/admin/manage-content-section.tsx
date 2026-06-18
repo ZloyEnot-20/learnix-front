@@ -22,12 +22,12 @@ import {
   DownloadCloud,
   FileJson,
   FilePlus2,
-  FileText,
   Folder,
   FolderPlus,
   Link2,
   ListChecks,
   Loader2,
+  Mic2,
   Plus,
   Save,
   Sparkles,
@@ -42,7 +42,9 @@ import {
   saveContent,
   type ContentKind,
 } from "@/lib/manage-content"
-import { getTopicsMeta, peekTopicsMeta } from "@/lib/exercises-cache"
+import { invalidateExercises, getTopicsMeta, peekTopicsMeta } from "@/lib/exercises-cache"
+import { invalidatePodcasts } from "@/lib/podcast-data"
+import { exercisesApi } from "@/lib/api"
 import type { TopicMeta } from "@/lib/grammar-utils"
 
 interface KindMeta {
@@ -71,18 +73,18 @@ const KINDS: KindMeta[] = [
     hint: "Required: slug, title, type, content.questions (or content.pairs for matching).",
   },
   {
-    id: "test",
-    label: "IELTS test",
-    icon: FileText,
-    blurb: "Register an IELTS test card (reading / listening / writing / speaking).",
-    hint: "Required: testId, title, type, totalTime.",
-  },
-  {
     id: "vocabulary",
     label: "Vocabulary deck",
     icon: BookMarked,
     blurb: "Add a vocabulary deck for flashcards and quizzes.",
     hint: "Required: slug, title, words[] (each: id, term, partOfSpeech, definition).",
+  },
+  {
+    id: "podcast",
+    label: "Podcast",
+    icon: Mic2,
+    blurb: "Upload a listening podcast with topic, difficulty and optional vocabulary.",
+    hint: "Upload audio + metadata. Optional words JSON: [{ word, definition }].",
   },
 ]
 
@@ -327,8 +329,8 @@ function withTopic(raw: string, topic: string): string {
   return JSON.stringify(list, null, 2)
 }
 
-/** Inject CEFR level into vocabulary deck JSON when omitted in the payload. */
-function withDeckLevel(raw: string, level: string): string {
+/** Inject CEFR level into vocabulary deck or podcast JSON when omitted in the payload. */
+function withContentLevel(raw: string, level: string): string {
   const json = JSON.parse(raw)
   const list = Array.isArray(json) ? json : [json]
   for (const item of list) {
@@ -338,6 +340,11 @@ function withDeckLevel(raw: string, level: string): string {
     }
   }
   return JSON.stringify(list, null, 2)
+}
+
+/** @deprecated Use withContentLevel */
+function withDeckLevel(raw: string, level: string): string {
+  return withContentLevel(raw, level)
 }
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
@@ -364,7 +371,19 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
   const [exerciseSource, setExerciseSource] = useState<"json" | "url">("json")
   const [urls, setUrls] = useState<string[]>([""])
   const [fetching, setFetching] = useState(false)
-  const [vocabLevel, setVocabLevel] = useState("A2")
+  const [contentLevel, setContentLevel] = useState("A2")
+  const [podcastForm, setPodcastForm] = useState({
+    title: "",
+    topic: "",
+    slug: "",
+    slugTouched: false,
+    description: "",
+    level: "A2",
+    difficulty: "easy" as "easy" | "medium" | "hard",
+    wordsJson: "",
+  })
+  const [podcastAudio, setPodcastAudio] = useState<File | null>(null)
+  const [uploadingPodcast, setUploadingPodcast] = useState(false)
 
   // New-folder form.
   const [folderForm, setFolderForm] = useState({
@@ -494,10 +513,14 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
     }
     if (kind === "vocabulary") {
       try {
-        rawToParse = withDeckLevel(raw, vocabLevel.trim() || "A1")
+        rawToParse = withContentLevel(raw, contentLevel.trim() || "A1")
       } catch {
         /* let parseContent surface the JSON syntax error below */
       }
+    }
+    if (kind === "podcast") {
+      setError("Use the upload form to add podcasts with an audio file.")
+      return
     }
     const parsed = parseContent(kind, rawToParse)
     if (!parsed.ok) {
@@ -511,19 +534,83 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
         title: "Saved",
         description:
           kind === "vocabulary"
-            ? `${count} deck${count === 1 ? "" : "s"} saved for level ${vocabLevel}. Open Exercises → ${vocabLevel} → Vocabulary.`
-            : `${count} ${active.label.toLowerCase()} item${count === 1 ? "" : "s"} added.`,
+            ? `${count} deck${count === 1 ? "" : "s"} saved for level ${contentLevel}. Open Exercises → ${contentLevel} → Vocabulary.`
+            : kind === "podcast"
+              ? `${count} podcast${count === 1 ? "" : "s"} saved for level ${contentLevel}. Open Exercises → ${contentLevel} → Podcasts.`
+              : `${count} ${active.label.toLowerCase()} item${count === 1 ? "" : "s"} added.`,
       })
       setRaw("")
       if (kind === "exercise") void reloadTopics()
-      // Vocabulary is localStorage-only; exercises catalogue refresh is not needed.
-      if (kind === "topic" || kind === "exercise" || kind === "test") onChanged?.()
+      if (kind === "topic" || kind === "exercise" || kind === "podcast") onChanged?.()
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Please try again."
       setError(msg)
       toast({ title: "Could not save", description: msg, variant: "destructive" })
     } finally {
       setSaving(false)
+    }
+  }
+
+  const uploadPodcastEpisode = async () => {
+    setError(null)
+    const title = podcastForm.title.trim()
+    const topic = podcastForm.topic.trim()
+    if (!title) {
+      setError("Title is required.")
+      return
+    }
+    if (!topic) {
+      setError("Topic is required.")
+      return
+    }
+    if (!podcastAudio) {
+      setError("Choose an audio file (mp3, m4a, wav…).")
+      return
+    }
+    if (podcastForm.wordsJson.trim()) {
+      try {
+        JSON.parse(podcastForm.wordsJson)
+      } catch {
+        setError("Words JSON is not valid JSON.")
+        return
+      }
+    }
+    setUploadingPodcast(true)
+    try {
+      const form = new FormData()
+      form.append("audio", podcastAudio)
+      form.append("title", title)
+      form.append("topic", topic)
+      form.append("level", podcastForm.level)
+      form.append("difficulty", podcastForm.difficulty)
+      if (podcastForm.description.trim()) form.append("description", podcastForm.description.trim())
+      const slug = podcastForm.slugTouched ? slugify(podcastForm.slug) : slugify(title)
+      if (slug) form.append("slug", slug)
+      if (podcastForm.wordsJson.trim()) form.append("words", podcastForm.wordsJson.trim())
+      const res = await exercisesApi.uploadPodcast(form)
+      toast({
+        title: "Podcast uploaded",
+        description: `${res.podcast.title} · ${res.podcast.level} → Exercises → Podcasts`,
+      })
+      setPodcastForm({
+        title: "",
+        topic: "",
+        slug: "",
+        slugTouched: false,
+        description: "",
+        level: podcastForm.level,
+        difficulty: podcastForm.difficulty,
+        wordsJson: "",
+      })
+      setPodcastAudio(null)
+      invalidatePodcasts()
+      onChanged?.()
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Please try again."
+      setError(msg)
+      toast({ title: "Upload failed", description: msg, variant: "destructive" })
+    } finally {
+      setUploadingPodcast(false)
     }
   }
 
@@ -631,7 +718,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
           <div>
             <h2 className="text-base font-semibold text-slate-900">Manage exercises</h2>
             <p className="mt-0.5 text-sm text-slate-500">
-              Create topic folders, then upload questions, tests and vocabulary into them.
+              Create topic folders, upload questions, vocabulary decks and podcasts.
             </p>
           </div>
         </div>
@@ -805,7 +892,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                   <active.icon className="h-4 w-4 text-slate-500" />
                   <h3 className="text-sm font-semibold text-slate-900">{active.label}</h3>
                 </div>
-                {!(kind === "exercise" && exerciseSource === "url") && (
+                {!(kind === "exercise" && exerciseSource === "url") && kind !== "podcast" && (
                   <Button
                     type="button"
                     variant="outline"
@@ -851,9 +938,9 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
               {kind === "vocabulary" && (
                 <div className="space-y-1.5">
                   <Label>CEFR level *</Label>
-                  <Select value={vocabLevel} onValueChange={setVocabLevel}>
+                  <Select value={contentLevel} onValueChange={setContentLevel}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Choose level for this deck" />
+                      <SelectValue placeholder="Choose level for this content" />
                     </SelectTrigger>
                     <SelectContent>
                       {CEFR_LEVELS.map((lvl) => (
@@ -865,7 +952,7 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                   </Select>
                   <p className="text-[11px] text-slate-400">
                     Applied when <code className="rounded bg-slate-100 px-1">level</code> is
-                    omitted in the JSON. The deck appears under this level in Exercises →
+                    omitted in the JSON. Content appears under Exercises → {contentLevel} →
                     Vocabulary.
                   </p>
                 </div>
@@ -893,7 +980,177 @@ export default function ManageContentSection({ onChanged }: ManageContentSection
                 </div>
               )}
 
-              {kind === "exercise" && exerciseSource === "url" ? (
+              {kind === "podcast" ? (
+                <>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <Label htmlFor="podcast-title">Title *</Label>
+                      <Input
+                        id="podcast-title"
+                        value={podcastForm.title}
+                        onChange={(e) =>
+                          setPodcastForm((f) => ({
+                            ...f,
+                            title: e.target.value,
+                            slug: f.slugTouched ? f.slug : slugify(e.target.value),
+                          }))
+                        }
+                        placeholder="A Morning Routine"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="podcast-topic">Topic *</Label>
+                      <Input
+                        id="podcast-topic"
+                        value={podcastForm.topic}
+                        onChange={(e) =>
+                          setPodcastForm((f) => ({ ...f, topic: e.target.value }))
+                        }
+                        placeholder="Daily life"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="podcast-slug">Slug</Label>
+                      <Input
+                        id="podcast-slug"
+                        value={podcastForm.slug}
+                        onChange={(e) =>
+                          setPodcastForm((f) => ({
+                            ...f,
+                            slug: slugify(e.target.value),
+                            slugTouched: true,
+                          }))
+                        }
+                        className="font-mono text-xs"
+                        placeholder="morning-routine"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>CEFR level *</Label>
+                      <Select
+                        value={podcastForm.level}
+                        onValueChange={(level) => setPodcastForm((f) => ({ ...f, level }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {CEFR_LEVELS.map((lvl) => (
+                            <SelectItem key={lvl} value={lvl}>
+                              {lvl}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Difficulty *</Label>
+                      <Select
+                        value={podcastForm.difficulty}
+                        onValueChange={(difficulty) =>
+                          setPodcastForm((f) => ({
+                            ...f,
+                            difficulty: difficulty as "easy" | "medium" | "hard",
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="easy">Easy</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="hard">Hard</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <Label htmlFor="podcast-desc">Description</Label>
+                      <Input
+                        id="podcast-desc"
+                        value={podcastForm.description}
+                        onChange={(e) =>
+                          setPodcastForm((f) => ({ ...f, description: e.target.value }))
+                        }
+                        placeholder="Short summary for teachers and students"
+                      />
+                    </div>
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <Label htmlFor="podcast-audio">Audio file *</Label>
+                      <Input
+                        id="podcast-audio"
+                        type="file"
+                        accept="audio/*,.mp3,.m4a,.wav,.webm"
+                        onChange={(e) => {
+                          setPodcastAudio(e.target.files?.[0] ?? null)
+                          if (error) setError(null)
+                        }}
+                      />
+                      {podcastAudio && (
+                        <p className="text-[11px] text-slate-500">
+                          {podcastAudio.name} · {(podcastAudio.size / 1024 / 1024).toFixed(1)} MB
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <Label htmlFor="podcast-words">Words JSON (optional)</Label>
+                      <Textarea
+                        id="podcast-words"
+                        value={podcastForm.wordsJson}
+                        onChange={(e) =>
+                          setPodcastForm((f) => ({ ...f, wordsJson: e.target.value }))
+                        }
+                        spellCheck={false}
+                        placeholder='[{"word":"commute","definition":"to travel to work regularly"}]'
+                        className="min-h-[140px] font-mono text-xs"
+                      />
+                      <p className="text-[11px] text-slate-400">
+                        Shown after listening. Each item: <code className="rounded bg-slate-100 px-1">word</code> and{" "}
+                        <code className="rounded bg-slate-100 px-1">definition</code>.
+                      </p>
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span>{error}</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-end gap-2 pt-1">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setPodcastForm({
+                          title: "",
+                          topic: "",
+                          slug: "",
+                          slugTouched: false,
+                          description: "",
+                          level: podcastForm.level,
+                          difficulty: podcastForm.difficulty,
+                          wordsJson: "",
+                        })
+                        setPodcastAudio(null)
+                        setError(null)
+                      }}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={uploadPodcastEpisode}
+                      loading={uploadingPodcast}
+                      className="gap-1.5 bg-primary hover:bg-primary/90"
+                    >
+                      <Save className="h-4 w-4" />
+                      Upload podcast
+                    </Button>
+                  </div>
+                </>
+              ) : kind === "exercise" && exerciseSource === "url" ? (
                 <>
                   <div className="space-y-2">
                     {urls.map((url, i) => (

@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/lib/auth-context"
 import { OrgBlockedGuard } from "@/components/org-blocked-guard"
+import { StudentWebBlockedGuard } from "@/components/student-web-blocked-guard"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { Suspense } from "react"
@@ -28,7 +29,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           <OrgBlockedGuard>
-            <Suspense>{children}</Suspense>
+            <StudentWebBlockedGuard>
+              <Suspense>{children}</Suspense>
+            </StudentWebBlockedGuard>
           </OrgBlockedGuard>
         </AuthProvider>
         <Toaster />
