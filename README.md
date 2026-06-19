@@ -1,30 +1,49 @@
-# ielts1
+# Learnix — Frontend (Next.js 15)
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Student and staff UI for the Learnix / IELTS platform. Talks to `learnix-backend` over REST.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/akadamboev-4010s-projects/v0-ielts1)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/KJHa3LUxPJ7)
+## Development
 
-## Overview
+```bash
+cd learnix-front
+pnpm install
+cp .env.example .env.local   # optional — defaults to http://localhost:4000/api
+pnpm dev                     # http://localhost:3000
+```
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+Start the backend (`learnix-backend`, port `4000`) before using the app.
 
-## Deployment
+## Production
 
-Your project is live at:
+Environment variables are read at **build time** for `NEXT_PUBLIC_*` (baked into the client bundle).
+Set them in `.env.production` on the server before building.
 
-**[https://vercel.com/akadamboev-4010s-projects/v0-ielts1](https://vercel.com/akadamboev-4010s-projects/v0-ielts1)**
+```bash
+cp .env.production.example .env.production
+# edit NEXT_PUBLIC_API_URL, BACKEND_URL, PORT
 
-## Build your app
+pnpm install --frozen-lockfile
+pnpm prod                    # next build && next start
+```
 
-Continue building your app on:
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | **Required in prod.** Public API base with `/api` suffix, e.g. `https://api.learnix.space/api` |
+| `BACKEND_URL` | Optional. Origin for Next.js `/api/*` rewrites (no `/api`). Derived from `NEXT_PUBLIC_API_URL` if omitted |
+| `PORT` | `next start` port (default `3000`) |
 
-**[https://v0.app/chat/projects/KJHa3LUxPJ7](https://v0.app/chat/projects/KJHa3LUxPJ7)**
+Backend `CORS_ORIGINS` must include the frontend origin (e.g. `https://learnix.space`).
 
-## How It Works
+Typical VPS: `nginx → Next.js (PORT) + nginx → backend (4000)`.
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Build only / run separately
+
+```bash
+pnpm build
+pnpm start
+```
+
+## API client
+
+`lib/api-client.ts` uses `lib/env.ts` → `env.config.mjs`. No hard-coded production URLs;
+dev falls back to `http://localhost:4000/api` when env is unset.

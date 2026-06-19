@@ -1,8 +1,7 @@
+import { resolveBackendUrl } from "./env.config.mjs"
+
 /** @type {import('next').NextConfig} */
-const backendUrl = (
-  process.env.BACKEND_URL ??
-  (process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://learnix-api.xyz")
-).replace(/\/$/, "")
+const backendUrl = resolveBackendUrl()
 
 const nextConfig = {
   eslint: {
