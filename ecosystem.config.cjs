@@ -1,6 +1,6 @@
 /**
  * PM2: Next.js frontend.
- * Прод (foreground, без дублей): npm run prod
+ * Прод (daemon): npm run prod
  * Первый деплой / после правок: npm run prod:deploy  (build + prod)
  * Остановка: npm run prod:stop
  *
@@ -15,11 +15,13 @@ module.exports = {
       args: "start",
       cwd: __dirname,
       interpreter: "node",
+      // Next.js не поддерживает PM2 cluster — только fork.
+      exec_mode: "fork",
       instances: 1,
       autorestart: true,
       watch: false,
       env: { NODE_ENV: "development", PORT: 3000 },
-      env_production: { NODE_ENV: "production" },
+      env_production: { NODE_ENV: "production", PORT: 3000 },
     },
   ],
 }

@@ -38,7 +38,8 @@ if (command === "start") {
     console.error("[prod] Сначала соберите фронт: pnpm build  (или npm run prod:deploy)")
     process.exit(1)
   }
-  pm2(["delete", ecosystem], { ignoreError: true })
+  // По имени — надёжнее, чем delete ecosystem (старые id не остаются на порту).
+  pm2(["delete", "learnix-front"], { ignoreError: true })
   pm2(["start", ecosystem, "--env", "production"])
   process.exit(0)
 }
