@@ -351,10 +351,7 @@ export default function ExercisesIndexPage() {
             <p className="mt-1 text-sm text-slate-500">
               Topics are organised into folders by CEFR level. Open a folder to see its topics.
             </p>
-            <div
-              className="mt-4 grid gap-3"
-              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-            >
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {levelFolders.map((folder) => {
                 const locked = !levelUnlocked(folder.level)
                 return (
@@ -401,10 +398,7 @@ export default function ExercisesIndexPage() {
               <ChevronLeft className="h-4 w-4" />
               Back
             </Button>
-            <div
-              className="mt-4 grid gap-3"
-              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-            >
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {SUBJECT_FOLDERS.map((folder) => {
                 const stats = categoryStats(selectedLevel, folder.id)
                 return (
@@ -476,28 +470,19 @@ export default function ExercisesIndexPage() {
                       </p>
                     </div>
                   ) : isVocab ? (
-                    <div
-                      className="mt-4 grid gap-4 justify-center"
-                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-                    >
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {vocabDecksForLevel.map((d) => (
                         <VocabDeckCard key={d.slug} deck={d} />
                       ))}
                     </div>
                   ) : isPodcasts ? (
-                    <div
-                      className="mt-4 grid gap-4 justify-center"
-                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-                    >
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {podcastsForLevel.map((p) => (
                         <PodcastCard key={p.slug} episode={p} />
                       ))}
                     </div>
                   ) : (
-                    <div
-                      className="mt-4 grid gap-4 justify-center"
-                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-                    >
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {topics.map((t) => (
                         <TopicCard key={t.topic} topic={t} />
                       ))}
@@ -590,7 +575,7 @@ function LevelFolderCard({
       disabled={disabled}
       aria-disabled={disabled}
       className={cn(
-        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        "group flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all duration-200 sm:gap-3 sm:p-5",
         disabled
           ? "cursor-not-allowed opacity-60"
           : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
@@ -668,7 +653,7 @@ function SubjectFolderCard({
       disabled={empty}
       aria-disabled={empty}
       className={cn(
-        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        "group flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all duration-200 sm:gap-3 sm:p-5",
         empty
           ? "cursor-not-allowed opacity-60"
           : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
@@ -714,18 +699,18 @@ function SubjectFolderCard({
 function VocabDeckCard({ deck }: { deck: VocabDeck }) {
   return (
     <Link href={`/vocabulary/${deck.slug}`} className="group block h-full">
-      <Card className="relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
-            <div className="flex items-start gap-3 min-w-0 flex-1">
+      <Card className="relative h-full rounded-2xl border-slate-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg sm:rounded-3xl">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
               <span
                 aria-hidden
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-sm"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-sm sm:h-10 sm:w-10"
               >
-                <BookMarked className="h-5 w-5" />
+                <BookMarked className="h-4 w-4 sm:h-5 sm:w-5" />
               </span>
-              <div className="min-w-0 space-y-2">
-                <h3 className="text-lg font-semibold text-slate-900">{deck.title}</h3>
+              <div className="min-w-0 space-y-1.5">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{deck.title}</h3>
                 <div className="flex flex-wrap gap-2 text-xs text-slate-600">
                   <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 font-medium">
                     {deck.words.length} words
@@ -740,7 +725,7 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
               {deck.level}
             </span>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600">{deck.description}</p>
+          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 sm:mt-4">{deck.description}</p>
         </CardContent>
       </Card>
     </Link>
@@ -750,18 +735,18 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
 function PodcastCard({ episode }: { episode: PodcastEpisode }) {
   const hasWords = podcastHasWords(episode)
   return (
-    <Card className="relative h-full rounded-3xl border-slate-200/80 bg-white">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
-          <div className="flex items-start gap-3 min-w-0 flex-1">
+    <Card className="relative h-full rounded-2xl border-slate-200/80 bg-white sm:rounded-3xl">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+          <div className="flex min-w-0 flex-1 items-start gap-3">
             <span
               aria-hidden
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 text-white shadow-sm"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 text-white shadow-sm sm:h-10 sm:w-10"
             >
-              <Headphones className="h-5 w-5" />
+              <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
             </span>
-            <div className="min-w-0 space-y-2">
-              <h3 className="text-lg font-semibold text-slate-900">{episode.title}</h3>
+            <div className="min-w-0 space-y-1.5">
+              <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{episode.title}</h3>
               <div className="flex flex-wrap gap-2 text-xs text-slate-600">
                 <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
                   {episode.topic}
@@ -808,7 +793,7 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
   const card = (
       <Card
         className={cn(
-          "relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200",
+          "relative h-full rounded-2xl border-slate-200/80 bg-white transition-all duration-200 sm:rounded-3xl",
           isSpeaking && "border-rose-200/80",
           disabled
             ? "opacity-60"
@@ -820,26 +805,26 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
             {topic.comingSoon ? "Coming soon" : "Empty"}
           </span>
         )}
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
-            <div className="flex items-start gap-3 min-w-0 flex-1">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
               <span
                 aria-hidden
                 className={cn(
-                  "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl shadow-sm ring-1",
+                  "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl shadow-sm ring-1 sm:h-10 sm:w-10",
                   isSpeaking
                     ? "bg-gradient-to-br from-rose-200 to-rose-400 ring-rose-300/50"
                     : "bg-gradient-to-br from-amber-200 to-amber-400 ring-amber-300/50",
                 )}
               >
                 {isSpeaking ? (
-                  <Mic className="h-5 w-5 text-rose-900" />
+                  <Mic className="h-4 w-4 text-rose-900 sm:h-5 sm:w-5" />
                 ) : (
-                  <Folder className="h-5 w-5 text-amber-900 fill-amber-100" />
+                  <Folder className="h-4 w-4 text-amber-900 fill-amber-100 sm:h-5 sm:w-5" />
                 )}
               </span>
-              <div className="min-w-0 space-y-2">
-                <h3 className="text-lg font-semibold text-slate-900">{topic.title}</h3>
+              <div className="min-w-0 space-y-1.5">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{topic.title}</h3>
                 <div className="flex flex-wrap gap-2 text-xs text-slate-600">
                   <Badge>
                     {topic.exerciseCount} exercise
@@ -862,7 +847,7 @@ function TopicCard({ topic }: { topic: TopicSummary }) {
               {lvl.display}
             </span>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600">
+          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 sm:mt-4">
             {topic.description ??
               `${topic.exerciseCount} exercise${
                 topic.exerciseCount === 1 ? "" : "s"

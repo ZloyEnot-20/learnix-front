@@ -10,6 +10,8 @@ import {
   type ReactNode,
 } from "react"
 import type { Group, Student } from "./admin-storage"
+import type { GrammarExercise } from "./grammar-types"
+import type { TopicMeta } from "./grammar-utils"
 import {
   getGroups,
   getStudents,
@@ -19,6 +21,13 @@ import {
   peekStudents,
   peekHomeworkCount,
 } from "./admin-cache"
+import {
+  getExercises,
+  getTopicsMeta,
+  onExercisesInvalidate,
+  peekExercises,
+  peekTopicsMeta,
+} from "./exercises-cache"
 
 export type AdminListKey = "students" | "groups" | "homeworkCount"
 
@@ -38,13 +47,18 @@ interface AdminDataContextValue {
   /** Fetch only the lists a section needs (uses cache + in-flight dedup). */
   ensureLists: (keys: AdminListKey[], force?: boolean) => Promise<void>
   refreshAll: (force?: boolean) => Promise<{ students: Student[]; groups: Group[] }>
+  /** Grammar/speaking catalogue — shared across Homework, Exercises, Progress test. */
+  exercises: GrammarExercise[]
+  topicsMeta: TopicMeta[]
+  exercisesReady: boolean
+  ensureExercisesCatalog: (force?: boolean) => Promise<void>
 }
 
 const AdminDataContext = createContext<AdminDataContextValue | null>(null)
 
 /**
- * Loads students + groups once for the whole admin session. Child sections read
- * from context instead of fetching on every tab switch.
+ * Loads students, groups and the exercise catalogue once for the whole admin
+ * session. Child sections read from context instead of fetching on every tab switch.
  */
 export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [students, setStudents] = useState<Student[]>(() => peekStudents() ?? [])
@@ -52,7 +66,16 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [homeworkCount, setHomeworkCount] = useState<number>(
     () => peekHomeworkCount() ?? 0,
   )
+  const [exercises, setExercises] = useState<GrammarExercise[]>(
+    () => peekExercises() ?? [],
+  )
+  const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>(
+    () => peekTopicsMeta() ?? [],
+  )
   const [ready, setReady] = useState(false)
+  const [exercisesReady, setExercisesReady] = useState(
+    () => peekExercises() !== undefined,
+  )
 
   const refreshStudents = useCallback(async (force = false) => {
     const data = await getStudents(force)
@@ -83,6 +106,13 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     } catch {
       /* keep previous count on failure */
     }
+  }, [])
+
+  const ensureExercisesCatalog = useCallback(async (force = false) => {
+    const [ex, metas] = await Promise.all([getExercises(force), getTopicsMeta(force)])
+    setExercises(ex)
+    setTopicsMeta(metas)
+    setExercisesReady(true)
   }, [])
 
   const ensureLists = useCallback(
@@ -135,6 +165,13 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     })
   }, [refreshAll, refreshStudents, refreshGroups, refreshHomeworkCount])
 
+  // After manage-content uploads, refetch catalogue for all open sections.
+  useEffect(() => {
+    return onExercisesInvalidate(() => {
+      void ensureExercisesCatalog(true)
+    })
+  }, [ensureExercisesCatalog])
+
   const value = useMemo(
     () => ({
       students,
@@ -147,6 +184,10 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       patchStudent,
       ensureLists,
       refreshAll,
+      exercises,
+      topicsMeta,
+      exercisesReady,
+      ensureExercisesCatalog,
     }),
     [
       students,
@@ -159,6 +200,10 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       patchStudent,
       ensureLists,
       refreshAll,
+      exercises,
+      topicsMeta,
+      exercisesReady,
+      ensureExercisesCatalog,
     ],
   )
 

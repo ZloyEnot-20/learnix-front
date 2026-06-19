@@ -69,8 +69,6 @@ import { useAdminData } from "@/lib/admin-data-context"
 import { selectableGroups } from "@/lib/entry-test-group"
 import { TableSkeleton } from "./skeletons"
 import { controlWorkApi, exercisesApi } from "@/lib/api"
-import { getExercises } from "@/lib/exercises-cache"
-import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import type { VocabDeck } from "@/lib/vocabulary-data"
 import { useToast } from "@/hooks/use-toast"
@@ -662,7 +660,7 @@ export default function ControlWorkManager({
   onChanged?: () => void
 }) {
   const { toast } = useToast()
-  const { groups, students } = useAdminData()
+  const { groups, students, exercises: grammarExercises } = useAdminData()
   const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [items, setItems] = useState<ControlWork[]>([])
   const [submissions, setSubmissions] = useState<ControlWorkSubmission[]>([])
@@ -692,7 +690,6 @@ export default function ControlWorkManager({
     })
   }, [])
 
-  const [grammarExercises, setGrammarExercises] = useState<GrammarExercise[]>([])
   const [vocabDecks, setVocabDecks] = useState<VocabDeck[]>([])
 
   const [sectionOrder, setSectionOrder] = useState<ControlWorkSubject[]>(DEFAULT_ORDER)
@@ -717,15 +714,13 @@ export default function ControlWorkManager({
 
   const refresh = async () => {
     try {
-      const [list, subs, exercises, decks] = await Promise.all([
+      const [list, subs, decks] = await Promise.all([
         controlWorkApi.list(),
         controlWorkApi.submissions(),
-        getExercises(true),
         exercisesApi.vocab(),
       ])
       setItems(list)
       setSubmissions(subs)
-      setGrammarExercises(exercises)
       setVocabDecks(decks)
     } catch {
       toast({

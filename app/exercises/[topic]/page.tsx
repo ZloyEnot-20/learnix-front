@@ -289,10 +289,7 @@ export default function ExercisesTopicPage() {
             </Button>
           </div>
         ) : (
-          <div
-            className="grid gap-4 justify-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 400px))" }}
-          >
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
             {visibleExercises.map((ex) => {
               const diff = DIFFICULTY_META[ex.difficulty]
               const levelCls = levelBadgeClass(ex.level)
@@ -301,7 +298,7 @@ export default function ExercisesTopicPage() {
                   key={ex.id}
                   className="group h-full overflow-hidden border-slate-200/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                 >
-                  <CardContent className="p-5 flex flex-col h-full gap-4">
+                  <CardContent className="flex h-full flex-col gap-3 p-4 sm:gap-4 sm:p-5">
                     <div className="flex items-start justify-between gap-3">
                       <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-slate-600">
                         {prettifySubtopic(ex.subtopic)}
@@ -316,29 +313,29 @@ export default function ExercisesTopicPage() {
                       </span>
                     </div>
 
-                    <div className="space-y-1.5">
-                      <h3 className="font-bold text-slate-900 text-lg leading-snug">
+                    <div className="space-y-1">
+                      <h3 className="text-base font-bold leading-snug text-slate-900 sm:text-lg">
                         {ex.title}
                       </h3>
-                      <p className="text-sm text-slate-600 leading-relaxed">
+                      <p className="line-clamp-3 text-sm leading-relaxed text-slate-600">
                         {ex.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2 border-t border-slate-100 pt-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                        <ListChecks className="h-3.5 w-3.5 text-slate-400" />
+                    <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+                      <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
+                        <ListChecks className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                         <span className="tabular-nums">{ex.totalQuestions}</span>
-                        <span className="text-slate-500">questions</span>
+                        <span className="hidden text-slate-500 sm:inline">questions</span>
                       </span>
-                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                        <Clock className="h-3.5 w-3.5 text-slate-400" />
+                      <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
+                        <Clock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                         <span className="tabular-nums">{ex.estimatedTime}</span>
                         <span className="text-slate-500">min</span>
                       </span>
                       <span
                         className={cn(
-                          "ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1",
+                          "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1",
                           diff.cls,
                         )}
                       >
@@ -348,19 +345,19 @@ export default function ExercisesTopicPage() {
                     </div>
 
                     <div className="mt-auto flex flex-col gap-2 pt-1">
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2 sm:flex-row">
                         <Button
                           onClick={() => router.push(`/exercises/${topic}/${ex.slug}`)}
-                          className="flex-1 gap-1.5 bg-blue-500 hover:bg-blue-600 text-white h-10"
+                          className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
                         >
-                          Start Exercise
+                          Start
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                         {canAssign && (
                           <Button
                             variant="outline"
                             onClick={() => setPreviewTarget(ex)}
-                            className="gap-1.5 h-10"
+                            className="h-9 w-full gap-1.5 sm:w-auto"
                           >
                             <Eye className="h-4 w-4" />
                             Preview
@@ -371,10 +368,10 @@ export default function ExercisesTopicPage() {
                         <Button
                           variant="outline"
                           onClick={() => setAssignTarget(ex)}
-                          className="w-full gap-1.5"
+                          className="h-9 w-full gap-1.5"
                         >
                           <Send className="h-4 w-4" />
-                          Assign to group
+                          Assign
                         </Button>
                       )}
                     </div>

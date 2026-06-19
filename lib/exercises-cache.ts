@@ -24,7 +24,10 @@ function mergeLocalExercises(remote: GrammarExercise[]): GrammarExercise[] {
 }
 
 const LOCAL_TOPICS = topicsMetaRaw as TopicMeta[]
-const TTL = 5 * 60 * 1000
+/** Catalogue changes rarely — keep warm for the admin session until explicit invalidate. */
+const TTL = 30 * 60 * 1000
+
+const EXERCISES_INVALIDATE = "exercises-catalog:invalidate"
 
 interface CacheEntry<T> {
   data?: T
@@ -49,7 +52,7 @@ async function load<T>(
   force: boolean,
 ): Promise<T> {
   if (!force && isFresh(cache)) return cache.data as T
-  if (!force && cache.inflight) return cache.inflight
+  if (cache.inflight) return cache.inflight
 
   const promise = fetcher()
     .then((data) => {
@@ -136,6 +139,18 @@ export function peekExerciseBySlug(slug: string): GrammarExercise | undefined {
 export function invalidateExercises(): void {
   exercisesCache.data = undefined
   exercisesCache.fetchedAt = undefined
+  exercisesCache.inflight = undefined
   topicsCache.data = undefined
   topicsCache.fetchedAt = undefined
+  topicsCache.inflight = undefined
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(EXERCISES_INVALIDATE))
+  }
+}
+
+/** Subscribe to catalogue invalidation (used by AdminDataProvider). */
+export function onExercisesInvalidate(handler: () => void): () => void {
+  if (typeof window === "undefined") return () => {}
+  window.addEventListener(EXERCISES_INVALIDATE, handler)
+  return () => window.removeEventListener(EXERCISES_INVALIDATE, handler)
 }

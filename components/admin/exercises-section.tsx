@@ -47,7 +47,6 @@ import ExerciseTypeFilter, {
   type ExerciseTypeValue,
 } from "@/components/exercises/exercise-type-filter"
 import { getMaterialsForTopic } from "@/lib/grammar-materials"
-import { getExercises, getTopicsMeta } from "@/lib/exercises-cache"
 import {
   formatDuration,
   groupExercisesByTopic,
@@ -254,11 +253,14 @@ export default function ExercisesSection({
   onHomeworkAssigned,
 }: ExercisesSectionProps) {
   const { toast } = useToast()
-  const { groups } = useAdminData()
+  const {
+    groups,
+    exercises,
+    topicsMeta,
+    exercisesReady,
+  } = useAdminData()
   const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
 
-  const [exercises, setExercises] = useState<GrammarExercise[]>([])
-  const [topicsMeta, setTopicsMeta] = useState<TopicMeta[]>([])
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null)
@@ -271,17 +273,7 @@ export default function ExercisesSection({
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  const loadCatalog = async () => {
-    const [ex, metas] = await Promise.all([getExercises(), getTopicsMeta()])
-    setExercises(ex)
-    setTopicsMeta(metas)
-  }
-
-  useEffect(() => {
-    void loadCatalog().finally(() => setLoading(false))
-  }, [])
+  const loading = !exercisesReady
 
   const grammarTopics = useMemo<TopicSummary[]>(() => {
     return buildTopicSummaries(exercises, topicsMeta).filter(
@@ -499,10 +491,7 @@ export default function ExercisesSection({
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                         Podcasts · {podcastResults.length}
                       </h3>
-                      <div
-                        className="grid gap-3"
-                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
-                      >
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {podcastResults.map((episode) => (
                           <PodcastSearchCard
                             key={episode.slug}
@@ -525,10 +514,7 @@ export default function ExercisesSection({
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                         Folders · {topicResults.length}
                       </h3>
-                      <div
-                        className="grid gap-3"
-                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
-                      >
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {topicResults.map((t) => (
                           <TopicHubCard
                             key={t.topic}
@@ -545,10 +531,7 @@ export default function ExercisesSection({
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                         Exercises · {exerciseResults.length}
                       </h3>
-                      <div
-                        className="grid gap-3"
-                        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
-                      >
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {exerciseResults.map((ex) => (
                           <ExerciseSearchCard
                             key={ex.id}
@@ -564,10 +547,7 @@ export default function ExercisesSection({
                 </div>
               )
             ) : (
-              <div
-                className="grid gap-3 duration-300 animate-in fade-in-0"
-                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-              >
+              <div className="grid grid-cols-1 gap-3 duration-300 animate-in fade-in-0 sm:grid-cols-2 lg:grid-cols-3">
                 {levelFolders.map((folder) => (
                   <LevelFolderCard
                     key={folder.level}
@@ -693,10 +673,7 @@ export default function ExercisesSection({
           <ChevronLeft className="h-4 w-4" />
           Back
         </Button>
-        <div
-          className="grid gap-3"
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-        >
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {SUBJECT_FOLDERS.map((folder) => {
             const stats = statsFor(folder.id)
             return (
@@ -780,10 +757,7 @@ export default function ExercisesSection({
             </p>
           </div>
         ) : isVocab ? (
-          <div
-            className="grid gap-3 justify-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-          >
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {vocabDecksForLevel.map((d) => (
               <VocabDeckCard
                 key={d.slug}
@@ -795,10 +769,7 @@ export default function ExercisesSection({
             ))}
           </div>
         ) : isPodcasts ? (
-          <div
-            className="grid gap-3 justify-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-          >
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {podcastsForLevel.map((p) => (
               <PodcastCard
                 key={p.slug}
@@ -810,10 +781,7 @@ export default function ExercisesSection({
             ))}
           </div>
         ) : (
-          <div
-            className="grid gap-3 justify-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 400px))" }}
-          >
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {topics.map((t) => (
               <TopicHubCard key={t.topic} topic={t} onSelect={() => setSelectedTopic(t.topic)} />
             ))}
@@ -1029,8 +997,7 @@ export default function ExercisesSection({
         </div>
       ) : (
         <div
-          className="grid gap-4 justify-center"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 400px))" }}
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
         >
           {visibleTopicExercises.map((ex) => {
             const diff = DIFFICULTY_META[ex.difficulty]
@@ -1040,7 +1007,7 @@ export default function ExercisesSection({
                 key={ex.id}
                 className="group h-full overflow-hidden border-slate-200/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
               >
-                <CardContent className="p-5 flex flex-col h-full gap-4">
+                <CardContent className="flex h-full flex-col gap-3 p-4 sm:gap-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3">
                     <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-slate-600">
                       {prettifySubtopic(ex.subtopic)}
@@ -1055,29 +1022,29 @@ export default function ExercisesSection({
                     </span>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <h4 className="font-bold text-slate-900 text-base leading-snug">
+                  <div className="space-y-1">
+                    <h4 className="text-base font-bold leading-snug text-slate-900 sm:text-lg">
                       {ex.title}
                     </h4>
-                    <p className="text-[13px] text-slate-600 leading-relaxed">
+                    <p className="line-clamp-3 text-[13px] leading-relaxed text-slate-600 sm:text-sm">
                       {ex.description}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 border-t border-slate-100 pt-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                      <ListChecks className="h-3.5 w-3.5 text-slate-400" />
+                  <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
+                      <ListChecks className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                       <span className="tabular-nums">{ex.totalQuestions}</span>
-                      <span className="text-slate-500">questions</span>
+                      <span className="hidden text-slate-500 sm:inline">questions</span>
                     </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                      <Clock className="h-3.5 w-3.5 text-slate-400" />
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
+                      <Clock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                       <span className="tabular-nums">{ex.estimatedTime}</span>
                       <span className="text-slate-500">min</span>
                     </span>
                     <span
                       className={cn(
-                        "ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1",
+                        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1",
                         diff.cls,
                       )}
                     >
@@ -1086,12 +1053,12 @@ export default function ExercisesSection({
                     </span>
                   </div>
 
-                  <div className="mt-auto flex gap-2">
+                  <div className="mt-auto flex flex-col gap-2 sm:flex-row">
                     {canAssign && (
                       <Button
                         size="sm"
                         onClick={() => setAssignTarget(ex)}
-                        className="flex-1 gap-1.5 bg-blue-500 hover:bg-blue-600 text-white h-9"
+                        className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
                       >
                         <UserPlus className="h-4 w-4" />
                         Assign
@@ -1101,7 +1068,7 @@ export default function ExercisesSection({
                       size="sm"
                       variant="outline"
                       onClick={() => setPreviewTarget(ex)}
-                      className={cn("gap-1.5 h-9", !canAssign && "ml-auto")}
+                      className={cn("h-9 w-full gap-1.5 sm:w-auto", !canAssign && "sm:ml-auto")}
                     >
                       <Eye className="h-4 w-4" />
                       Preview
@@ -1202,7 +1169,7 @@ function LevelFolderCard({
       disabled={comingSoon}
       aria-disabled={comingSoon}
       className={cn(
-        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        "group flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all duration-200 sm:gap-3 sm:p-5",
         comingSoon
           ? "cursor-not-allowed opacity-60"
           : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
@@ -1272,7 +1239,7 @@ function SubjectFolderCard({
       disabled={empty}
       aria-disabled={empty}
       className={cn(
-        "group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-left transition-all duration-200",
+        "group flex flex-col gap-2.5 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all duration-200 sm:gap-3 sm:p-5",
         empty
           ? "cursor-not-allowed opacity-60"
           : "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md",
@@ -1327,49 +1294,49 @@ function VocabDeckCard({
   onPreview: () => void
 }) {
   return (
-    <div className="flex h-full flex-col rounded-3xl border border-violet-200/80 bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
-        <div className="flex items-start gap-3 min-w-0 flex-1">
+    <div className="flex h-full flex-col rounded-2xl border border-violet-200/80 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+        <div className="flex min-w-0 flex-1 items-start gap-3">
           <span
             aria-hidden
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-sm"
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-sm sm:h-10 sm:w-10"
           >
-            <BookMarked className="h-5 w-5" />
+            <BookMarked className="h-4 w-4 sm:h-5 sm:w-5" />
           </span>
-          <div className="min-w-0 space-y-2">
-            <h3 className="text-lg font-semibold text-slate-900">{deck.title}</h3>
-            <div className="flex flex-wrap gap-2 text-xs text-slate-600">
-              <span className="rounded-full bg-slate-100 px-2.5 py-1">{deck.words.length} words</span>
-              <span className="rounded-full bg-slate-100 px-2.5 py-1">Flashcards · Quiz</span>
+          <div className="min-w-0 space-y-1.5">
+            <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{deck.title}</h3>
+            <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1">{deck.words.length} words</span>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1">Flashcards · Quiz</span>
             </div>
           </div>
         </div>
-        <span className="shrink-0 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700">
+        <span className="shrink-0 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700">
           {deck.level}
         </span>
       </div>
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-600">{deck.description}</p>
-      <div className="mt-4 flex gap-2">
+      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">{deck.description}</p>
+      <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row sm:flex-wrap">
         {canAssign && (
           <Button
             size="sm"
             onClick={onAssign}
-            className="flex-1 gap-1.5 bg-blue-500 hover:bg-blue-600 text-white h-9"
+            className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
           >
             <UserPlus className="h-4 w-4" />
-            Assign repetition
+            Assign
           </Button>
         )}
         <Button
           size="sm"
           variant="outline"
           onClick={onPreview}
-          className={cn("gap-1.5 h-9", !canAssign && "ml-auto")}
+          className={cn("h-9 w-full gap-1.5 sm:w-auto", !canAssign && "sm:ml-auto")}
         >
           <Eye className="h-4 w-4" />
           Preview
         </Button>
-        <Button asChild size="sm" variant="outline" className="gap-1.5 h-9">
+        <Button asChild size="sm" variant="outline" className="h-9 w-full gap-1.5 sm:w-auto">
           <a href={`/vocabulary/${deck.slug}`} target="_blank" rel="noreferrer">
             <BookOpen className="h-4 w-4" />
             Open
@@ -1464,18 +1431,18 @@ function PodcastCard({
 }) {
   const hasWords = podcastHasWords(episode)
   return (
-    <div className="flex h-full flex-col rounded-3xl border border-indigo-200/80 bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
-        <div className="flex items-start gap-3 min-w-0 flex-1">
+    <div className="flex h-full flex-col rounded-2xl border border-indigo-200/80 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+        <div className="flex min-w-0 flex-1 items-start gap-3">
           <span
             aria-hidden
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white shadow-sm"
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white shadow-sm sm:h-10 sm:w-10"
           >
-            <Headphones className="h-5 w-5" />
+            <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
           </span>
-          <div className="min-w-0 space-y-2">
-            <h3 className="text-lg font-semibold text-slate-900">{episode.title}</h3>
-            <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+          <div className="min-w-0 space-y-1.5">
+            <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{episode.title}</h3>
+            <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
               <span className="rounded-full bg-slate-100 px-2.5 py-1">{episode.topic}</span>
               <span className="rounded-full bg-slate-100 px-2.5 py-1 capitalize">
                 {episode.difficulty}
@@ -1500,21 +1467,21 @@ function PodcastCard({
           {episode.level}
         </span>
       </div>
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-600">
+      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">
         {episode.description || "Listening podcast episode."}
       </p>
-      <div className="mt-4 flex gap-2">
+      <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row">
         {canAssign && (
           <Button
             size="sm"
             onClick={onAssign}
-            className="flex-1 gap-1.5 bg-blue-500 hover:bg-blue-600 text-white h-9"
+            className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
           >
             <UserPlus className="h-4 w-4" />
             Assign
           </Button>
         )}
-        <Button size="sm" variant="outline" onClick={onPreview} className="gap-1.5 h-9">
+        <Button size="sm" variant="outline" onClick={onPreview} className="h-9 w-full gap-1.5 sm:w-auto">
           <Eye className="h-4 w-4" />
           Preview
         </Button>
@@ -1788,12 +1755,12 @@ function PodcastSearchCard({
           </span>
         </div>
 
-        <div className="mt-auto flex gap-2 pt-1">
+        <div className="mt-auto flex flex-col gap-2 pt-1 sm:flex-row">
           {onAssign && (
             <Button
               size="sm"
               onClick={onAssign}
-              className="h-8 flex-1 gap-1.5 bg-blue-500 text-white hover:bg-blue-600"
+              className="h-8 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
             >
               <UserPlus className="h-3.5 w-3.5" />
               Assign
@@ -1803,7 +1770,7 @@ function PodcastSearchCard({
             size="sm"
             variant="outline"
             onClick={onPreview}
-            className={cn("h-8 gap-1.5", !onAssign && "ml-auto")}
+            className={cn("h-8 w-full gap-1.5 sm:w-auto", !onAssign && "sm:ml-auto")}
           >
             <Eye className="h-3.5 w-3.5" />
             Preview
@@ -1856,9 +1823,9 @@ function ExerciseSearchCard({
           </span>
         </div>
 
-        <div className="mt-auto flex gap-2 pt-1">
+        <div className="mt-auto flex flex-col gap-2 pt-1 sm:flex-row">
           {onAssign && (
-            <Button size="sm" onClick={onAssign} className="h-8 flex-1 gap-1.5 bg-blue-500 text-white hover:bg-blue-600">
+            <Button size="sm" onClick={onAssign} className="h-8 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1">
               <UserPlus className="h-3.5 w-3.5" />
               Assign
             </Button>
@@ -1867,7 +1834,7 @@ function ExerciseSearchCard({
             size="sm"
             variant="outline"
             onClick={onPreview}
-            className={cn("h-8 gap-1.5", !onAssign && "ml-auto")}
+            className={cn("h-8 w-full gap-1.5 sm:w-auto", !onAssign && "sm:ml-auto")}
           >
             <Eye className="h-3.5 w-3.5" />
             Preview
@@ -1898,27 +1865,27 @@ function TopicHubCard({
     >
       <div
         className={cn(
-          "relative border text-card-foreground shadow-sm h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200",
+          "relative h-full rounded-2xl border border-slate-200/80 bg-white text-card-foreground shadow-sm transition-all duration-200 sm:rounded-3xl",
           disabled ? "opacity-60" : "group-hover:-translate-y-1 group-hover:shadow-lg",
         )}
       >
         {(t.comingSoon || empty) && (
-          <span className="absolute -top-2 left-6 inline-flex items-center rounded-full bg-slate-900 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
+          <span className="absolute -top-2 left-4 inline-flex items-center rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm sm:left-6">
             {t.comingSoon ? "Coming soon" : "Empty"}
           </span>
         )}
-        <div className="flex flex-col space-y-1.5 p-6 border-b border-slate-100 pb-5">
+        <div className="flex flex-col space-y-1.5 border-b border-slate-100 p-4 pb-4 sm:p-6 sm:pb-5">
           <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-3 min-w-0 flex-1">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
               <span
                 aria-hidden
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-200 to-amber-400 shadow-sm ring-1 ring-amber-300/50"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-200 to-amber-400 shadow-sm ring-1 ring-amber-300/50 sm:h-10 sm:w-10"
               >
-                <Folder className="h-5 w-5 text-amber-900 fill-amber-100" />
+                <Folder className="h-4 w-4 text-amber-900 fill-amber-100 sm:h-5 sm:w-5" />
               </span>
-              <div className="min-w-0 space-y-2">
-                <h3 className="text-lg font-semibold text-slate-900">{t.title}</h3>
-                <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+              <div className="min-w-0 space-y-1.5">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{t.title}</h3>
+                <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
                   <span className="rounded-full bg-slate-100 px-2.5 py-1">
                     {t.exerciseCount} exercise{t.exerciseCount === 1 ? "" : "s"}
                   </span>
@@ -1941,8 +1908,8 @@ function TopicHubCard({
             </span>
           </div>
         </div>
-        <div className="p-6 pt-5">
-          <p className="text-sm leading-relaxed text-slate-600">
+        <div className="p-4 pt-4 sm:p-6 sm:pt-5">
+          <p className="line-clamp-3 text-sm leading-relaxed text-slate-600">
             {t.description ??
               `${t.exerciseCount} exercise${t.exerciseCount === 1 ? "" : "s"} and ${
                 t.questionCount

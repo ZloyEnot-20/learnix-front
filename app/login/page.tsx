@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-
 export default function LoginPage() {
   const [loginValue, setLoginValue] = useState("")
   const [password, setPassword] = useState("")
@@ -92,13 +90,6 @@ export default function LoginPage() {
               Sign In
             </Button>
           </form>
-
-          <div className="mt-6 text-center text-sm">
-            <span className="text-muted-foreground">Don't have an account? </span>
-            <Link href="/register" className="text-primary hover:underline font-medium">
-              Register
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>

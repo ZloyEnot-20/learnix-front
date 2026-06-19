@@ -202,15 +202,16 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
   return (
     <li
       className={cn(
-        "group relative flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:border-slate-300 hover:shadow-md sm:flex-row sm:items-center sm:gap-4",
+        "group relative flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3 transition-all hover:border-slate-300 hover:shadow-md sm:flex-row sm:items-center sm:gap-4 sm:rounded-2xl sm:p-4",
         isCompleted && "opacity-80",
       )}
     >
+      <div className="flex min-w-0 items-start gap-3 sm:contents">
       <div
-        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ring-1 ring-black/5"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ring-1 ring-black/5 sm:h-12 sm:w-12 sm:rounded-xl"
         style={{ backgroundColor: meta.color }}
       >
-        <Icon className="h-6 w-6 text-slate-900/80" />
+        <Icon className="h-5 w-5 text-slate-900/80 sm:h-6 sm:w-6" />
       </div>
 
       <div className="min-w-0 flex-1">
@@ -257,17 +258,21 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
           <span className="capitalize text-slate-400">{hw.subject}</span>
         </div>
       </div>
+      </div>
 
-      <div className="shrink-0">
+      <div className="w-full shrink-0 sm:w-auto">
         {isCompleted ? (
           hw.href ? (
-            <Link href={hw.href}>
+            <Link href={hw.href} className="block w-full sm:w-auto">
               <Button
                 variant="ghost"
                 size="sm"
-                className={hw.failedCheating ? "text-red-700" : "text-emerald-700"}
+                className={cn(
+                  "w-full sm:w-auto",
+                  hw.failedCheating ? "text-red-700" : "text-emerald-700",
+                )}
               >
-                <CheckCircle2 className="h-4 w-4 mr-1.5" />
+                <CheckCircle2 className="mr-1.5 h-4 w-4" />
                 View
               </Button>
             </Link>
@@ -275,20 +280,23 @@ function HomeworkCard({ hw }: { hw: HomeworkItem }) {
             <Button
               variant="ghost"
               size="sm"
-              className={hw.failedCheating ? "text-red-700" : "text-emerald-700"}
+              className={cn(
+                "w-full sm:w-auto",
+                hw.failedCheating ? "text-red-700" : "text-emerald-700",
+              )}
             >
-              <CheckCircle2 className="h-4 w-4 mr-1.5" />
+              <CheckCircle2 className="mr-1.5 h-4 w-4" />
               View
             </Button>
           )
         ) : hw.href ? (
-          <Link href={hw.href}>
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
+          <Link href={hw.href} className="block w-full sm:w-auto">
+            <Button size="sm" className="w-full bg-primary hover:bg-primary/90 sm:w-auto">
               {hw.status === "in_progress" ? "Continue" : "Start"}
             </Button>
           </Link>
         ) : (
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
+          <Button size="sm" className="w-full bg-primary hover:bg-primary/90 sm:w-auto">
             {hw.status === "in_progress" ? "Continue" : "Start"}
           </Button>
         )}

@@ -61,7 +61,6 @@ import {
   endOfDueDay,
   isHomeworkPast,
 } from "@/lib/homework-dates"
-import { getExercises } from "@/lib/exercises-cache"
 import type { GrammarExercise } from "@/lib/grammar-types"
 import { groupExercisesByTopic } from "@/lib/grammar-utils"
 import { useToast } from "@/hooks/use-toast"
@@ -125,7 +124,7 @@ interface HomeworkManagerProps {
 
 export default function HomeworkManager({ createdByName, onChanged }: HomeworkManagerProps) {
   const { toast } = useToast()
-  const { students, groups } = useAdminData()
+  const { students, groups, exercises: grammarExercises } = useAdminData()
   const assignableGroups = useMemo(() => selectableGroups(groups), [groups])
   const [homework, setHomework] = useState<HomeworkAssignment[]>([])
   const [submissions, setSubmissions] = useState<HomeworkSubmission[]>([])
@@ -141,8 +140,6 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
   const [search, setSearch] = useState("")
   const [groupFilter, setGroupFilter] = useState<string>("all")
   const [subjectFilter, setSubjectFilter] = useState<"all" | Subject>("all")
-
-  const [grammarExercises, setGrammarExercises] = useState<GrammarExercise[]>([])
 
   const [assignForm, setAssignForm] = useState<{
     groupId: string
@@ -164,13 +161,9 @@ export default function HomeworkManager({ createdByName, onChanged }: HomeworkMa
 
   const refresh = async () => {
     try {
-      const [check, exercises] = await Promise.all([
-        homeworkApi.check(),
-        getExercises(true),
-      ])
+      const check = await homeworkApi.check()
       setHomework(check.assignments)
       setSubmissions(check.records)
-      setGrammarExercises(exercises)
     } catch {
       toast({
         title: "Failed to load homework",

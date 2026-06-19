@@ -10,10 +10,36 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { Suspense } from "react"
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://learnix.space"
+
+const siteDescription =
+  "A modern platform for English learners. Study with your teachers, complete tasks, earn achievements, play educational games, and track your progress in one place."
+
 export const metadata: Metadata = {
-  title: "Learnix — IELTS Test Platform",
-  description: "Learnix · complete IELTS preparation and testing platform",
-  generator: "v0.app",
+  metadataBase: new URL(siteUrl),
+  title: "Learnix — Achieve Your Dream IELTS Score",
+  description: siteDescription,
+  openGraph: {
+    title: "Learnix — Achieve Your Dream IELTS Score",
+    description: siteDescription,
+    siteName: "Learnix",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1024,
+        height: 767,
+        alt: "Learnix — English learning platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Learnix — Achieve Your Dream IELTS Score",
+    description: siteDescription,
+    images: ["/og-image.png"],
+  },
 }
 
 export default function RootLayout({

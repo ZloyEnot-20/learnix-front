@@ -92,6 +92,9 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   // tests, manage — no shared list APIs
 }
 
+/** Sections that need the full exercise catalogue (GET /exercises). */
+const SECTIONS_NEED_EXERCISES = new Set(["homework", "exercises", "control"])
+
 /** Platform content import — org admin and super admin. */
 function canManageExercises(type: UserRole): boolean {
   return isAdminRole(type)
@@ -138,7 +141,7 @@ function roleBadge(role: string) {
 
 function AdminPanelContent() {
   const { user, logout, isLoading } = useAuth()
-  const { students, groups, homeworkCount, ensureLists } = useAdminData()
+  const { students, groups, homeworkCount, ensureLists, ensureExercisesCatalog } = useAdminData()
   const router = useRouter()
   const params = useParams<{ section?: string[] }>()
 
@@ -181,7 +184,8 @@ function AdminPanelContent() {
   useEffect(() => {
     const keys = SECTION_LIST_NEEDS[activeTab]
     if (keys?.length) void ensureLists(keys, activeTab === "groups")
-  }, [activeTab, ensureLists])
+    if (SECTIONS_NEED_EXERCISES.has(activeTab)) void ensureExercisesCatalog()
+  }, [activeTab, ensureLists, ensureExercisesCatalog])
 
   /** Refresh exercise/topic catalogue after Manage exercises uploads — no people APIs. */
   const bumpCatalog = () => {
