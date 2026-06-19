@@ -88,7 +88,7 @@ interface SubjectFolder {
 const SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700" },
-  { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-indigo-100 text-indigo-700" },
+  { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-emerald-100 text-emerald-700" },
   { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700" },
@@ -714,7 +714,7 @@ function SubjectFolderCard({
 function VocabDeckCard({ deck }: { deck: VocabDeck }) {
   return (
     <Link href={`/vocabulary/${deck.slug}`} className="group block h-full">
-      <Card className="relative h-full rounded-3xl border-violet-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
+      <Card className="relative h-full rounded-3xl border-slate-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
         <CardContent className="p-6">
           <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
             <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -736,7 +736,7 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
                 </div>
               </div>
             </div>
-            <span className="shrink-0 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700">
+            <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
               {deck.level}
             </span>
           </div>
@@ -750,13 +750,13 @@ function VocabDeckCard({ deck }: { deck: VocabDeck }) {
 function PodcastCard({ episode }: { episode: PodcastEpisode }) {
   const hasWords = podcastHasWords(episode)
   return (
-    <Card className="relative h-full rounded-3xl border-indigo-200/80 bg-white">
+    <Card className="relative h-full rounded-3xl border-slate-200/80 bg-white">
       <CardContent className="p-6">
         <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-5">
           <div className="flex items-start gap-3 min-w-0 flex-1">
             <span
               aria-hidden
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white shadow-sm"
+              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 text-white shadow-sm"
             >
               <Headphones className="h-5 w-5" />
             </span>
@@ -770,14 +770,14 @@ function PodcastCard({ episode }: { episode: PodcastEpisode }) {
                   {episode.difficulty}
                 </span>
                 {hasWords && (
-                  <span className="rounded-full bg-violet-100 px-2.5 py-1 font-medium text-violet-700">
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
                     {episode.words.length} words
                   </span>
                 )}
               </div>
             </div>
           </div>
-          <span className="shrink-0 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+          <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
             {episode.level}
           </span>
         </div>

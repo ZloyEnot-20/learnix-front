@@ -298,6 +298,67 @@ export function StudentIeltsProfileSkeleton() {
   )
 }
 
+/** Exercise statistics panel — summary cards, insights, table or topic accordion. */
+export function ExerciseStatsSkeleton({ variant = "page" }: { variant?: "dialog" | "page" }) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="rounded-xl border border-slate-200 bg-white p-3 text-center">
+            <Skeleton className="mx-auto h-7 w-14 rounded-full" />
+            <Skeleton className="mx-auto mt-2 h-2.5 w-16" />
+            <Skeleton className="mx-auto mt-1 h-2 w-12" />
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3">
+            <Skeleton className="h-4 w-4 shrink-0 rounded" />
+            <div className="min-w-0 flex-1 space-y-2">
+              <Skeleton className="h-2.5 w-24" />
+              <Skeleton className="h-4 w-full max-w-[220px]" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Skeleton className="h-10 min-w-[200px] flex-1 rounded-md" />
+        <Skeleton className="h-3 w-40" />
+      </div>
+
+      {variant === "page" ? (
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white p-1">
+          <TableSkeleton rows={8} columns={8} />
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="overflow-hidden rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-4 w-4 shrink-0 rounded" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                  </div>
+                  <Skeleton className="h-1.5 w-full rounded-full" />
+                  <div className="flex gap-3">
+                    <Skeleton className="h-2.5 w-16" />
+                    <Skeleton className="h-2.5 w-20" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /** A list of avatar rows — for member lists, simple lists. */
 export function ListRowsSkeleton({ count = 4 }: { count?: number }) {
   return (

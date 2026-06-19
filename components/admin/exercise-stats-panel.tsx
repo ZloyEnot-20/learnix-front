@@ -7,7 +7,6 @@ import {
   ArrowUp,
   ArrowUpDown,
   ChevronRight,
-  Loader2,
   Search,
   ShieldAlert,
   TrendingDown,
@@ -16,6 +15,7 @@ import {
 import { analyticsApi, type ExerciseAnalyticsReport } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
+import { ExerciseStatsSkeleton } from "./skeletons"
 
 type SortKey =
   | "title"
@@ -131,12 +131,7 @@ export default function ExerciseStatsPanel({ variant = "dialog" }: ExerciseStats
   }
 
   if (loading) {
-    return (
-      <div className="flex min-h-[200px] items-center justify-center gap-2 text-sm text-slate-500">
-        <Loader2 className="h-5 w-5 animate-spin" />
-        Loading statistics…
-      </div>
-    )
+    return <ExerciseStatsSkeleton variant={variant} />
   }
 
   if (error || !data) {
