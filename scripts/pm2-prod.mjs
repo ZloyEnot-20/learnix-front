@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * PM2 production: foreground start/stop без дублирования процессов.
+ * PM2 production: daemon start/stop без дублирования процессов.
  *
- *   npm run prod        — pm2 delete ecosystem → start --no-daemon
+ *   npm run prod        — pm2 delete ecosystem → start --env production (daemon, для VPS)
  *   npm run prod:stop   — pm2 delete all → pm2 kill
  */
 import { existsSync } from "node:fs"
@@ -39,7 +39,7 @@ if (command === "start") {
     process.exit(1)
   }
   pm2(["delete", ecosystem], { ignoreError: true })
-  pm2(["start", ecosystem, "--env", "production", "--no-daemon"])
+  pm2(["start", ecosystem, "--env", "production"])
   process.exit(0)
 }
 
