@@ -7,7 +7,9 @@
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
-    "prod": "next build && next start"
+    "prod": "node scripts/pm2-prod.mjs start",
+    "prod:deploy": "next build && node scripts/pm2-prod.mjs start",
+    "prod:stop": "node scripts/pm2-prod.mjs stop"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

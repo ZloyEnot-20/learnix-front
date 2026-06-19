@@ -13,18 +13,32 @@ pnpm dev                     # http://localhost:3000
 
 Start the backend (`learnix-backend`, port `4000`) before using the app.
 
-## Production
+## Production (PM2)
+
+PM2 is not a dependency — install globally on the server:
+
+```bash
+npm i -g pm2
+```
 
 Environment variables are read at **build time** for `NEXT_PUBLIC_*` (baked into the client bundle).
-Set them in `.env.production` on the server before building.
+Set them in `.env.production` on the server **before** building.
 
 ```bash
 cp .env.production.example .env.production
 # edit NEXT_PUBLIC_API_URL, BACKEND_URL, PORT
 
 pnpm install --frozen-lockfile
-pnpm prod                    # next build && next start
+pnpm prod:deploy             # build + pm2 start (foreground, без дублей)
 ```
+
+| Command | Description |
+| --- | --- |
+| `pnpm prod:deploy` | `next build` + PM2 start (первый деплой / после правок кода) |
+| `pnpm prod` | PM2 start без сборки (перезапуск, если `.next` уже есть) |
+| `pnpm prod:stop` | `pm2 delete all` + `pm2 kill` |
+
+Остановка вручную из другого терминала: `pm2 delete all && pm2 kill`.
 
 | Variable | Description |
 | --- | --- |
@@ -36,11 +50,11 @@ Backend `CORS_ORIGINS` must include the frontend origin (e.g. `https://learnix.s
 
 Typical VPS: `nginx → Next.js (PORT) + nginx → backend (4000)`.
 
-### Build only / run separately
+Autostart on reboot (run once):
 
 ```bash
-pnpm build
-pnpm start
+pm2 startup
+pm2 save
 ```
 
 ## API client
