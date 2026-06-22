@@ -528,7 +528,14 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             className="cursor-pointer border-b border-sky-100/80 transition-colors hover:bg-sky-50/80"
                           >
                             <td className="py-3 px-3">
-                              <p className="font-medium text-slate-900">{s.name}</p>
+                              <div className="flex items-center gap-2 min-w-0">
+                                <p className="font-medium text-slate-900">{s.name}</p>
+                                {s.isActive === false ? (
+                                  <span className="shrink-0 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-rose-700">
+                                    Inactive
+                                  </span>
+                                ) : null}
+                              </div>
                               <p className="text-xs text-slate-500">{s.login}</p>
                             </td>
                             <td className="py-3 px-3 text-slate-700">{s.phone || "—"}</td>
@@ -575,7 +582,10 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                         <tr
                           key={s.id}
                           onClick={() => openDetail(s)}
-                          className="border-b border-slate-100 cursor-pointer transition-colors hover:bg-slate-50/70 focus-within:bg-slate-50"
+                          className={cn(
+                            "border-b border-slate-100 cursor-pointer transition-colors hover:bg-slate-50/70 focus-within:bg-slate-50",
+                            s.isActive === false && "opacity-70",
+                          )}
                         >
                           <td className="py-3 px-3">
                             <div className="flex items-center gap-3 min-w-0">
@@ -583,9 +593,16 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                                 {initials(s.name)}
                               </div>
                               <div className="min-w-0">
-                                <p className="truncate font-medium text-slate-900">
-                                  {s.name}
-                                </p>
+                                <div className="flex min-w-0 items-center gap-2">
+                                  <p className="truncate font-medium text-slate-900">
+                                    {s.name}
+                                  </p>
+                                  {s.isActive === false ? (
+                                    <span className="shrink-0 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-rose-700">
+                                      Inactive
+                                    </span>
+                                  ) : null}
+                                </div>
                                 <p className="truncate text-xs text-slate-500">
                                   {s.login}
                                   {s.email ? ` · ${s.email}` : ""}

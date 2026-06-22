@@ -7,6 +7,7 @@ import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 export default function LoginPage() {
   const [loginValue, setLoginValue] = useState("")
@@ -90,6 +91,12 @@ export default function LoginPage() {
               Sign In
             </Button>
           </form>
+
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            <Link href="/privacy" className="text-primary hover:underline">
+              Privacy Policy
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>

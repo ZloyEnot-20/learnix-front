@@ -181,7 +181,14 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
               {initials(student.name)}
             </div>
             <div className="min-w-0 flex-1">
-              <DialogTitle className="text-xl">{student.name}</DialogTitle>
+              <div className="flex flex-wrap items-center gap-2">
+                <DialogTitle className="text-xl">{student.name}</DialogTitle>
+                {student.isActive === false ? (
+                  <span className="rounded-full bg-rose-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-rose-700">
+                    Inactive
+                  </span>
+                ) : null}
+              </div>
               <DialogDescription className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                 <span className="inline-flex items-center gap-1 font-mono">
                   @{student.login}
@@ -208,6 +215,11 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
                   <Calendar className="h-3.5 w-3.5" />
                   Joined {new Date(student.joinedAt).toLocaleDateString()}
                 </span>
+                {student.deletedAt ? (
+                  <span className="inline-flex items-center gap-1 text-rose-600">
+                    Deactivated {new Date(student.deletedAt).toLocaleString()}
+                  </span>
+                ) : null}
               </DialogDescription>
             </div>
           </div>

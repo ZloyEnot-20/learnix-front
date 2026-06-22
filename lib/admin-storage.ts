@@ -50,6 +50,8 @@ export interface Student {
   notes?: string
   targetBand?: number | null
   targetExamDate?: string | null
+  isActive?: boolean
+  deletedAt?: string | null
 }
 
 export type StaffType = "super_admin" | "admin" | "teacher"
