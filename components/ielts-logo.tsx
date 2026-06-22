@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 export function IELTSLogo({ className = "" }: { className?: string }) {
@@ -5,9 +6,16 @@ export function IELTSLogo({ className = "" }: { className?: string }) {
     <Link
       href="/"
       aria-label="Go to home page"
-      className={`inline-block font-bold text-2xl rounded-sm transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${className}`}
+      className={`inline-block rounded-sm transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${className}`}
     >
-      <span className="bg-primary text-primary-foreground px-3 py-1 tracking-tight">Learnix</span>
+      <Image
+        src="/logo.png"
+        alt="Learnix"
+        width={48}
+        height={48}
+        className="h-10 w-10 object-contain"
+        priority
+      />
     </Link>
   )
 }
