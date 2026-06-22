@@ -25,20 +25,11 @@ export const metadata: Metadata = {
     siteName: "Learnix",
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1024,
-        height: 767,
-        alt: "Learnix — English learning platform",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Learnix — Achieve Your Dream IELTS Score",
     description: siteDescription,
-    images: ["/og-image.png"],
   },
 }
 
