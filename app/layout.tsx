@@ -19,14 +19,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Learnix — Achieve Your Dream IELTS Score",
   description: siteDescription,
-  icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/site.webmanifest",
   openGraph: {
     title: "Learnix — Achieve Your Dream IELTS Score",
     description: siteDescription,
@@ -37,8 +29,8 @@ export const metadata: Metadata = {
       {
         url: "/og-image.png",
         width: 1024,
-        height: 576,
-        alt: "Learnix — English learning platform with home, learn, and homework screens",
+        height: 767,
+        alt: "Learnix — English learning platform",
       },
     ],
   },
