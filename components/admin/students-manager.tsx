@@ -60,6 +60,10 @@ function initials(name: string): string {
     .toUpperCase()
 }
 
+function buildFullName(firstName: string, lastName: string) {
+  return [firstName.trim(), lastName.trim()].filter(Boolean).join(" ")
+}
+
 interface StudentsManagerProps {
   onChanged?: () => void
 }
@@ -112,7 +116,8 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   }
 
   const [form, setForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     login: "",
     email: "",
     phone: "",
@@ -124,7 +129,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [confirmation, setConfirmation] = useState<{ login: string; code: string } | null>(null)
 
   useEffect(() => {
-    const name = form.name.trim()
+    const name = buildFullName(form.firstName, form.lastName)
     if (name.length < 2) {
       setLoginSuggestions([])
       return
@@ -141,10 +146,10 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
       }
     }, 400)
     return () => clearTimeout(timer)
-  }, [form.name])
+  }, [form.firstName, form.lastName])
 
   const resetCreateForm = () => {
-    setForm({ name: "", login: "", email: "", phone: "", groupId: "", notes: "" })
+    setForm({ firstName: "", lastName: "", login: "", email: "", phone: "", groupId: "", notes: "" })
     setLoginSuggestions([])
     setConfirmation(null)
   }
@@ -197,10 +202,11 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   }, [filtered, entryTestGroupId, groupFilter])
 
   const submit = async () => {
-    if (!form.name.trim() || !form.login.trim()) {
+    const fullName = buildFullName(form.firstName, form.lastName)
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.login.trim()) {
       toast({
         title: "Missing fields",
-        description: "Name and login are required.",
+        description: "First name, last name, and login are required.",
         variant: "destructive",
       })
       return
@@ -217,7 +223,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     setCreating(true)
     try {
       const res = await studentsApi.create({
-        name: form.name.trim(),
+        name: fullName,
         login: form.login.trim().toLowerCase(),
         ...(trimmedEmail ? { email: trimmedEmail.toLowerCase() } : {}),
         ...(form.phone.trim() ? { phone: form.phone.trim() } : {}),
@@ -225,7 +231,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
         notes: form.notes.trim() || undefined,
       })
       setConfirmation(res.confirmation)
-      toast({ title: "Student added", description: form.name })
+      toast({ title: "Student added", description: fullName })
       invalidateStudents()
       await refreshAll(true)
       onChanged?.()
@@ -749,14 +755,27 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="s-name">Full name *</Label>
-                  <Input
-                    id="s-name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="Full name"
-                  />
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="s-first-name">First name *</Label>
+                    <Input
+                      id="s-first-name"
+                      value={form.firstName}
+                      onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                      placeholder="First name"
+                      autoComplete="given-name"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="s-last-name">Last name *</Label>
+                    <Input
+                      id="s-last-name"
+                      value={form.lastName}
+                      onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                      placeholder="Last name"
+                      autoComplete="family-name"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="s-login">Login *</Label>
