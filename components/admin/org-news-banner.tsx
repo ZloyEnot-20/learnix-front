@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { AlertTriangle, Info, Megaphone, Wrench, X } from "lucide-react"
-import { orgApi, type OrgAnnouncement } from "@/lib/api"
+import type { OrgAnnouncement } from "@/lib/api"
+import { getOrgBanner, peekOrgBanner } from "@/lib/org-banner-cache"
 import { cn } from "@/lib/utils"
 
 const SEVERITY_STYLES: Record<
@@ -30,25 +31,35 @@ function writeDismissed(ids: Set<string>) {
   localStorage.setItem(DISMISS_KEY, JSON.stringify([...ids]))
 }
 
-export function OrgNewsBanner() {
-  const [items, setItems] = useState<OrgAnnouncement[]>([])
+export const OrgNewsBanner = memo(function OrgNewsBanner() {
+  const [items, setItems] = useState<OrgAnnouncement[]>(() => peekOrgBanner() ?? [])
   const [dismissed, setDismissed] = useState<Set<string>>(() => readDismissed())
 
   useEffect(() => {
-    orgApi
-      .banner()
-      .then(setItems)
-      .catch(() => setItems([]))
+    const cached = peekOrgBanner()
+    if (cached !== null) {
+      setItems(cached)
+      return
+    }
+    let cancelled = false
+    getOrgBanner().then((data) => {
+      if (!cancelled) setItems(data)
+    })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const visible = items.filter((item) => !dismissed.has(item.id))
   if (!visible.length) return null
 
   function dismiss(id: string) {
-    const next = new Set(dismissed)
-    next.add(id)
-    setDismissed(next)
-    writeDismissed(next)
+    setDismissed((prev) => {
+      const next = new Set(prev)
+      next.add(id)
+      writeDismissed(next)
+      return next
+    })
   }
 
   return (
@@ -88,4 +99,4 @@ export function OrgNewsBanner() {
       })}
     </div>
   )
-}
+})

@@ -273,10 +273,18 @@ export function HomeworkStudentResults({
 
   const confirmRetry = async () => {
     const row = pendingRetry
-    if (!row?.submission?.id) return
+    const submissionId = row?.submission?.id
+    if (!submissionId) {
+      toast({
+        title: "Could not assign retry",
+        description: "Submission record is missing — refresh the page and try again.",
+        variant: "destructive",
+      })
+      return
+    }
     setRetryingId(row.studentId)
     try {
-      const updated = await homeworkApi.retry(row.submission.id)
+      const updated = await homeworkApi.retry(submissionId)
       setRows((prev) =>
         prev.map((r) =>
           r.studentId === row.studentId

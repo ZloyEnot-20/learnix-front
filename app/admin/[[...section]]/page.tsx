@@ -41,7 +41,6 @@ import AuditSection from "@/components/admin/audit-section"
 import OrgBillingSection from "@/components/admin/org-billing-section"
 import OrgSettingsSection from "@/components/admin/org-settings-section"
 import SpeechRecognitionSection from "@/components/admin/speech-recognition-section"
-import { OrgNewsBanner } from "@/components/admin/org-news-banner"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
@@ -280,7 +279,7 @@ function AdminPanelContent() {
           {groups.length} groups · {students.length} students
         </Badge>
       }
-      topBanner={<OrgNewsBanner />}
+      showOrgNewsBanner
       onLogout={logout}
     >
       {activeTab === "dashboard" && (

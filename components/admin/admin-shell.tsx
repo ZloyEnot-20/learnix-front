@@ -6,6 +6,7 @@ import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ChevronDown, LogOut, Menu } from "lucide-react"
+import { OrgNewsBanner } from "@/components/admin/org-news-banner"
 import { cn } from "@/lib/utils"
 
 const NAV_COLLAPSE_STORAGE_KEY = "learnix-admin-nav-collapsed"
@@ -44,7 +45,8 @@ interface AdminShellProps {
   user: { name: string; email: string }
   role: { label: string; icon: React.ComponentType<{ className?: string }>; className: string }
   headerExtras?: ReactNode
-  topBanner?: ReactNode
+  /** Platform news / maintenance strip — mounted once inside the shell layout. */
+  showOrgNewsBanner?: boolean
   onLogout: () => void
   children: ReactNode
 }
@@ -62,7 +64,7 @@ export function AdminShell({
   user,
   role,
   headerExtras,
-  topBanner,
+  showOrgNewsBanner = false,
   onLogout,
   children,
 }: AdminShellProps) {
@@ -218,7 +220,7 @@ export function AdminShell({
       </aside>
 
       <div className="lg:pl-64">
-        {topBanner}
+        {showOrgNewsBanner ? <OrgNewsBanner /> : null}
         <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur lg:px-8">
           <div className="flex items-center gap-3">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
