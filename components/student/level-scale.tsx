@@ -46,9 +46,10 @@ function AllLevelsDialog({ currentLevel }: { currentLevel: number }) {
             const isCurrent = tier.id === currentTier.id
             const isPassed = currentLevel > tier.maxLevel
             const range =
-              tier.maxLevel === Number.POSITIVE_INFINITY
-                ? `Lvl ${tier.minLevel}+`
+              tier.maxLevel === tier.minLevel
+                ? `Lvl ${tier.minLevel}`
                 : `Lvl ${tier.minLevel}–${tier.maxLevel}`
+            const isLegend = tier.id === "legend"
             return (
               <li
                 key={tier.id}
@@ -57,7 +58,9 @@ function AllLevelsDialog({ currentLevel }: { currentLevel: number }) {
                   isCurrent
                     ? "border-indigo-300 bg-indigo-50/60 ring-1 ring-indigo-200"
                     : "border-slate-200 bg-white",
-                  !isCurrent && !isPassed && "opacity-90",
+                  isLegend && !isCurrent && "border-orange-200 bg-orange-50/40",
+                  isLegend && isCurrent && "border-orange-300 bg-orange-50/80 ring-orange-200",
+                  !isCurrent && !isPassed && !isLegend && "opacity-90",
                 )}
               >
                 <TierIcon
@@ -156,9 +159,11 @@ export function LevelScale({ studentId, compact = false, className }: LevelScale
   if (!data) return null
 
   const tier = tierForLevel(data.level)
-  const progressPct = Math.round(
-    (data.pointsIntoLevel / data.pointsForNextLevel) * 100,
-  )
+  const progressPct = data.isMaxLevel
+    ? 100
+    : data.pointsForNextLevel > 0
+      ? Math.round((data.pointsIntoLevel / data.pointsForNextLevel) * 100)
+      : 0
 
   return (
     <div
@@ -186,8 +191,10 @@ export function LevelScale({ studentId, compact = false, className }: LevelScale
               {data.tierLabel}
             </span>
             <p className="text-xs text-slate-500">
-              {data.totalPoints.toLocaleString()} pts ·{" "}
-              {data.pointsToNextLevel} pts to level {data.level + 1}
+              {data.totalPoints.toLocaleString()} pts
+              {data.isMaxLevel
+                ? " · Max level reached"
+                : ` · ${data.pointsToNextLevel.toLocaleString()} pts to level ${data.level + 1}`}
             </p>
           </div>
         </div>

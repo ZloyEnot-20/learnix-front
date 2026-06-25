@@ -610,8 +610,54 @@ export const analyticsApi = {
     correct: number
     total: number
     source?: "game" | "homework"
+    totalWords?: number
+    wordAnswers?: Array<{
+      term: string
+      correct: boolean
+      interactionType?: string
+      deckSlug?: string
+    }>
     words?: Array<{ term: string; partOfSpeech?: string; definition?: string; deckSlug?: string; deckTitle?: string }>
   }) => api.post("/analytics/vocab", input),
+  recordVocabWord: (input: {
+    term: string
+    deckSlug: string
+    correct: boolean
+    interactionType?: string
+  }) => api.post("/analytics/vocab/word", input),
+  syncLearn: (input: {
+    studyWords?: Array<{
+      term: string
+      deckSlug: string
+      correctCount?: number
+      totalAttempts?: number
+      masteredAt?: string
+      wantToLearn?: boolean
+      lastReviewedAt?: string
+    }>
+    vocabResults?: Array<{
+      deckSlug: string
+      deckTitle?: string
+      correct: number
+      total: number
+      completedAt?: string
+    }>
+  }) => api.post("/analytics/learn/sync", input),
+  learnProgress: (studentId?: string) =>
+    api.get(`/analytics/learn/progress${studentId ? `/${studentId}` : ""}`),
+  vocabWordStats: (params?: { deckSlug?: string; limit?: number }) => {
+    const qs = new URLSearchParams()
+    if (params?.deckSlug) qs.set("deckSlug", params.deckSlug)
+    if (params?.limit) qs.set("limit", String(params.limit))
+    const q = qs.toString()
+    return api.get(`/analytics/vocab/words/stats${q ? `?${q}` : ""}`)
+  },
+  vocabDeckStats: (params?: { limit?: number }) => {
+    const qs = new URLSearchParams()
+    if (params?.limit) qs.set("limit", String(params.limit))
+    const q = qs.toString()
+    return api.get(`/analytics/vocab/decks/stats${q ? `?${q}` : ""}`)
+  },
   topics: (studentId?: string) =>
     api.get<TopicStat[]>(`/analytics/topics${studentId ? `?studentId=${studentId}` : ""}`),
   exerciseStats: () => api.get<ExerciseAnalyticsReport>("/analytics/exercises"),

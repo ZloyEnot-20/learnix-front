@@ -460,6 +460,7 @@ function Quiz({
   // Track the picked option by word id (stable across language switches).
   const [picked, setPicked] = useState<string | null>(null)
   const [correct, setCorrect] = useState(0)
+  const [wordAnswers, setWordAnswers] = useState<Array<{ term: string; correct: boolean; deckSlug: string }>>([])
   const [streak, setStreak] = useState(0)
   const [bestStreak, setBestStreak] = useState(0)
   const [xp, setXp] = useState(0)
@@ -475,6 +476,10 @@ function Quiz({
     if (picked) return
     setPicked(optionId)
     const isRight = optionId === q.word.id
+    setWordAnswers((prev) => [
+      ...prev,
+      { term: q.word.term, correct: isRight, deckSlug: deck.slug },
+    ])
     if (isRight) {
       const newStreak = streak + 1
       setStreak(newStreak)
@@ -519,6 +524,8 @@ function Quiz({
           correct,
           total: questions.length,
           source: "game",
+          totalWords: deck.words.length,
+          wordAnswers,
           words: deck.words.map((w) => ({
             term: w.term,
             partOfSpeech: w.partOfSpeech,
@@ -529,7 +536,7 @@ function Quiz({
         })
         .catch(() => {})
     }
-  }, [done, homeworkId, questions.length, correct, user?.type, deck])
+  }, [done, homeworkId, questions.length, correct, user?.type, deck, wordAnswers])
 
   if (done) {
     return (
@@ -544,6 +551,7 @@ function Quiz({
             setIndex(0)
             setPicked(null)
             setCorrect(0)
+            setWordAnswers([])
             setStreak(0)
             setBestStreak(0)
             setXp(0)

@@ -1,12 +1,13 @@
 /**
  * Shared gamification definitions (mirror the backend rules in
- * services/gamification.service.js). The backend is the source of truth for the
- * actual numbers; these helpers are only for labels/colours and CEFR gating.
+ * config/level-thresholds.js and services/gamification.service.js).
  */
 
 export interface StudentLevel {
   totalPoints: number
   level: number
+  maxLevel: number
+  isMaxLevel: boolean
   tier: TierId
   tierLabel: string
   levelName: string
@@ -16,13 +17,14 @@ export interface StudentLevel {
   breakdown: {
     homeworkPoints: number
     exercisePoints: number
+    learnPoints: number
     completedHomework: number
   }
   requirements: Record<string, number>
   unlockedCefrLevels: string[]
 }
 
-export type TierId = "bronze" | "silver" | "gold" | "diamond" | "master"
+export type TierId = "bronze" | "silver" | "gold" | "diamond" | "legend"
 
 export interface TierMeta {
   id: TierId
@@ -35,13 +37,12 @@ export interface TierMeta {
   bar: string
   /** Path to the tier badge image in /public, or null to fall back to an icon. */
   icon: string | null
-  /** Short motivational tagline shown under the tier name. */
   tagline: string
-  /** One-line prestige description for the "All levels" modal. */
   description: string
-  /** Perks/rewards unlocked at this tier (drives engagement). */
   perks: string[]
 }
+
+export const MAX_LEVEL = 30
 
 export const TIERS: TierMeta[] = [
   {
@@ -87,7 +88,7 @@ export const TIERS: TierMeta[] = [
     id: "diamond",
     label: "Diamond",
     minLevel: 21,
-    maxLevel: 30,
+    maxLevel: 29,
     badge: "bg-cyan-100 text-cyan-800",
     ring: "from-cyan-300 to-sky-500",
     bar: "bg-cyan-500",
@@ -97,17 +98,17 @@ export const TIERS: TierMeta[] = [
     perks: ["C1 level unlocked", "IELTS-level materials", "Diamond badge"],
   },
   {
-    id: "master",
-    label: "Master",
-    minLevel: 31,
-    maxLevel: Number.POSITIVE_INFINITY,
+    id: "legend",
+    label: "Legend",
+    minLevel: 30,
+    maxLevel: 30,
     badge: "bg-fuchsia-100 text-fuchsia-800",
     ring: "from-fuchsia-400 to-purple-600",
     bar: "bg-fuchsia-500",
     icon: "/tiers/master.png",
-    tagline: "Legendary tier",
-    description: "The highest peak. You've elevated language learning to an art — a true Master.",
-    perks: ["All levels open", "C2 exclusive content", "Master badge & top ranking"],
+    tagline: "The ultimate peak",
+    description: "Level 30 — a true Legend. Few students ever reach this summit.",
+    perks: ["All levels open", "C2 exclusive content", "Legend badge & top ranking"],
   },
 ]
 
@@ -115,7 +116,6 @@ export function tierForLevel(level: number): TierMeta {
   return TIERS.find((t) => level >= t.minLevel && level <= t.maxLevel) ?? TIERS[0]
 }
 
-/** Minimum student level required to unlock each CEFR folder. */
 export const CEFR_LEVEL_REQUIREMENT: Record<string, number> = {
   A1: 1,
   A2: 3,
@@ -125,7 +125,6 @@ export const CEFR_LEVEL_REQUIREMENT: Record<string, number> = {
   C2: 21,
 }
 
-/** Whether a student of `level` can open a `cefr` folder. */
 export function isCefrUnlocked(cefr: string, level: number): boolean {
   const required = CEFR_LEVEL_REQUIREMENT[cefr] ?? 1
   return level >= required
