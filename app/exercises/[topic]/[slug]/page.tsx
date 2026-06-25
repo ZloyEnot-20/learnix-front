@@ -18,6 +18,10 @@ import {
   XCircle,
 } from "lucide-react"
 import { isBlankCorrect } from "@/lib/grammar-storage"
+import {
+  formatFillBlankCorrectAnswer,
+  getAcceptableAnswersForBlank,
+} from "@/lib/fill-blank-answers"
 import { getExerciseBySlug, peekExerciseBySlug } from "@/lib/exercises-cache"
 import { peekHomeworkById, invalidateMyHomework } from "@/lib/homework-cache"
 import {
@@ -293,7 +297,7 @@ function FillBlankRunner({
   const handleCheck = useCallback(() => {
     if (!question || result !== "idle" || !allFilled) return
     const checks = inputs.map((val, i) =>
-      isBlankCorrect(val, question.acceptableAnswers?.[i] ?? []),
+      isBlankCorrect(val, getAcceptableAnswersForBlank(question, i)),
     )
     const allCorrect = checks.every(Boolean)
     setPerBlank(checks)
@@ -307,7 +311,7 @@ function FillBlankRunner({
           id: question.id,
           prompt: question.text,
           userAnswer: inputs.map((s) => s.trim()).filter(Boolean).join(" / "),
-          correctAnswer: question.blanks?.join(" / ") ?? "",
+          correctAnswer: formatFillBlankCorrectAnswer(question),
           explanation: question.explanation,
         },
       ])
@@ -407,7 +411,7 @@ function FillBlankRunner({
             {result !== "idle" && (
               <FeedbackBox
                 correct={result === "correct"}
-                correctAnswer={question.blanks?.join(" / ") ?? ""}
+                correctAnswer={formatFillBlankCorrectAnswer(question)}
                 explanation={question.explanation}
               />
             )}

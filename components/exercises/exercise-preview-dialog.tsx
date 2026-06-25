@@ -14,6 +14,7 @@ import {
   GRAMMAR_BLANK_TOKEN,
   type GrammarExercise,
 } from "@/lib/grammar-types"
+import { getAcceptableAnswersForBlank } from "@/lib/fill-blank-answers"
 import { cn } from "@/lib/utils"
 
 const LEVEL_PALETTE: Record<string, string> = {
@@ -277,8 +278,12 @@ function renderQuestionText(
   parts.forEach((part, idx) => {
     out.push(<Fragment key={`p${idx}`}>{part}</Fragment>)
     if (idx < parts.length - 1) {
+      const accepted = getAcceptableAnswersForBlank(
+        { acceptableAnswers, blanks },
+        idx,
+      )
       const answer =
-        acceptableAnswers?.[idx]?.[0] ?? blanks?.[idx] ?? GRAMMAR_BLANK_TOKEN
+        accepted.join(" or ") || blanks?.[idx] || GRAMMAR_BLANK_TOKEN
       out.push(
         <span
           key={`b${idx}`}
