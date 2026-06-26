@@ -106,6 +106,14 @@ export default function TelegramBotSection() {
   const [pendingRevoke, setPendingRevoke] = useState<BotInvite | null>(null)
   const [pendingRemove, setPendingRemove] = useState<BotSubscriber | null>(null)
 
+  const sortedStudents = useMemo(
+    () =>
+      [...students].sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+      ),
+    [students],
+  )
+
   const studentName = useMemo(
     () => students.find((s) => s.id === studentId)?.name ?? "",
     [students, studentId],
@@ -265,7 +273,7 @@ export default function TelegramBotSection() {
                   />
                 </SelectTrigger>
                 <SelectContent>
-                  {students.map((s) => (
+                  {sortedStudents.map((s) => (
                     <SelectItem key={s.id} value={s.id}>
                       {s.name}
                     </SelectItem>
