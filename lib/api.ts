@@ -749,13 +749,14 @@ export interface OrgBillingInfo {
 
 export interface OrgSettings {
   allowScreenshots: boolean
+  entryTestAutocomplete: boolean
 }
 
 export const orgApi = {
   banner: () => api.get<OrgAnnouncement[]>("/org/banner"),
   billing: () => api.get<OrgBillingInfo>("/org/billing"),
   settings: () => api.get<OrgSettings>("/org/settings"),
-  updateSettings: (body: OrgSettings) => api.patch<OrgSettings>("/org/settings", body),
+  updateSettings: (body: Partial<OrgSettings>) => api.patch<OrgSettings>("/org/settings", body),
 }
 
 // ---------- Exercises catalogue ----------

@@ -59,6 +59,9 @@ export interface EntryTestSubmission {
   // Final level set by the teacher across all sections
   overallLevel?: string
 
+  /** Org setting: show demo autocomplete buttons in the entry test UI. */
+  entryTestAutocomplete?: boolean
+
   status: EntryTestStatus
 }
 

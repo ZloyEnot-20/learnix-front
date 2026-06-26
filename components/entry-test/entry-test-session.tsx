@@ -46,7 +46,7 @@ export function EntryTestSession({
   onReload,
   backHref,
   backLabel,
-  showDemoAutofill = true,
+  showDemoAutofill = false,
 }: EntryTestSessionProps) {
   const { t } = useEntryTestLang()
   const resolvedBackLabel = backLabel ?? t("back")

@@ -79,6 +79,7 @@ export default function EntryTestPage() {
       onReload={reload}
       backHref="/dashboard"
       backLabel={t("dashboard")}
+      showDemoAutofill={test.entryTestAutocomplete === true}
     />
   )
 }

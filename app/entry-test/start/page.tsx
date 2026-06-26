@@ -121,6 +121,7 @@ function EntryTestStartContent() {
           test={test}
           actions={actions}
           onReload={reload}
+          showDemoAutofill={test.entryTestAutocomplete === true}
         />
       </div>
     )
