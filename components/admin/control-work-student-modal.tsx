@@ -24,6 +24,8 @@ import type {
   Student,
 } from "@/lib/admin-storage"
 import { cn } from "@/lib/utils"
+import { useAdminData } from "@/lib/admin-data-context"
+import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
 
 const SECTION_META: Record<
   ControlWorkSubject,
@@ -103,6 +105,7 @@ export function ControlWorkStudentModal({
   onOpenChange,
 }: ControlWorkStudentModalProps) {
   const [expandedSteps, setExpandedSteps] = useState<Record<number, boolean>>({})
+  const { exercises } = useAdminData()
 
   const overallPct = useMemo(() => {
     if (!submission?.stepResults?.length) return null
@@ -176,6 +179,8 @@ export function ControlWorkStudentModal({
             const detail = stepDetail(result, submission?.currentStep ?? 0, index)
             const attempt = result?.attempt
             const mistakes = attempt?.mistakes ?? []
+            const stepExercise =
+              exercises.find((e) => e.slug === step.exerciseSlug) ?? null
             const meta = SECTION_META[step.subject]
             const expanded = !!expandedSteps[index]
 
@@ -258,7 +263,10 @@ export function ControlWorkStudentModal({
                               </span>
                               <span className="inline-flex items-center gap-1 text-emerald-700">
                                 <CheckCircle2 className="h-3 w-3" />
-                                Correct: <span className="font-semibold">{m.correctAnswer}</span>
+                                Correct:{" "}
+                                <span className="font-semibold">
+                                  {resolveMistakeCorrectAnswer(stepExercise, m)}
+                                </span>
                               </span>
                             </div>
                             {m.explanation ? (

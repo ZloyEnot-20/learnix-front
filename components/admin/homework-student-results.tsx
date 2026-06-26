@@ -55,6 +55,8 @@ import {
 } from "@/components/admin/speaking-recording-review"
 import { PodcastListenCoverageBar } from "@/components/admin/podcast-listen-coverage-bar"
 import { listenedCoveragePercent, resolveListenedSegments } from "@/lib/podcast-listening"
+import { useAdminData } from "@/lib/admin-data-context"
+import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -750,6 +752,11 @@ function StudentDetail({
   loadingDetails?: boolean
 }) {
   const { toast } = useToast()
+  const { exercises } = useAdminData()
+  const exercise = useMemo(
+    () => exercises.find((e) => e.slug === homework.exerciseSlug) ?? null,
+    [exercises, homework.exerciseSlug],
+  )
   const [transcribing, setTranscribing] = useState(false)
   const attempt = row.submission?.attempt
   const cheatingFailed = isCheatingFailed(row.submission)
@@ -1058,7 +1065,10 @@ function StudentDetail({
                     </span>
                     <span className="inline-flex items-center gap-1 text-emerald-700">
                       <CheckCircle2 className="h-3 w-3" />
-                      Correct: <span className="font-semibold">{m.correctAnswer}</span>
+                      Correct:{" "}
+                      <span className="font-semibold">
+                        {resolveMistakeCorrectAnswer(exercise, m)}
+                      </span>
                     </span>
                   </div>
                   {m.explanation && (

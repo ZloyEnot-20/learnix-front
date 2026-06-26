@@ -28,6 +28,9 @@ export function getAcceptableAnswersForBlank(
   }
 
   if (blanksCount === 1 && blankIndex === 0 && all.length > 1) {
+    if (all.every((entry) => typeof entry === "string")) {
+      return all.map((s) => s.trim()).filter(Boolean)
+    }
     return all.flatMap(nonEmpty)
   }
 

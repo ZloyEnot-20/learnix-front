@@ -41,6 +41,7 @@ import { buildHomeworkStudentRows } from "@/lib/build-homework-student-rows"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { isPodcastHomework, PODCAST_SUBJECT_COLOR } from "@/lib/podcast-data"
+import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string; label: string }> = {
   reading: { icon: BookOpen, color: "#c1bffd", label: "Reading" },
@@ -104,7 +105,11 @@ export function HomeworkDetailModal({
   onChanged,
 }: HomeworkDetailModalProps) {
   const { toast } = useToast()
-  const { students: allStudents, groups } = useAdminData()
+  const { students: allStudents, groups, exercises } = useAdminData()
+  const exercise = useMemo(
+    () => exercises.find((e) => e.slug === homework?.exerciseSlug) ?? null,
+    [exercises, homework?.exerciseSlug],
+  )
   const [rows, setRows] = useState<Row[]>([])
   const [groupName, setGroupName] = useState<string>("—")
   const [filter, setFilter] = useState<"all" | HomeworkStatus>("all")
@@ -641,7 +646,10 @@ export function HomeworkDetailModal({
                                       </span>
                                       <span className="inline-flex items-center gap-1 text-emerald-700">
                                         <CheckCircle2 className="h-3 w-3" />
-                                        Correct: <span className="font-semibold">{m.correctAnswer}</span>
+                                        Correct:{" "}
+                                        <span className="font-semibold">
+                                          {resolveMistakeCorrectAnswer(exercise, m)}
+                                        </span>
                                       </span>
                                     </div>
                                     {m.explanation && (
