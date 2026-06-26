@@ -45,8 +45,8 @@ export default function OrgSettingsSection() {
     try {
       setError(null)
       const settings = await orgApi.settings()
-      setAllowScreenshots(settings.allowScreenshots)
-      setEntryTestAutocomplete(settings.entryTestAutocomplete)
+      setAllowScreenshots(settings.allowScreenshots === true)
+      setEntryTestAutocomplete(settings.entryTestAutocomplete === true)
     } catch {
       setError("Failed to load settings. Make sure the backend is running.")
     } finally {
@@ -65,8 +65,8 @@ export default function OrgSettingsSection() {
     setError(null)
     try {
       const updated = await orgApi.updateSettings({ allowScreenshots: checked })
-      setAllowScreenshots(updated.allowScreenshots)
-      setEntryTestAutocomplete(updated.entryTestAutocomplete)
+      setAllowScreenshots(updated.allowScreenshots === true)
+      setEntryTestAutocomplete(updated.entryTestAutocomplete === true)
     } catch {
       setAllowScreenshots(previous)
       setError("Could not save settings. Please try again.")
@@ -82,8 +82,8 @@ export default function OrgSettingsSection() {
     setError(null)
     try {
       const updated = await orgApi.updateSettings({ entryTestAutocomplete: checked })
-      setAllowScreenshots(updated.allowScreenshots)
-      setEntryTestAutocomplete(updated.entryTestAutocomplete)
+      setAllowScreenshots(updated.allowScreenshots === true)
+      setEntryTestAutocomplete(updated.entryTestAutocomplete === true)
     } catch {
       setEntryTestAutocomplete(previous)
       setError("Could not save settings. Please try again.")

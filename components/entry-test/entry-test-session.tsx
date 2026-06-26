@@ -46,9 +46,13 @@ export function EntryTestSession({
   onReload,
   backHref,
   backLabel,
-  showDemoAutofill = false,
+  showDemoAutofill: showDemoAutofillProp,
 }: EntryTestSessionProps) {
   const { t } = useEntryTestLang()
+  const showDemoAutofill =
+    showDemoAutofillProp !== undefined
+      ? showDemoAutofillProp
+      : test.entryTestAutocomplete === true
   const resolvedBackLabel = backLabel ?? t("back")
   const [view, setView] = useState<View>("overview")
 

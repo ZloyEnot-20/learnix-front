@@ -749,7 +749,8 @@ export interface OrgBillingInfo {
 
 export interface OrgSettings {
   allowScreenshots: boolean
-  entryTestAutocomplete: boolean
+  /** Off unless explicitly enabled in organization settings. */
+  entryTestAutocomplete?: boolean
 }
 
 export const orgApi = {
