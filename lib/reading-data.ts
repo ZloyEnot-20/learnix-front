@@ -64,20 +64,8 @@ export function isReadingHomework(
   return subject === "reading" || parseReadingHomeworkSlug(exerciseSlug) != null
 }
 
-import { collectAvailableReadingTypes } from "./reading-question-types"
-
 /** Initial empty catalogue; use fetchReadingSummaries for the real list. */
 export function listReadings(): IeltsReadingSummary[] {
-  return []
-}
-
-async function fetchLocalReadingSummaries(): Promise<IeltsReadingSummary[]> {
-  try {
-    const res = await fetch("/api/local-readings")
-    if (res.ok) return (await res.json()) as IeltsReadingSummary[]
-  } catch {
-    // ignore
-  }
   return []
 }
 
@@ -92,27 +80,17 @@ async function fetchStaticReadingTypesBySlug(): Promise<Map<string, string[]>> {
   }
 }
 
-/** Fill missing questionTypes from a slug → types map. */
-function mergeQuestionTypesFromMap(
-  remote: IeltsReadingSummary[],
+function enrichReadingSummaries(
+  readings: IeltsReadingSummary[],
   typesBySlug: Map<string, string[]>,
 ): IeltsReadingSummary[] {
-  if (typesBySlug.size === 0) return remote
-  return remote.map((r) => {
-    if (r.questionTypes?.length) return r
-    const types = typesBySlug.get(r.slug)
-    return types?.length ? { ...r, questionTypes: types } : r
-  })
-}
-
-/** Fill missing questionTypes from local JSON catalogue (same slugs as API). */
-function mergeReadingQuestionTypes(
-  remote: IeltsReadingSummary[],
-  local: IeltsReadingSummary[],
-): IeltsReadingSummary[] {
-  if (local.length === 0) return remote
-  const localBySlug = new Map(local.map((r) => [r.slug, r.questionTypes ?? []]))
-  return mergeQuestionTypesFromMap(remote, localBySlug)
+  return readings.map((reading) => ({
+    ...reading,
+    totalTimeMinutes: reading.totalTimeMinutes > 0 ? reading.totalTimeMinutes : 20,
+    questionTypes: reading.questionTypes?.length
+      ? reading.questionTypes
+      : typesBySlug.get(reading.slug) ?? [],
+  }))
 }
 
 export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
@@ -121,33 +99,33 @@ export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
     const { exercisesApi } = await import("./api")
     remote = await exercisesApi.readingSummaries()
   } catch {
-    // fall back to local catalogue
+    return []
   }
 
-  const local = await fetchLocalReadingSummaries()
-  if (remote.length === 0) return local
+  if (remote.length === 0) return []
 
-  if (collectAvailableReadingTypes(remote).length > 0) return remote
-
-  let enriched = mergeReadingQuestionTypes(remote, local)
-  if (collectAvailableReadingTypes(enriched).length === 0) {
-    enriched = mergeQuestionTypesFromMap(enriched, await fetchStaticReadingTypesBySlug())
-  }
-  return enriched
+  const typesBySlug = await fetchStaticReadingTypesBySlug()
+  return enrichReadingSummaries(remote, typesBySlug)
 }
 
 export async function fetchReading(slug: string): Promise<IeltsReadingDocument | undefined> {
   try {
     const { exercisesApi } = await import("./api")
     const doc = await exercisesApi.reading(slug)
-    if (doc) return doc
-  } catch {
-    // fall back to local file
-  }
-
-  try {
-    const res = await fetch(`/api/local-readings/${encodeURIComponent(slug)}`)
-    if (res.ok) return (await res.json()) as IeltsReadingDocument
+    if (doc) {
+      const totalTimeMinutes = doc.totalTimeMinutes > 0 ? doc.totalTimeMinutes : 20
+      const dataTotal =
+        doc.data.totalTimeMinutes > 0 ? doc.data.totalTimeMinutes : totalTimeMinutes
+      return {
+        ...doc,
+        totalTimeMinutes,
+        data: {
+          ...doc.data,
+          totalTimeMinutes: dataTotal,
+          parts: doc.data.parts as IeltsReadingPart[],
+        },
+      }
+    }
   } catch {
     // ignore
   }
