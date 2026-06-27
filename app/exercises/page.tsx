@@ -9,7 +9,6 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  Clock,
   Folder,
   Headphones,
   Lock,
@@ -619,7 +618,7 @@ export default function ExercisesIndexPage() {
                             ) : null}
                           </div>
                         ) : (
-                          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                          <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
                             {filteredReadings.map((r) => (
                               <ReadingPracticeCard key={r.slug} test={r} />
                             ))}
@@ -963,20 +962,12 @@ function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 flex-col items-end gap-1.5">
-              {test.totalTimeMinutes > 0 ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm ring-1 ring-amber-500/50">
-                  <Clock className="h-3.5 w-3.5" aria-hidden />
-                  {test.totalTimeMinutes} min
-                </span>
-              ) : null}
-              <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
-                IELTS
-              </span>
-            </div>
+            <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+              IELTS
+            </span>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-slate-600">
-            Timed IELTS Academic reading with passage and exam-style questions.
+            IELTS Academic reading with passage and exam-style questions.
           </p>
         </CardContent>
       </Card>

@@ -909,7 +909,7 @@ export default function ExercisesSection({
                   ) : null}
                 </div>
               ) : (
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
                   {filteredReadings.map((r) => (
                     <ReadingCard
                       key={r.slug}
@@ -1758,20 +1758,12 @@ function ReadingCard({
             </div>
           </div>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-1.5">
-          {test.totalTimeMinutes > 0 ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm ring-1 ring-amber-500/50">
-              <Clock className="h-3.5 w-3.5" aria-hidden />
-              {test.totalTimeMinutes} min
-            </span>
-          ) : null}
-          <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
-            IELTS
-          </span>
-        </div>
+        <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+          IELTS
+        </span>
       </div>
       <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">
-        IELTS Academic reading passage with timed practice and auto-scoring.
+        IELTS Academic reading passage with auto-scoring.
       </p>
       <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row">
         {canAssign && (
@@ -1807,13 +1799,17 @@ function AssignReadingDialog({
   const { toast } = useToast()
   const [groupId, setGroupId] = useState<string>("")
   const [dueDate, setDueDate] = useState<string>("")
+  const [unlimited, setUnlimited] = useState(false)
+  const [timeLimit, setTimeLimit] = useState<string>("20")
   const [assigning, setAssigning] = useState(false)
 
   useEffect(() => {
     if (!open) return
     setGroupId("")
+    setUnlimited(false)
+    setTimeLimit(String(Math.max(15, test?.totalTimeMinutes || 20)))
     setDueDate(new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString().slice(0, 10))
-  }, [open])
+  }, [open, test])
 
   const submit = async () => {
     if (!test) return
@@ -1825,6 +1821,13 @@ function AssignReadingDialog({
       toast({ title: "Pick a due date", variant: "destructive" })
       return
     }
+    const parsedLimit = Number.parseInt(timeLimit, 10)
+    if (!unlimited && (!Number.isFinite(parsedLimit) || parsedLimit <= 0)) {
+      toast({ title: "Enter a valid time limit", variant: "destructive" })
+      return
+    }
+    const limitMinutes = unlimited ? undefined : parsedLimit
+    const estimatedMinutes = limitMinutes ?? Math.max(15, test.totalTimeMinutes || 20)
     setAssigning(true)
     try {
       await homeworkApi.create({
@@ -1833,8 +1836,8 @@ function AssignReadingDialog({
         subject: "reading",
         groupId,
         dueAt: new Date(dueDate).toISOString(),
-        estimatedMinutes: Math.max(15, test.totalTimeMinutes || 20),
-        timeLimitMinutes: Math.max(15, test.totalTimeMinutes || 20),
+        estimatedMinutes,
+        timeLimitMinutes: limitMinutes,
         createdBy: createdByName,
         exerciseSlug: readingHomeworkSlug(test.slug),
       })
@@ -1893,6 +1896,46 @@ function AssignReadingDialog({
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label>Time limit</Label>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setUnlimited((v) => !v)}
+                aria-pressed={unlimited}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                  unlimited
+                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    : "border-slate-200 bg-white text-slate-500 hover:bg-slate-50",
+                )}
+              >
+                <Infinity className="h-3.5 w-3.5" />
+                Unlimited
+              </button>
+              {!unlimited && (
+                <div className="flex items-center gap-1.5">
+                  <div className="relative">
+                    <Clock className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      type="number"
+                      min={1}
+                      value={timeLimit}
+                      onChange={(e) => setTimeLimit(e.target.value)}
+                      className="h-9 w-24 pl-8"
+                    />
+                  </div>
+                  <span className="text-xs text-slate-500">minutes</span>
+                </div>
+              )}
+            </div>
+            <p className="text-[11px] text-slate-500">
+              {unlimited
+                ? "Students can take as long as they need."
+                : "A countdown timer will be shown during the reading task."}
+            </p>
           </div>
         </div>
         <DialogFooter>
