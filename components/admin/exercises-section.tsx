@@ -162,14 +162,13 @@ function prettifySubtopic(subtopic: string): string {
 
 const CEFR_ORDER = ["A1", "A2", "B1", "B2", "C1", "C2"]
 
-/** The six fixed levels. These are the only level folders that ever render. */
+/** Visible CEFR level folders (C2/Expert is hidden — content folds into C1). */
 const LEVELS: { key: string; label: string }[] = [
   { key: "A1", label: "Beginner" },
   { key: "A2", label: "Elementary" },
   { key: "B1", label: "Intermediate" },
   { key: "B2", label: "Upper-Intermediate" },
   { key: "C1", label: "Advanced" },
-  { key: "C2", label: "Expert" },
 ]
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -194,8 +193,9 @@ function primaryLevel(levels: string[]): string {
   return best === Number.MAX_SAFE_INTEGER ? "Other" : CEFR_ORDER[best]
 }
 
-/** Map any level (incl. "Other") onto one of the six fixed bands (A1–C2). */
+/** Map any level (incl. "Other") onto a visible band (A1–C1). C2 folds into C1. */
 function clampToFixedLevel(level: string): string {
+  if (level === "C2") return "C1"
   return CEFR_ORDER.includes(level) ? level : "A1"
 }
 
@@ -458,7 +458,7 @@ export default function ExercisesSection({
               <Skeleton className="h-4 w-80" />
             </div>
             <Skeleton className="h-10 w-full sm:max-w-md rounded-md" />
-            <LevelFolderCardsSkeleton count={7} />
+            <LevelFolderCardsSkeleton count={6} />
           </section>
         ) : levelFolders.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">

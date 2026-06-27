@@ -4,6 +4,9 @@ import { resolveBackendUrl } from "./env.config.mjs"
 const backendUrl = resolveBackendUrl()
 
 const nextConfig = {
+  experimental: {
+    externalDir: true,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
