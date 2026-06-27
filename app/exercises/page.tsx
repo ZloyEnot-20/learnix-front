@@ -9,6 +9,7 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  Clock,
   Folder,
   Headphones,
   Lock,
@@ -43,13 +44,20 @@ import {
   podcastHasWords,
   type PodcastEpisode,
 } from "@/lib/podcast-data"
-import { LevelFolderCardsSkeleton } from "@/components/admin/skeletons"
+import { LevelFolderCardsSkeleton, CardGridSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
 import {
   fetchReadingSummaries,
   listReadings,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
+import {
+  collectAvailableReadingTypes,
+  countReadingsByQuestionType,
+  filterReadingsByQuestionType,
+  readingQuestionTypeLabel,
+  sortReadingQuestionTypes,
+} from "@/lib/reading-question-types"
 import {
   IELTS_LEVEL,
   IELTS_LEVEL_KEY,
@@ -232,8 +240,12 @@ export default function ExercisesIndexPage() {
   }, [])
 
   const [readings, setReadings] = useState<IeltsReadingSummary[]>(() => listReadings())
+  const [readingsLoading, setReadingsLoading] = useState(true)
+  const [readingTypeFilter, setReadingTypeFilter] = useState<string | null>(null)
   useEffect(() => {
-    void fetchReadingSummaries().then(setReadings)
+    void fetchReadingSummaries()
+      .then(setReadings)
+      .finally(() => setReadingsLoading(false))
   }, [])
 
   const ieltsStats = useMemo(() => ieltsFolderStats(readings), [readings])
@@ -263,6 +275,19 @@ export default function ExercisesIndexPage() {
 
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  useEffect(() => {
+    setReadingTypeFilter(null)
+  }, [selectedCategory])
+
+  const readingQuestionTypes = useMemo(
+    () => collectAvailableReadingTypes(readings),
+    [readings],
+  )
+  const filteredReadings = useMemo(
+    () => filterReadingsByQuestionType(readings, readingTypeFilter),
+    [readings, readingTypeFilter],
+  )
 
   const activeLevelFolder = useMemo(
     () => levelFolders.find((f) => f.level === selectedLevel) ?? null,
@@ -496,15 +521,30 @@ export default function ExercisesIndexPage() {
                     {subject?.label ?? selectedCategory}
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
-                    {levelLabel} · {count}{" "}
-                    {isVocab
-                      ? "deck"
-                      : isPodcasts
-                        ? "podcast"
-                        : isReading
-                          ? "passage"
-                          : "topic"}
-                    {count === 1 ? "" : "s"}
+                    {isReading && readingsLoading ? (
+                      <span className="inline-block h-4 w-48 animate-pulse rounded bg-slate-200" />
+                    ) : (
+                      <>
+                        {levelLabel} ·{" "}
+                        {isReading && readingTypeFilter
+                          ? `${filteredReadings.length} of ${readings.length} passages`
+                          : `${count} ${
+                              isVocab
+                                ? "deck"
+                                : isPodcasts
+                                  ? "podcast"
+                                  : isReading
+                                    ? "passage"
+                                    : "topic"
+                            }${count === 1 ? "" : "s"}`}
+                        {isReading && readingTypeFilter ? (
+                          <>
+                            {" "}
+                            · {readingQuestionTypeLabel(readingTypeFilter)}
+                          </>
+                        ) : null}
+                      </>
+                    )}
                   </p>
                   <Button
                     type="button"
@@ -516,7 +556,7 @@ export default function ExercisesIndexPage() {
                     <ChevronLeft className="h-4 w-4" />
                     Back
                   </Button>
-                  {count === 0 ? (
+                  {count === 0 && !(isReading && readingsLoading) ? (
                     <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
                       <p className="font-medium text-slate-900">Coming soon</p>
                       <p className="text-sm text-slate-500">
@@ -536,11 +576,57 @@ export default function ExercisesIndexPage() {
                       ))}
                     </div>
                   ) : isReading ? (
-                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      {readings.map((r) => (
-                        <ReadingPracticeCard key={r.slug} test={r} />
-                      ))}
-                    </div>
+                    readingsLoading ? (
+                      <div className="mt-4">
+                        <div className="flex flex-wrap gap-2">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <div
+                              key={i}
+                              className="h-8 w-24 animate-pulse rounded-full bg-slate-200"
+                            />
+                          ))}
+                        </div>
+                        <CardGridSkeleton count={6} columns={3} className="mt-4" />
+                      </div>
+                    ) : (
+                      <>
+                        {readingQuestionTypes.length > 0 ? (
+                          <ReadingTypeFilters
+                            types={readingQuestionTypes}
+                            readings={readings}
+                            activeType={readingTypeFilter}
+                            onChange={setReadingTypeFilter}
+                          />
+                        ) : null}
+                        {filteredReadings.length === 0 ? (
+                          <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                            <p className="font-medium text-slate-900">No passages found</p>
+                            <p className="text-sm text-slate-500">
+                              {readingTypeFilter
+                                ? `No tests with “${readingQuestionTypeLabel(readingTypeFilter)}” questions.`
+                                : "Reading passages haven't been added yet."}
+                            </p>
+                            {readingTypeFilter ? (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="mt-4"
+                                onClick={() => setReadingTypeFilter(null)}
+                              >
+                                Show all passages
+                              </Button>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            {filteredReadings.map((r) => (
+                              <ReadingPracticeCard key={r.slug} test={r} />
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )
                   ) : (
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {topics.map((t) => (
@@ -844,7 +930,62 @@ function PodcastCard({ episode }: { episode: PodcastEpisode }) {
   )
 }
 
+function ReadingTypeFilters({
+  types,
+  readings,
+  activeType,
+  onChange,
+}: {
+  types: string[]
+  readings: IeltsReadingSummary[]
+  activeType: string | null
+  onChange: (type: string | null) => void
+}) {
+  return (
+    <div className="mt-4 space-y-2">
+      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        Question type
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          type="button"
+          size="sm"
+          variant={activeType === null ? "default" : "outline"}
+          className={cn(
+            "rounded-full",
+            activeType === null && "bg-sky-600 text-white hover:bg-sky-600/90",
+          )}
+          onClick={() => onChange(null)}
+        >
+          All · {readings.length}
+        </Button>
+        {types.map((type) => {
+          const typeCount = countReadingsByQuestionType(readings, type)
+          return (
+            <Button
+              key={type}
+              type="button"
+              size="sm"
+              variant={activeType === type ? "default" : "outline"}
+              className={cn(
+                "rounded-full",
+                activeType === type && "bg-sky-600 text-white hover:bg-sky-600/90",
+              )}
+              onClick={() => onChange(activeType === type ? null : type)}
+            >
+              {readingQuestionTypeLabel(type)} · {typeCount}
+            </Button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
+  const typeLabels = sortReadingQuestionTypes(test.questionTypes ?? []).map(
+    readingQuestionTypeLabel,
+  )
   return (
     <Link href={`/exercises/ielts/reading/${test.slug}`} className="group block h-full">
       <Card className="relative h-full rounded-2xl border-sky-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg sm:rounded-3xl">
@@ -860,25 +1001,31 @@ function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
               <div className="min-w-0 space-y-1.5">
                 <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
                 <div className="flex flex-wrap gap-2 text-xs text-slate-600">
-                  {test.subtitle ? (
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                      {test.subtitle}
+                  {typeLabels.map((label) => (
+                    <span
+                      key={label}
+                      className="rounded-full bg-sky-50 px-2.5 py-1 font-medium text-sky-800"
+                    >
+                      {label}
                     </span>
-                  ) : null}
+                  ))}
                   <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
                     {test.questionCount} questions
                   </span>
-                  {test.totalTimeMinutes > 0 ? (
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                      {test.totalTimeMinutes} min
-                    </span>
-                  ) : null}
                 </div>
               </div>
             </div>
-            <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
-              IELTS
-            </span>
+            <div className="flex shrink-0 flex-col items-end gap-1.5">
+              {test.totalTimeMinutes > 0 ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm ring-1 ring-amber-500/50">
+                  <Clock className="h-3.5 w-3.5" aria-hidden />
+                  {test.totalTimeMinutes} min
+                </span>
+              ) : null}
+              <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+                IELTS
+              </span>
+            </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-slate-600">
             Timed IELTS Academic reading with passage and exam-style questions.

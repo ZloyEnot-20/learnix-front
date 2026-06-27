@@ -791,6 +791,7 @@ export const exercisesApi = {
         subtitle: string
         totalTimeMinutes: number
         questionCount: number
+        questionTypes?: string[]
         order?: number
       }[]
     >("/exercises/reading/summary"),

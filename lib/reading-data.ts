@@ -9,6 +9,7 @@ export interface IeltsReadingSummary {
   subtitle: string
   totalTimeMinutes: number
   questionCount: number
+  questionTypes?: string[]
   order?: number
 }
 
@@ -71,10 +72,19 @@ export function listReadings(): IeltsReadingSummary[] {
 export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
   try {
     const { exercisesApi } = await import("./api")
-    return await exercisesApi.readingSummaries()
+    const remote = await exercisesApi.readingSummaries()
+    if (remote.length > 0) return remote
   } catch {
-    return []
+    // fall back to local catalogue
   }
+
+  try {
+    const res = await fetch("/api/local-readings")
+    if (res.ok) return (await res.json()) as IeltsReadingSummary[]
+  } catch {
+    // ignore
+  }
+  return []
 }
 
 export async function fetchReading(slug: string): Promise<IeltsReadingDocument | undefined> {
