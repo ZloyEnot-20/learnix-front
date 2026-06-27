@@ -45,6 +45,20 @@ import {
 } from "@/lib/podcast-data"
 import { LevelFolderCardsSkeleton } from "@/components/admin/skeletons"
 import { cn } from "@/lib/utils"
+import {
+  fetchReadingSummaries,
+  listReadings,
+  type IeltsReadingSummary,
+} from "@/lib/reading-data"
+import {
+  IELTS_LEVEL,
+  IELTS_LEVEL_KEY,
+  IELTS_LEVEL_PALETTE,
+  IELTS_SUBJECT_FOLDERS,
+  ieltsCategoryStats,
+  ieltsFolderStats,
+  isIeltsLevel,
+} from "@/lib/ielts-exercises"
 
 const LEVEL_PALETTE: Record<string, string> = {
   A1: "bg-emerald-100 text-emerald-700",
@@ -84,12 +98,11 @@ interface SubjectFolder {
   cls: string
 }
 
-/** Subject folders shown inside every level. Grammar/Vocabulary carry the catalogue content. */
-const SUBJECT_FOLDERS: SubjectFolder[] = [
+/** Subject folders inside CEFR level folders. IELTS skills live under the IELTS folder. */
+const CEFR_SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700" },
   { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-emerald-100 text-emerald-700" },
-  { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700" },
 ]
@@ -218,6 +231,13 @@ export default function ExercisesIndexPage() {
     return onPodcastsInvalidate(reload)
   }, [])
 
+  const [readings, setReadings] = useState<IeltsReadingSummary[]>(() => listReadings())
+  useEffect(() => {
+    void fetchReadingSummaries().then(setReadings)
+  }, [])
+
+  const ieltsStats = useMemo(() => ieltsFolderStats(readings), [readings])
+
   // Exactly the six fixed levels with their content folded in.
   const levelFolders = useMemo(() => {
     const topicsByLevel = new Map<string, TopicSummary[]>()
@@ -272,6 +292,9 @@ export default function ExercisesIndexPage() {
     level: string,
     categoryId: string,
   ): { count: number; lines: string[] } => {
+    if (isIeltsLevel(level)) {
+      return ieltsCategoryStats(categoryId, readings)
+    }
     if (categoryId === "vocabulary") {
       const decks = vocabDecks.filter((d) => clampToFixedLevel(primaryLevel([d.level])) === level)
       const words = decks.reduce((acc, d) => acc + d.words.length, 0)
@@ -308,6 +331,8 @@ export default function ExercisesIndexPage() {
     }
   }
 
+  const subjectFolders = isIeltsLevel(selectedLevel) ? IELTS_SUBJECT_FOLDERS : CEFR_SUBJECT_FOLDERS
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-200">
@@ -340,7 +365,7 @@ export default function ExercisesIndexPage() {
             <div className="h-5 w-40 rounded-md bg-slate-200 animate-pulse" />
             <div className="mt-2 h-4 w-80 rounded-md bg-slate-200 animate-pulse" />
             <div className="mt-4">
-              <LevelFolderCardsSkeleton count={6} />
+              <LevelFolderCardsSkeleton count={7} />
             </div>
           </section>
         )}
@@ -349,7 +374,7 @@ export default function ExercisesIndexPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-900">Choose a level</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Topics are organised into folders by CEFR level. Open a folder to see its topics.
+              Topics are organised into folders by CEFR level. Open IELTS for exam-style practice.
             </p>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {levelFolders.map((folder) => {
@@ -369,6 +394,16 @@ export default function ExercisesIndexPage() {
                   />
                 )
               })}
+              <LevelFolderCard
+                level={IELTS_LEVEL_KEY}
+                label={IELTS_LEVEL.label}
+                badge="IELTS"
+                colorCls={IELTS_LEVEL_PALETTE}
+                topicCount={ieltsStats.sectionCount}
+                exerciseCount={ieltsStats.passageCount}
+                questionCount={ieltsStats.questionCount}
+                onOpen={() => setSelectedLevel(IELTS_LEVEL_KEY)}
+              />
             </div>
           </section>
         )}
@@ -378,16 +413,24 @@ export default function ExercisesIndexPage() {
             <Breadcrumbs
               items={[
                 { label: "Exercises", onClick: () => setSelectedLevel(null) },
-                { label: selectedLevel },
+                { label: isIeltsLevel(selectedLevel) ? IELTS_LEVEL.label : selectedLevel! },
               ]}
             />
             <h2 className="mt-4 text-lg font-semibold text-slate-900">
-              {selectedLevel}{" "}
-              <span className="text-base font-medium text-slate-500">
-                · {LEVEL_LABELS[selectedLevel] ?? ""}
-              </span>
+              {isIeltsLevel(selectedLevel) ? (
+                IELTS_LEVEL.label
+              ) : (
+                <>
+                  {selectedLevel}{" "}
+                  <span className="text-base font-medium text-slate-500">
+                    · {LEVEL_LABELS[selectedLevel!] ?? ""}
+                  </span>
+                </>
+              )}
             </h2>
-            <p className="mt-1 text-sm text-slate-500">Choose a section</p>
+            <p className="mt-1 text-sm text-slate-500">
+              {isIeltsLevel(selectedLevel) ? "Choose an exam skill" : "Choose a section"}
+            </p>
             <Button
               type="button"
               variant="outline"
@@ -399,8 +442,8 @@ export default function ExercisesIndexPage() {
               Back
             </Button>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {SUBJECT_FOLDERS.map((folder) => {
-                const stats = categoryStats(selectedLevel, folder.id)
+              {subjectFolders.map((folder) => {
+                const stats = categoryStats(selectedLevel!, folder.id)
                 return (
                   <SubjectFolderCard
                     key={folder.id}
@@ -419,16 +462,21 @@ export default function ExercisesIndexPage() {
         {!loading && hasContent && selectedLevel && selectedCategory && (
           <section>
             {(() => {
-              const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
+              const subject = subjectFolders.find((f) => f.id === selectedCategory)
               const isVocab = selectedCategory === "vocabulary"
               const isPodcasts = selectedCategory === "podcasts"
+              const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
               const topics = levelTopics.filter((t) => t.category === selectedCategory)
               const count = isVocab
                 ? vocabDecksForLevel.length
                 : isPodcasts
                   ? podcastsForLevel.length
-                  : topics.length
-              const levelLabel = selectedLevel
+                  : isReading
+                    ? readings.length
+                    : topics.length
+              const levelLabel = isIeltsLevel(selectedLevel)
+                ? IELTS_LEVEL.label
+                : selectedLevel!
               return (
                 <>
                   <Breadcrumbs
@@ -449,7 +497,13 @@ export default function ExercisesIndexPage() {
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
                     {levelLabel} · {count}{" "}
-                    {isVocab ? "deck" : isPodcasts ? "podcast" : "topic"}
+                    {isVocab
+                      ? "deck"
+                      : isPodcasts
+                        ? "podcast"
+                        : isReading
+                          ? "passage"
+                          : "topic"}
                     {count === 1 ? "" : "s"}
                   </p>
                   <Button
@@ -479,6 +533,12 @@ export default function ExercisesIndexPage() {
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {podcastsForLevel.map((p) => (
                         <PodcastCard key={p.slug} episode={p} />
+                      ))}
+                    </div>
+                  ) : isReading ? (
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {readings.map((r) => (
+                        <ReadingPracticeCard key={r.slug} test={r} />
                       ))}
                     </div>
                   ) : (
@@ -781,6 +841,51 @@ function PodcastCard({ episode }: { episode: PodcastEpisode }) {
         )}
       </CardContent>
     </Card>
+  )
+}
+
+function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
+  return (
+    <Link href={`/exercises/ielts/reading/${test.slug}`} className="group block h-full">
+      <Card className="relative h-full rounded-2xl border-sky-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg sm:rounded-3xl">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
+              <span
+                aria-hidden
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white shadow-sm sm:h-10 sm:w-10"
+              >
+                <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
+              </span>
+              <div className="min-w-0 space-y-1.5">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
+                <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                  {test.subtitle ? (
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                      {test.subtitle}
+                    </span>
+                  ) : null}
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                    {test.questionCount} questions
+                  </span>
+                  {test.totalTimeMinutes > 0 ? (
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                      {test.totalTimeMinutes} min
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+            <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+              IELTS
+            </span>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-slate-600">
+            Timed IELTS Academic reading with passage and exam-style questions.
+          </p>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 

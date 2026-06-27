@@ -78,6 +78,15 @@ import {
   readingHomeworkSlug,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
+import {
+  IELTS_LEVEL,
+  IELTS_LEVEL_KEY,
+  IELTS_LEVEL_PALETTE,
+  IELTS_SUBJECT_FOLDERS,
+  ieltsCategoryStats,
+  ieltsFolderStats,
+  isIeltsLevel,
+} from "@/lib/ielts-exercises"
 import type { Group } from "@/lib/admin-storage"
 import { groupMemberCount } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
@@ -130,12 +139,11 @@ interface SubjectFolder {
   cls: string
 }
 
-/** Subject folders shown inside every level. Grammar/Vocabulary carry the catalogue content. */
-const SUBJECT_FOLDERS: SubjectFolder[] = [
+/** Subject folders inside CEFR levels. IELTS skills live under the IELTS folder. */
+const CEFR_SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800 ring-amber-200/70" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700 ring-violet-200/70" },
   { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-indigo-100 text-indigo-700 ring-indigo-200/70" },
-  { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700 ring-emerald-200/70" },
 ]
@@ -318,6 +326,8 @@ export default function ExercisesSection({
     void fetchReadingSummaries().then(setReadings)
   }, [])
 
+  const ieltsStats = useMemo(() => ieltsFolderStats(readings), [readings])
+
   // Exactly the six fixed levels, with their content folded in. Topics/decks
   // whose CEFR band falls outside A1–C2 are bucketed into the nearest fixed band.
   const levelFolders = useMemo(() => {
@@ -448,7 +458,7 @@ export default function ExercisesSection({
               <Skeleton className="h-4 w-80" />
             </div>
             <Skeleton className="h-10 w-full sm:max-w-md rounded-md" />
-            <LevelFolderCardsSkeleton count={6} />
+            <LevelFolderCardsSkeleton count={7} />
           </section>
         ) : levelFolders.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
@@ -573,6 +583,16 @@ export default function ExercisesSection({
                     onOpen={() => setSelectedLevel(folder.level)}
                   />
                 ))}
+                <LevelFolderCard
+                  level={IELTS_LEVEL_KEY}
+                  label={IELTS_LEVEL.label}
+                  badge="IELTS"
+                  topicCount={ieltsStats.sectionCount}
+                  exerciseCount={ieltsStats.passageCount}
+                  questionCount={ieltsStats.questionCount}
+                  colorCls={IELTS_LEVEL_PALETTE + " ring-indigo-200/70"}
+                  onOpen={() => setSelectedLevel(IELTS_LEVEL_KEY)}
+                />
               </div>
             )}
           </section>
@@ -631,7 +651,11 @@ export default function ExercisesSection({
 
   // ─── Category folders view (inside a level) ──────────────────────────────
   if (!selectedTopic && selectedLevel && !selectedCategory) {
+    const subjectFolders = isIeltsLevel(selectedLevel) ? IELTS_SUBJECT_FOLDERS : CEFR_SUBJECT_FOLDERS
     const statsFor = (id: string): { count: number; lines: string[] } => {
+      if (isIeltsLevel(selectedLevel)) {
+        return ieltsCategoryStats(id, readings)
+      }
       if (id === "vocabulary") {
         const words = vocabDecksForLevel.reduce((acc, d) => acc + d.words.length, 0)
         return {
@@ -653,13 +677,7 @@ export default function ExercisesSection({
         }
       }
       if (id === "reading") {
-        return {
-          count: readings.length,
-          lines: [
-            `${readings.length} passage${readings.length === 1 ? "" : "s"}`,
-            "IELTS-style questions",
-          ],
-        }
+        return { count: 0, lines: [] }
       }
       const topics = levelTopics.filter((t) => t.category === id)
       const exercises = topics.reduce((acc, t) => acc + t.exerciseCount, 0)
@@ -678,7 +696,7 @@ export default function ExercisesSection({
         <Breadcrumbs
           items={[
             { label: "Exercises", onClick: () => setSelectedLevel(null) },
-            { label: selectedLevel },
+            { label: isIeltsLevel(selectedLevel) ? IELTS_LEVEL.label : selectedLevel },
           ]}
         />
         <div>
@@ -686,16 +704,22 @@ export default function ExercisesSection({
             <span
               className={cn(
                 "inline-flex items-center rounded-xl px-3 py-1 text-xl font-bold ring-1",
-                folderColorClass(activeLevelFolder?.color) ?? levelBadgeClass(selectedLevel),
+                isIeltsLevel(selectedLevel)
+                  ? IELTS_LEVEL_PALETTE + " ring-indigo-200/70"
+                  : folderColorClass(activeLevelFolder?.color) ?? levelBadgeClass(selectedLevel),
               )}
             >
-              {selectedLevel}
+              {isIeltsLevel(selectedLevel) ? IELTS_LEVEL.label : selectedLevel}
             </span>
-            <span className="text-base font-medium text-slate-500">
-              {activeLevelFolder?.label ?? LEVEL_LABELS[selectedLevel] ?? ""}
-            </span>
+            {!isIeltsLevel(selectedLevel) ? (
+              <span className="text-base font-medium text-slate-500">
+                {activeLevelFolder?.label ?? LEVEL_LABELS[selectedLevel] ?? ""}
+              </span>
+            ) : null}
           </div>
-          <p className="mt-1 text-sm text-slate-500">Choose a section</p>
+          <p className="mt-1 text-sm text-slate-500">
+            {isIeltsLevel(selectedLevel) ? "Choose an exam skill" : "Choose a section"}
+          </p>
         </div>
         <Button
           type="button"
@@ -708,7 +732,7 @@ export default function ExercisesSection({
           Back
         </Button>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {SUBJECT_FOLDERS.map((folder) => {
+          {subjectFolders.map((folder) => {
             const stats = statsFor(folder.id)
             return (
               <SubjectFolderCard
@@ -740,10 +764,11 @@ export default function ExercisesSection({
 
   // ─── Topics-in-category view ──────────────────────────────────────────────
   if (!selectedTopic && selectedLevel && selectedCategory) {
-    const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
+    const subjectFolders = isIeltsLevel(selectedLevel) ? IELTS_SUBJECT_FOLDERS : CEFR_SUBJECT_FOLDERS
+    const subject = subjectFolders.find((f) => f.id === selectedCategory)
     const isVocab = selectedCategory === "vocabulary"
     const isPodcasts = selectedCategory === "podcasts"
-    const isReading = selectedCategory === "reading"
+    const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
     const topics = levelTopics.filter((t) => t.category === selectedCategory)
     const count = isVocab
       ? vocabDecksForLevel.length
@@ -752,7 +777,7 @@ export default function ExercisesSection({
         : isReading
           ? readings.length
           : topics.length
-    const levelLabel = selectedLevel
+    const levelLabel = isIeltsLevel(selectedLevel) ? IELTS_LEVEL.label : selectedLevel
     return (
       <div className="space-y-5">
         <Breadcrumbs
@@ -898,7 +923,9 @@ export default function ExercisesSection({
   const topicLevel =
     selectedLevel ?? (selectedTopicMeta ? primaryLevel(selectedTopicMeta.levels) : null)
   const topicCategory = selectedCategory ?? selectedTopicMeta?.category ?? "grammar"
-  const topicSubject = SUBJECT_FOLDERS.find((f) => f.id === topicCategory)
+  const topicSubject =
+    CEFR_SUBJECT_FOLDERS.find((f) => f.id === topicCategory) ??
+    IELTS_SUBJECT_FOLDERS.find((f) => f.id === topicCategory)
 
   return (
     <div className="space-y-4">
