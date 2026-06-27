@@ -72,6 +72,12 @@ import {
   podcastHasWords,
   type PodcastEpisode,
 } from "@/lib/podcast-data"
+import {
+  listReadings,
+  fetchReadingSummaries,
+  readingHomeworkSlug,
+  type IeltsReadingSummary,
+} from "@/lib/reading-data"
 import type { Group } from "@/lib/admin-storage"
 import { groupMemberCount } from "@/lib/admin-storage"
 import { homeworkApi } from "@/lib/api"
@@ -270,6 +276,7 @@ export default function ExercisesSection({
   const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
   const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
   const [assignPodcast, setAssignPodcast] = useState<PodcastEpisode | null>(null)
+  const [assignReading, setAssignReading] = useState<IeltsReadingSummary | null>(null)
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
@@ -304,6 +311,11 @@ export default function ExercisesSection({
     const reload = () => void fetchPodcasts().then(setPodcasts)
     reload()
     return onPodcastsInvalidate(reload)
+  }, [])
+
+  const [readings, setReadings] = useState<IeltsReadingSummary[]>(() => listReadings())
+  useEffect(() => {
+    void fetchReadingSummaries().then(setReadings)
   }, [])
 
   // Exactly the six fixed levels, with their content folded in. Topics/decks
@@ -600,6 +612,19 @@ export default function ExercisesSection({
           }}
           createdByName={createdByName}
         />
+
+        <AssignReadingDialog
+          test={assignReading}
+          groups={assignableGroups}
+          open={!!assignReading}
+          onOpenChange={(open) => !open && setAssignReading(null)}
+          onAssigned={() => {
+            toast({ title: "Reading task assigned" })
+            setAssignReading(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
       </div>
     )
   }
@@ -624,6 +649,15 @@ export default function ExercisesSection({
           lines: [
             `${podcastsForLevel.length} episode${podcastsForLevel.length === 1 ? "" : "s"}`,
             withWords > 0 ? `${withWords} with vocabulary` : "Listening practice",
+          ],
+        }
+      }
+      if (id === "reading") {
+        return {
+          count: readings.length,
+          lines: [
+            `${readings.length} passage${readings.length === 1 ? "" : "s"}`,
+            "IELTS-style questions",
           ],
         }
       }
@@ -709,12 +743,15 @@ export default function ExercisesSection({
     const subject = SUBJECT_FOLDERS.find((f) => f.id === selectedCategory)
     const isVocab = selectedCategory === "vocabulary"
     const isPodcasts = selectedCategory === "podcasts"
+    const isReading = selectedCategory === "reading"
     const topics = levelTopics.filter((t) => t.category === selectedCategory)
     const count = isVocab
       ? vocabDecksForLevel.length
       : isPodcasts
         ? podcastsForLevel.length
-        : topics.length
+        : isReading
+          ? readings.length
+          : topics.length
     const levelLabel = selectedLevel
     return (
       <div className="space-y-5">
@@ -735,7 +772,7 @@ export default function ExercisesSection({
           <h2 className="text-2xl font-bold text-slate-900">{subject?.label ?? selectedCategory}</h2>
           <p className="mt-1 text-sm text-slate-500">
             {levelLabel} · {count}{" "}
-            {isVocab ? "deck" : isPodcasts ? "podcast" : "topic"}
+            {isVocab ? "deck" : isPodcasts ? "podcast" : isReading ? "passage" : "topic"}
             {count === 1 ? "" : "s"}
           </p>
         </div>
@@ -780,6 +817,17 @@ export default function ExercisesSection({
               />
             ))}
           </div>
+        ) : isReading ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {readings.map((r) => (
+              <ReadingCard
+                key={r.slug}
+                test={r}
+                canAssign={canAssign}
+                onAssign={() => setAssignReading(r)}
+              />
+            ))}
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {topics.map((t) => (
@@ -821,6 +869,19 @@ export default function ExercisesSection({
           onAssigned={() => {
             toast({ title: "Podcast assigned to group" })
             setAssignPodcast(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
+
+        <AssignReadingDialog
+          test={assignReading}
+          groups={assignableGroups}
+          open={!!assignReading}
+          onOpenChange={(open) => !open && setAssignReading(null)}
+          onAssigned={() => {
+            toast({ title: "Reading task assigned" })
+            setAssignReading(null)
             onHomeworkAssigned?.()
           }}
           createdByName={createdByName}
@@ -1555,6 +1616,179 @@ function PodcastPreviewDialog({
         <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function ReadingCard({
+  test,
+  canAssign,
+  onAssign,
+}: {
+  test: IeltsReadingSummary
+  canAssign: boolean
+  onAssign: () => void
+}) {
+  return (
+    <div className="flex h-full flex-col rounded-2xl border border-sky-200/80 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          <span
+            aria-hidden
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white shadow-sm sm:h-10 sm:w-10"
+          >
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
+          </span>
+          <div className="min-w-0 space-y-1.5">
+            <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
+            <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
+              <span className="rounded-full bg-slate-100 px-2.5 py-1">{test.subtitle}</span>
+              {test.totalTimeMinutes > 0 && (
+                <span className="rounded-full bg-slate-100 px-2.5 py-1">
+                  {test.totalTimeMinutes} min
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+          IELTS
+        </span>
+      </div>
+      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">
+        IELTS Academic reading passage with timed practice and auto-scoring.
+      </p>
+      <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row">
+        {canAssign && (
+          <Button
+            size="sm"
+            onClick={onAssign}
+            className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
+          >
+            <UserPlus className="h-4 w-4" />
+            Assign to group
+          </Button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function AssignReadingDialog({
+  test,
+  groups,
+  open,
+  onOpenChange,
+  onAssigned,
+  createdByName,
+}: {
+  test: IeltsReadingSummary | null
+  groups: Group[]
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onAssigned: () => void
+  createdByName: string
+}) {
+  const { toast } = useToast()
+  const [groupId, setGroupId] = useState<string>("")
+  const [dueDate, setDueDate] = useState<string>("")
+  const [assigning, setAssigning] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    setGroupId("")
+    setDueDate(new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString().slice(0, 10))
+  }, [open])
+
+  const submit = async () => {
+    if (!test) return
+    if (!groupId) {
+      toast({ title: "Pick a group", variant: "destructive" })
+      return
+    }
+    if (!dueDate) {
+      toast({ title: "Pick a due date", variant: "destructive" })
+      return
+    }
+    setAssigning(true)
+    try {
+      await homeworkApi.create({
+        title: `Reading: ${test.title}`,
+        description: `Complete the IELTS reading passage "${test.title}" (${test.questionCount} questions).`,
+        subject: "reading",
+        groupId,
+        dueAt: new Date(dueDate).toISOString(),
+        estimatedMinutes: Math.max(15, test.totalTimeMinutes || 20),
+        timeLimitMinutes: Math.max(15, test.totalTimeMinutes || 20),
+        createdBy: createdByName,
+        exerciseSlug: readingHomeworkSlug(test.slug),
+      })
+      onAssigned()
+    } catch (err) {
+      toast({
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-slate-500" />
+            Assign reading
+          </DialogTitle>
+          <DialogDescription>
+            {test ? (
+              <>
+                <span className="font-medium text-slate-900">{test.title}</span>
+                <span className="text-slate-500"> · {test.questionCount} questions</span>
+              </>
+            ) : (
+              "Pick a group and a due date"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label>Group *</Label>
+            <Select value={groupId} onValueChange={setGroupId}>
+              <SelectTrigger>
+                <SelectValue placeholder={groups.length === 0 ? "No groups yet" : "Pick a group"} />
+              </SelectTrigger>
+              <SelectContent>
+                {groups.map((g) => (
+                  <SelectItem key={g.id} value={g.id}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="assign-reading-due">Due date *</Label>
+            <Input
+              id="assign-reading-due"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={assigning}>
+            Cancel
+          </Button>
+          <Button onClick={() => void submit()} disabled={assigning || !test}>
+            {assigning ? "Assigning…" : "Assign"}
           </Button>
         </DialogFooter>
       </DialogContent>

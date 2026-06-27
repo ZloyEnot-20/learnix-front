@@ -783,6 +783,30 @@ export const exercisesApi = {
     api.post<{ ok: boolean; podcastsWritten: number }>("/exercises/podcasts/import", { podcasts }),
   uploadPodcast: (form: FormData) =>
     apiUpload<{ ok: boolean; podcast: PodcastEpisode }>("/exercises/podcasts/upload", form),
+  readingSummaries: () =>
+    api.get<
+      {
+        slug: string
+        title: string
+        subtitle: string
+        totalTimeMinutes: number
+        questionCount: number
+        order?: number
+      }[]
+    >("/exercises/reading/summary"),
+  reading: (slug: string) =>
+    api.get<{
+      slug: string
+      title: string
+      totalTimeMinutes: number
+      questionCount: number
+      data: {
+        id: string
+        title: string
+        totalTimeMinutes: number
+        parts: unknown[]
+      }
+    }>(`/exercises/reading/${slug}`),
 }
 
 // ---------- Uploads ----------
