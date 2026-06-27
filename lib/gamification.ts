@@ -1,6 +1,9 @@
 /**
  * Shared gamification definitions (mirror the backend rules in
  * config/level-thresholds.js and services/gamification.service.js).
+ *
+ * Tier transitions (~homework-only baseline): Silver L6 ≈ 50, Gold L11 ≈ 250,
+ * Diamond L21 ≈ 750, Legend L30 unchanged.
  */
 
 export interface StudentLevel {
