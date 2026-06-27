@@ -1,6 +1,6 @@
 /** @typedef {"development" | "production" | "test"} NodeEnv */
 
-const DEV_BACKEND = "http://localhost:4000"
+const DEV_BACKEND = "https://api.learnix.space"
 const DEV_PUBLIC_API = `${DEV_BACKEND}/api`
 
 function trimSlash(url) {

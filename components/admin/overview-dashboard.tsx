@@ -642,7 +642,7 @@ export default function OverviewDashboard({
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-slate-700" />
-                  IELTS test catalogue
+                  IELTS assessment catalogue
                   <Badge
                     variant="secondary"
                     className="text-[10px] font-semibold uppercase tracking-wide"
@@ -658,10 +658,10 @@ export default function OverviewDashboard({
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
-              <p className="font-medium text-slate-900">IELTS tests are not available yet</p>
+              <p className="font-medium text-slate-900">IELTS assessment is not available yet</p>
               <p className="max-w-sm text-sm text-slate-500">
-                You&apos;ll be able to create and manage full practice tests from the IELTS Tests
-                section once this feature launches.
+                You&apos;ll be able to create and manage full practice tests from the IELTS
+                Assessment section once this feature launches.
               </p>
               {onSelectTab && (
                 <button
@@ -669,7 +669,7 @@ export default function OverviewDashboard({
                   onClick={() => onSelectTab("tests")}
                   className="mt-2 text-sm font-medium text-slate-700 underline-offset-2 hover:underline"
                 >
-                  Open IELTS Tests
+                  Open IELTS Assessment
                 </button>
               )}
             </div>

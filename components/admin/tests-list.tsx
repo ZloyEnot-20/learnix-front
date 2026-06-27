@@ -22,7 +22,7 @@ export default function TestsList() {
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-xl font-semibold text-slate-900">IELTS Tests</h2>
+                <h2 className="text-xl font-semibold text-slate-900">IELTS Assessment</h2>
                 <Badge
                   variant="secondary"
                   className="text-[10px] font-semibold uppercase tracking-wide"

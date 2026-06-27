@@ -60,7 +60,7 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   students: { title: "Students", subtitle: "Manage student profiles" },
   users: { title: "Users", subtitle: "Manage admins and teachers in your organization" },
   audit: { title: "Activity log", subtitle: "Who did what on the platform" },
-  tests: { title: "IELTS Tests", subtitle: "Full practice tests — coming soon" },
+  tests: { title: "IELTS Assessment", subtitle: "Full practice tests — coming soon" },
   homework: { title: "Homework check", subtitle: "Review submissions and track completion" },
   stats: { title: "Exercise statistics", subtitle: "Completion, cheating and failure rates per exercise" },
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
@@ -216,7 +216,7 @@ function AdminPanelContent() {
     {
       label: "Teaching",
       items: [
-        { id: "tests", label: "IELTS Tests", icon: ListChecks, badge: "Soon" },
+        { id: "tests", label: "IELTS Assessment", icon: ListChecks, badge: "Soon" },
         { id: "homework", label: "Homework check", icon: ClipboardList, badge: homeworkCount },
         { id: "stats", label: "Statistics", icon: BarChart3 },
         { id: "control", label: "Progress test", icon: Layers },
