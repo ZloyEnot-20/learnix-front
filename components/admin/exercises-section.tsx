@@ -76,6 +76,7 @@ import { ReadingTypeFilters } from "@/components/exercises/reading-type-filters"
 import {
   listReadings,
   fetchReadingSummaries,
+  fetchReading,
   readingHomeworkSlug,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
@@ -294,6 +295,7 @@ export default function ExercisesSection({
   const [assignReading, setAssignReading] = useState<IeltsReadingSummary | null>(null)
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
+  const [previewReading, setPreviewReading] = useState<IeltsReadingSummary | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
   const loading = !exercisesReady
 
@@ -644,6 +646,11 @@ export default function ExercisesSection({
           open={!!previewPodcast}
           onOpenChange={(open) => !open && setPreviewPodcast(null)}
         />
+        <ReadingPreviewDialog
+          test={previewReading}
+          open={!!previewReading}
+          onOpenChange={(open) => !open && setPreviewReading(null)}
+        />
         <AssignPodcastDialog
           episode={assignPodcast}
           groups={assignableGroups}
@@ -916,6 +923,7 @@ export default function ExercisesSection({
                       test={r}
                       canAssign={canAssign}
                       onAssign={() => setAssignReading(r)}
+                      onPreview={() => setPreviewReading(r)}
                     />
                   ))}
                 </div>
@@ -940,6 +948,12 @@ export default function ExercisesSection({
           episode={previewPodcast}
           open={!!previewPodcast}
           onOpenChange={(open) => !open && setPreviewPodcast(null)}
+        />
+
+        <ReadingPreviewDialog
+          test={previewReading}
+          open={!!previewReading}
+          onOpenChange={(open) => !open && setPreviewReading(null)}
         />
 
         <AssignVocabDialog
@@ -1719,14 +1733,141 @@ function PodcastPreviewDialog({
   )
 }
 
+function ReadingPreviewDialog({
+  test,
+  open,
+  onOpenChange,
+}: {
+  test: IeltsReadingSummary | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const [loading, setLoading] = useState(false)
+  const [passagePreview, setPassagePreview] = useState<string>("")
+  const [partTitles, setPartTitles] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!open || !test) {
+      setPassagePreview("")
+      setPartTitles([])
+      return
+    }
+    let cancelled = false
+    setLoading(true)
+    void fetchReading(test.slug)
+      .then((doc) => {
+        if (cancelled || !doc) return
+        const parts = doc.data.parts ?? []
+        setPartTitles(
+          parts.map((part) => part.passageTitle || part.title || `Part ${part.partNumber}`),
+        )
+        const firstPassage = parts[0]?.passage ?? ""
+        setPassagePreview(firstPassage.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim())
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [open, test])
+
+  const typeLabels = test
+    ? sortReadingQuestionTypes(test.questionTypes ?? []).map(readingQuestionTypeLabel)
+    : []
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-sky-500" />
+            {test?.title ?? "Reading"}
+          </DialogTitle>
+          <DialogDescription>
+            {test ? (
+              <>
+                <span className="font-medium text-slate-900">
+                  {test.questionCount} questions · {test.totalTimeMinutes} min
+                </span>
+                {test.subtitle ? (
+                  <span className="text-slate-500"> · {test.subtitle}</span>
+                ) : null}
+              </>
+            ) : (
+              "Reading preview"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+          {typeLabels.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {typeLabels.map((label) => (
+                <span
+                  key={label}
+                  className="rounded-full bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-800"
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
+          {loading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          ) : (
+            <>
+              {partTitles.length > 0 && (
+                <div className="space-y-1">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Passages
+                  </h4>
+                  <ul className="space-y-1 text-sm text-slate-700">
+                    {partTitles.map((title) => (
+                      <li key={title} className="rounded-lg border border-slate-200 px-3 py-2">
+                        {title}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {passagePreview ? (
+                <div className="space-y-1">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Passage preview
+                  </h4>
+                  <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm leading-relaxed text-slate-700 line-clamp-6">
+                    {passagePreview}
+                  </p>
+                </div>
+              ) : null}
+            </>
+          )}
+        </div>
+        <DialogFooter className="flex-row justify-end gap-2 sm:space-x-0">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 function ReadingCard({
   test,
   canAssign,
   onAssign,
+  onPreview,
 }: {
   test: IeltsReadingSummary
   canAssign: boolean
   onAssign: () => void
+  onPreview: () => void
 }) {
   const typeLabels = sortReadingQuestionTypes(test.questionTypes ?? []).map(
     readingQuestionTypeLabel,
@@ -1776,6 +1917,10 @@ function ReadingCard({
             Assign to group
           </Button>
         )}
+        <Button size="sm" variant="outline" onClick={onPreview} className="h-9 w-full gap-1.5 sm:w-auto">
+          <Eye className="h-4 w-4" />
+          Preview
+        </Button>
       </div>
     </div>
   )

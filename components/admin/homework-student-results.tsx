@@ -57,6 +57,8 @@ import { PodcastListenCoverageBar } from "@/components/admin/podcast-listen-cove
 import { listenedCoveragePercent, resolveListenedSegments } from "@/lib/podcast-listening"
 import { useAdminData } from "@/lib/admin-data-context"
 import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
+import { isReadingHomework } from "@/lib/reading-data"
+import { ReadingAnswersReview } from "@/components/admin/reading-answers-review"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -454,6 +456,9 @@ export function HomeworkStudentResults({
 
   const isSpeaking = homework.subject === "speaking"
   const isListening = homework.subject === "listening"
+  const isReading =
+    homework.subject === "reading" ||
+    isReadingHomework(homework.subject, homework.exerciseSlug)
 
   return (
     <div className="space-y-3">
@@ -762,6 +767,9 @@ function StudentDetail({
   const cheatingFailed = isCheatingFailed(row.submission)
   const isSpeaking = homework.subject === "speaking"
   const isListening = homework.subject === "listening"
+  const isReading =
+    homework.subject === "reading" ||
+    isReadingHomework(homework.subject, homework.exerciseSlug)
   const listeningStats = attempt?.listeningStats
   const podcastDurationSeconds = listeningStats?.podcastDurationSeconds ?? 0
   const listenCoveragePct =
@@ -862,7 +870,9 @@ function StudentDetail({
                   ? "Speaking recordings"
                   : isListening
                     ? "Listening result"
-                    : "Exercise result"}
+                    : isReading
+                      ? "Reading result"
+                      : "Exercise result"}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-900 ring-1 ring-slate-200">
                 {isSpeaking
@@ -1048,6 +1058,8 @@ function StudentDetail({
             ) : (
               <p className="mt-2 text-[11px] text-slate-500">No recordings submitted yet.</p>
             )
+          ) : isReading ? (
+            <ReadingAnswersReview exerciseSlug={homework.exerciseSlug} attempt={attempt} />
           ) : attempt.mistakes.length > 0 ? (
             <ul className="mt-3 space-y-1.5">
               {attempt.mistakes.map((m) => (

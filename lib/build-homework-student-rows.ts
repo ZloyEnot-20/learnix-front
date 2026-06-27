@@ -70,6 +70,7 @@ export function hasSubmissionResults(sub?: HomeworkSubmission): boolean {
     return (
       (attempt.totalQuestions ?? 0) > 0 ||
       (attempt.mistakes?.length ?? 0) > 0 ||
+      (attempt.readingAnswers?.length ?? 0) > 0 ||
       attempt.timedOut ||
       attempt.failedDueToCheating ||
       typeof attempt.answeredCount === "number" ||

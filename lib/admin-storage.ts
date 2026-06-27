@@ -97,8 +97,13 @@ export interface HomeworkMistake {
   score?: number
   /** Teacher feedback for a single speaking recording. */
   feedback?: string
-  /** Auto-generated speech-to-text (Whisper) — may be inaccurate. */
-  transcription?: string
+    /** Auto-generated speech-to-text (Whisper) — may be inaccurate. */
+    transcription?: string
+  }
+
+export interface ReadingAnswerRecord {
+  questionId: number
+  userAnswer: string
 }
 
 export interface HomeworkAttempt {
@@ -112,6 +117,8 @@ export interface HomeworkAttempt {
   timedOut?: boolean
   /** How many questions the student actually reached before time ran out. */
   answeredCount?: number
+  /** Per-question answers for IELTS reading homework. */
+  readingAnswers?: ReadingAnswerRecord[]
   listeningStats?: {
     totalListenSeconds: number
     seekCount: number
