@@ -1,9 +1,7 @@
 /**
  * IELTS Reading tests for homework assignment.
- * Summaries fall back to the local exercises catalogue when the API is empty.
+ * Summaries are loaded from the API; an empty list is used until the request completes.
  */
-
-import readingIndex from "../../exercises/ielts/reading/index.json"
 
 export interface IeltsReadingSummary {
   slug: string
@@ -44,15 +42,6 @@ export interface IeltsReadingDocument {
   }
 }
 
-interface ReadingCatalogItem {
-  id: string
-  title: string
-  subtitle: string
-  estimatedMinutes: number
-  questionCount: number
-  file: string
-}
-
 /** Homework `exerciseSlug` payload for reading, e.g. "reading:1518-australian-artist-margaret-preston". */
 export const READING_SLUG_PREFIX = "reading:"
 
@@ -74,32 +63,18 @@ export function isReadingHomework(
   return subject === "reading" || parseReadingHomeworkSlug(exerciseSlug) != null
 }
 
-function localReadingSummaries(): IeltsReadingSummary[] {
-  const items = (readingIndex as { items: ReadingCatalogItem[] }).items ?? []
-  return items.map((item, order) => ({
-    slug: item.id,
-    title: item.title,
-    subtitle: item.subtitle,
-    totalTimeMinutes: item.estimatedMinutes,
-    questionCount: item.questionCount,
-    order,
-  }))
-}
-
-/** Synchronous catalogue from bundled index.json. */
+/** Initial empty catalogue; use fetchReadingSummaries for the real list. */
 export function listReadings(): IeltsReadingSummary[] {
-  return localReadingSummaries()
+  return []
 }
 
 export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
   try {
     const { exercisesApi } = await import("./api")
-    const remote = await exercisesApi.readingSummaries()
-    if (remote.length > 0) return remote
+    return await exercisesApi.readingSummaries()
   } catch {
-    // fall back to bundled catalogue
+    return []
   }
-  return localReadingSummaries()
 }
 
 export async function fetchReading(slug: string): Promise<IeltsReadingDocument | undefined> {
