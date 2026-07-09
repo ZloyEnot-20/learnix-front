@@ -293,7 +293,7 @@ export function HomeworkDetailModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="!max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0"
+        className="!max-w-6xl w-[95vw] max-h-[90vh] p-0 flex flex-col overflow-hidden"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader className="border-b bg-gradient-to-br from-slate-50 to-white px-6 py-5">
@@ -336,7 +336,7 @@ export function HomeworkDetailModal({
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-5 space-y-5">
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
           <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
             <div className="mb-3 flex items-center justify-between">
               <div>
@@ -714,7 +714,7 @@ export function HomeworkDetailModal({
                         )}
                       >
                         <Save className="h-3.5 w-3.5 mr-1.5" />
-                        {row.dirty ? "Save changes" : "Saved"}
+                        {row.dirty ? "Submit" : "Submitted"}
                       </Button>
                     </div>
                   </li>
