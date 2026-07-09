@@ -766,6 +766,33 @@ export interface ImportCatalogResult {
   topics: { received: number; written: number }
   exercises: { received: number; written: number }
 }
+
+export interface VocabDeckSummary {
+  slug: string
+  title: string
+  description: string
+  level: string
+  topic?: string
+  difficulty?: "easy" | "medium" | "hard"
+  orgId?: string | null
+  wordCount: number
+}
+
+export interface ManageVocabPayload {
+  mode: "create" | "append"
+  level?: "A1"
+  difficulty?: "easy" | "medium" | "hard"
+  topic?: string
+  deckSlug?: string
+  title?: string
+  words: Array<{
+    term: string
+    definition: string
+    translation?: string
+    translationUz?: string
+    partOfSpeech?: string
+  }>
+}
 export const exercisesApi = {
   list: (topic?: string) =>
     api.get<GrammarExercise[]>(`/exercises${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
@@ -774,7 +801,13 @@ export const exercisesApi = {
   import: (payload: { topics: TopicMeta[]; exercises: GrammarExercise[] }) =>
     api.post<ImportCatalogResult>("/exercises/import", payload),
   vocab: () => api.get<VocabDeck[]>("/exercises/vocab"),
+  orgVocabDecks: () => api.get<VocabDeckSummary[]>("/exercises/vocab/org"),
   vocabDeck: (slug: string) => api.get<VocabDeck>(`/exercises/vocab/${slug}`),
+  manageVocab: (payload: ManageVocabPayload) =>
+    api.post<{ ok: boolean; deck: VocabDeck; wordsAdded: number }>(
+      "/exercises/vocab/manage",
+      payload,
+    ),
   importVocab: (decks: VocabDeck[]) =>
     api.post<{ ok: boolean; decksWritten: number }>("/exercises/vocab/import", { decks }),
   podcasts: () => api.get<PodcastEpisode[]>("/exercises/podcasts"),

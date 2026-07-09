@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import { IELTSLogo } from "@/components/ielts-logo"
 import { Button } from "@/components/ui/button"
@@ -69,9 +69,20 @@ export function AdminShell({
   children,
 }: AdminShellProps) {
   const router = useRouter()
+  const navScrollRef = useRef<HTMLDivElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collapsedSections, setCollapsedSections] = useState(readCollapsedSections)
   const RoleIcon = role.icon
+
+  const navigate = (href: string | undefined, id: string, inSheet: boolean) => {
+    const scrollTop = navScrollRef.current?.scrollTop ?? 0
+    if (href) router.push(href, { scroll: false })
+    else onSelect(id)
+    if (inSheet) setMobileOpen(false)
+    requestAnimationFrame(() => {
+      if (navScrollRef.current) navScrollRef.current.scrollTop = scrollTop
+    })
+  }
 
   useEffect(() => {
     localStorage.setItem(NAV_COLLAPSE_STORAGE_KEY, JSON.stringify(collapsedSections))
@@ -90,6 +101,15 @@ export function AdminShell({
       })
     })
   }, [active, sections])
+
+  useEffect(() => {
+    const el = navScrollRef.current
+    if (!el) return
+    const scrollTop = el.scrollTop
+    requestAnimationFrame(() => {
+      if (navScrollRef.current) navScrollRef.current.scrollTop = scrollTop
+    })
+  }, [active, collapsedSections])
 
   const toggleSection = (key: string) => {
     setCollapsedSections((prev) => {
@@ -115,7 +135,7 @@ export function AdminShell({
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 pb-4">
+      <div ref={navScrollRef} className="flex-1 overflow-y-auto px-3 pb-4">
         {sections.map((section, idx) => {
           const key = navSectionKey(section, idx)
           const isOpen = !collapsedSections[key]
@@ -150,11 +170,7 @@ export function AdminShell({
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => {
-                        if (item.href) router.push(item.href)
-                        else onSelect(item.id)
-                        if (inSheet) setMobileOpen(false)
-                      }}
+                      onClick={() => navigate(item.href, item.id, inSheet)}
                       className={cn(
                         "group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors",
                         isActive

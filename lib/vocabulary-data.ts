@@ -36,6 +36,9 @@ export interface VocabDeck {
   title: string
   description: string
   level: string
+  topic?: string
+  difficulty?: "easy" | "medium" | "hard"
+  orgId?: string | null
   words: VocabWord[]
 }
 

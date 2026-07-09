@@ -1,17 +1,18 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { orgApi } from "@/lib/api"
+import { orgApi, speechApi } from "@/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Camera, ClipboardList, Shield, Sparkles } from "lucide-react"
+import { Camera, CheckCircle2, ClipboardList, Mic, Shield, Sparkles, XCircle } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 function OrgSettingsSkeleton() {
   return (
     <div className="space-y-6">
-      {[0, 1].map((i) => (
+      {[0, 1, 2].map((i) => (
         <Card key={i}>
           <CardHeader>
             <Skeleton className="h-6 w-48" />
@@ -35,6 +36,7 @@ function OrgSettingsSkeleton() {
 export default function OrgSettingsSection() {
   const [allowScreenshots, setAllowScreenshots] = useState(false)
   const [entryTestAutocomplete, setEntryTestAutocomplete] = useState(false)
+  const [speechWorking, setSpeechWorking] = useState<boolean | null>(null)
   const [loading, setLoading] = useState(true)
   const [savingKey, setSavingKey] = useState<"allowScreenshots" | "entryTestAutocomplete" | null>(
     null,
@@ -44,9 +46,15 @@ export default function OrgSettingsSection() {
   const load = useCallback(async () => {
     try {
       setError(null)
-      const settings = await orgApi.settings()
+      const [settings, speechStatus] = await Promise.all([
+        orgApi.settings(),
+        speechApi.status().catch(() => null),
+      ])
       setAllowScreenshots(settings.allowScreenshots === true)
       setEntryTestAutocomplete(settings.entryTestAutocomplete === true)
+      setSpeechWorking(
+        speechStatus ? Boolean(speechStatus.online && speechStatus.loaded) : false,
+      )
     } catch {
       setError("Failed to load settings. Make sure the backend is running.")
     } finally {
@@ -95,6 +103,8 @@ export default function OrgSettingsSection() {
   if (loading) {
     return <OrgSettingsSkeleton />
   }
+
+  const speechOk = speechWorking === true
 
   return (
     <div className="space-y-6">
@@ -167,6 +177,41 @@ export default function OrgSettingsSection() {
               disabled={savingKey !== null}
               onCheckedChange={(checked) => void handleEntryTestAutocompleteToggle(checked)}
             />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Mic className="h-5 w-5 text-slate-500" />
+            Speech recognition
+          </CardTitle>
+          <CardDescription>
+            Automatic speech-to-text for student speaking homework.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-slate-900">Whisper service</p>
+              <p className="text-sm text-slate-500">
+                Transcribes speaking recordings after submission for teacher review.
+              </p>
+            </div>
+            <span
+              className={cn(
+                "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+                speechOk ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800",
+              )}
+            >
+              {speechOk ? (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              ) : (
+                <XCircle className="h-3.5 w-3.5" />
+              )}
+              {speechOk ? "Working" : "Not working"}
+            </span>
           </div>
         </CardContent>
       </Card>

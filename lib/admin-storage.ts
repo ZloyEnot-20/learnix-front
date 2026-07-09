@@ -52,6 +52,7 @@ export interface Student {
   targetExamDate?: string | null
   isActive?: boolean
   deletedAt?: string | null
+  lastLoginAt?: string | null
 }
 
 export type StaffType = "super_admin" | "admin" | "teacher"

@@ -42,7 +42,7 @@ import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
 import { StudentDetailModal } from "./student-detail-modal"
 import { ReadinessBadge } from "./student-ielts-profile-section"
 import { useToast } from "@/hooks/use-toast"
-import { cn, formatMoney } from "@/lib/utils"
+import { cn, formatMoney, formatLastLogin } from "@/lib/utils"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import {
   ENTRY_TEST_GROUP_NAME,
@@ -189,16 +189,31 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const entryTestStudents = useMemo(() => {
     if (!entryTestGroupId) return []
     if (groupFilter !== "all" && groupFilter !== entryTestGroupId) return []
-    return filtered.filter((s) => s.groupId != null && String(s.groupId) === entryTestGroupId)
+    return filtered
+      .filter((s) => s.groupId != null && String(s.groupId) === entryTestGroupId)
+      .sort((a, b) => {
+        const aTime = a.lastLoginAt ? new Date(a.lastLoginAt).getTime() : 0
+        const bTime = b.lastLoginAt ? new Date(b.lastLoginAt).getTime() : 0
+        return bTime - aTime
+      })
   }, [filtered, entryTestGroupId, groupFilter])
 
   const regularStudents = useMemo(() => {
+    const sortByLastLogin = (list: Student[]) =>
+      [...list].sort((a, b) => {
+        const aTime = a.lastLoginAt ? new Date(a.lastLoginAt).getTime() : 0
+        const bTime = b.lastLoginAt ? new Date(b.lastLoginAt).getTime() : 0
+        return bTime - aTime
+      })
+
     if (groupFilter === entryTestGroupId && entryTestGroupId) return []
-    if (!entryTestGroupId) return filtered
+    if (!entryTestGroupId) return sortByLastLogin(filtered)
     if (groupFilter === "all") {
-      return filtered.filter((s) => String(s.groupId ?? "") !== entryTestGroupId)
+      return sortByLastLogin(
+        filtered.filter((s) => String(s.groupId ?? "") !== entryTestGroupId),
+      )
     }
-    return filtered
+    return sortByLastLogin(filtered)
   }, [filtered, entryTestGroupId, groupFilter])
 
   const submit = async () => {
@@ -522,6 +537,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                         <tr className="border-b border-sky-100 text-left text-[11px] uppercase tracking-wider text-slate-500">
                           <th className="py-3 px-3 font-semibold">Student</th>
                           <th className="py-3 px-3 font-semibold">Phone</th>
+                          <th className="py-3 px-3 font-semibold">Last login</th>
                           <th className="py-3 px-3 font-semibold">Joined</th>
                           <th className="py-3 px-3 font-semibold text-right">Action</th>
                         </tr>
@@ -545,6 +561,17 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                               <p className="text-xs text-slate-500">{s.login}</p>
                             </td>
                             <td className="py-3 px-3 text-slate-700">{s.phone || "—"}</td>
+                            <td className="py-3 px-3 text-slate-600">
+                              <span
+                                title={
+                                  s.lastLoginAt
+                                    ? new Date(s.lastLoginAt).toLocaleString()
+                                    : "Has not logged in yet"
+                                }
+                              >
+                                {formatLastLogin(s.lastLoginAt)}
+                              </span>
+                            </td>
                             <td className="py-3 px-3 text-slate-600">
                               {new Date(s.joinedAt).toLocaleDateString()}
                             </td>
@@ -576,6 +603,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                       <th className="py-3 px-3 font-semibold">Monthly fee</th>
                       <th className="py-3 px-3 font-semibold">Est. band</th>
                       <th className="py-3 px-3 font-semibold">Readiness</th>
+                      <th className="py-3 px-3 font-semibold">Last login</th>
                       <th className="py-3 px-3 font-semibold">Joined</th>
                       <th className="py-3 px-3 font-semibold text-right">Action</th>
                     </tr>
@@ -645,6 +673,17 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             ) : (
                               <span className="text-slate-400">—</span>
                             )}
+                          </td>
+                          <td className="py-3 px-3 text-slate-600 tabular-nums">
+                            <span
+                              title={
+                                s.lastLoginAt
+                                  ? new Date(s.lastLoginAt).toLocaleString()
+                                  : "Has not logged in yet"
+                              }
+                            >
+                              {formatLastLogin(s.lastLoginAt)}
+                            </span>
                           </td>
                           <td className="py-3 px-3 text-slate-600 tabular-nums">
                             {new Date(s.joinedAt).toLocaleDateString()}

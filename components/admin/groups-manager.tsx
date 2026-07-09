@@ -97,7 +97,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   }, [params.section])
   const openGroup = useCallback(
     (id: string) => {
-      router.push(`/admin/groups/${id}`)
+      router.push(`/admin/groups/${id}`, { scroll: false })
     },
     [router],
   )
@@ -115,7 +115,7 @@ export default function GroupsManager({ canCreate = true, onChanged }: GroupsMan
   const [attendanceScheduleRevision, setAttendanceScheduleRevision] = useState(0)
   const closeGroup = useCallback(() => {
     setStudentSearch("")
-    router.push("/admin/groups")
+    router.push("/admin/groups", { scroll: false })
   }, [router])
   const [groupLessons, setGroupLessons] = useState<LessonSession[]>([])
   const [groupPayments, setGroupPayments] = useState<Payment[]>([])
