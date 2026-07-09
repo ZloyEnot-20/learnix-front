@@ -95,6 +95,18 @@ export const studentsApi = {
   context: (id: string) => api.get<StudentContextResponse>(`/students/${id}/context`),
   ieltsProfile: (id: string) => api.get<StudentIeltsProfile>(`/students/${id}/ielts-profile`),
   ieltsSummaries: () => api.get<StudentIeltsSummary[]>("/students/ielts-summaries"),
+  languageProfile: (id: string, force?: boolean) =>
+    api.get<StudentLanguageProfile>(
+      `/students/${id}/language-profile${force ? "?force=true" : ""}`,
+    ),
+  languageProfileSummaries: () =>
+    api.get<StudentLanguageProfileSummary[]>("/students/language-profile-summaries"),
+  recomputeLanguageProfile: (id: string) =>
+    api.post<StudentLanguageProfile>(`/students/${id}/language-profile/recompute`),
+  languageProfileHistory: (id: string) =>
+    api.get<LanguageProfileHistory>(`/students/${id}/language-profile/history`),
+  recommendedHomework: (id: string) =>
+    api.get<RecommendedHomeworkResponse>(`/students/${id}/recommended-homework`),
   sendNotification: (
     id: string,
     input: { title: string; message: string; type: StudentNotificationType },
@@ -145,6 +157,115 @@ export interface StudentIeltsSummary {
   readinessStatus: IeltsReadinessStatus
   targetExamDate: string | null
   targetBand: number | null
+}
+
+export interface LanguageTopicStat {
+  slug: string
+  title: string
+  attemptedQuestions: number
+  correctAnswers: number
+  totalAttempts: number
+  firstAttemptAt?: string
+  lastAttemptAt?: string
+  accuracy: number
+  weightedAccuracy: number
+  confidence: number
+  learnixLevel?: number
+  mastered: boolean
+  needsReview: boolean
+}
+
+export interface LanguageSkillProfile {
+  score: number
+  confidence: number
+  level: number
+  topics: LanguageTopicStat[]
+  hasData: boolean
+  dimensions?: {
+    grammar: number
+    vocabulary: number
+    fluency: number
+    pronunciation: number
+  }
+}
+
+export interface StudentLanguageProfile {
+  studentId: string
+  orgId: string
+  grammar: LanguageSkillProfile
+  vocabulary: LanguageSkillProfile
+  speaking: LanguageSkillProfile
+  reading: LanguageSkillProfile
+  listening: LanguageSkillProfile
+  writing: LanguageSkillProfile
+  overall: {
+    score: number
+    level: number
+    confidence: number
+  }
+  coverage: {
+    attemptedTopics: number
+    masteredTopics: number
+    totalTopics: number
+    needsReviewTopics: number
+  }
+  masteredTopics: string[]
+  needsReviewTopics: string[]
+  levelCoverage: Record<string, number>
+  recommendations: LanguageRecommendation[]
+  lastComputedAt: string
+  version: number
+}
+
+export interface LanguageRecommendation {
+  type: string
+  skill?: string
+  topic?: string
+  title?: string
+  priority: "high" | "medium" | "low"
+  reason?: string
+}
+
+export interface LanguageScoreHistoryPoint {
+  date: string
+  score: number
+  level: number
+}
+
+export interface LanguageProfileHistory {
+  grammar: LanguageScoreHistoryPoint[]
+  vocabulary: LanguageScoreHistoryPoint[]
+  speaking: LanguageScoreHistoryPoint[]
+  overall: LanguageScoreHistoryPoint[]
+}
+
+export interface HomeworkCandidate {
+  kind: string
+  subject: string
+  exerciseSlug: string
+  title: string
+  topic: string
+  level?: string
+  difficulty?: string
+  totalQuestions?: number
+  priority: "high" | "medium" | "low"
+  reason: string
+}
+
+export interface RecommendedHomeworkResponse {
+  recommendations: LanguageRecommendation[]
+  homeworkCandidates: HomeworkCandidate[]
+}
+
+export interface StudentLanguageProfileSummary {
+  studentId: string
+  overallScore: number | null
+  learnixLevel: number | null
+  confidence: number | null
+  grammarScore: number | null
+  vocabularyScore: number | null
+  speakingScore: number | null
+  hasData: boolean
 }
 
 // ---------- Staff users (org admin) ----------

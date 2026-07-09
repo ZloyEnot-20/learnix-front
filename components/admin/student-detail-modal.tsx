@@ -39,6 +39,7 @@ import { homeworkApi, paymentsApi, studentsApi } from "@/lib/api"
 import { cn, formatMoney } from "@/lib/utils"
 import { StudentDetailModalSkeleton } from "./skeletons"
 import { StudentIeltsProfileSection } from "./student-ielts-profile-section"
+import { StudentLanguageProfileSection } from "./student-language-profile-section"
 import { SendStudentNotificationDialog } from "./send-student-notification-dialog"
 
 const SUBJECT_META: Record<Subject, { icon: typeof BookOpen; color: string }> = {
@@ -226,6 +227,7 @@ export function StudentDetailModal({ student, open, onOpenChange }: StudentDetai
         </DialogHeader>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5 space-y-6">
+          <StudentLanguageProfileSection student={student} />
           <StudentIeltsProfileSection student={student} />
 
           {loading ? (
