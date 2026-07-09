@@ -2,33 +2,86 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { orgApi, speechApi } from "@/lib/api"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Camera, CheckCircle2, ClipboardList, Mic, Shield, Sparkles, XCircle } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { Camera, CheckCircle2, Mic, Sparkles, XCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+function SettingsGroupLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="px-1 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wide text-slate-400 first:pt-0">
+      {children}
+    </p>
+  )
+}
+
+function SettingsRow({
+  icon,
+  iconClassName,
+  title,
+  description,
+  htmlFor,
+  control,
+}: {
+  icon: React.ReactNode
+  iconClassName?: string
+  title: string
+  description?: string
+  htmlFor?: string
+  control: React.ReactNode
+}) {
+  return (
+    <div className="flex items-center gap-3 py-2.5">
+      <div
+        className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500",
+          iconClassName,
+        )}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <Label htmlFor={htmlFor} className="text-sm font-medium text-slate-900">
+          {title}
+        </Label>
+        {description ? (
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{description}</p>
+        ) : null}
+      </div>
+      <div className="shrink-0">{control}</div>
+    </div>
+  )
+}
 
 function OrgSettingsSkeleton() {
   return (
-    <div className="space-y-6">
-      {[0, 1, 2].map((i) => (
-        <Card key={i}>
-          <CardHeader>
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="h-4 w-full max-w-md" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 p-4">
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-56" />
-                <Skeleton className="h-3 w-72" />
+    <div className="mx-auto max-w-2xl">
+      <Card className="gap-0 py-0 shadow-none">
+        <CardContent className="px-4 py-3">
+          <Skeleton className="mb-3 h-3 w-20" />
+          {[0, 1, 2].map((i) => (
+            <div key={i}>
+              {i > 0 ? (
+                <>
+                  <Separator className="my-2" />
+                  <Skeleton className="mb-2 h-3 w-24" />
+                </>
+              ) : null}
+              <div className="flex items-center gap-3 py-2.5">
+                <Skeleton className="h-8 w-8 rounded-lg" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-4 w-36" />
+                  <Skeleton className="h-3 w-52" />
+                </div>
+                <Skeleton className="h-5 w-9 rounded-full" />
               </div>
-              <Skeleton className="h-6 w-11 rounded-full" />
             </div>
-          </CardContent>
-        </Card>
-      ))}
+          ))}
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -107,112 +160,75 @@ export default function OrgSettingsSection() {
   const speechOk = speechWorking === true
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-3">
       {error ? (
-        <Card>
-          <CardContent className="pt-6 text-sm text-rose-600">{error}</CardContent>
-        </Card>
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+          {error}
+        </p>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Shield className="h-5 w-5 text-slate-500" />
-            Homework integrity
-          </CardTitle>
-          <CardDescription>
-            Control how the mobile app protects homework sessions for your students.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-start justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
-            <div className="space-y-1">
-              <Label htmlFor="allow-screenshots" className="flex items-center gap-2 text-sm font-semibold">
-                <Camera className="h-4 w-4 text-slate-500" />
-                Allow screenshots
-              </Label>
-              <p className="text-sm text-slate-500">
-                When disabled, students cannot take screenshots while doing homework in the mobile app.
-                Recommended for exams and graded assignments.
-              </p>
-            </div>
-            <Switch
-              id="allow-screenshots"
-              checked={allowScreenshots}
-              disabled={savingKey !== null}
-              onCheckedChange={(checked) => void handleAllowScreenshotsToggle(checked)}
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <Card className="gap-0 py-0 shadow-none">
+        <CardContent className="px-4 py-3">
+          <SettingsGroupLabel>Mobile app</SettingsGroupLabel>
+          <SettingsRow
+            icon={<Camera className="h-4 w-4" />}
+            title="Allow screenshots"
+            description="Block screenshots during homework on mobile."
+            htmlFor="allow-screenshots"
+            control={
+              <Switch
+                id="allow-screenshots"
+                checked={allowScreenshots}
+                disabled={savingKey !== null}
+                onCheckedChange={(checked) => void handleAllowScreenshotsToggle(checked)}
+              />
+            }
+          />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <ClipboardList className="h-5 w-5 text-slate-500" />
-            Entry test
-          </CardTitle>
-          <CardDescription>
-            Options for phone-based placement tests and student entry tests.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-start justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
-            <div className="space-y-1">
-              <Label
-                htmlFor="entry-test-autocomplete"
-                className="flex items-center gap-2 text-sm font-semibold"
+          <Separator className="my-2" />
+
+          <SettingsGroupLabel>Entry test</SettingsGroupLabel>
+          <SettingsRow
+            icon={<Sparkles className="h-4 w-4 text-amber-600" />}
+            iconClassName="bg-amber-50"
+            title="Autocomplete button"
+            description="Quick-fill answers for demos and internal testing."
+            htmlFor="entry-test-autocomplete"
+            control={
+              <Switch
+                id="entry-test-autocomplete"
+                checked={entryTestAutocomplete}
+                disabled={savingKey !== null}
+                onCheckedChange={(checked) => void handleEntryTestAutocompleteToggle(checked)}
+              />
+            }
+          />
+
+          <Separator className="my-2" />
+
+          <SettingsGroupLabel>Speech recognition</SettingsGroupLabel>
+          <SettingsRow
+            icon={<Mic className="h-4 w-4" />}
+            title="Whisper service"
+            description="Transcribes speaking recordings after submission."
+            control={
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium",
+                  speechOk
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-rose-50 text-rose-700",
+                )}
               >
-                <Sparkles className="h-4 w-4 text-amber-600" />
-                Autocomplete button
-              </Label>
-              <p className="text-sm text-slate-500">
-                When enabled, entry test screens show a demo autocomplete button to quickly fill
-                answers. Useful for staff demos and internal testing — keep disabled for real candidates.
-              </p>
-            </div>
-            <Switch
-              id="entry-test-autocomplete"
-              checked={entryTestAutocomplete}
-              disabled={savingKey !== null}
-              onCheckedChange={(checked) => void handleEntryTestAutocompleteToggle(checked)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Mic className="h-5 w-5 text-slate-500" />
-            Speech recognition
-          </CardTitle>
-          <CardDescription>
-            Automatic speech-to-text for student speaking homework.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-slate-900">Whisper service</p>
-              <p className="text-sm text-slate-500">
-                Transcribes speaking recordings after submission for teacher review.
-              </p>
-            </div>
-            <span
-              className={cn(
-                "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
-                speechOk ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800",
-              )}
-            >
-              {speechOk ? (
-                <CheckCircle2 className="h-3.5 w-3.5" />
-              ) : (
-                <XCircle className="h-3.5 w-3.5" />
-              )}
-              {speechOk ? "Working" : "Not working"}
-            </span>
-          </div>
+                {speechOk ? (
+                  <CheckCircle2 className="h-3 w-3" />
+                ) : (
+                  <XCircle className="h-3 w-3" />
+                )}
+                {speechOk ? "Online" : "Offline"}
+              </span>
+            }
+          />
         </CardContent>
       </Card>
     </div>
