@@ -1,7 +1,6 @@
 "use client"
 
-import { Award, AlertTriangle, Lightbulb, MessageSquare } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { AlertTriangle, Lightbulb, MessageSquare } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { SpeakingAudioPlayer } from "@/components/speaking-audio-player"
 import type { HomeworkMistake } from "@/lib/admin-storage"
@@ -9,7 +8,6 @@ import { cn } from "@/lib/utils"
 
 export interface RecordingGradeDraft {
   questionId: number
-  score: string
   feedback: string
 }
 
@@ -18,7 +16,6 @@ export function recordingGradesFromMistakes(mistakes: HomeworkMistake[]): Record
     .filter((m) => /^https?:\/\//i.test(m.userAnswer))
     .map((m) => ({
       questionId: m.questionId,
-      score: m.score != null ? String(m.score) : "",
       feedback: m.feedback ?? "",
     }))
 }
@@ -34,7 +31,6 @@ export function SpeakingRecordingReviewCard({
   index: number
   onChange: (patch: Partial<RecordingGradeDraft>) => void
 }) {
-  const parsedScore = grade.score.trim() ? Number(grade.score.replace(",", ".")) : null
   const hint = mistake.correctAnswer || mistake.explanation
 
   return (
@@ -52,17 +48,6 @@ export function SpeakingRecordingReviewCard({
             </p>
           ) : null}
         </div>
-        {parsedScore != null && !Number.isNaN(parsedScore) ? (
-          <span
-            className={cn(
-              "inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
-              bandClass(parsedScore),
-            )}
-          >
-            <Award className="h-3 w-3" />
-            {parsedScore.toFixed(1)}
-          </span>
-        ) : null}
       </div>
 
       <div className="space-y-3 px-4 py-3">
@@ -85,40 +70,20 @@ export function SpeakingRecordingReviewCard({
           </p>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
-          <div>
-            <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-              Score (0–9)
-            </label>
-            <Input
-              value={grade.score}
-              onChange={(e) => onChange({ score: e.target.value })}
-              placeholder="6.5"
-              className="mt-1 h-9"
-            />
-          </div>
-          <div>
-            <label className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-              <MessageSquare className="h-3 w-3" />
-              Feedback
-            </label>
-            <Textarea
-              value={grade.feedback}
-              onChange={(e) => onChange({ feedback: e.target.value })}
-              placeholder="Pronunciation, fluency, vocabulary…"
-              rows={2}
-              className="mt-1 min-h-[72px] resize-y text-sm"
-            />
-          </div>
+        <div>
+          <label className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <MessageSquare className="h-3 w-3" />
+            Feedback for this recording
+          </label>
+          <Textarea
+            value={grade.feedback}
+            onChange={(e) => onChange({ feedback: e.target.value })}
+            placeholder="Notes about pronunciation, fluency, vocabulary…"
+            rows={3}
+            className="mt-1 min-h-[96px] resize-y text-sm"
+          />
         </div>
       </div>
     </li>
   )
-}
-
-function bandClass(score: number): string {
-  if (score >= 7) return "bg-emerald-100 text-emerald-800"
-  if (score >= 5.5) return "bg-sky-100 text-sky-800"
-  if (score >= 4) return "bg-amber-100 text-amber-800"
-  return "bg-rose-100 text-rose-800"
 }

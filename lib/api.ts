@@ -105,6 +105,8 @@ export const studentsApi = {
     api.get<LearnixLevelCatalogueEntry[]>("/students/language-profile/level-catalogue"),
   recomputeLanguageProfile: (id: string) =>
     api.post<StudentLanguageProfile>(`/students/${id}/language-profile/recompute`),
+  languageProfileDebug: (id: string) =>
+    api.get<LanguageProfileDebugResponse>(`/students/${id}/language-profile/debug`),
   languageProfileHistory: (id: string) =>
     api.get<LanguageProfileHistory>(`/students/${id}/language-profile/history`),
   recommendedHomework: (id: string) =>
@@ -239,6 +241,46 @@ export interface LanguageProfileHistory {
   vocabulary: LanguageScoreHistoryPoint[]
   speaking: LanguageScoreHistoryPoint[]
   overall: LanguageScoreHistoryPoint[]
+}
+
+export interface LanguageProfileSkillDebug {
+  rawScore: number
+  avgConfidence?: number
+  breadthFactor?: number
+  masteryFactor?: number
+  masteryBonus?: number
+  eligibleTopics?: number
+  masteredTopics?: number
+  finalScore: number
+  level?: number
+}
+
+export interface LanguageProfileVocabularySourceDebug {
+  source: string
+  events: number
+  questions: number
+  scoreIfOnlySource: number
+  rawScoreIfOnlySource: number
+  eligibleTopics: number
+}
+
+export interface LanguageProfileOverallDebug {
+  rawScore: number
+  breadthPenalty: number
+  levelPenalty: number
+  finalScore: number
+  level: number
+  confidence: number
+  attemptedTopics: number
+  totalTopics: number
+}
+
+export interface LanguageProfileDebugResponse {
+  grammar: LanguageProfileSkillDebug
+  vocabulary: LanguageProfileSkillDebug & { sources: LanguageProfileVocabularySourceDebug[] }
+  speaking: { rawScore: number; confidence: number; finalScore: number; level: number; approvedAssessments: number }
+  overall: LanguageProfileOverallDebug
+  meta: { computedAt: string; levelCoverage: Record<string, number> }
 }
 
 export interface HomeworkCandidate {

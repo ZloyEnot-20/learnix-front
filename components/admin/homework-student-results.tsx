@@ -343,42 +343,14 @@ export function HomeworkStudentResults({
       return
     }
 
-    const recordingGrades: Array<{ questionId: number; score?: number; feedback?: string }> = []
-    for (const grade of row.recordingGrades) {
-      const trimmedScore = grade.score.trim()
-      const parsedRecordingScore = trimmedScore
-        ? Number(trimmedScore.replace(",", "."))
-        : undefined
-      if (
-        parsedRecordingScore !== undefined &&
-        (Number.isNaN(parsedRecordingScore) ||
-          parsedRecordingScore < 0 ||
-          parsedRecordingScore > 9)
-      ) {
-        toast({
-          title: "Invalid recording score",
-          description: `Question ${grade.questionId}: score must be between 0 and 9.`,
-          variant: "destructive",
-        })
-        return
-      }
-      const trimmedFeedback = grade.feedback.trim()
-      if (parsedRecordingScore != null || trimmedFeedback) {
-        recordingGrades.push({
-          questionId: grade.questionId,
-          score: parsedRecordingScore,
-          feedback: trimmedFeedback || undefined,
-        })
-      }
-    }
-
-    const hasRecordingGrades = recordingGrades.length > 0
+    // Speaking homework: teacher gives ONE overall score (submission.score).
+    // Per-recording grades (band/rubric) are intentionally not collected in the UI.
     const submittedAt =
       row.status === "submitted" || row.status === "graded"
         ? row.submission.submittedAt ?? new Date().toISOString()
         : undefined
     const nextStatus =
-      isSpeakingHomework && (parsedScore != null || hasRecordingGrades)
+      isSpeakingHomework && parsedScore != null
         ? "graded"
         : row.status
 
@@ -389,22 +361,6 @@ export function HomeworkStudentResults({
         score: parsedScore,
         feedback: row.feedback.trim() || undefined,
         submittedAt,
-        recordingGrades: hasRecordingGrades ? recordingGrades : undefined,
-      })
-      const updatedMistakes = row.submission.attempt?.mistakes.map((m) => {
-        const grade = row.recordingGrades.find((g) => g.questionId === m.questionId)
-        if (!grade) return m
-        const parsedRecordingScore = grade.score.trim()
-          ? Number(grade.score.replace(",", "."))
-          : undefined
-        return {
-          ...m,
-          score:
-            parsedRecordingScore != null && !Number.isNaN(parsedRecordingScore)
-              ? parsedRecordingScore
-              : undefined,
-          feedback: grade.feedback.trim() || undefined,
-        }
       })
       setRows((prev) =>
         prev.map((r) =>
@@ -413,7 +369,9 @@ export function HomeworkStudentResults({
                 ...r,
                 dirty: false,
                 status: nextStatus,
-                recordingGrades: recordingGradesFromMistakes(updatedMistakes ?? []),
+                recordingGrades: recordingGradesFromMistakes(
+                  r.submission?.attempt?.mistakes ?? [],
+                ),
                 submission: r.submission
                   ? {
                       ...r.submission,
@@ -424,7 +382,7 @@ export function HomeworkStudentResults({
                       attempt: r.submission.attempt
                         ? {
                             ...r.submission.attempt,
-                            mistakes: updatedMistakes ?? r.submission.attempt.mistakes,
+                            mistakes: r.submission.attempt.mistakes,
                           }
                         : undefined,
                     }
@@ -1038,7 +996,6 @@ function StudentDetail({
                   const grade =
                     row.recordingGrades.find((g) => g.questionId === m.questionId) ?? {
                       questionId: m.questionId,
-                      score: "",
                       feedback: "",
                     }
                   return (
