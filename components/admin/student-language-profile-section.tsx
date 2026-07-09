@@ -323,10 +323,10 @@ function ProgressHistoryChart({ history }: { history: LanguageProfileHistory | n
             <YAxis domain={[0, 1000]} tick={{ fontSize: 10 }} width={36} />
             <Tooltip contentStyle={{ fontSize: 12 }} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Line type="monotone" dataKey="grammar" stroke="#fcd5a4" strokeWidth={2} dot={false} name="Grammar" />
-            <Line type="monotone" dataKey="vocabulary" stroke="#d8b4fe" strokeWidth={2} dot={false} name="Vocabulary" />
-            <Line type="monotone" dataKey="speaking" stroke="#9fcffb" strokeWidth={2} dot={false} name="Speaking" />
-            <Line type="monotone" dataKey="overall" stroke="#7c3aed" strokeWidth={2.5} dot={false} name="Overall" />
+            <Line type="monotone" dataKey="grammar" stroke="#F59E0B" strokeWidth={2.5} dot={false} name="Grammar" />
+            <Line type="monotone" dataKey="vocabulary" stroke="#A855F7" strokeWidth={2.5} dot={false} name="Vocabulary" />
+            <Line type="monotone" dataKey="speaking" stroke="#0EA5E9" strokeWidth={2.5} dot={false} name="Speaking" />
+            <Line type="monotone" dataKey="overall" stroke="#6D28D9" strokeWidth={3} dot={false} name="Overall" />
           </LineChart>
         </ResponsiveContainer>
       </div>
