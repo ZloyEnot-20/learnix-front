@@ -24,41 +24,29 @@ import {
 } from "recharts"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
 import type { Student } from "@/lib/admin-storage"
 import {
   studentsApi,
   type LanguageProfileHistory,
   type LanguageRecommendation,
+  type LanguageSkillProfile,
   type StudentLanguageProfile,
 } from "@/lib/api"
+import {
+  CEFR_LEVEL_COLORS,
+  collectAllTopics,
+  confidenceClass,
+  confidenceLabel,
+  formatTopicLabel,
+  groupTopicsByLevel,
+  learnixLevelToCefr,
+  scoreClass,
+  type TopicWithSkill,
+} from "@/lib/language-profile"
 import { cn } from "@/lib/utils"
+import { LearnixLevelScale } from "./learnix-level-scale"
 import { StudentLanguageProfileSkeleton } from "./skeletons"
-
-function formatTopicLabel(slug: string): string {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-}
-
-function confidenceLabel(c: number): string {
-  if (c >= 0.8) return "High"
-  if (c >= 0.5) return "Medium"
-  return "Low"
-}
-
-function confidenceClass(c: number): string {
-  if (c >= 0.8) return "bg-emerald-100 text-emerald-800"
-  if (c >= 0.5) return "bg-sky-100 text-sky-800"
-  return "bg-amber-100 text-amber-800"
-}
-
-function scoreClass(score: number): string {
-  if (score >= 750) return "text-emerald-700"
-  if (score >= 550) return "text-sky-700"
-  if (score >= 350) return "text-amber-700"
-  return "text-rose-700"
-}
 
 function priorityClass(p: string): string {
   if (p === "high") return "text-rose-700 bg-rose-50 border-rose-100"
@@ -83,21 +71,31 @@ function recommendationLabel(rec: LanguageRecommendation): string {
   }
 }
 
+const SKILL_META = {
+  grammar: { label: "Grammar", icon: GraduationCap, color: "#fcd5a4" },
+  vocabulary: { label: "Vocabulary", icon: BookMarked, color: "#d8b4fe" },
+  speaking: { label: "Speaking", icon: Mic, color: "#9fcffb" },
+} as const
+
 interface SkillCardProps {
-  label: string
-  icon: typeof GraduationCap
-  color: string
-  skill: StudentLanguageProfile["grammar"]
+  skillKey: keyof typeof SKILL_META
+  skill: LanguageSkillProfile
   emptyLabel?: string
 }
 
-function SkillCard({ label, icon: Icon, color, skill, emptyLabel }: SkillCardProps) {
+function SkillCard({ skillKey, skill, emptyLabel }: SkillCardProps) {
+  const meta = SKILL_META[skillKey]
+  const Icon = meta.icon
+  const mastered = skill.topics?.filter((t) => t.mastered).length ?? 0
+  const attempted = skill.topics?.length ?? 0
+  const cefr = learnixLevelToCefr(skill.level)
+
   if (!skill.hasData) {
     return (
       <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/80 p-4">
         <div className="flex items-center gap-2 text-slate-500">
-          <Icon className="h-4 w-4" style={{ color }} />
-          <span className="text-sm font-medium">{label}</span>
+          <Icon className="h-4 w-4" style={{ color: meta.color }} />
+          <span className="text-sm font-medium">{meta.label}</span>
         </div>
         <p className="mt-2 text-xs text-slate-400">{emptyLabel ?? "Not enough data yet"}</p>
       </div>
@@ -106,52 +104,184 @@ function SkillCard({ label, icon: Icon, color, skill, emptyLabel }: SkillCardPro
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2.5">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg"
-            style={{ backgroundColor: `${color}22` }}
+            className="flex h-9 w-9 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${meta.color}33` }}
           >
-            <Icon className="h-4 w-4" style={{ color }} />
+            <Icon className="h-4 w-4" style={{ color: meta.color }} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">{label}</p>
-            <p className={cn("text-xl font-bold tabular-nums", scoreClass(skill.score))}>
+            <p className="text-xs font-medium text-slate-500">{meta.label}</p>
+            <p className={cn("text-2xl font-bold tabular-nums leading-tight", scoreClass(skill.score))}>
               {skill.score}
             </p>
           </div>
         </div>
-        <Badge variant="secondary" className="text-[10px]">
-          L{skill.level}
-        </Badge>
+        <div className="text-right">
+          <Badge
+            variant="outline"
+            className="text-[10px]"
+            style={{
+              borderColor: `${CEFR_LEVEL_COLORS[cefr] ?? "#94a3b8"}66`,
+              color: CEFR_LEVEL_COLORS[cefr] ?? "#64748b",
+            }}
+          >
+            {cefr}
+          </Badge>
+          <p className="mt-1 text-[10px] text-slate-500">Level {skill.level}</p>
+        </div>
       </div>
-      <p className="mt-2 text-[11px] text-slate-500">
-        Confidence: {Math.round(skill.confidence * 100)}%
-      </p>
+
+      <div className="mt-3 space-y-2">
+        <div className="flex justify-between text-[10px] text-slate-500">
+          <span>{mastered} mastered</span>
+          <span>{attempted} topics touched</span>
+        </div>
+        <Progress
+          value={attempted > 0 ? (mastered / attempted) * 100 : 0}
+          className="h-1.5 bg-slate-100"
+        />
+        <p className="text-[10px] text-slate-400">
+          Confidence {Math.round(skill.confidence * 100)}%
+        </p>
+      </div>
     </div>
   )
 }
 
-function LevelCoverageBars({ coverage }: { coverage: Record<string, number> }) {
-  const levels = Array.from({ length: 9 }, (_, i) => String(i + 1))
+function OverallScoreCard({ profile }: { profile: StudentLanguageProfile }) {
+  const cefr = learnixLevelToCefr(profile.overall.level)
+  const coveragePct =
+    profile.coverage.totalTopics > 0
+      ? Math.round((profile.coverage.attemptedTopics / profile.coverage.totalTopics) * 100)
+      : 0
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-        Level coverage
+    <div className="col-span-2 rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4 sm:col-span-1">
+      <p className="text-[11px] font-medium uppercase tracking-wide text-violet-700/80">
+        Overall Score
       </p>
-      {levels.map((level) => {
-        const pct = coverage[level] ?? 0
-        const filled = Math.round(pct / 10)
-        const bar = "█".repeat(filled) + "░".repeat(10 - filled)
-        return (
-          <div key={level} className="flex items-center gap-2 text-xs">
-            <span className="w-14 shrink-0 font-medium text-slate-600">Level {level}</span>
-            <span className="font-mono text-[11px] text-violet-700 tracking-tight">{bar}</span>
-            <span className="ml-auto tabular-nums text-slate-500">{pct}%</span>
+      <div className="mt-1 flex items-end gap-2">
+        <p
+          className={cn("text-3xl font-bold tabular-nums", scoreClass(profile.overall.score))}
+        >
+          {profile.overall.score}
+        </p>
+        <Badge
+          className="mb-1 text-[10px]"
+          style={{
+            backgroundColor: `${CEFR_LEVEL_COLORS[cefr] ?? "#7c3aed"}22`,
+            color: CEFR_LEVEL_COLORS[cefr] ?? "#7c3aed",
+            border: "none",
+          }}
+        >
+          {cefr}
+        </Badge>
+      </div>
+      <p className="mt-1 text-sm font-medium text-violet-900">
+        Learnix Level {profile.overall.level}
+      </p>
+      <div className="mt-3 space-y-1.5">
+        <div className="flex justify-between text-[10px] text-violet-800/70">
+          <span>Catalogue explored</span>
+          <span className="tabular-nums">
+            {profile.coverage.attemptedTopics} / {profile.coverage.totalTopics} ({coveragePct}%)
+          </span>
+        </div>
+        <Progress value={coveragePct} className="h-1.5 bg-violet-100" />
+        <p className="text-[10px] text-violet-700/60">
+          {profile.coverage.masteredTopics} mastered · {profile.coverage.needsReviewTopics} need review
+        </p>
+      </div>
+    </div>
+  )
+}
+
+const SKILL_BADGE: Record<TopicWithSkill["skill"], string> = {
+  grammar: "bg-amber-100 text-amber-800",
+  vocabulary: "bg-purple-100 text-purple-800",
+  speaking: "bg-sky-100 text-sky-800",
+}
+
+function TopicsMasteryPanel({ topics }: { topics: TopicWithSkill[] }) {
+  const mastered = topics.filter((t) => t.mastered)
+  const inProgress = topics.filter((t) => !t.mastered && t.attemptedQuestions >= 3)
+  const byLevel = groupTopicsByLevel(mastered)
+
+  if (!mastered.length && !inProgress.length) return null
+
+  return (
+    <div className="space-y-4">
+      {mastered.length > 0 ? (
+        <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+          <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-800">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Mastered topics ({mastered.length})
+          </p>
+          <div className="space-y-3">
+            {Array.from(byLevel.entries())
+              .sort(([a], [b]) => a - b)
+              .map(([level, levelTopics]) => (
+                <div key={level}>
+                  <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700/80">
+                    Level {level} · {learnixLevelToCefr(level)}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {levelTopics.map((topic) => (
+                      <span
+                        key={`${topic.skill}-${topic.slug}`}
+                        className="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] text-emerald-900"
+                        title={`${topic.weightedAccuracy}% accuracy · ${topic.attemptedQuestions} questions`}
+                      >
+                        <span
+                          className={cn(
+                            "rounded px-1 py-0.5 text-[9px] font-semibold uppercase",
+                            SKILL_BADGE[topic.skill],
+                          )}
+                        >
+                          {topic.skill.slice(0, 4)}
+                        </span>
+                        {topic.title || formatTopicLabel(topic.slug)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
           </div>
-        )
-      })}
+        </div>
+      ) : null}
+
+      {inProgress.length > 0 ? (
+        <div className="rounded-xl border border-amber-100 bg-amber-50/40 p-4">
+          <p className="mb-3 text-xs font-semibold text-amber-900">
+            In progress ({inProgress.length})
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {inProgress
+              .sort((a, b) => b.weightedAccuracy - a.weightedAccuracy)
+              .map((topic) => (
+                <span
+                  key={`${topic.skill}-${topic.slug}`}
+                  className="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-white px-2 py-1 text-[10px] text-amber-950"
+                  title={`${topic.weightedAccuracy}% weighted accuracy`}
+                >
+                  <span
+                    className={cn(
+                      "rounded px-1 py-0.5 text-[9px] font-semibold uppercase",
+                      SKILL_BADGE[topic.skill],
+                    )}
+                  >
+                    {topic.skill.slice(0, 4)}
+                  </span>
+                  {topic.title || formatTopicLabel(topic.slug)}
+                  <span className="text-amber-600">{Math.round(topic.weightedAccuracy)}%</span>
+                </span>
+              ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -252,6 +382,11 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
     setRefreshing(false)
   }
 
+  const allTopics = useMemo(
+    () => (profile ? collectAllTopics(profile) : []),
+    [profile],
+  )
+
   if (loading) {
     return <StudentLanguageProfileSkeleton />
   }
@@ -270,7 +405,6 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
   const hasAnySkill =
     profile.grammar.hasData || profile.vocabulary.hasData || profile.speaking.hasData
 
-  const masteredLabels = profile.masteredTopics.map(formatTopicLabel)
   const recommendations = profile.recommendations ?? []
 
   return (
@@ -309,31 +443,49 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="col-span-2 rounded-xl border border-violet-200 bg-violet-50/60 p-4 sm:col-span-1">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-violet-700/80">
-                Overall Score
-              </p>
-              <p className={cn("mt-1 text-3xl font-bold tabular-nums", scoreClass(profile.overall.score))}>
-                {profile.overall.score}
-              </p>
-              <p className="mt-1 text-xs text-violet-800/70">
-                Learnix Level {profile.overall.level}
-              </p>
-            </div>
-            <SkillCard label="Grammar" icon={GraduationCap} color="#fcd5a4" skill={profile.grammar} />
-            <SkillCard label="Vocabulary" icon={BookMarked} color="#d8b4fe" skill={profile.vocabulary} />
+            <OverallScoreCard profile={profile} />
+            <SkillCard skillKey="grammar" skill={profile.grammar} />
+            <SkillCard skillKey="vocabulary" skill={profile.vocabulary} />
             <SkillCard
-              label="Speaking"
-              icon={Mic}
-              color="#9fcffb"
+              skillKey="speaking"
               skill={profile.speaking}
               emptyLabel="No speaking assessments yet"
             />
           </div>
 
+          <LearnixLevelScale
+            levelCoverage={profile.levelCoverage ?? {}}
+            studentLevel={profile.overall.level}
+            studentTopics={allTopics}
+          />
+
+          <TopicsMasteryPanel topics={allTopics} />
+
           <div className="grid gap-4 lg:grid-cols-2">
-            <LevelCoverageBars coverage={profile.levelCoverage ?? {}} />
             <ProgressHistoryChart history={history} />
+
+            {profile.needsReviewTopics.length > 0 ? (
+              <div className="rounded-xl border border-amber-100 bg-amber-50/50 p-4">
+                <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-amber-900">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  Needs review ({profile.needsReviewTopics.length})
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {profile.needsReviewTopics.map((slug) => (
+                    <span
+                      key={slug}
+                      className="rounded-md border border-amber-200 bg-white px-2 py-1 text-[10px] text-amber-950"
+                    >
+                      {formatTopicLabel(slug)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">
+                No topics flagged for review.
+              </div>
+            )}
           </div>
 
           {recommendations.length > 0 ? (
@@ -394,57 +546,11 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
             </div>
           ) : null}
 
-          <div className="flex flex-wrap gap-4 text-xs text-slate-600">
-            <span>
-              Coverage: {profile.coverage.attemptedTopics} / {profile.coverage.totalTopics} topics
-            </span>
-            <span>Mastered: {profile.coverage.masteredTopics}</span>
-            <span>Needs review: {profile.coverage.needsReviewTopics}</span>
-            {profile.lastComputedAt ? (
-              <span className="text-slate-400">
-                Updated {new Date(profile.lastComputedAt).toLocaleString()}
-              </span>
-            ) : null}
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {masteredLabels.length > 0 ? (
-              <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4">
-                <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-800">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  Mastered topics
-                </p>
-                <ul className="space-y-1">
-                  {masteredLabels.slice(0, 8).map((t) => (
-                    <li key={t} className="text-xs text-emerald-900">
-                      ✅ {t}
-                    </li>
-                  ))}
-                  {masteredLabels.length > 8 ? (
-                    <li className="text-[11px] text-emerald-700/70">
-                      +{masteredLabels.length - 8} more
-                    </li>
-                  ) : null}
-                </ul>
-              </div>
-            ) : null}
-
-            {profile.needsReviewTopics.length > 0 ? (
-              <div className="rounded-xl border border-amber-100 bg-amber-50/50 p-4">
-                <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-amber-900">
-                  <AlertTriangle className="h-3.5 w-3.5" />
-                  Needs review
-                </p>
-                <ul className="space-y-1">
-                  {profile.needsReviewTopics.slice(0, 8).map((slug) => (
-                    <li key={slug} className="text-xs text-amber-950">
-                      ⚠️ {formatTopicLabel(slug)}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-          </div>
+          {profile.lastComputedAt ? (
+            <p className="text-right text-[10px] text-slate-400">
+              Updated {new Date(profile.lastComputedAt).toLocaleString()}
+            </p>
+          ) : null}
         </>
       )}
     </section>

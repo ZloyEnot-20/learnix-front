@@ -101,6 +101,8 @@ export const studentsApi = {
     ),
   languageProfileSummaries: () =>
     api.get<StudentLanguageProfileSummary[]>("/students/language-profile-summaries"),
+  languageProfileLevelCatalogue: () =>
+    api.get<LearnixLevelCatalogueEntry[]>("/students/language-profile/level-catalogue"),
   recomputeLanguageProfile: (id: string) =>
     api.post<StudentLanguageProfile>(`/students/${id}/language-profile/recompute`),
   languageProfileHistory: (id: string) =>
@@ -266,6 +268,15 @@ export interface StudentLanguageProfileSummary {
   vocabularyScore: number | null
   speakingScore: number | null
   hasData: boolean
+}
+
+export interface LearnixLevelCatalogueEntry {
+  level: number
+  cefr: string
+  title: string
+  description: string
+  grammarTopics: { slug: string; title: string }[]
+  vocabularyCefr: string
 }
 
 // ---------- Staff users (org admin) ----------

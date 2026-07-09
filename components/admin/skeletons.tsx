@@ -276,17 +276,11 @@ export function StudentLanguageProfileSkeleton() {
           </div>
         ))}
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 p-4 space-y-2">
-          <Skeleton className="h-3.5 w-28" />
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-4 w-full" />
-          ))}
-        </div>
-        <div className="rounded-xl border border-slate-200 p-4">
-          <Skeleton className="mb-3 h-3.5 w-32" />
-          <Skeleton className="h-52 w-full rounded-lg" />
-        </div>
+      <div className="rounded-xl border border-slate-200 p-4 space-y-2">
+        <Skeleton className="h-3.5 w-36" />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Skeleton key={i} className="h-14 w-full rounded-lg" />
+        ))}
       </div>
       <div className="rounded-xl border border-slate-200 p-4 space-y-2">
         <Skeleton className="h-3.5 w-36" />
