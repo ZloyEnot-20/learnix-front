@@ -780,7 +780,7 @@ export interface VocabDeckSummary {
 
 export interface ManageVocabPayload {
   mode: "create" | "append"
-  level?: "A1"
+  level?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
   difficulty?: "easy" | "medium" | "hard"
   topic?: string
   deckSlug?: string
@@ -791,6 +791,25 @@ export interface ManageVocabPayload {
     translation?: string
     translationUz?: string
     partOfSpeech?: string
+  }>
+}
+
+export interface SpeakingSetSummary {
+  slug: string
+  title: string
+  level: string
+  questionCount: number
+}
+
+export interface ManageSpeakingPayload {
+  mode: "create" | "append"
+  level?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
+  title?: string
+  exerciseSlug?: string
+  prompts: Array<{
+    text: string
+    hint?: string
+    explanation?: string
   }>
 }
 export const exercisesApi = {
@@ -806,6 +825,12 @@ export const exercisesApi = {
   manageVocab: (payload: ManageVocabPayload) =>
     api.post<{ ok: boolean; deck: VocabDeck; wordsAdded: number }>(
       "/exercises/vocab/manage",
+      payload,
+    ),
+  orgSpeakingSets: () => api.get<SpeakingSetSummary[]>("/exercises/speaking/org"),
+  manageSpeaking: (payload: ManageSpeakingPayload) =>
+    api.post<{ ok: boolean; exercise: GrammarExercise; promptsAdded: number }>(
+      "/exercises/speaking/manage",
       payload,
     ),
   importVocab: (decks: VocabDeck[]) =>

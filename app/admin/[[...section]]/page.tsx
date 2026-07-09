@@ -32,7 +32,7 @@ import HomeworkManager from "@/components/admin/homework-manager"
 import ControlWorkManager from "@/components/admin/control-work-manager"
 import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
-import { VocabularyManageSection } from "@/components/admin/vocabulary-manage-section"
+import { ManageExercisesSection } from "@/components/admin/manage-exercises-section"
 import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import UsersManager from "@/components/admin/users-manager"
@@ -64,7 +64,7 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
-  manage: { title: "Manage exercises", subtitle: "Add Stage 1 vocabulary decks for your organization" },
+  manage: { title: "Manage exercises", subtitle: "Add vocabulary and speaking content for your organization" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
   billing: { title: "Billing", subtitle: "Your organization subscription and platform payments" },
@@ -91,9 +91,9 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
 /** Sections that need the full exercise catalogue (GET /exercises). */
 const SECTIONS_NEED_EXERCISES = new Set(["homework", "exercises", "control"])
 
-/** Platform content import — org admin and super admin. */
+/** Platform content import — teachers, org admin and super admin. */
 function canManageExercises(type: UserRole): boolean {
-  return isAdminRole(type)
+  return canAccessAdmin(type)
 }
 
 /** Section ids restricted to org admin / super admin (not teachers). */
@@ -314,7 +314,7 @@ function AdminPanelContent() {
         />
       )}
       {activeTab === "manage" && manageExercises && (
-        <VocabularyManageSection onChanged={bumpCatalog} />
+        <ManageExercisesSection onChanged={bumpCatalog} />
       )}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
