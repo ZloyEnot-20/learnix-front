@@ -35,7 +35,11 @@ import {
 } from "lucide-react"
 import type { Group, Student } from "@/lib/admin-storage"
 import { studentMonthlyFee } from "@/lib/admin-storage"
-import { studentsApi, type StudentIeltsSummary } from "@/lib/api"
+import {
+  studentsApi,
+  type StudentIeltsSummary,
+  type StudentLanguageProfileSummary,
+} from "@/lib/api"
 import { invalidateStudents } from "@/lib/admin-cache"
 import { useAdminData } from "@/lib/admin-data-context"
 import { StatCardsSkeleton, TableSkeleton } from "./skeletons"
@@ -81,13 +85,21 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
   const [pendingRemove, setPendingRemove] = useState<{ id: string; name: string } | null>(null)
   const [refreshing, setRefreshing] = useState(false)
   const [ieltsSummaries, setIeltsSummaries] = useState<StudentIeltsSummary[]>([])
+  const [languageSummaries, setLanguageSummaries] = useState<StudentLanguageProfileSummary[]>(
+    [],
+  )
 
   useEffect(() => {
     if (!ready) return
-    studentsApi
-      .ieltsSummaries()
-      .then(setIeltsSummaries)
-      .catch(() => setIeltsSummaries([]))
+    Promise.all([studentsApi.ieltsSummaries(), studentsApi.languageProfileSummaries()])
+      .then(([ielts, lang]) => {
+        setIeltsSummaries(ielts)
+        setLanguageSummaries(lang)
+      })
+      .catch(() => {
+        setIeltsSummaries([])
+        setLanguageSummaries([])
+      })
   }, [ready, students.length])
 
   const ieltsByStudent = useMemo(() => {
@@ -96,13 +108,23 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
     return map
   }, [ieltsSummaries])
 
+  const languageByStudent = useMemo(() => {
+    const map = new Map<string, StudentLanguageProfileSummary>()
+    for (const row of languageSummaries) map.set(row.studentId, row)
+    return map
+  }, [languageSummaries])
+
   const handleRefresh = async () => {
     setRefreshing(true)
     try {
       invalidateStudents()
       await refreshAll(true)
-      const summaries = await studentsApi.ieltsSummaries()
-      setIeltsSummaries(summaries)
+      const [ielts, lang] = await Promise.all([
+        studentsApi.ieltsSummaries(),
+        studentsApi.languageProfileSummaries(),
+      ])
+      setIeltsSummaries(ielts)
+      setLanguageSummaries(lang)
       onChanged?.()
     } catch (err) {
       toast({
@@ -612,6 +634,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                     {regularStudents.map((s) => {
                       const group = groups.find((g) => g.id === s.groupId)
                       const ielts = ieltsByStudent.get(s.id)
+                      const language = languageByStudent.get(s.id)
                       return (
                         <tr
                           key={s.id}
@@ -665,7 +688,7 @@ export default function StudentsManager({ onChanged }: StudentsManagerProps) {
                             })()}
                           </td>
                           <td className="py-3 px-3 font-semibold tabular-nums text-slate-900">
-                            {ielts?.overallBand != null ? ielts.overallBand.toFixed(1) : "—"}
+                            {language?.learnixLevel != null ? language.learnixLevel : "—"}
                           </td>
                           <td className="py-3 px-3">
                             {ielts ? (
