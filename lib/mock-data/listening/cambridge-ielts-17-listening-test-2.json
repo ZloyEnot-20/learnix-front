@@ -1,0 +1,1038 @@
+{
+  "testId": "cambridge-ielts-17-academic-listening-test-2",
+  "title": "Cambridge IELTS 17 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-17-academic-listening-test-2/",
+  "book": 17,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-17-academic-listening-2-audio-1.mp3",
+      "content": "Questions 1-7\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Opportunities for voluntary work in Southoe village Library Help with [1] books (times to be arranged) Help needed to keep [2] of books up to date Library is in the [3] Room in the village hall Lunch club Help by providing [4] Help with hobbies such as [5] Help for individuals needed next week Taking Mrs Carroll to [6] Work in the [7] at Mr Selsbury’s house\n\nQuestions 8-10\n\nComplete the table below. Write ONE WORD ONLY for each answer. Village social events Date Event Location Help needed 19 Oct [8] Village hall providing refreshments 18 Nov dance Village hall checking [9] 31 Dec New Year’s Eve party Mountfort Hotel designing the [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-7\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Opportunities for voluntary work in Southoe village",
+          "sections": [
+            {
+              "heading": "Library",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "books (times to be arranged)",
+                  "before": "Help with"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "of books up to date",
+                  "before": "Help needed to keep"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "Room in the village hall",
+                  "before": "Library is in the"
+                }
+              ]
+            },
+            {
+              "heading": "Lunch club",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "Help by providing"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Help with hobbies such as"
+                }
+              ]
+            },
+            {
+              "heading": "Help for individuals needed next week",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Taking Mrs Carroll to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "at Mr Selsbury’s house",
+                  "before": "Work in the"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 8-10\n\nComplete the table below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Date",
+            "Event",
+            "Location",
+            "Help needed"
+          ],
+          "rows": [
+            [
+              "19 Oct",
+              "[8]",
+              "Village hall",
+              "providing refreshments"
+            ],
+            [
+              "18 Nov",
+              "dance",
+              "Village hall",
+              "checking\n[9]"
+            ],
+            [
+              "31 Dec",
+              "New Year’s Eve party",
+              "Mountfort Hotel",
+              "designing the\n[10]"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "collecting"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "records"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "West"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "transport"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "art"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "hospital"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "garden"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "quiz"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "tickets"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "poster"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-17-academic-listening-2-audio-2.mp3",
+      "content": "Questions 11-14\n\nChoose the correct letter, A , B or C . Oniton Hall\n\nQuestions 15-20\n\nWhich activity is offered at each of the following locations on the farm? Choose SIX answers from the box and write the correct letter, A-H , next to Questions. Activities Locations on the farm",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-14\n\nChoose the correct letter, A, B or C.\n\nOniton Hall"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "Many past owners made changes to",
+          "options": [
+            "A. the gardens.",
+            "B. the house.",
+            "C. the farm."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "Sir Edward Downes built Oniton Hall because he wanted",
+          "options": [
+            "A. a place for discussing politics.",
+            "B. a place to display his wealth.",
+            "C. a place for artists and writers."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Visitors can learn about the work of servants in the past from",
+          "options": [
+            "A. audio guides.",
+            "B. photographs.",
+            "C. people in costume."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "What is new for children at Onion Hall?",
+          "options": [
+            "A. clothes for dressing up",
+            "B. mini tractors",
+            "C. the adventure playground"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nWhich activity is offered at each of the following locations on the farm?\n\nChoose SIX answers from the box and write the correct letter, A-H, next to Questions.\n\nActivities\n\nLocations on the farm"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "dairy",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "large barn",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "small barn",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "stables",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "shed",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "parkland",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. shopping",
+            "B. watching cows being milked",
+            "C. seeing old farming equipment",
+            "D. eating and drinking",
+            "E. starting a trip",
+            "F. seeing rare breeds of animals",
+            "G. helping to look after animals",
+            "H. using farming tools"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "F"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-17-academic-listening-2-audio-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A-E .\n\nQuestions 23-27\n\nWhich opinion do the speakers give about each of the following aspects of The Emporium’s production of Romeo and Juliet ? Choose FIVE answers from the box and write the correct letter, A-G , next to Questions Opinions Aspects of the production\n\nQuestions 28-30\n\nChoose the correct letter, A , B or C .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "Which TWO things do the students agree they need to include in their review of Romeo and Juliet ?",
+          "options": [
+            "A. analysis of the text",
+            "B. a summary of the plot",
+            "C. a description of the theatre",
+            "D. a personal reaction",
+            "E. a reference to particular scenes"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-27\n\nWhich opinion do the speakers give about each of the following aspects of The Emporium’s production of Romeo and Juliet ?\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to Questions\n\nOpinions\n\nAspects of the production"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "the set",
+              "questionId": 23
+            },
+            {
+              "stepLabel": "the lighting",
+              "questionId": 24
+            },
+            {
+              "stepLabel": "the costume design",
+              "questionId": 25
+            },
+            {
+              "stepLabel": "the music",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "the actors’ delivery",
+              "questionId": 27
+            }
+          ],
+          "options": [
+            "A. They both expected this to be more traditional.",
+            "B. They both thought this was original.",
+            "C. They agree this created the right atmosphere.",
+            "D. They agree this was a major strength.",
+            "E. They were both disappointed by this.",
+            "F. They disagree about why this was an issue.",
+            "G. They disagree about how this could be improved."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 28-30\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "The students think the story of Romeo and Juliet is still relevant for young people today because",
+          "options": [
+            "A. it illustrates how easily conflict can start.",
+            "B. it deals with problems that families experience.",
+            "C. it teaches them about relationships."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "The students found watching Romeo and Juliet in another language",
+          "options": [
+            "A. frustrating.",
+            "B. demanding.",
+            "C. moving."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "Why do the students think Shakespeare’s plays have such international appeal?",
+          "options": [
+            "A. The stories are exciting.",
+            "B. There are recognisable characters.",
+            "C. They can be interpreted in many ways."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 23,
+          "type": "matching",
+          "label": "23",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 24,
+          "type": "matching",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-17-academic-listening-2-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. The impact of digital technology on the Icelandic language The Icelandic language has approximately [31] speakers has a [32] that is still growing has not changed a lot over the last thousand years has its own words for computer-based concepts, such as web browser and [33] Young speakers are big users of digital technology, such as [34] are becoming [35] very quickly are having discussions using only English while they are in the [36] at school are better able to identify the content of a [37] in English than Icelandic Technology and internet companies write very little in Icelandic because of the small number of speakers and because of how complicated its [38] is The Icelandic government has set up a fund to support the production of more digital content in the language believes that Icelandic has a secure future is worried that young Icelanders may lose their [39] as Icelanders is worried about the consequences of children not being [40] in either Icelandic or English",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "The impact of digital technology on the Icelandic language",
+          "sections": [
+            {
+              "heading": "The Icelandic language",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "speakers",
+                  "before": "has approximately"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "that is still growing",
+                  "before": "has a"
+                },
+                {
+                  "kind": "text",
+                  "text": "has not changed a lot over the last thousand years"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "has its own words for computer-based concepts, such as web browser and"
+                }
+              ]
+            },
+            {
+              "heading": "Young speakers",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "",
+                  "before": "are big users of digital technology, such as"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "very quickly",
+                  "before": "are becoming"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "at school",
+                  "before": "are having discussions using only English while they are in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "in English than Icelandic",
+                  "before": "are better able to identify the content of a"
+                }
+              ]
+            },
+            {
+              "heading": "Technology and internet companies",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "is",
+                  "before": "write very little in Icelandic because of the small number of speakers and because of how complicated its"
+                }
+              ]
+            },
+            {
+              "heading": "The Icelandic government",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "has set up a fund to support the production of more digital content in the language"
+                },
+                {
+                  "kind": "text",
+                  "text": "believes that Icelandic has a secure future"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "as Icelanders",
+                  "before": "is worried that young Icelanders may lose their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "in either Icelandic or English",
+                  "before": "is worried about the consequences of children not being"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "321,000 / 321000"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "vocabulary"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "podcast"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "smartphones"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "bilingual"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "playground"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "picture"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "grammar"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "identity"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "fluent"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "collecting"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "records"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "West"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "transport"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "art"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "hospital"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "garden"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "quiz"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tickets"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "poster"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Many past owners made changes to",
+      "options": [
+        "A. the gardens.",
+        "B. the house.",
+        "C. the farm."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Sir Edward Downes built Oniton Hall because he wanted",
+      "options": [
+        "A. a place for discussing politics.",
+        "B. a place to display his wealth.",
+        "C. a place for artists and writers."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Visitors can learn about the work of servants in the past from",
+      "options": [
+        "A. audio guides.",
+        "B. photographs.",
+        "C. people in costume."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "What is new for children at Onion Hall?",
+      "options": [
+        "A. clothes for dressing up",
+        "B. mini tractors",
+        "C. the adventure playground"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• dairy",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• large barn",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• small barn",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• stables",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• shed",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• parkland",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Which TWO things do the students agree they need to include in their review of Romeo and Juliet ?",
+      "options": [
+        "A. analysis of the text",
+        "B. a summary of the plot",
+        "C. a description of the theatre",
+        "D. a personal reaction",
+        "E. a reference to particular scenes"
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Which TWO things do the students agree they need to include in their review of Romeo and Juliet ?",
+      "options": [
+        "A. analysis of the text",
+        "B. a summary of the plot",
+        "C. a description of the theatre",
+        "D. a personal reaction",
+        "E. a reference to particular scenes"
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 23,
+      "type": "matching",
+      "label": "23",
+      "question": "• the set",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 24,
+      "type": "matching",
+      "label": "24",
+      "question": "• the lighting",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• the costume design",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• the music",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• the actors’ delivery",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "The students think the story of Romeo and Juliet is still relevant for young people today because",
+      "options": [
+        "A. it illustrates how easily conflict can start.",
+        "B. it deals with problems that families experience.",
+        "C. it teaches them about relationships."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "The students found watching Romeo and Juliet in another language",
+      "options": [
+        "A. frustrating.",
+        "B. demanding.",
+        "C. moving."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "Why do the students think Shakespeare’s plays have such international appeal?",
+      "options": [
+        "A. The stories are exciting.",
+        "B. There are recognisable characters.",
+        "C. They can be interpreted in many ways."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "321,000 / 321000"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vocabulary"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "podcast"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "smartphones"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bilingual"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "playground"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "picture"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "grammar"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "identity"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fluent"
+    }
+  ]
+}

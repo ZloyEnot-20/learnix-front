@@ -1,0 +1,1121 @@
+{
+  "testId": "cambridge-ielts-11-academic-listening-test-1",
+  "title": "Cambridge IELTS 11 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-11-academic-listening-test-1/",
+  "book": 11,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-11-academic-listening-1-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. HIRING A PUBLIC ROOM Example the Main Hall – seats ………. 200 ………. Room and cost the [1] Room – seats 100 Cost of Main Hall for Saturday evening: £ [2] + £250 deposit ( [3] payment is required) Cost includes use of tables and chairs and also [4] Additional charge for use of the kitchen: £25 Before the event Will need a [5] licence Need to contact caretaker (Mr Evans) in advance to arrange [6] During the event The building is no smoking The bank should use the [7] door at the back Don’t touch the system that controls the volume For microphones, contact the caretaker After the event Need to know the [8] for the cleaning cupboard The [9] must be washed and rubbish placed in black bags All [10] Must be taken down Chairs and tables must be piled up",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "HIRING A PUBLIC ROOM",
+          "sections": [
+            {
+              "heading": "Example",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "the Main Hall – seats ………. 200 ………."
+                }
+              ]
+            },
+            {
+              "heading": "Room and cost",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "Room – seats 100",
+                  "before": "the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Cost of Main Hall for Saturday evening: £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "payment is required)",
+                  "before": "+ £250 deposit ("
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "Cost includes use of tables and chairs and also"
+                },
+                {
+                  "kind": "text",
+                  "text": "Additional charge for use of the kitchen: £25"
+                }
+              ]
+            },
+            {
+              "heading": "Before the event",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "licence",
+                  "before": "Will need a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Need to contact caretaker (Mr Evans) in advance to arrange"
+                }
+              ]
+            },
+            {
+              "heading": "During the event",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "The building is no smoking"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "door at the back",
+                  "before": "The bank should use the"
+                },
+                {
+                  "kind": "text",
+                  "text": "Don’t touch the system that controls the volume"
+                },
+                {
+                  "kind": "text",
+                  "text": "For microphones, contact the caretaker"
+                }
+              ]
+            },
+            {
+              "heading": "After the event",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "for the cleaning cupboard",
+                  "before": "Need to know the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "must be washed and rubbish placed in black bags",
+                  "before": "The"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "Must be taken down",
+                  "before": "All"
+                },
+                {
+                  "kind": "text",
+                  "text": "Chairs and tables must be piled up"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Charlton"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "115"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "cash"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "parking"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "music"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "entry"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "stage"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "code"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "floor / floors"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "decoration / decorations"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-11-academic-listening-1-audio-2.mp3",
+      "content": "Questions 11-14\n\nComplete the notes below. Write ONE WORD for each answer. Fiddy Working Heritage Farm Advice about visiting the farm Visitors should take care not to harm any [11] not touch any [12] wear [13] not bring [14] into the farm, with certain exceptions.\n\nQuestions 15-20\n\nLabel the map below. Write the correct letter A-I , next to Questions.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-14\n\nComplete the notes below.\n\nWrite ONE WORD for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Fiddy Working Heritage Farm",
+          "sections": [
+            {
+              "heading": "Advice about visiting the farm",
+              "lines": []
+            },
+            {
+              "heading": "Visitors should",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": "",
+                  "before": "take care not to harm any"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": "",
+                  "before": "not touch any"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": "",
+                  "before": "wear"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "into the farm, with certain exceptions.",
+                  "before": "not bring"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nLabel the map below.\n\nWrite the correct letter A-I , next to Questions."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-11-academic-listening-test-1-15-20.jpg",
+          "alt": "Cambridge IELTS 11 Academic Listening Test 1 - 15 - 20"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+          ],
+          "rows": [
+            {
+              "questionId": 15,
+              "label": "Scarecrow"
+            },
+            {
+              "questionId": 16,
+              "label": "Maze"
+            },
+            {
+              "questionId": 17,
+              "label": "Café"
+            },
+            {
+              "questionId": 18,
+              "label": "Black Barn"
+            },
+            {
+              "questionId": 19,
+              "label": "Covered picnic area"
+            },
+            {
+              "questionId": 20,
+              "label": "Fiddy House"
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "animal / animals"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "tool / tools"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "shoes"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "dog / dogs"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-11-academic-listening-1-audio-3.mp3",
+      "content": "Questions 21-30\n\nChoose the correct letter, A , B or C . Study on Gender in Physics",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-30\n\nChoose the correct letter, A, B or C.\n\nStudy on Gender in Physics"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "The students in Akira Miyake’s study were all majoring in",
+          "options": [
+            "A. physics.",
+            "B. psychology or physics.",
+            "C. science, technology, engineering or mathematics."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The aim of Miyake’s study was to investigate",
+          "options": [
+            "A. what kind of women choose to study physics.",
+            "B. a way of improving women’s performance in physics.",
+            "C. whether fewer women than men study physics at college."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "The female physics students were wrong to believe that",
+          "options": [
+            "A. the teachers marked them in an unfair way.",
+            "B. the male students expected them to do badly.",
+            "C. their test results were lower than the male students’."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Miyake’s team asked the students to write about",
+          "options": [
+            "A. what they enjoyed about studying physics.",
+            "B. the successful experiences of other people.",
+            "C. something that was important to them personally."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What was the aim of the writing exercise done by the subjects?",
+          "options": [
+            "A. to reduce stress",
+            "B. to strengthen verbal ability",
+            "C. to encourage logical thinking"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "What surprised the researchers about the study?",
+          "options": [
+            "A. how few students managed to get A grades",
+            "B. the positive impact it had on physics results for women",
+            "C. the difference between male and female performance"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "Greg and Lisa think Miyake’s results could have been affected by",
+          "options": [
+            "A. the length of the writing task.",
+            "B. the number of students who took part.",
+            "C. the information the students were given."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "Greg and Lisa decide that in their own project, they will compare the effects of",
+          "options": [
+            "A. two different writing tasks.",
+            "B. a writing task with an oral task.",
+            "C. two different oral tasks."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "The main finding of Smolinsky’s research was that class teamwork activities",
+          "options": [
+            "A. were most effective when done by all-women groups.",
+            "B. had no effect on the performance of men or women.",
+            "C. improved the results of men more than of women."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "What will Lisa and Greg do next?",
+          "options": [
+            "A. talk to a professor",
+            "B. observe a science class",
+            "C. look at the science timetable"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-11-academic-listening-1-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Ocean Biodiversity Biodiversity hotspots areas containing many different species important for locating targets for [31] at first only identified on land Boris Worm, 2005 identified hotspots for large ocean predators, e.g. sharks found the ocean hotspots: – were not always rich in [32] – had higher temperatures at the [33] – had sufficient [34] in the water Lisa Ballance, 2007 looked for hotspots for marine [35] found these were all located where ocean currents meet Census of Marine Life found new ocean species living: – under the [36] – near volcanoes on the ocean floor Global Marine Species Assessment want to list endangered ocean species, considering: – population size – geographical distribution – rate of [37] Aim: to assess 20,000 species and make a distribution [38] for each one Recommendations to retain ocean biodiversity increase the number of ocean reserves establish [39] corridors (e.g. for turtles) reduce fishing quotas catch fish only for the purpose of [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Ocean Biodiversity",
+          "sections": [
+            {
+              "heading": "Biodiversity hotspots",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "areas containing many different species"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "",
+                  "before": "important for locating targets for"
+                },
+                {
+                  "kind": "text",
+                  "text": "at first only identified on land"
+                }
+              ]
+            },
+            {
+              "heading": "Boris Worm, 2005",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "identified hotspots for large ocean predators, e.g. sharks"
+                },
+                {
+                  "kind": "text",
+                  "text": "found the ocean hotspots:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "–   were not always rich in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "–   had higher temperatures at the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "in the water",
+                  "before": "–   had sufficient"
+                }
+              ]
+            },
+            {
+              "heading": "Lisa Ballance, 2007",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "looked for hotspots for marine"
+                },
+                {
+                  "kind": "text",
+                  "text": "found these were all located where ocean currents meet"
+                }
+              ]
+            },
+            {
+              "heading": "Census of Marine Life",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "found new ocean species living:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "",
+                  "before": "–   under the"
+                }
+              ]
+            },
+            {
+              "heading": "–   near volcanoes on the ocean floor",
+              "lines": []
+            },
+            {
+              "heading": "Global Marine Species Assessment",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "want to list endangered ocean species, considering:"
+                }
+              ]
+            },
+            {
+              "heading": "–   population size",
+              "lines": []
+            },
+            {
+              "heading": "–   geographical distribution",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "",
+                  "before": "–   rate of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "for each one",
+                  "before": "Aim: to assess 20,000 species and make a distribution"
+                }
+              ]
+            },
+            {
+              "heading": "Recommendations to retain ocean biodiversity",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "increase the number of ocean reserves"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "corridors (e.g. for turtles)",
+                  "before": "establish"
+                },
+                {
+                  "kind": "text",
+                  "text": "reduce fishing quotas"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "catch fish only for the purpose of"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "conservation"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "food / foods"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "surface"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "oxygen / O2"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "mammals"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "ice"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "decline / declining / decrease"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "map"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "migration"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "consumption"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Charlton"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "115"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cash"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "parking"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "music"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "entry"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "stage"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "code"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "floor / floors"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "decoration / decorations"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "animal / animals"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tool / tools"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shoes"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dog / dogs"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Scarecrow",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Maze",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Café",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Black Barn",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Covered picnic area",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Fiddy House",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "The students in Akira Miyake’s study were all majoring in",
+      "options": [
+        "A. physics.",
+        "B. psychology or physics.",
+        "C. science, technology, engineering or mathematics."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The aim of Miyake’s study was to investigate",
+      "options": [
+        "A. what kind of women choose to study physics.",
+        "B. a way of improving women’s performance in physics.",
+        "C. whether fewer women than men study physics at college."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "The female physics students were wrong to believe that",
+      "options": [
+        "A. the teachers marked them in an unfair way.",
+        "B. the male students expected them to do badly.",
+        "C. their test results were lower than the male students’."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Miyake’s team asked the students to write about",
+      "options": [
+        "A. what they enjoyed about studying physics.",
+        "B. the successful experiences of other people.",
+        "C. something that was important to them personally."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What was the aim of the writing exercise done by the subjects?",
+      "options": [
+        "A. to reduce stress",
+        "B. to strengthen verbal ability",
+        "C. to encourage logical thinking"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "What surprised the researchers about the study?",
+      "options": [
+        "A. how few students managed to get A grades",
+        "B. the positive impact it had on physics results for women",
+        "C. the difference between male and female performance"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "Greg and Lisa think Miyake’s results could have been affected by",
+      "options": [
+        "A. the length of the writing task.",
+        "B. the number of students who took part.",
+        "C. the information the students were given."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "Greg and Lisa decide that in their own project, they will compare the effects of",
+      "options": [
+        "A. two different writing tasks.",
+        "B. a writing task with an oral task.",
+        "C. two different oral tasks."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "The main finding of Smolinsky’s research was that class teamwork activities",
+      "options": [
+        "A. were most effective when done by all-women groups.",
+        "B. had no effect on the performance of men or women.",
+        "C. improved the results of men more than of women."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "What will Lisa and Greg do next?",
+      "options": [
+        "A. talk to a professor",
+        "B. observe a science class",
+        "C. look at the science timetable"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "conservation"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "food / foods"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "surface"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "oxygen / O2"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mammals"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ice"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "decline / declining / decrease"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "map"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "migration"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "consumption"
+    }
+  ]
+}

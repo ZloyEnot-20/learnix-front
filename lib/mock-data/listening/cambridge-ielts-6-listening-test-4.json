@@ -1,0 +1,1023 @@
+{
+  "testId": "cambridge-ielts-06-academic-listening-test-4",
+  "title": "Cambridge IELTS 06 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-06-academic-listening-test-4/",
+  "book": 6,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-06-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. Example Title of conference: Answer Future Directions in Computing Three day cost: £ [1] Payment by [2] or on arrival Accommodation: Conference Centre £ [3] per night near to conference rooms Guest House £ [4] per night approximately [5] walk from Conference Centre Further documents to be sent: [6] an application form Location: Conference Centre is on [7] Park Road, next to the [8] . Taxi costs £ [9] or take bus number [10] from station.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Example",
+          "sections": [
+            {
+              "heading": "Title of conference:",
+              "lines": []
+            },
+            {
+              "heading": "Answer",
+              "lines": []
+            },
+            {
+              "heading": "Future Directions in Computing",
+              "lines": []
+            },
+            {
+              "heading": "Three day cost:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "£"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "or on arrival",
+                  "before": "Payment by"
+                }
+              ]
+            },
+            {
+              "heading": "Accommodation:",
+              "lines": []
+            },
+            {
+              "heading": "Conference Centre",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "per night",
+                  "before": "£"
+                },
+                {
+                  "kind": "text",
+                  "text": "near to conference rooms"
+                }
+              ]
+            },
+            {
+              "heading": "Guest House",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "per night",
+                  "before": "£"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "walk from Conference Centre",
+                  "before": "approximately"
+                }
+              ]
+            },
+            {
+              "heading": "Further documents to be sent:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": ""
+                },
+                {
+                  "kind": "text",
+                  "text": "an application form"
+                }
+              ]
+            },
+            {
+              "heading": "Location:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "Park Road, next to the",
+                  "before": "Conference Centre is on"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "or take bus number",
+                  "before": "Taxi costs £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "from station."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "75"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "cheque / check"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "15"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "25"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "10-minute / ten-minute"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "conference pack"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "South"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "library"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "5"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "21A"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-06-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-13\n\nWhich team will do each of the following jobs? Choose THREE answers from the box and write the correct letter, A-D, next to questions 11-13.\n\nQuestions 14-20\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Travel Expo Temporary Staff Orientation Programme Time Event Details 9.30 am Talk by Anne Smith information about pay will give out the [14] forms 10.00 am Talk by Peter Chen will discuss Conference Centre plan will explain about arrangements for [15] and fire exits 10.30 am Coffee Break go to Staff Canteen on the [16] 11.00 am Video Presentation go to [17] video title: [18] 12.00 Buffet Lunch go to the [19] on 1st floor 1.00 pm Meet the [20] 3.00 pm Finish",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nWhich team will do each of the following jobs?\n\nChoose THREE answers from the box and write the correct letter, A-D, next to questions 11-13."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "checking entrance tickets",
+              "questionId": 11
+            },
+            {
+              "stepLabel": "preparing refreshments",
+              "questionId": 12
+            },
+            {
+              "stepLabel": "directing car-park traffic",
+              "questionId": 13
+            }
+          ],
+          "options": [
+            "A. the blue team",
+            "B. the yellow team",
+            "C. the green team",
+            "D. the red team"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-20\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer.\n\nTravel Expo\n\nTemporary Staff Orientation Programme"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Time",
+            "Event",
+            "Details"
+          ],
+          "rows": [
+            [
+              "9.30 am",
+              "Talk by Anne Smith",
+              "information about pay\nwill give out the\n[14]\nforms"
+            ],
+            [
+              "10.00 am",
+              "Talk by Peter Chen",
+              "will discuss Conference Centre plan\nwill explain about arrangements for\n[15]\nand fire exits"
+            ],
+            [
+              "10.30 am",
+              "Coffee Break",
+              "go to Staff Canteen on the\n[16]"
+            ],
+            [
+              "11.00 am",
+              "Video Presentation",
+              "go to\n[17]\nvideo title:\n[18]"
+            ],
+            [
+              "12.00",
+              "Buffet Lunch",
+              "go to the\n[19]\non 1st floor"
+            ],
+            [
+              "1.00 pm",
+              "Meet the\n[20]",
+              ""
+            ],
+            [
+              "3.00 pm",
+              "Finish",
+              ""
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "matching",
+          "label": "11",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 12,
+          "type": "matching",
+          "label": "12",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 13,
+          "type": "matching",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "tax"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "security"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "ground floor"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "lecture room 311"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "Safety at Work"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "Main Hall"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "team leaders"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-06-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-25\n\nComplete the summary below. Write ONE WORD ONLY for each answer. The School of Education Libraries The libraries on both sites provide internet access and have a variety of [21] materials on education. The Castle Road library has books on sociology, together with [22] and other resources relevant to the majority of [23] school subjects. The Fordham library includes resources for teaching in [24] education and special needs. Current issues of periodicals are available at both libraries, although [25] issues are only available at Fordham.\n\nQuestions 26-27\n\nAnswer the questions below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\n\nQuestions 28-30\n\nChoose THREE letters, A-G.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nComplete the summary below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "The School of Education Libraries",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "materials on education.",
+                  "before": "The libraries on both sites provide internet access and have a variety of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": "and other resources relevant to the majority of",
+                  "before": "The Castle Road library has books on sociology, together with"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 23,
+                  "after": "school subjects."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "education and special needs.",
+                  "before": "The Fordham library includes resources for teaching in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": "issues are only available at Fordham.",
+                  "before": "Current issues of periodicals are available at both libraries, although"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-27\n\nAnswer the questions below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "text",
+          "text": "[26]"
+        },
+        {
+          "type": "text",
+          "text": "[27]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 28-30\n\nChoose THREE letters, A-G."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            28,
+            29,
+            30
+          ],
+          "label": "28-30",
+          "prompt": "Which THREE topics do this term's study skills workshops cover?",
+          "options": [
+            "A. An introduction to the Internet",
+            "B. How to carry out research for a dissertation",
+            "C. Making good use of the whole range of library services",
+            "D. Planning a dissertation",
+            "E. Standard requirements when writing a dissertation",
+            "F. Using the Internet when doing research",
+            "G. What books and technical resources are available in the library"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "reference"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "textbooks"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "secondary"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "primary"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "back"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "overdue books / overdue ones / overdue"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "7 working days"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "C / E / F"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "C / E / F"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "C / E / F"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-06-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-34\n\nChoose the correct letter, A, B or C.\n\nQuestions 35-40\n\nComplete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. The sanctuary has an area of approximately [35] square kilometres. One threat to the lions in the sanctuary is [36] . The ancestors of the Gir Sanctuary lions were protected by a [37] . A large part of the lions' [38] consists of animals belonging to local farmers. The lions sometimes [39] , especially when water is short. In ancient India a man would fight a lion as a test of [40] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-34\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "When did Asiatic lions develop as a separate sub-species?",
+          "options": [
+            "A. about 10,000 years ago",
+            "B. about 100,000 years ago",
+            "C. about 1,000,000 years ago"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "Pictures of Asiatic lions can be seen on ancient coins from",
+          "options": [
+            "A. Greece.",
+            "B. The Middle East.",
+            "C. India."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "Asiatic lions disappeared from Europe",
+          "options": [
+            "A. 2,500 years ago.",
+            "B. 2,000 years ago.",
+            "C. 1,900 years ago."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "Very few African lions have",
+          "options": [
+            "A. a long mane.",
+            "B. a coat with varied colours.",
+            "C. a fold of skin on their stomach."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 35-40\n\nComplete the sentences below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "square kilometres.",
+                  "before": "The sanctuary has an area of approximately"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": ".",
+                  "before": "One threat to the lions in the sanctuary is"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ".",
+                  "before": "The ancestors of the Gir Sanctuary lions were protected by a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "consists of animals belonging to local farmers.",
+                  "before": "A large part of the lions'"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ", especially when water is short.",
+                  "before": "The lions sometimes"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ".",
+                  "before": "In ancient India a man would fight a lion as a test of"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "1,450 / 1450"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "disease"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "wealthy prince / prince"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "diet"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "attack humans"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "leadership"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "75"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cheque / check"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "15"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "25"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10-minute / ten-minute"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "conference pack"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "South"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "library"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "5"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "21A"
+    },
+    {
+      "id": 11,
+      "type": "matching",
+      "label": "11",
+      "question": "• checking entrance tickets",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 12,
+      "type": "matching",
+      "label": "12",
+      "question": "• preparing refreshments",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "type": "matching",
+      "label": "13",
+      "question": "• directing car-park traffic",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tax"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "security"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ground floor"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lecture room 311"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Safety at Work"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Main Hall"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "team leaders"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "reference"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "textbooks"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "secondary"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "primary"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "back"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "Which books cannot be renewed by telephone or email?",
+      "options": [],
+      "correctAnswer": "overdue books / overdue ones / overdue"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "How much time is allowed to return recalled books?",
+      "options": [],
+      "correctAnswer": "7 working days"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "Which THREE topics do this term's study skills workshops cover?",
+      "options": [
+        "A. An introduction to the Internet",
+        "B. How to carry out research for a dissertation",
+        "C. Making good use of the whole range of library services",
+        "D. Planning a dissertation",
+        "E. Standard requirements when writing a dissertation",
+        "F. Using the Internet when doing research",
+        "G. What books and technical resources are available in the library"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "Which THREE topics do this term's study skills workshops cover?",
+      "options": [
+        "A. An introduction to the Internet",
+        "B. How to carry out research for a dissertation",
+        "C. Making good use of the whole range of library services",
+        "D. Planning a dissertation",
+        "E. Standard requirements when writing a dissertation",
+        "F. Using the Internet when doing research",
+        "G. What books and technical resources are available in the library"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "Which THREE topics do this term's study skills workshops cover?",
+      "options": [
+        "A. An introduction to the Internet",
+        "B. How to carry out research for a dissertation",
+        "C. Making good use of the whole range of library services",
+        "D. Planning a dissertation",
+        "E. Standard requirements when writing a dissertation",
+        "F. Using the Internet when doing research",
+        "G. What books and technical resources are available in the library"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "When did Asiatic lions develop as a separate sub-species?",
+      "options": [
+        "A. about 10,000 years ago",
+        "B. about 100,000 years ago",
+        "C. about 1,000,000 years ago"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "Pictures of Asiatic lions can be seen on ancient coins from",
+      "options": [
+        "A. Greece.",
+        "B. The Middle East.",
+        "C. India."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "Asiatic lions disappeared from Europe",
+      "options": [
+        "A. 2,500 years ago.",
+        "B. 2,000 years ago.",
+        "C. 1,900 years ago."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "Very few African lions have",
+      "options": [
+        "A. a long mane.",
+        "B. a coat with varied colours.",
+        "C. a fold of skin on their stomach."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1,450 / 1450"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "disease"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "wealthy prince / prince"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "diet"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "attack humans"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "leadership"
+    }
+  ]
+}

@@ -1,0 +1,1089 @@
+{
+  "testId": "cambridge-ielts-02-academic-listening-test-4",
+  "title": "Cambridge IELTS 02 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-02-academic-listening-test-4/",
+  "book": 2,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-2\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. MIC HOUSE AGENCY - REPAIRS Example Answer Name: Paul...SMILEY... Address: Apartment 2, [1] , Newton Length of lease: one year Date moved in: [2]\n\nQuestions 3-9\n\nComplete the table below. Write NO MORE THAN TWO WORDS for each answer. For the \"When to be done\" column, write: A if the repair will be done immediately. B if the repair will be done during the following week. C if the repair will be done in two or more weeks. Item Problem When to be done washing machine leaking Example A cooker [3] [4] windows [5] B [6] flickers [7] [8] torn [9]\n\nQuestions 10-10\n\nWrite NO MORE THAN ONE WORD AND/OR A NUMBER for each answer . workman to call between 1 pm and [10] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-2\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "MIC HOUSE AGENCY - REPAIRS",
+          "sections": [
+            {
+              "heading": "Example Answer",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Name: Paul...SMILEY...",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": ", Newton",
+                  "before": "Address: Apartment 2,"
+                }
+              ]
+            },
+            {
+              "heading": "Length of lease: one year",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Date moved in:"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 3-9\n\nComplete the table below.\n\nWrite NO MORE THAN TWO WORDS for each answer.\n\nFor the \"When to be done\" column, write:\n\nA if the repair will be done immediately.\n\nB if the repair will be done during the following week.\n\nC if the repair will be done in two or more weeks."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Item",
+            "Problem",
+            "When to be done"
+          ],
+          "rows": [
+            [
+              "washing machine",
+              "leaking",
+              "Example A"
+            ],
+            [
+              "cooker",
+              "[3]",
+              "[4]"
+            ],
+            [
+              "windows",
+              "[5]",
+              "B"
+            ],
+            [
+              "[6]",
+              "flickers",
+              "[7]"
+            ],
+            [
+              "[8]",
+              "torn",
+              "[9]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 10-10\n\nWrite NO MORE THAN ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ".",
+                  "before": "workman to call between 1 pm and"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "16 Rose Lane"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "27th June / June 27th / 27th of June / 27 June / June 27"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "door broken / broken door"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "no locks / need locks"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "bathroom light"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "kitchen curtains"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "5 pm / 5:00pm / 5.00pm"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-12\n\nCircle the correct letters A - C.\n\nQuestions 13-15\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. TOUR NAME DETAILS Orchid and Fungi walking tour Four-Wheel-Dreve tour to the [13] Fishing to catch lunch Crocodile Cruise departs at [14] daily [15] departs at sundown\n\nQuestions 16-18\n\nWrite NO MORE THAN TWO WORDS for each answer. What THREE items of clothing (in order) does the speaker recommend for the rainforest? - [16] - [17] - [18]\n\nQuestions 19-20\n\nWrite NO MORE THAN TWO WORDS for each answer. Which TWO things in the rainforest (in order) does the speaker give a warning about? - [19] - [20]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-12\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "At Rainforest Lodage there aren't any ________",
+          "options": [
+            "A. telephones or TVs.",
+            "B. newspapers or TVs.",
+            "C. telephones or newspapers."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "The guests are told to ________",
+          "options": [
+            "A. carry their luggage to the cabin.",
+            "B. go straight to the restaurant.",
+            "C. wait an hour for dinner."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 13-15\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "TOUR NAME",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Orchid and Fungi",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": "",
+                  "before": "Four-Wheel-Dreve tour to the"
+                },
+                {
+                  "kind": "text",
+                  "text": "Fishing",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "daily",
+                  "before": "Crocodile Cruise departs at"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-18\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "What THREE items of clothing (in order) does the speaker recommend for the rainforest?",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 16,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 17,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 18,
+                  "after": "",
+                  "before": "-"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Which TWO things in the rainforest (in order) does the speaker give a warning about?",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 19,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 20,
+                  "after": "",
+                  "before": "-"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "waterfalls / waterfall / water falls / water fall / water-falls / water-fall"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "eleven am / eleven / 11.00 am / 11.00 / 11:00 am / 11:00 / 11 am / 11"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "Spotlight tour / Spotlight"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "walking boots"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "long trousers"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "socks"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "venomous snakes / poisonous snakes / snakes"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "certain plants / plants"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-25\n\nCircle the correct letters A - C.\n\nQuestions 26-30\n\nComplete the notes below. Write NO MORE THAN THREE WORDS for each answer. WRITING Pay careful attention to the question Leave time to [26] LISTENING Try to [27] lectures Check notes with [28] READING Choose topics of [29] Buy a good [30]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "These sessions with a counsellor are ________",
+          "options": [
+            "A. compulsory for all students.",
+            "B. available to any students.",
+            "C. for science students only."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The counsellor says that new students have to ________",
+          "options": [
+            "A. spend more time on the college premises.",
+            "B. get used to working independently.",
+            "C. work harder than they did at school."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "John complains that the resource centre ________",
+          "options": [
+            "A. has limited opening hours.",
+            "B. has too few resources.",
+            "C. gets too crowded."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "The counsellor suggests to John that ________",
+          "options": [
+            "A. most other students can cope.",
+            "B. he needs to study all the time.",
+            "C. he should be able to fit in some leisure activities."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "Before being able to help John the counsellor needs to ________",
+          "options": [
+            "A. talk with some of his lecturers.",
+            "B. consult his tutor.",
+            "C. get more information from him."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "WRITING",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Pay careful attention to the question"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "",
+                  "before": "Leave time to"
+                }
+              ]
+            },
+            {
+              "heading": "LISTENING",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "lectures",
+                  "before": "Try to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "",
+                  "before": "Check notes with"
+                }
+              ]
+            },
+            {
+              "heading": "READING",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "",
+                  "before": "Choose topics of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "",
+                  "before": "Buy a good"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "check your work / check work / check for errors / check errors"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "record"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "a friend / friend / friends"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "general interest"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "dictionary"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-35\n\nCircle the correct letters A - C.\n\nQuestions 36-40\n\nWhich group gave the following advice? Tick Column A if it was mainly women. Tick Column B if it was mainly men. Tick Column C if it was both men and women.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-35\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "John was first interested in the subject because of something ________",
+          "options": [
+            "A. he had witnessed.",
+            "B. he had read about.",
+            "C. he had experienced."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "The main research method was ________",
+          "options": [
+            "A. interviews.",
+            "B. questionnaires.",
+            "C. observation."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "Which pie chart shows the proportion of men and women respondents?",
+          "options": [
+            "A. Pie chart A",
+            "B. Pie chart B",
+            "C. Pie chart C"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "How many respondents were there?",
+          "options": [
+            "A. 50 – 100",
+            "B. 100 – 150",
+            "C. 150 – 200"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 35,
+          "prompt": "The most common type of road rage incident involved ________",
+          "options": [
+            "A. damage to property.",
+            "B. personal violence.",
+            "C. verbal abuse."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 36-40\n\nWhich group gave the following advice?\n\nTick Column A if it was mainly women.\n\nTick Column B if it was mainly men.\n\nTick Column C if it was both men and women."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Avoid eye contact with other drivers.",
+              "questionId": 36
+            },
+            {
+              "stepLabel": "Inform someone of your likely arrival time.",
+              "questionId": 37
+            },
+            {
+              "stepLabel": "Ensure car keys are ready when you return to the car.",
+              "questionId": 38
+            },
+            {
+              "stepLabel": "Leave plenty of space when parking.",
+              "questionId": 39
+            },
+            {
+              "stepLabel": "Keep all doors locked.",
+              "questionId": 40
+            }
+          ],
+          "options": [
+            "A. mainly women",
+            "B. mainly men",
+            "C. both men and women"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "label": "35",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 36,
+          "type": "matching",
+          "label": "36",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 37,
+          "type": "matching",
+          "label": "37",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 38,
+          "type": "matching",
+          "label": "38",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 39,
+          "type": "matching",
+          "label": "39",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 40,
+          "type": "matching",
+          "label": "40",
+          "correctAnswer": "C"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "16 Rose Lane"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "27th June / June 27th / 27th of June / 27 June / June 27"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "door broken / broken door"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "no locks / need locks"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bathroom light"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "kitchen curtains"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "5 pm / 5:00pm / 5.00pm"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "At Rainforest Lodage there aren't any ________",
+      "options": [
+        "A. telephones or TVs.",
+        "B. newspapers or TVs.",
+        "C. telephones or newspapers."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "The guests are told to ________",
+      "options": [
+        "A. carry their luggage to the cabin.",
+        "B. go straight to the restaurant.",
+        "C. wait an hour for dinner."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "waterfalls / waterfall / water falls / water fall / water-falls / water-fall"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "eleven am / eleven / 11.00 am / 11.00 / 11:00 am / 11:00 / 11 am / 11"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Spotlight tour / Spotlight"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "walking boots"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "long trousers"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "socks"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "venomous snakes / poisonous snakes / snakes"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "certain plants / plants"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "These sessions with a counsellor are ________",
+      "options": [
+        "A. compulsory for all students.",
+        "B. available to any students.",
+        "C. for science students only."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The counsellor says that new students have to ________",
+      "options": [
+        "A. spend more time on the college premises.",
+        "B. get used to working independently.",
+        "C. work harder than they did at school."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "John complains that the resource centre ________",
+      "options": [
+        "A. has limited opening hours.",
+        "B. has too few resources.",
+        "C. gets too crowded."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "The counsellor suggests to John that ________",
+      "options": [
+        "A. most other students can cope.",
+        "B. he needs to study all the time.",
+        "C. he should be able to fit in some leisure activities."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Before being able to help John the counsellor needs to ________",
+      "options": [
+        "A. talk with some of his lecturers.",
+        "B. consult his tutor.",
+        "C. get more information from him."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "check your work / check work / check for errors / check errors"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "record"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a friend / friend / friends"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "general interest"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dictionary"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "John was first interested in the subject because of something ________",
+      "options": [
+        "A. he had witnessed.",
+        "B. he had read about.",
+        "C. he had experienced."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "The main research method was ________",
+      "options": [
+        "A. interviews.",
+        "B. questionnaires.",
+        "C. observation."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "Which pie chart shows the proportion of men and women respondents?",
+      "options": [
+        "A. Pie chart A",
+        "B. Pie chart B",
+        "C. Pie chart C"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "How many respondents were there?",
+      "options": [
+        "A. 50 – 100",
+        "B. 100 – 150",
+        "C. 150 – 200"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "label": "35",
+      "question": "The most common type of road rage incident involved ________",
+      "options": [
+        "A. damage to property.",
+        "B. personal violence.",
+        "C. verbal abuse."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 36,
+      "type": "matching",
+      "label": "36",
+      "question": "• Avoid eye contact with other drivers.",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 37,
+      "type": "matching",
+      "label": "37",
+      "question": "• Inform someone of your likely arrival time.",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 38,
+      "type": "matching",
+      "label": "38",
+      "question": "• Ensure car keys are ready when you return to the car.",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 39,
+      "type": "matching",
+      "label": "39",
+      "question": "• Leave plenty of space when parking.",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 40,
+      "type": "matching",
+      "label": "40",
+      "question": "• Keep all doors locked.",
+      "options": [],
+      "correctAnswer": "C"
+    }
+  ]
+}

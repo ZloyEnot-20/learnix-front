@@ -1,0 +1,1090 @@
+{
+  "testId": "cambridge-ielts-20-academic-listening-test-4",
+  "title": "Cambridge IELTS 20 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-20-academic-listening-test-4/",
+  "book": 20,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-4-audio-part-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Advice on Family Visit Accommodation [1] Hotel on George Street Cost of family room per night: £ [2] (approx.) Recommended Trips A [3] tour of the city centre (starts in Carlton Square) A trip by [4] to the old fort Science Museum Best day to visit: [5] See the exhibition about [6] which opens soon Food Clacton Market: – Good for [7] food – Need to have lunch before [8] p.m. Theatre Tickets Save up to [9] % on ticket prices at bargaintickets.com Free Activities Blakewell Gardens: – Roots Music Festival – Climb Telegraph Hill to see a view of the [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Advice on Family Visit",
+          "sections": [
+            {
+              "heading": "Accommodation",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "Hotel on George Street"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "(approx.)",
+                  "before": "Cost of family room per night: £"
+                }
+              ]
+            },
+            {
+              "heading": "Recommended Trips",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "tour of the city centre (starts in Carlton Square)",
+                  "before": "A"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "to the old fort",
+                  "before": "A trip by"
+                }
+              ]
+            },
+            {
+              "heading": "Science Museum",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Best day to visit:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "which opens soon",
+                  "before": "See the exhibition about"
+                }
+              ]
+            },
+            {
+              "heading": "Food",
+              "lines": []
+            },
+            {
+              "heading": "Clacton Market:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "food",
+                  "before": "– Good for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "p.m.",
+                  "before": "– Need to have lunch before"
+                }
+              ]
+            },
+            {
+              "heading": "Theatre Tickets",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "% on ticket prices at bargaintickets.com",
+                  "before": "Save up to"
+                }
+              ]
+            },
+            {
+              "heading": "Free Activities",
+              "lines": []
+            },
+            {
+              "heading": "Blakewell Gardens:",
+              "lines": []
+            },
+            {
+              "heading": "– Roots Music Festival",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "– Climb Telegraph Hill to see a view of the"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Kings / King's"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "125"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "walking"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "boat"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "Tuesday"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "space"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "vegetarian"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "2.30 / 2:30"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "75"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "port"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-4-audio-part-2.mp3",
+      "content": "Questions 11-12\n\nChoose TWO letters, A-E\n\nQuestions 13-14\n\nChoose TWO letters , A-E\n\nQuestions 15-20\n\nWhich event in the history of football in the UK took place in each of the following years? Choose SIX answers from the box and write the correct letter, A-H, next to Questions Events in the history of football",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-12\n\nChoose TWO letters, A-E"
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            11,
+            12
+          ],
+          "label": "11-12",
+          "prompt": "Which TWO things does the speaker say about visiting the football stadium with children?",
+          "options": [
+            "A. Children can get their photo taken with a football player",
+            "B. There is a competition for children today",
+            "C. Parents must stay with their children at all times",
+            "D. Children will need sunhats and drinks",
+            "E. The café has a special offer on meals for children"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 13-14\n\nChoose TWO letters , A-E"
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            13,
+            14
+          ],
+          "label": "13-14",
+          "prompt": "Which TWO features of the stadium tour are new this year?",
+          "options": [
+            "A. VIP tour",
+            "B. 360 cinema experience",
+            "C. audio guide",
+            "D. dressing room tour",
+            "E. tours in other languages"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nWhich event in the history of football in the UK took place in each of the following years?\n\nChoose SIX answers from the box and write the correct letter, A-H, next to Questions\n\nEvents in the history of football"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "1870",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "1874",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "1875",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "1877",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "1878",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "1880",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. the introduction of pay for the players",
+            "B. a change to the design of the goal",
+            "C. the first use of lights for matches",
+            "D. the introduction of goalkeepers",
+            "E. the first international match",
+            "F. two changes to the rules of the game",
+            "G. the introduction of a fee for spectators",
+            "H. an agreement on the length of a game"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "G"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-4-audio-part-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A-E\n\nQuestions 23-24\n\nChoose TWO letters, A-E\n\nQuestions 25-30\n\nChoose the correct letter, A, B or C",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A-E"
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "Which TWO benefits for children of learning to write did both students find surprising?",
+          "options": [
+            "A. improved fine motor skills",
+            "B. improved memory",
+            "C. improved concentration",
+            "D. improved imagination",
+            "E. improved spatial awareness"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-24\n\nChoose TWO letters, A-E"
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            23,
+            24
+          ],
+          "label": "23-24",
+          "prompt": "For children with dyspraxia, which TWO problems with handwriting do the students think are easiest to correct?",
+          "options": [
+            "A. not spacing letters correctly",
+            "B. not writing in a straight line",
+            "C. applying too much pressure when writing",
+            "D. confusing letter shapes",
+            "E. writing very slowly"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-30\n\nChoose the correct letter, A, B or C"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What does the woman say about using laptops to teach writing to children with dyslexia?",
+          "options": [
+            "A. Children often lack motivation to learn that way",
+            "B. Children become fluent relatively quickly",
+            "C. Children react more positively if they make a mistake"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "When discussing whether to teach cursive or print writing, the woman thinks that",
+          "options": [
+            "A. cursive writing disadvantages a certain group of children",
+            "B. print writing is associated with lower academic performance",
+            "C. most teachers in the UK prefer a traditional approach to handwriting"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "According to the students, what impact does poor handwriting have on exam performance?",
+          "options": [
+            "A. There is evidence to suggest grades are affected by poor handwriting",
+            "B. Neat handwriting is less important now than it used to be",
+            "C. Candidates write more slowly and produce shorter answers"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "What prediction does the man make about the future of handwriting?",
+          "options": [
+            "A. Touch typing will be taught before writing by hand",
+            "B. Children will continue to learn to write by hand",
+            "C. People will dislike handwriting on digital devices"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "The woman is concerned that relying on digital devices has made it difficult for her to",
+          "options": [
+            "A. take detailed notes",
+            "B. spell and punctuate",
+            "C. read old documents"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "How do the students feel about their own handwriting?",
+          "options": [
+            "A. concerned they are unable to write quickly",
+            "B. embarrassed by comments made about it",
+            "C. regretful that they have lost the habit"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-4-audio-part-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Research in the Area Around the Chem be Bird Sanctuary The importance of birds of prey to local communities They destroy [31] and other rodents. They help prevent farmers from being bitten by [32]. They have been an important part of local culture for many years. They now support the economy by encouraging [33] in the area. Falling numbers of birds of prey – The birds may be accidentally killed: By [34] when hunting or sleeping. By electrocution from power lines, especially during times of high [35]. – Local farmers may illegally shoot them or [36] them. Ways of protecting chickens from birds of prey – Clearing away vegetation (unhelpful). – Providing a [37] for chickens (expensive). – Frightening birds of prey by: Keeping a [38]. Making a [39] (e.g., with metal objects). – A [40] of methods is usually most effective.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Research in the Area Around the Chem be Bird Sanctuary",
+          "sections": [
+            {
+              "heading": "The importance of birds of prey to local communities",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "and other rodents.",
+                  "before": "They destroy"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": ".",
+                  "before": "They help prevent farmers from being bitten by"
+                },
+                {
+                  "kind": "text",
+                  "text": "They have been an important part of local culture for many years."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "in the area.",
+                  "before": "They now support the economy by encouraging"
+                }
+              ]
+            },
+            {
+              "heading": "Falling numbers of birds of prey",
+              "lines": []
+            },
+            {
+              "heading": "– The birds may be accidentally killed:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "when hunting or sleeping.",
+                  "before": "By"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": ".",
+                  "before": "By electrocution from power lines, especially during times of high"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "them.",
+                  "before": "– Local farmers may illegally shoot them or"
+                }
+              ]
+            },
+            {
+              "heading": "Ways of protecting chickens from birds of prey",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "– Clearing away vegetation (unhelpful).",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "for chickens (expensive).",
+                  "before": "– Providing a"
+                }
+              ]
+            },
+            {
+              "heading": "– Frightening birds of prey by:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": ".",
+                  "before": "Keeping a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "(e.g., with metal objects).",
+                  "before": "Making a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "of methods is usually most effective.",
+                  "before": "– A"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "rats"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "snakes"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "tourism"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "traffic"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "rain"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "poison"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "building"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "dog"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "noise"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "combination"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Kings / King's"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "125"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "walking"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "boat"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Tuesday"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "space"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vegetarian"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "2.30 / 2:30"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "75"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "port"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Which TWO things does the speaker say about visiting the football stadium with children?",
+      "options": [
+        "A. Children can get their photo taken with a football player",
+        "B. There is a competition for children today",
+        "C. Parents must stay with their children at all times",
+        "D. Children will need sunhats and drinks",
+        "E. The café has a special offer on meals for children"
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Which TWO things does the speaker say about visiting the football stadium with children?",
+      "options": [
+        "A. Children can get their photo taken with a football player",
+        "B. There is a competition for children today",
+        "C. Parents must stay with their children at all times",
+        "D. Children will need sunhats and drinks",
+        "E. The café has a special offer on meals for children"
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Which TWO features of the stadium tour are new this year?",
+      "options": [
+        "A. VIP tour",
+        "B. 360 cinema experience",
+        "C. audio guide",
+        "D. dressing room tour",
+        "E. tours in other languages"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Which TWO features of the stadium tour are new this year?",
+      "options": [
+        "A. VIP tour",
+        "B. 360 cinema experience",
+        "C. audio guide",
+        "D. dressing room tour",
+        "E. tours in other languages"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• 1870",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• 1874",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• 1875",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• 1877",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• 1878",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• 1880",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Which TWO benefits for children of learning to write did both students find surprising?",
+      "options": [
+        "A. improved fine motor skills",
+        "B. improved memory",
+        "C. improved concentration",
+        "D. improved imagination",
+        "E. improved spatial awareness"
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Which TWO benefits for children of learning to write did both students find surprising?",
+      "options": [
+        "A. improved fine motor skills",
+        "B. improved memory",
+        "C. improved concentration",
+        "D. improved imagination",
+        "E. improved spatial awareness"
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "For children with dyspraxia, which TWO problems with handwriting do the students think are easiest to correct?",
+      "options": [
+        "A. not spacing letters correctly",
+        "B. not writing in a straight line",
+        "C. applying too much pressure when writing",
+        "D. confusing letter shapes",
+        "E. writing very slowly"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "For children with dyspraxia, which TWO problems with handwriting do the students think are easiest to correct?",
+      "options": [
+        "A. not spacing letters correctly",
+        "B. not writing in a straight line",
+        "C. applying too much pressure when writing",
+        "D. confusing letter shapes",
+        "E. writing very slowly"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What does the woman say about using laptops to teach writing to children with dyslexia?",
+      "options": [
+        "A. Children often lack motivation to learn that way",
+        "B. Children become fluent relatively quickly",
+        "C. Children react more positively if they make a mistake"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "When discussing whether to teach cursive or print writing, the woman thinks that",
+      "options": [
+        "A. cursive writing disadvantages a certain group of children",
+        "B. print writing is associated with lower academic performance",
+        "C. most teachers in the UK prefer a traditional approach to handwriting"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "According to the students, what impact does poor handwriting have on exam performance?",
+      "options": [
+        "A. There is evidence to suggest grades are affected by poor handwriting",
+        "B. Neat handwriting is less important now than it used to be",
+        "C. Candidates write more slowly and produce shorter answers"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "What prediction does the man make about the future of handwriting?",
+      "options": [
+        "A. Touch typing will be taught before writing by hand",
+        "B. Children will continue to learn to write by hand",
+        "C. People will dislike handwriting on digital devices"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "The woman is concerned that relying on digital devices has made it difficult for her to",
+      "options": [
+        "A. take detailed notes",
+        "B. spell and punctuate",
+        "C. read old documents"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "How do the students feel about their own handwriting?",
+      "options": [
+        "A. concerned they are unable to write quickly",
+        "B. embarrassed by comments made about it",
+        "C. regretful that they have lost the habit"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rats"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "snakes"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tourism"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "traffic"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rain"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "poison"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "building"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dog"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "noise"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "combination"
+    }
+  ]
+}

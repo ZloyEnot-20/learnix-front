@@ -1,0 +1,1045 @@
+{
+  "testId": "cambridge-ielts-19-academic-listening-test-1",
+  "title": "Cambridge IELTS 19 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-19-academic-listening-test-1/",
+  "book": 19,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-1-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Hinchingbrooke Country Park The park Area: [1] hectares Habitats: wetland, grassland and woodland Wetland: lakes, ponds and a [2] Wildlife includes birds, insects and animals Subjects studied in educational visits include Science: Children look at [3] about plants, etc. Geography: includes learning to use a [4] and compass History: changes in land use Leisure and tourism: mostly concentrates on the park’s [5] Music: Children make [6] with natural materials, and experiment with rhythm and speed. Benefits of outdoor educational visits They give children a feeling of [7] that they may not have elsewhere. Children learn new [8] and gain self-confidence. Practical issues Cost per child: £ [9] Adults, such as [10] , free",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Hinchingbrooke Country Park",
+          "sections": [
+            {
+              "heading": "The park",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "hectares",
+                  "before": "Area:"
+                }
+              ]
+            },
+            {
+              "heading": "Habitats: wetland, grassland and woodland",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Wetland: lakes, ponds and a"
+                }
+              ]
+            },
+            {
+              "heading": "Wildlife includes birds, insects and animals",
+              "lines": []
+            },
+            {
+              "heading": "Subjects studied in educational visits include",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "about plants, etc.",
+                  "before": "Science: Children look at"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "and compass History: changes in land use",
+                  "before": "Geography: includes learning to use a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Leisure and tourism: mostly concentrates on the park’s"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "with natural materials, and experiment with rhythm and speed.",
+                  "before": "Music: Children make"
+                }
+              ]
+            },
+            {
+              "heading": "Benefits of outdoor educational visits",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "that they may not have elsewhere.",
+                  "before": "They give children a feeling of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "and gain self-confidence.",
+                  "before": "Children learn new"
+                }
+              ]
+            },
+            {
+              "heading": "Practical issues",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Cost per child: £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ", free",
+                  "before": "Adults, such as"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "69"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "stream"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "data"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "map"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "visitors"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "sounds"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "freedom"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "skills"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "4.95"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "leaders"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-1-audio-2.mp3",
+      "content": "Questions 11-15\n\nChoose the correct letter, A, B or C. Stanthorpe Twinning Association\n\nQuestions 16-20\n\nLabel the map below. Write the correct letter, A–H, next to Questions. Farley House",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-15\n\nChoose the correct letter, A, B or C.\n\nStanthorpe Twinning Association"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "During the visit to Malatte, in France, members especially enjoyed",
+          "options": [
+            "A. going to a theme park.",
+            "B. experiencing a river trip.",
+            "C. visiting a cheese factory."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "What will happen in Stanthorpe to mark the 25th anniversary of the Twinning Association?",
+          "options": [
+            "A. A tree will be planted.",
+            "B. A garden seat will be bought.",
+            "C. A footbridge will be built."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Which event raised most funds this year?",
+          "options": [
+            "A. the film show",
+            "B. the pancake evening",
+            "C. the cookery demonstration"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "For the first evening with the French visitors host families are advised to",
+          "options": [
+            "A. take them for a walk round the town.",
+            "B. go to a local restaurant.",
+            "C. have a meal at home."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "On Saturday evening there will be the chance to",
+          "options": [
+            "A. listen to a concert.",
+            "B. watch a match.",
+            "C. take part in a competition."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-20\n\nLabel the map below.\n\nWrite the correct letter, A–H, next to Questions.\n\nFarley House"
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2024/07/cambridge-ielts-19-academic-listening-test-1-16-20.png",
+          "alt": "Cambridge IELTS 19 Academic Listening Test 1 - 16 - 20"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "rows": [
+            {
+              "questionId": 16,
+              "label": "Farm shop"
+            },
+            {
+              "questionId": 17,
+              "label": "Disabled entry"
+            },
+            {
+              "questionId": 18,
+              "label": "Adventure playground"
+            },
+            {
+              "questionId": 19,
+              "label": "Kitchen gardens"
+            },
+            {
+              "questionId": 20,
+              "label": "The Temple of the Four Winds"
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-1-audio-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A-E.\n\nQuestions 23-24\n\nChoose TWO letters, A-E.\n\nQuestions 25-30\n\nWhat is the students’ opinion about each of the following food trends? Choose SIX answers from the box and write the correct letter, A-H, next to Opinions",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "Which TWO things did Colin find most satisfying about his bread reuse project?",
+          "options": [
+            "A. receiving support from local restaurants",
+            "B. finding a good way to prevent waste",
+            "C. overcoming problems in a basic process",
+            "D. experimenting with designs and colours",
+            "E. learning how to apply 3-D printing"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-24\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            23,
+            24
+          ],
+          "label": "23-24",
+          "prompt": "Which TWO ways do the students agree that touch-sensitive sensors for food labels could be developed in future?",
+          "options": [
+            "A. for use on medical products",
+            "B. to show that food is no longer fit to eat",
+            "C. for use with drinks as well as foods",
+            "D. to provide applications for blind people",
+            "E. to indicate the weight of certain foods"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-30\n\nWhat is the students’ opinion about each of the following food trends?\n\nChoose SIX answers from the box and write the correct letter, A-H, next to\n\nOpinions"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Use of local products",
+              "questionId": 25
+            },
+            {
+              "stepLabel": "Reduction in unnecessary packaging",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "Gluten-free and lactose-free food",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "Use of branded products related to celebrity chefs",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Development of 'ghost kitchens’ for takeaway food",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "Use of mushrooms for common health concerns",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. This is only relevant to young people.",
+            "B. This may have disappointing results.",
+            "C. This already seems to be widespread.",
+            "D. Retailers should do more to encourage this.",
+            "E. More financial support is needed for this.",
+            "F. Most people know little about this.",
+            "G. There should be stricter regulations about this.",
+            "H. This could be dangerous."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "H"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-1-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Céide Fields an important Neolithic archaeological site in the northwest of Ireland Discovery In the 1930s, a local teacher realised that stones beneath the bog surface were once [31]. His [32] became an archaeologist and undertook an investigation of the site: - a traditional method used by local people to dig for [33] was used to identify where stones were located - carbon dating later proved the site was Neolithic. Items are well preserved in the bog because of a lack of [34]. Neolithic farmers Houses were [35] in shape and had a hole in the roof. Neolithic innovations include: - cooking indoors - pots used for storage and to make [36]. Each field at Céide was large enough to support a big [37]. The fields were probably used to restrict the grazing of animals – no evidence of structures to house them during [38]. Reasons for the decline in farming a decline in [39] quality an increase in [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Céide Fields",
+          "sections": [
+            {
+              "heading": "an important Neolithic archaeological site in the northwest of Ireland",
+              "lines": []
+            },
+            {
+              "heading": "Discovery",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": ".",
+                  "before": "In the 1930s, a local teacher realised that stones beneath the bog surface were once"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "became an archaeologist and undertook an investigation of the site:",
+                  "before": "His"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "was used to identify where stones were located",
+                  "before": "- a traditional method used by local people to dig for"
+                },
+                {
+                  "kind": "text",
+                  "text": "- carbon dating later proved the site was Neolithic.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": ".",
+                  "before": "Items are well preserved in the bog because of a lack of"
+                }
+              ]
+            },
+            {
+              "heading": "Neolithic farmers",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "in shape and had a hole in the roof.",
+                  "before": "Houses were"
+                }
+              ]
+            },
+            {
+              "heading": "Neolithic innovations include:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "- cooking indoors",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": ".",
+                  "before": "- pots used for storage and to make"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ".",
+                  "before": "Each field at Céide was large enough to support a big"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": ".",
+                  "before": "The fields were probably used to restrict the grazing of animals – no evidence of structures to house them during"
+                }
+              ]
+            },
+            {
+              "heading": "Reasons for the decline in farming",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "quality",
+                  "before": "a decline in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "an increase in"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "walls"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "son"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "fuel"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "oxygen"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "rectangular"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "lamps"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "family"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "winter"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "soil"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "rain"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "69"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "stream"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "data"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "map"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "visitors"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sounds"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "freedom"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "skills"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4.95"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "leaders"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "During the visit to Malatte, in France, members especially enjoyed",
+      "options": [
+        "A. going to a theme park.",
+        "B. experiencing a river trip.",
+        "C. visiting a cheese factory."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "What will happen in Stanthorpe to mark the 25th anniversary of the Twinning Association?",
+      "options": [
+        "A. A tree will be planted.",
+        "B. A garden seat will be bought.",
+        "C. A footbridge will be built."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Which event raised most funds this year?",
+      "options": [
+        "A. the film show",
+        "B. the pancake evening",
+        "C. the cookery demonstration"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "For the first evening with the French visitors host families are advised to",
+      "options": [
+        "A. take them for a walk round the town.",
+        "B. go to a local restaurant.",
+        "C. have a meal at home."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "On Saturday evening there will be the chance to",
+      "options": [
+        "A. listen to a concert.",
+        "B. watch a match.",
+        "C. take part in a competition."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Farm shop",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Disabled entry",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Adventure playground",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Kitchen gardens",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "The Temple of the Four Winds",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Which TWO things did Colin find most satisfying about his bread reuse project?",
+      "options": [
+        "A. receiving support from local restaurants",
+        "B. finding a good way to prevent waste",
+        "C. overcoming problems in a basic process",
+        "D. experimenting with designs and colours",
+        "E. learning how to apply 3-D printing"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Which TWO things did Colin find most satisfying about his bread reuse project?",
+      "options": [
+        "A. receiving support from local restaurants",
+        "B. finding a good way to prevent waste",
+        "C. overcoming problems in a basic process",
+        "D. experimenting with designs and colours",
+        "E. learning how to apply 3-D printing"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Which TWO ways do the students agree that touch-sensitive sensors for food labels could be developed in future?",
+      "options": [
+        "A. for use on medical products",
+        "B. to show that food is no longer fit to eat",
+        "C. for use with drinks as well as foods",
+        "D. to provide applications for blind people",
+        "E. to indicate the weight of certain foods"
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Which TWO ways do the students agree that touch-sensitive sensors for food labels could be developed in future?",
+      "options": [
+        "A. for use on medical products",
+        "B. to show that food is no longer fit to eat",
+        "C. for use with drinks as well as foods",
+        "D. to provide applications for blind people",
+        "E. to indicate the weight of certain foods"
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• Use of local products",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• Reduction in unnecessary packaging",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• Gluten-free and lactose-free food",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• Use of branded products related to celebrity chefs",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• Development of 'ghost kitchens’ for takeaway food",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• Use of mushrooms for common health concerns",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "walls"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "son"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fuel"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "oxygen"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rectangular"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lamps"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "family"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "winter"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "soil"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rain"
+    }
+  ]
+}

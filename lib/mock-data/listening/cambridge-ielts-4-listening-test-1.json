@@ -1,0 +1,1025 @@
+{
+  "testId": "cambridge-ielts-04-academic-listening-test-1",
+  "title": "Cambridge IELTS 04 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-04-academic-listening-test-1/",
+  "book": 4,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-1.mp3",
+      "content": "Questions 1-4\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. NOTES ON SOCIAL PROGRAMME Example Number of trips per month: 5 Visit places which have: • historical interest • good [1] • [2] Cost: between £5.00 and £15.00 per person Note: special trips organised for groups of [3] people Time: departure – 8.30 a.m. return – 6.00 p.m. To reserve a seat: sign name on the [4] 3 days in advance\n\nQuestions 5-10\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Place Date Number of seats Optional extra St Ives [5] 16 Hepworth Museum London 16th February 45 [6] [7] 3rd March 18 S.S. Great Britain Salisbury 18th March 50 Stonehenge Bath 23rd March 16 [8] For further information: Read the [9] or see Social Assistant: Jane [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-4\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "NOTES ON SOCIAL PROGRAMME",
+          "sections": [
+            {
+              "heading": "Example",
+              "lines": []
+            },
+            {
+              "heading": "Number of trips per month: 5",
+              "lines": []
+            },
+            {
+              "heading": "Visit places which have:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "historical interest"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "good"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": ""
+                }
+              ]
+            },
+            {
+              "heading": "Cost: between £5.00 and £15.00 per person",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "people",
+                  "before": "Note: special trips organised for groups of"
+                },
+                {
+                  "kind": "text",
+                  "text": "Time: departure – 8.30 a.m.",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "return – 6.00 p.m.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "3 days in advance",
+                  "before": "To reserve a seat: sign name on the"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 5-10\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "For further information:",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "or see Social Assistant: Jane",
+                  "before": "Read the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "shopping / variety of shopping"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "guided tours"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "more than 12 / over 12 / more than twelve / over twelve"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "notice board"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "13th February / 13th of February / February 13th / 13 February / February 13"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Tower of London"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Bristol"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "American Museum"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "student newspaper"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "Yentob"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-2.mp3",
+      "content": "Questions 11-13\n\nComplete the sentences below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Riverside Village was a good place to start an industry because it had water, raw materials and fuels such as [11] . The metal industry was established at Riverside Village by [12] who lived in the area. There were over [13] water-powered mills in the area in the eighteenth century.\n\nQuestions 14-20\n\nLabel the plan below. Write NO MORE THAN TWO WORDS for each answer.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nComplete the sentences below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": ".",
+                  "before": "Riverside Village was a good place to start an industry because it had water, raw materials and fuels such as"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": "who lived in the area.",
+                  "before": "The metal industry was established at Riverside Village by"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": "water-powered mills in the area in the eighteenth century.",
+                  "before": "There were over"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-20\n\nLabel the plan below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-4-diagram-6a2772d388db3.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "text",
+          "text": "[14]"
+        },
+        {
+          "type": "text",
+          "text": "[15]"
+        },
+        {
+          "type": "text",
+          "text": "[16]"
+        },
+        {
+          "type": "text",
+          "text": "[17]"
+        },
+        {
+          "type": "text",
+          "text": "[18]"
+        },
+        {
+          "type": "text",
+          "text": "[19]"
+        },
+        {
+          "type": "text",
+          "text": "[20]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "coal and firewood / coal,firewood"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "local craftsmen"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "160"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "Woodside"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "Ticket Office"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "Gift Shop"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "main Workshop / Workshop"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "Showroom"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "Café / Cafe"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "cottages"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-3.mp3",
+      "content": "Questions 21-22\n\nChoose the correct letter, A, B or C.\n\nQuestions 23-27\n\nWhat recommendations does Dr Johnson make about the journal articles? Choose your answers from the box and write the letters A-G next to questions 23-27.\n\nQuestions 28-30\n\nLabel the chart below. Choose your answers from the box below and write the letters A-H next to questions 28-30. A. uncooperative landlord | B. environment | C. space D. noisy neighbours | E. near city | F. work location G. transport | H. rent",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Melanie says she has not started the assignment because",
+          "options": [
+            "A. she was doing work for another course.",
+            "B. it was a really big assignment.",
+            "C. she hasn't spent time in the library."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The lecturer says that reasonable excuses for extensions are",
+          "options": [
+            "A. planning problems.",
+            "B. problems with assignment deadlines.",
+            "C. personal illness or accident."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-27\n\nWhat recommendations does Dr Johnson make about the journal articles?\n\nChoose your answers from the box and write the letters A-G next to questions 23-27."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Jackson",
+              "questionId": 23
+            },
+            {
+              "stepLabel": "Roberts",
+              "questionId": 24
+            },
+            {
+              "stepLabel": "Morris",
+              "questionId": 25
+            },
+            {
+              "stepLabel": "Cooper",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "Forster",
+              "questionId": 27
+            }
+          ],
+          "options": [
+            "A. must read",
+            "B. useful",
+            "C. limited value",
+            "D. read first section",
+            "E. read research methods",
+            "F. read conclusion",
+            "G. don't read"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 28-30\n\nLabel the chart below.\n\nChoose your answers from the box below and write the letters A-H next to questions 28-30.\n\nA. uncooperative landlord | B. environment | C. space\n\nD. noisy neighbours | E. near city | F. work location\n\nG. transport | H. rent"
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-7-diagram-6a2772d3a1c91.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "rows": [
+            {
+              "questionId": 28,
+              "label": ""
+            },
+            {
+              "questionId": 29,
+              "label": ""
+            },
+            {
+              "questionId": 30,
+              "label": ""
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 23,
+          "type": "matching",
+          "label": "23",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 24,
+          "type": "matching",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-1-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write NO MORE THAN TWO WORDS for each answer. THE URBAN LANDSCAPE Two areas of focus: • the effect of vegetation on the urban climate • ways of planning our [31] better Large-scale impact of trees: • they can make cities more or less [32] • in summer they can make cities cooler • they can make inland cities more [33] Local impact of trees: • they can make local areas – more [34] – cooler – more humid – less windy – less [35] Comparing trees and buildings Temperature regulation: • trees evaporate water through their [36] • building surfaces may reach high temperatures Wind force: • tall buildings cause more wind at [37] level • trees [38] the wind force Noise: • trees have a small effect on traffic noise • [39] frequency noise passes through trees Important points to consider: • trees require a lot of sunlight, water and [40] to grow",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "THE URBAN LANDSCAPE",
+          "sections": [
+            {
+              "heading": "Two areas of focus:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "the effect of vegetation on the urban climate"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "better",
+                  "before": "ways of planning our"
+                }
+              ]
+            },
+            {
+              "heading": "Large-scale impact of trees:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "they can make cities more or less"
+                },
+                {
+                  "kind": "text",
+                  "text": "in summer they can make cities cooler"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "they can make inland cities more"
+                }
+              ]
+            },
+            {
+              "heading": "Local impact of trees:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "they can make local areas"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "",
+                  "before": "– more"
+                }
+              ]
+            },
+            {
+              "heading": "– cooler",
+              "lines": []
+            },
+            {
+              "heading": "– more humid",
+              "lines": []
+            },
+            {
+              "heading": "– less windy",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "– less"
+                }
+              ]
+            },
+            {
+              "heading": "Comparing trees and buildings",
+              "lines": []
+            },
+            {
+              "heading": "Temperature regulation:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "",
+                  "before": "trees evaporate water through their"
+                },
+                {
+                  "kind": "text",
+                  "text": "building surfaces may reach high temperatures"
+                }
+              ]
+            },
+            {
+              "heading": "Wind force:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "level",
+                  "before": "tall buildings cause more wind at"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "the wind force",
+                  "before": "trees"
+                }
+              ]
+            },
+            {
+              "heading": "Noise:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "trees have a small effect on traffic noise"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "frequency noise passes through trees"
+                }
+              ]
+            },
+            {
+              "heading": "Important points to consider:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "to grow",
+                  "before": "trees require a lot of sunlight, water and"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "cities / environment"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "windy"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "humid"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "shady / shaded"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "dangerous"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "leaves"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "ground"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "filter / considerably reduce / reduce / filter and reduce"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "low"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "space / room"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shopping / variety of shopping"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "guided tours"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "more than 12 / over 12 / more than twelve / over twelve"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "notice board"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "13th February / 13th of February / February 13th / 13 February / February 13"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Tower of London"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Bristol"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "American Museum"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "student newspaper"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Yentob"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "coal and firewood / coal,firewood"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "local craftsmen"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "160"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Woodside"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Ticket Office"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Gift Shop"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "main Workshop / Workshop"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Showroom"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Café / Cafe"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cottages"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Melanie says she has not started the assignment because",
+      "options": [
+        "A. she was doing work for another course.",
+        "B. it was a really big assignment.",
+        "C. she hasn't spent time in the library."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The lecturer says that reasonable excuses for extensions are",
+      "options": [
+        "A. planning problems.",
+        "B. problems with assignment deadlines.",
+        "C. personal illness or accident."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "type": "matching",
+      "label": "23",
+      "question": "• Jackson",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 24,
+      "type": "matching",
+      "label": "24",
+      "question": "• Roberts",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• Morris",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• Cooper",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• Forster",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cities / environment"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "windy"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "humid"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shady / shaded"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dangerous"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "leaves"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ground"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "filter / considerably reduce / reduce / filter and reduce"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "low"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "space / room"
+    }
+  ]
+}

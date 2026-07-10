@@ -1,0 +1,1067 @@
+{
+  "testId": "cambridge-ielts-13-academic-listening-test-4",
+  "title": "Cambridge IELTS 13 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-13-academic-listening-test-4/",
+  "book": 13,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-13-academic-listening-4-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Alex’s Training Example Alex complete his training in ….. 2014 …… About the applicant: At first, Alex did his training in the [1] department. Alex didn’t have a qualification from school in [2] . Alex thinks he should have done the diploma in [3] skills. Age of other trainees: the youngest was [4] . Benefits of doing training at JPNW: Lots of opportunities because of the size of the organisation. Trainees receive the same amount of [5] as permanent staff. The training experience increases people’s confidence a lot. Trainees go to [6] one day per month. The company is in a convenient [7] . Advice for interview: Don’t wear [8] . Don’t be [9] . Make sure you [10] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "department. Alex didn’t have a qualification from school in",
+                  "before": "About the applicant: At first, Alex did his training in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": ". Alex thinks he should have done the diploma in",
+                  "before": "department. Alex didn’t have a qualification from school in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "skills. Age of other trainees: the youngest was",
+                  "before": ". Alex thinks he should have done the diploma in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": ". Benefits of doing training at JPNW: Lots of opportunities because of the size of the organisation. Trainees receive the same amount of",
+                  "before": "skills. Age of other trainees: the youngest was"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "as permanent staff. The training experience increases people’s confidence a lot. Trainees go to",
+                  "before": ". Benefits of doing training at JPNW: Lots of opportunities because of the size of the organisation. Trainees receive the same amount of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "one day per month. The company is in a convenient",
+                  "before": "as permanent staff. The training experience increases people’s confidence a lot. Trainees go to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": ". Advice for interview: Don’t wear",
+                  "before": "one day per month. The company is in a convenient"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": ". Don’t be",
+                  "before": ". Advice for interview: Don’t wear"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": ". Make sure you",
+                  "before": ". Don’t be"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ".",
+                  "before": ". Make sure you"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Finance"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Maths / Math / Mathematics"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "business"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "17 / seventeen"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "holiday / holidays / vacation / vacations"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "college"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "location"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "jeans"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "late"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "smile"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-13-academic-listening-4-audio-2.mp3",
+      "content": "Questions 11-16\n\nChoose the correct letter, A , B or C . The Snow Centre\n\nQuestions 17-20\n\nWhat information does Annie give about skiing on each of the following mountain trails? Choose FOUR answers from the box and write the correct letter, A-F , next to Questions Information Mountain trails",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nChoose the correct letter, A, B or C.\n\nThe Snow Centre"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "Annie recommends that when cross-country skiing, the visitors should",
+          "options": [
+            "A. get away from the regular trails.",
+            "B. stop to enjoy views of the scenery.",
+            "C. go at a slow speed at the beginning."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "What does Annie tell the group about this afternoon’s dog-sled trip?",
+          "options": [
+            "A. Those who want to can take part in a race.",
+            "B. Anyone has the chance to drive a team of dogs.",
+            "C. One group member will be chosen to lead the trail."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "What does Annie say about the team relay event?",
+          "options": [
+            "A. All participants receive a medal.",
+            "B. The course is 4 km long.",
+            "C. Each team is led by a teacher."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "On the snow-shoe trip, the visitors will",
+          "options": [
+            "A. visit an old gold mine.",
+            "B. learn about unusual flowers.",
+            "C. climb to the top of a mountain."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "The cost of accommodation in the mountain hut includes",
+          "options": [
+            "A. a supply of drinking water.",
+            "B. transport of visitors’ luggage.",
+            "C. cooked meals."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 16,
+          "prompt": "If there is a storm while the visitors are in the hut, they should",
+          "options": [
+            "A. contact the bus driver.",
+            "B. wait until the weather improves.",
+            "C. use the emergency locator beacon."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nWhat information does Annie give about skiing on each of the following mountain trails?\n\nChoose FOUR answers from the box and write the correct letter, A-F, next to Questions\n\nInformation\n\nMountain trails"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Highland Trail",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "Pine Trail",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "Stony Trail",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "Loser’s Trail",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. It has a good place to stop and rest.",
+            "B. It is suitable for all abilities.",
+            "C. It involves crossing a river.",
+            "D. It demands a lot of skill.",
+            "E. It may be closed in bad weather.",
+            "F. It has some very narrow sections."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "E"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-13-academic-listening-4-audio-3.mp3",
+      "content": "Questions 21-26\n\nChoose the correct letter, A , B or C . Labels giving nutritional information on food packaging\n\nQuestions 27-28\n\nChoose TWO letters, A-E .\n\nQuestions 29-30\n\nChoose TWO letters, A-E .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-26\n\nChoose the correct letter, A, B or C.\n\nLabels giving nutritional information on food packaging"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "What was Jack’s attitude to nutritional food labels before this project?",
+          "options": [
+            "A. He didn’t read everything on them.",
+            "B. He didn’t think they were important.",
+            "C. He thought they were too complicated."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "Alice says that before doing this project,",
+          "options": [
+            "A. she was unaware of what certain foods contained.",
+            "B. she was too lazy to read food labels.",
+            "C. she was only interested in the number of calories."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "When discussing supermarket brands of pizza, Jack agrees with Alice that",
+          "options": [
+            "A. the list of ingredients is shocking.",
+            "B. he will hesitate before buying pizza again.",
+            "C. the nutritional label is misleading."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Jack prefers the daily value system to other labelling systems because it is",
+          "options": [
+            "A. more accessible.",
+            "B. more logical.",
+            "C. more comprehensive."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What surprised both students about one flavour of crisps?",
+          "options": [
+            "A. The percentage of artificial additives given was incorrect.",
+            "B. The products did not contain any meat.",
+            "C. The labels did not list all the ingredients."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "What do the students think about research into the impact of nutritional food labelling?",
+          "options": [
+            "A. It did not produce clear results.",
+            "B. It focused on the wrong people.",
+            "C. It made unrealistic recommendations."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-28\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            27,
+            28
+          ],
+          "label": "27-28",
+          "prompt": "Which TWO things surprised the students about the traffic-light system for nutritional labels?",
+          "options": [
+            "A. its widespread use",
+            "B. the fact that it is voluntary for supermarkets",
+            "C. how little research was done before its introduction",
+            "D. its unpopularity with food manufacturers",
+            "E. the way that certain colours are used"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 29-30\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            29,
+            30
+          ],
+          "label": "29-30",
+          "prompt": "Which TWO things are true about the participants in the study on the traffic-light system?",
+          "options": [
+            "A. They had low literacy levels.",
+            "B. They were regular consumers of packaged food.",
+            "C. They were selected randomly.",
+            "D. They were from all socio-economic groups.",
+            "E. They were interviewed face-to-face."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "D / E"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-13-academic-listening-4-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. The history of coffee Coffee in the Arab world These was small-scale trade in wild coffee from Ethiopia. 1522: Coffee was approved in the Ottoman court as a type of medicine. 1623: In Constantinople, the ruler ordered the [31] of every coffee house. Coffee arrives in Europe (17th century) Coffee shops were compared to [32] . They played an important part in social and [33] changes. Coffee and European colonization European powers established coffee plantations in their colonies. Types of coffee were often named according to the [34] they came from. In Brazil and the Caribbean, most cultivation depended on [35] . In Java, coffee was used as a form of [36] . Coffee became almost as important as [37] . The move towards the consumption of [38] in Britain did not also take place in the USA. Coffee in the 19th century Prices dropped because of improvements in [39] . Industrial workers found coffee helped them to work at [40] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "The history of coffee",
+          "sections": [
+            {
+              "heading": "Coffee in the Arab world",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "These was small-scale trade in wild coffee from Ethiopia."
+                },
+                {
+                  "kind": "text",
+                  "text": "1522: Coffee was approved in the Ottoman court as a type of medicine."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "of every coffee house.",
+                  "before": "1623: In Constantinople, the ruler ordered the"
+                }
+              ]
+            },
+            {
+              "heading": "Coffee arrives in Europe (17th century)",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": ".",
+                  "before": "Coffee shops were compared to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "changes.",
+                  "before": "They played an important part in social and"
+                }
+              ]
+            },
+            {
+              "heading": "Coffee and European colonization",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "European powers established coffee plantations in their colonies."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "they came from.",
+                  "before": "Types of coffee were often named according to the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": ".",
+                  "before": "In Brazil and the Caribbean, most cultivation depended on"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": ".",
+                  "before": "In Java, coffee was used as a form of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ".",
+                  "before": "Coffee became almost as important as"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "in Britain did not also take place in the USA.",
+                  "before": "The move towards the consumption of"
+                }
+              ]
+            },
+            {
+              "heading": "Coffee in the 19th century",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ".",
+                  "before": "Prices dropped because of improvements in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ".",
+                  "before": "Industrial workers found coffee helped them to work at"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "destruction"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "universities / university"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "political"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "port / ports"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "slaves / slavery"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "taxation"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "sugar"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "tea"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "transportation"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "night"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Finance"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Maths / Math / Mathematics"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "business"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "17 / seventeen"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "holiday / holidays / vacation / vacations"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "college"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "location"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "jeans"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "late"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "smile"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Annie recommends that when cross-country skiing, the visitors should",
+      "options": [
+        "A. get away from the regular trails.",
+        "B. stop to enjoy views of the scenery.",
+        "C. go at a slow speed at the beginning."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "What does Annie tell the group about this afternoon’s dog-sled trip?",
+      "options": [
+        "A. Those who want to can take part in a race.",
+        "B. Anyone has the chance to drive a team of dogs.",
+        "C. One group member will be chosen to lead the trail."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "What does Annie say about the team relay event?",
+      "options": [
+        "A. All participants receive a medal.",
+        "B. The course is 4 km long.",
+        "C. Each team is led by a teacher."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "On the snow-shoe trip, the visitors will",
+      "options": [
+        "A. visit an old gold mine.",
+        "B. learn about unusual flowers.",
+        "C. climb to the top of a mountain."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "The cost of accommodation in the mountain hut includes",
+      "options": [
+        "A. a supply of drinking water.",
+        "B. transport of visitors’ luggage.",
+        "C. cooked meals."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "If there is a storm while the visitors are in the hut, they should",
+      "options": [
+        "A. contact the bus driver.",
+        "B. wait until the weather improves.",
+        "C. use the emergency locator beacon."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• Highland Trail",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• Pine Trail",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• Stony Trail",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• Loser’s Trail",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "What was Jack’s attitude to nutritional food labels before this project?",
+      "options": [
+        "A. He didn’t read everything on them.",
+        "B. He didn’t think they were important.",
+        "C. He thought they were too complicated."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Alice says that before doing this project,",
+      "options": [
+        "A. she was unaware of what certain foods contained.",
+        "B. she was too lazy to read food labels.",
+        "C. she was only interested in the number of calories."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "When discussing supermarket brands of pizza, Jack agrees with Alice that",
+      "options": [
+        "A. the list of ingredients is shocking.",
+        "B. he will hesitate before buying pizza again.",
+        "C. the nutritional label is misleading."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Jack prefers the daily value system to other labelling systems because it is",
+      "options": [
+        "A. more accessible.",
+        "B. more logical.",
+        "C. more comprehensive."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What surprised both students about one flavour of crisps?",
+      "options": [
+        "A. The percentage of artificial additives given was incorrect.",
+        "B. The products did not contain any meat.",
+        "C. The labels did not list all the ingredients."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "What do the students think about research into the impact of nutritional food labelling?",
+      "options": [
+        "A. It did not produce clear results.",
+        "B. It focused on the wrong people.",
+        "C. It made unrealistic recommendations."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "Which TWO things surprised the students about the traffic-light system for nutritional labels?",
+      "options": [
+        "A. its widespread use",
+        "B. the fact that it is voluntary for supermarkets",
+        "C. how little research was done before its introduction",
+        "D. its unpopularity with food manufacturers",
+        "E. the way that certain colours are used"
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "Which TWO things surprised the students about the traffic-light system for nutritional labels?",
+      "options": [
+        "A. its widespread use",
+        "B. the fact that it is voluntary for supermarkets",
+        "C. how little research was done before its introduction",
+        "D. its unpopularity with food manufacturers",
+        "E. the way that certain colours are used"
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "Which TWO things are true about the participants in the study on the traffic-light system?",
+      "options": [
+        "A. They had low literacy levels.",
+        "B. They were regular consumers of packaged food.",
+        "C. They were selected randomly.",
+        "D. They were from all socio-economic groups.",
+        "E. They were interviewed face-to-face."
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "Which TWO things are true about the participants in the study on the traffic-light system?",
+      "options": [
+        "A. They had low literacy levels.",
+        "B. They were regular consumers of packaged food.",
+        "C. They were selected randomly.",
+        "D. They were from all socio-economic groups.",
+        "E. They were interviewed face-to-face."
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "destruction"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "universities / university"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "political"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "port / ports"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "slaves / slavery"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "taxation"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sugar"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tea"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "transportation"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "night"
+    }
+  ]
+}

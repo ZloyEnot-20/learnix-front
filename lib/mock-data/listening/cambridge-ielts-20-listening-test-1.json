@@ -1,0 +1,1112 @@
+{
+  "testId": "cambridge-ielts-20-academic-listening-test-1",
+  "title": "Cambridge IELTS 20 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-20-academic-listening-test-1/",
+  "book": 20,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-1-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Restaurant Recommendations Name of restaurant Location Reason for recommendation Other comments The Junction Greyson Street, near the station Good for people who are especially keen on [1] Quite expensive The [2] is a good place for a drink Paloma In Bow Street next to the cinema [3] food, good for sharing Staff are very friendly Need to pay £50 deposit A limited selection of [4] food on the menu The [5] At the top of a [6] A famous chef All the [7] are very good Only uses [8] ingredients Set lunch costs £ [9] per person Portions probably of [10] size",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer.\n\nRestaurant Recommendations"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Name of restaurant",
+            "Location",
+            "Reason for recommendation",
+            "Other comments"
+          ],
+          "rows": [
+            [
+              "The Junction",
+              "Greyson Street, near the station",
+              "Good for people who are especially keen on\n[1]",
+              "Quite expensive\nThe\n[2]\nis a good place for a drink"
+            ],
+            [
+              "Paloma",
+              "In Bow Street next to the cinema",
+              "[3]\nfood, good for sharing",
+              "Staff are very friendly\nNeed to pay £50 deposit\nA limited selection of\n[4]\nfood on the menu"
+            ],
+            [
+              "The\n[5]",
+              "At the top of a\n[6]",
+              "A famous chef\nAll the\n[7]\nare very good\nOnly uses\n[8]\ningredients",
+              "Set lunch costs £\n[9]\nper person\nPortions probably of\n[10]\nsize"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "[1]"
+        },
+        {
+          "type": "text",
+          "text": "[2]"
+        },
+        {
+          "type": "text",
+          "text": "[3]"
+        },
+        {
+          "type": "text",
+          "text": "[4]"
+        },
+        {
+          "type": "text",
+          "text": "[5]"
+        },
+        {
+          "type": "text",
+          "text": "[6]"
+        },
+        {
+          "type": "text",
+          "text": "[7]"
+        },
+        {
+          "type": "text",
+          "text": "[8]"
+        },
+        {
+          "type": "text",
+          "text": "[9]"
+        },
+        {
+          "type": "text",
+          "text": "[10]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Fish"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Roof"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Spanish"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Vegetarian"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "Audley"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Hotel"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Reviews"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "Local"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "30"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "Average"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-1-audio-2.mp3",
+      "content": "Questions 11-16\n\nChoose the correct letter, A, B, or C.\n\nQuestions 17-18\n\nChoose TWO letters , A–E.\n\nQuestions 19-20\n\nChoose TWO letters , A–E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nChoose the correct letter, A, B, or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "Heather says pottery differs from other art forms because",
+          "options": [
+            "A. It lasts longer in the ground.",
+            "B. It is practised by more people.",
+            "C. It can be repaired more easily."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "Archaeologists sometimes identify the use of ancient pottery from",
+          "options": [
+            "A. The clay it was made with.",
+            "B. The marks that are on it.",
+            "C. The basic shape of it."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Some people join Heather’s pottery class because they want to",
+          "options": [
+            "A. Create an item that looks very old.",
+            "B. Find something that they are good at.",
+            "C. Make something that will outlive them."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "What does Heather value most about being a potter?",
+          "options": [
+            "A. Its calming effect",
+            "B. Its messy nature",
+            "C. Its physical benefits"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "Most of the visitors to Edelman Pottery",
+          "options": [
+            "A. Bring friends to join courses.",
+            "B. Have never made a pot before.",
+            "C. Try to learn techniques too quickly."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 16,
+          "prompt": "Heather reminds her visitors that they should",
+          "options": [
+            "A. Put on their aprons.",
+            "B. Change their clothes.",
+            "C. Take off their jewellery."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-18\n\nChoose TWO letters , A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            17,
+            18
+          ],
+          "label": "17-18",
+          "prompt": "Which TWO things does Heather explain about kilns?",
+          "options": [
+            "A. What their function is",
+            "B. When they were invented",
+            "C. Ways of keeping them safe",
+            "D. Where to put one in your home",
+            "E. What some people use instead of one"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nChoose TWO letters , A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            19,
+            20
+          ],
+          "label": "19-20",
+          "prompt": "Which points does Heather make about a potter’s tools?",
+          "options": [
+            "A. Some are hard to hold.",
+            "B. Some are worth buying.",
+            "C. Some are essential items.",
+            "D. Some have memorable names.",
+            "E. Some are available for use by participants."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "C / E"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-1-audio-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A E.\n\nQuestions 23-24\n\nChoose TWO letters , A–E.\n\nQuestions 25-26\n\nChoose TWO letters, A–E.\n\nQuestions 27-30\n\nChoose the correct letter, A, B, or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "Which TWO things do the students both believe are responsible for the increase in loneliness?",
+          "options": [
+            "A. Social media",
+            "B. Smaller nuclear families",
+            "C. Urban design",
+            "D. Longer lifespans",
+            "E. A mobile workforce"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-24\n\nChoose TWO letters , A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            23,
+            24
+          ],
+          "label": "23-24",
+          "prompt": "Which TWO health risks associated with loneliness do the students agree are based on solid evidence?",
+          "options": [
+            "A. A weakened immune system",
+            "B. Dementia",
+            "C. Cancer",
+            "D. Obesity",
+            "E. Cardiovascular disease"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-26\n\nChoose TWO letters, A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            25,
+            26
+          ],
+          "label": "25-26",
+          "prompt": "Which TWO opinions do both the students express about the evolutionary theory of loneliness?",
+          "options": [
+            "A. It has little practical relevance.",
+            "B. It needs further investigation.",
+            "C. It is misleading.",
+            "D. It should be more widely accepted.",
+            "E. It is difficult to understand."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nChoose the correct letter, A, B, or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "When comparing loneliness to depression, the students",
+          "options": [
+            "A. Doubt that there will ever be a medical cure for loneliness.",
+            "B. Claim that the link between loneliness and mental health is overstated.",
+            "C. Express frustration that loneliness is not taken more seriously."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "Why do the students decide to start their presentation with an example from their own experience?",
+          "options": [
+            "A. To explain how difficult loneliness can be",
+            "B. To highlight a situation that most students will recognise",
+            "C. To emphasise that feeling lonely is more common for men than women"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "The students agree that talking to strangers is a good strategy for dealing with loneliness because",
+          "options": [
+            "A. It creates a sense of belonging.",
+            "B. It builds self-confidence.",
+            "C. It makes people feel more positive."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "The students find it difficult to understand why solitude is considered to be",
+          "options": [
+            "A. Similar to loneliness.",
+            "B. Necessary for mental health.",
+            "C. An enjoyable experience."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A / B"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A / B"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-1-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Reclaiming Urban Rivers Historical Background Nearly all major cities were built on a river. Rivers were traditionally used for transport, fishing, and recreation. Industrial development and rising populations later led to: -More sewage from houses being discharged into the river. -Pollution from [31] on the river bank. In 1957, the River Thames in London was declared biologically [32] Recent Improvements Seals and even a [33] have been seen in the River Thames. Riverside warehouses are converted to restaurants and [34] In Los Angeles, there are plans to: Build a riverside [35] Display [36] projects. In Paris, [37] are created on the sides of the river every summer. Transport Possibilities Over 2 billion passengers already travel by [38] in cities around the world. Changes in shopping habits mean the number of deliveries that are made is increasing. Instead of road transport, goods can be transported by large freight barges and electric [39] , or, in future, by [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Reclaiming Urban Rivers",
+          "sections": [
+            {
+              "heading": "Historical Background",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Nearly all major cities were built on a river.",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Rivers were traditionally used for transport, fishing, and recreation.",
+                  "bullet": false
+                }
+              ]
+            },
+            {
+              "heading": "Industrial development and rising populations later led to:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "-More sewage from houses being discharged into the river.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "on the river bank.",
+                  "before": "-Pollution from"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "In 1957, the River Thames in London was declared biologically"
+                }
+              ]
+            },
+            {
+              "heading": "Recent Improvements",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "have been seen in the River Thames.",
+                  "before": "Seals and even a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "",
+                  "before": "Riverside warehouses are converted to restaurants and"
+                }
+              ]
+            },
+            {
+              "heading": "In Los Angeles, there are plans to:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "Build a riverside"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "projects.",
+                  "before": "Display"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "are created on the sides of the river every summer.",
+                  "before": "In Paris,"
+                }
+              ]
+            },
+            {
+              "heading": "Transport Possibilities",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "in cities around the world.",
+                  "before": "Over 2 billion passengers already travel by"
+                },
+                {
+                  "kind": "text",
+                  "text": "Changes in shopping habits mean the number of deliveries that are made is increasing.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ", or, in future, by",
+                  "before": "Instead of road transport, goods can be transported by large freight barges and electric"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "Factories"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "Dead"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "Whale"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "Apartments"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "Park"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "Art"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "Beaches"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "Ferry"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "Bikes"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "Drone"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Fish"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Roof"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Spanish"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Vegetarian"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Audley"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Hotel"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Reviews"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Local"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "30"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Average"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Heather says pottery differs from other art forms because",
+      "options": [
+        "A. It lasts longer in the ground.",
+        "B. It is practised by more people.",
+        "C. It can be repaired more easily."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Archaeologists sometimes identify the use of ancient pottery from",
+      "options": [
+        "A. The clay it was made with.",
+        "B. The marks that are on it.",
+        "C. The basic shape of it."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Some people join Heather’s pottery class because they want to",
+      "options": [
+        "A. Create an item that looks very old.",
+        "B. Find something that they are good at.",
+        "C. Make something that will outlive them."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "What does Heather value most about being a potter?",
+      "options": [
+        "A. Its calming effect",
+        "B. Its messy nature",
+        "C. Its physical benefits"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Most of the visitors to Edelman Pottery",
+      "options": [
+        "A. Bring friends to join courses.",
+        "B. Have never made a pot before.",
+        "C. Try to learn techniques too quickly."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Heather reminds her visitors that they should",
+      "options": [
+        "A. Put on their aprons.",
+        "B. Change their clothes.",
+        "C. Take off their jewellery."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Which TWO things does Heather explain about kilns?",
+      "options": [
+        "A. What their function is",
+        "B. When they were invented",
+        "C. Ways of keeping them safe",
+        "D. Where to put one in your home",
+        "E. What some people use instead of one"
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Which TWO things does Heather explain about kilns?",
+      "options": [
+        "A. What their function is",
+        "B. When they were invented",
+        "C. Ways of keeping them safe",
+        "D. Where to put one in your home",
+        "E. What some people use instead of one"
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Which points does Heather make about a potter’s tools?",
+      "options": [
+        "A. Some are hard to hold.",
+        "B. Some are worth buying.",
+        "C. Some are essential items.",
+        "D. Some have memorable names.",
+        "E. Some are available for use by participants."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Which points does Heather make about a potter’s tools?",
+      "options": [
+        "A. Some are hard to hold.",
+        "B. Some are worth buying.",
+        "C. Some are essential items.",
+        "D. Some have memorable names.",
+        "E. Some are available for use by participants."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Which TWO things do the students both believe are responsible for the increase in loneliness?",
+      "options": [
+        "A. Social media",
+        "B. Smaller nuclear families",
+        "C. Urban design",
+        "D. Longer lifespans",
+        "E. A mobile workforce"
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Which TWO things do the students both believe are responsible for the increase in loneliness?",
+      "options": [
+        "A. Social media",
+        "B. Smaller nuclear families",
+        "C. Urban design",
+        "D. Longer lifespans",
+        "E. A mobile workforce"
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Which TWO health risks associated with loneliness do the students agree are based on solid evidence?",
+      "options": [
+        "A. A weakened immune system",
+        "B. Dementia",
+        "C. Cancer",
+        "D. Obesity",
+        "E. Cardiovascular disease"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Which TWO health risks associated with loneliness do the students agree are based on solid evidence?",
+      "options": [
+        "A. A weakened immune system",
+        "B. Dementia",
+        "C. Cancer",
+        "D. Obesity",
+        "E. Cardiovascular disease"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Which TWO opinions do both the students express about the evolutionary theory of loneliness?",
+      "options": [
+        "A. It has little practical relevance.",
+        "B. It needs further investigation.",
+        "C. It is misleading.",
+        "D. It should be more widely accepted.",
+        "E. It is difficult to understand."
+      ],
+      "correctAnswer": "A / B"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "Which TWO opinions do both the students express about the evolutionary theory of loneliness?",
+      "options": [
+        "A. It has little practical relevance.",
+        "B. It needs further investigation.",
+        "C. It is misleading.",
+        "D. It should be more widely accepted.",
+        "E. It is difficult to understand."
+      ],
+      "correctAnswer": "A / B"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "When comparing loneliness to depression, the students",
+      "options": [
+        "A. Doubt that there will ever be a medical cure for loneliness.",
+        "B. Claim that the link between loneliness and mental health is overstated.",
+        "C. Express frustration that loneliness is not taken more seriously."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "Why do the students decide to start their presentation with an example from their own experience?",
+      "options": [
+        "A. To explain how difficult loneliness can be",
+        "B. To highlight a situation that most students will recognise",
+        "C. To emphasise that feeling lonely is more common for men than women"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "The students agree that talking to strangers is a good strategy for dealing with loneliness because",
+      "options": [
+        "A. It creates a sense of belonging.",
+        "B. It builds self-confidence.",
+        "C. It makes people feel more positive."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "The students find it difficult to understand why solitude is considered to be",
+      "options": [
+        "A. Similar to loneliness.",
+        "B. Necessary for mental health.",
+        "C. An enjoyable experience."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Factories"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Dead"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Whale"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Apartments"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Park"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Art"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Beaches"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Ferry"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Bikes"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Drone"
+    }
+  ]
+}

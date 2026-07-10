@@ -1,0 +1,1038 @@
+{
+  "testId": "cambridge-ielts-07-academic-listening-test-4",
+  "title": "Cambridge IELTS 07 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-07-academic-listening-test-4/",
+  "book": 7,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-6\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. HOMESTAY APPLICATION Example Surname: Answer Yuichini First name: [1] Sex: female Nationality: Japanese Passport number: [2] Age: 28 years Present address: Room 21C, Willow College Length of homestay: approx [3] Course enrolled in: [4] Family preferences: no [5] no objection to [6]\n\nQuestions 7-10\n\nAnswer the questions below. Write NO MORE THAN TWO WORDS for each answer.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-6\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "HOMESTAY APPLICATION"
+          ],
+          "rows": [
+            [
+              "Example\nSurname:",
+              "Answer\nYuichini"
+            ],
+            [
+              "First name:",
+              "[1]"
+            ],
+            [
+              "Sex:",
+              "female",
+              "Nationality:",
+              "Japanese"
+            ],
+            [
+              "Passport number:",
+              "[2]",
+              "Age:",
+              "28 years"
+            ],
+            [
+              "Present address:",
+              "Room 21C, Willow College"
+            ],
+            [
+              "Length of homestay:",
+              "approx\n[3]"
+            ],
+            [
+              "Course enrolled in:",
+              "[4]"
+            ],
+            [
+              "Family preferences:",
+              "no\n[5]\nno objection to\n[6]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 7-10\n\nAnswer the questions below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "text",
+          "text": "[7]"
+        },
+        {
+          "type": "text",
+          "text": "[8]"
+        },
+        {
+          "type": "text",
+          "text": "[9]"
+        },
+        {
+          "type": "text",
+          "text": "[10]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Keiko"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "JO6337"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "4 months / four months"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Advanced English Studies / English Studies / Advanced English / English"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "young children / children"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "pets"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "seafood"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "tennis"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "trains / the train / train"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "this afternoon / afternoon"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-14\n\nChoose the correct letter, A, B or C.\n\nQuestions 15-17\n\nLabel the plan below. Write NO MORE THAN TWO WORDS for each answer.\n\nQuestions 18-20\n\nComplete the table below. Write NO MORE THAN TWO WORDS for each answer. Area Facility Activity The Mangroves boardwalk [18] Frog Pond outdoor classroom [19] The Waterbird Refuge [20] bird watching",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-14\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "What kind of tour is Sally leading?",
+          "options": [
+            "A. a bus tour",
+            "B. a train tour",
+            "C. a walking tour"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "The original buildings on the site were",
+          "options": [
+            "A. houses.",
+            "B. industrial buildings.",
+            "C. shops."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "The local residents wanted to use the site for",
+          "options": [
+            "A. leisure.",
+            "B. apartment blocks.",
+            "C. a sports centre."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "The Tower is at the centre of the",
+          "options": [
+            "A. nature reserve.",
+            "B. formal gardens.",
+            "C. Bicentennial Park."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-17\n\nLabel the plan below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-4-4-diagram-6a26372a43315.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "text",
+          "text": "[15]"
+        },
+        {
+          "type": "text",
+          "text": "[16]"
+        },
+        {
+          "type": "text",
+          "text": "[17]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 18-20\n\nComplete the table below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Area",
+            "Facility",
+            "Activity"
+          ],
+          "rows": [
+            [
+              "The Mangroves",
+              "boardwalk",
+              "[18]"
+            ],
+            [
+              "Frog Pond",
+              "outdoor classroom",
+              "[19]"
+            ],
+            [
+              "The Waterbird Refuge",
+              "[20]",
+              "bird watching"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "car park"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "rose garden"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "café / cafe"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "cycling"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "biology lesson"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "viewing shelter"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-22\n\nComplete the sentences below. Write NO MORE THAN ONE WORD AND/OR A NUMBER for each answer. The presentation will last 15 minutes. There will be [21] minutes for questions. The presentation will not be [22] .\n\nQuestions 23-26\n\nWhat do the students decide about each topic for the geography presentation? Write the correct letter, A, B or C.\n\nQuestions 27-30\n\nComplete the table below. Write NO MORE THAN TWO WORDS for each answer. Information/visual aid Where from? Overhead projector the [27] Map of West Africa the [28] Map of the islands a tourist brochure Literacy figures the [29] [30] on school places as above",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nComplete the sentences below.\n\nWrite NO MORE THAN ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "minutes for questions.",
+                  "before": "The presentation will last 15 minutes. There will be"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": ".",
+                  "before": "The presentation will not be"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-26\n\nWhat do the students decide about each topic for the geography presentation?\n\nWrite the correct letter, A, B or C."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Geographical Location",
+              "questionId": 23
+            },
+            {
+              "stepLabel": "Economy",
+              "questionId": 24
+            },
+            {
+              "stepLabel": "Overview of Education System",
+              "questionId": 25
+            },
+            {
+              "stepLabel": "Role of English Language",
+              "questionId": 26
+            }
+          ],
+          "options": [
+            "A. They will definitely include this topic.",
+            "B. They might include this topic.",
+            "C. They will not include this topic."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nComplete the table below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Information/visual aid",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "",
+                  "before": "Overhead projector the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "",
+                  "before": "Map of West Africa the"
+                },
+                {
+                  "kind": "text",
+                  "text": "Map of the islands",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "",
+                  "before": "Literacy figures the"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "5 / five"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "assessed"
+        },
+        {
+          "id": 23,
+          "type": "matching",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "matching",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "media room"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "resources room"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "embassy"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "statistics / stats"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-33\n\nChoose the correct letter, A, B or C.\n\nQuestions 34-40\n\nComplete the notes below. Write NO MORE THAN TWO WORDS for each answer. Monosodium Glutamate (MSG) MSG contains - glutamate (78.2%) - sodium (12.2%) - [34] (9.6%) Glutamate is found in foods that contain protein such as [35] and [36] . MSG is used in foods in many different parts of the world. In 1908 Kikunae Ikeda discovered a [37] . Our ability to detect glutamate makes sense because it is so [38] naturally. John Prescott suggests that: - sweetness tells us that a food contains carbohydrates. - [39] tells us that a food contains toxins. - sourness tells us that a food is spoiled. - saltiness tells us that a food contains [40] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-33\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "The speaker says the main topic of the lecture is",
+          "options": [
+            "A. the history of monosodium glutamate.",
+            "B. the way monosodium glutamate works.",
+            "C. where monosodium glutamate is used."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "In 1908, scientists in Japan",
+          "options": [
+            "A. made monosodium glutamate.",
+            "B. began using kombu.",
+            "C. identified glutamate."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "What change occurred in the manufacture of glutamate in 1956?",
+          "options": [
+            "A. It began to be manufactured on a large scale.",
+            "B. The Japanese began extracting it from natural sources.",
+            "C. It became much more expensive to produce."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 34-40\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Monosodium Glutamate (MSG)",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "(9.6%)",
+                  "before": "MSG contains - glutamate (78.2%) - sodium (12.2%) -"
+                },
+                {
+                  "kind": "text",
+                  "text": "- glutamate (78.2%)",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "- sodium (12.2%)",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "(9.6%)",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "and",
+                  "before": "Glutamate is found in foods that contain protein such as"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "."
+                },
+                {
+                  "kind": "text",
+                  "text": "MSG is used in foods in many different parts of the world."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ".",
+                  "before": "In 1908 Kikunae Ikeda discovered a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "naturally.",
+                  "before": "Our ability to detect glutamate makes sense because it is so"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "tells us that a food contains toxins. - sourness tells us that a food is spoiled. - saltiness tells us that a food contains",
+                  "before": "John Prescott suggests that: - sweetness tells us that a food contains carbohydrates. -"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "."
+                },
+                {
+                  "kind": "text",
+                  "text": "- sweetness tells us that a food contains carbohydrates.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "tells us that a food contains toxins.",
+                  "before": "-"
+                },
+                {
+                  "kind": "text",
+                  "text": "- sourness tells us that a food is spoiled.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ".",
+                  "before": "- saltiness tells us that a food contains"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "water"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "meat"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "cheese"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "fifth taste"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "common"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "bitterness"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "minerals"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Keiko"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "JO6337"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4 months / four months"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Advanced English Studies / English Studies / Advanced English / English"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "young children / children"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "pets"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "What does the student particularly like to eat?",
+      "options": [],
+      "correctAnswer": "seafood"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "What sport does the student play?",
+      "options": [],
+      "correctAnswer": "tennis"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "What mode of transport does the student prefer?",
+      "options": [],
+      "correctAnswer": "trains / the train / train"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "When will the student find out her homestay address?",
+      "options": [],
+      "correctAnswer": "this afternoon / afternoon"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "What kind of tour is Sally leading?",
+      "options": [
+        "A. a bus tour",
+        "B. a train tour",
+        "C. a walking tour"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "The original buildings on the site were",
+      "options": [
+        "A. houses.",
+        "B. industrial buildings.",
+        "C. shops."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "The local residents wanted to use the site for",
+      "options": [
+        "A. leisure.",
+        "B. apartment blocks.",
+        "C. a sports centre."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "The Tower is at the centre of the",
+      "options": [
+        "A. nature reserve.",
+        "B. formal gardens.",
+        "C. Bicentennial Park."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "car park"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rose garden"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "café / cafe"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cycling"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "biology lesson"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "viewing shelter"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "5 / five"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "assessed"
+    },
+    {
+      "id": 23,
+      "type": "matching",
+      "label": "23",
+      "question": "• Geographical Location",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "matching",
+      "label": "24",
+      "question": "• Economy",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• Overview of Education System",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• Role of English Language",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "media room"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "resources room"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "embassy"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "statistics / stats"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "The speaker says the main topic of the lecture is",
+      "options": [
+        "A. the history of monosodium glutamate.",
+        "B. the way monosodium glutamate works.",
+        "C. where monosodium glutamate is used."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "In 1908, scientists in Japan",
+      "options": [
+        "A. made monosodium glutamate.",
+        "B. began using kombu.",
+        "C. identified glutamate."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "What change occurred in the manufacture of glutamate in 1956?",
+      "options": [
+        "A. It began to be manufactured on a large scale.",
+        "B. The Japanese began extracting it from natural sources.",
+        "C. It became much more expensive to produce."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "water"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "meat"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cheese"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fifth taste"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "common"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bitterness"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "minerals"
+    }
+  ]
+}

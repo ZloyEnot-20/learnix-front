@@ -1,0 +1,1182 @@
+{
+  "testId": "cambridge-ielts-01-academic-listening-test-1",
+  "title": "Cambridge IELTS 01 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-01-academic-listening-test-1/",
+  "book": 1,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-listening-test-1-1.mp3",
+      "content": "Questions 1-5\n\nCircle the appropriate letter.\n\nQuestions 6-10\n\nComplete the form Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. PERSONAL DETAILS FORM Name: Mary [6] Address: Flat 2, [7] , [8] Road Canterbury Telephone: [9] Estimated value of lost item: £ [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-5\n\nCircle the appropriate letter."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 1,
+          "prompt": "What does her briefcase look like?",
+          "options": [
+            "A. Picture A",
+            "B. Picture B",
+            "C. Picture C",
+            "D. Picture D"
+          ],
+          "imageUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-reading-test-1-1-q1.png"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 2,
+          "prompt": "Which picture shows the distinguishing features?",
+          "options": [
+            "A. Picture A",
+            "B. Picture B",
+            "C. Picture C",
+            "D. Picture D"
+          ],
+          "imageUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-reading-test-1-1-q2.png"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 3,
+          "prompt": "What did she have inside her briefcase?",
+          "options": [
+            "A. wallet, pens and novel",
+            "B. papers and wallet",
+            "C. pens and novel",
+            "D. papers, pens and novel"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 4,
+          "prompt": "Where was she standing when she lost her briefcase?",
+          "options": [
+            "A. Picture A",
+            "B. Picture B",
+            "C. Picture C",
+            "D. Picture D"
+          ],
+          "imageUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-reading-test-1-1-q3.png"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 5,
+          "prompt": "What time was it when she lost her briefcase?",
+          "options": [
+            "A. Picture A",
+            "B. Picture B",
+            "C. Picture C",
+            "D. Picture D"
+          ],
+          "imageUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-reading-test-1-1-q4.png"
+        },
+        {
+          "type": "text",
+          "text": "Questions 6-10\n\nComplete the form Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "PERSONAL DETAILS FORM",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Name: Mary"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": ",",
+                  "before": "Address: Flat 2,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "Road"
+                }
+              ]
+            },
+            {
+              "heading": "Canterbury",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Telephone:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "Estimated value of lost item: £"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "multiple-choice",
+          "label": "1",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "label": "2",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "label": "3",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "label": "4",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Prescott"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "41"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "Fountain"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "752239"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "65"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–21.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-listening-test-1-2.mp3",
+      "content": "Questions 11-13\n\nTick the THREE other items which are mentioned in the news headlines.\n\nQuestions 14-21\n\nComplete the notes below by writing NO MORE THAN TWO WORDS AND/OR A NUMBER in the spaces provided. The Government plans to give $ [14] to assist the farmers. This money was to be spent on improving Sydney’s [15] but has now been re-allocated. Australia has experienced its worst drought in over fifty years. Farmers say that the money will not help them because it is [16] . An aeroplane which was carrying a group of [17] was forced to land just [18] minutes after take-off. The passengers were rescued by boats and [19] . The operation was helped because of the good weather. The passengers thanked the [20] for saving their lives but unfortunately they lost their [21] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nTick the THREE other items which are mentioned in the news headlines."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            11,
+            12,
+            13
+          ],
+          "label": "11-13",
+          "prompt": "Tick the THREE other items which are mentioned in the news headlines.",
+          "options": [
+            "A. Rivers flood in the north",
+            "B. Money promised for drought victims",
+            "C. Nurses on strike in Melbourne",
+            "D. Passengers rescued from ship",
+            "E. Passengers rescued from plane",
+            "F. Bus and train drivers national strike threat",
+            "G. Teachers demand more pay",
+            "H. New uniform for QANTAS staff",
+            "I. National airports under new management"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-21\n\nComplete the notes below by writing NO MORE THAN TWO WORDS AND/OR A NUMBER in the spaces provided."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "to assist the farmers. This money was to be spent on improving Sydney’s",
+                  "before": "The Government plans to give $"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 15,
+                  "after": "but has now been re-allocated."
+                },
+                {
+                  "kind": "text",
+                  "text": "Australia has experienced its worst drought in over fifty years.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 16,
+                  "after": ".",
+                  "before": "Farmers say that the money will not help them because it is"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 17,
+                  "after": "was forced to land just",
+                  "before": "An aeroplane which was carrying a group of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 18,
+                  "after": "minutes after take-off. The passengers were rescued by boats and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 19,
+                  "after": ". The operation was helped because of the good weather. The passengers thanked the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 20,
+                  "after": "for saving their lives but unfortunately they lost their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "E / F / H"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "E / F / H"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "E / F / H"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "250 million / 250,000,000 / 250000000"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "roads / road system"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "too late"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "school children / boys"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "3 / three"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "pleasure craft"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "pilot"
+        },
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "musical instruments / instruments"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 22–31.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-listening-test-1-3.mp3",
+      "content": "Questions 22-25\n\nCircle the appropriate letter.\n\nQuestions 26-31\n\nComplete the notes below using NO MORE THAN THREE WORDS. Course requirements: Tutorial paper: A piece of work on a given topic. Students must: [26] for 25 minutes [27] work give to lecturer for marking Essay topic: Usually can [28] Type of exam: [29] Library: Important books are in [30] . Focus of course: Focus on [31] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 22-25\n\nCircle the appropriate letter."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The orientation meeting",
+          "options": [
+            "A. took place recently.",
+            "B. took place last term.",
+            "C. will take place tomorrow.",
+            "D. will take place next week."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "Attendance at lectures is",
+          "options": [
+            "A. optional after 4 pm.",
+            "B. closely monitored.",
+            "C. difficult to enforce.",
+            "D. sometimes unnecessary."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Tutorials take place",
+          "options": [
+            "A. every morning.",
+            "B. twice a week.",
+            "C. three mornings a week.",
+            "D. three afternoons a week."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "The lecturer’s name is",
+          "options": [
+            "A. Roberts.",
+            "B. Rawson.",
+            "C. Rogers.",
+            "D. Robertson."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-31\n\nComplete the notes below using NO MORE THAN THREE WORDS."
+        },
+        {
+          "type": "notes",
+          "title": "Course requirements:",
+          "sections": [
+            {
+              "heading": "Tutorial paper:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "A piece of work on a given topic. Students must:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "for 25 minutes"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "work"
+                },
+                {
+                  "kind": "text",
+                  "text": "give to lecturer for marking"
+                }
+              ]
+            },
+            {
+              "heading": "Essay topic:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "",
+                  "before": "Usually can"
+                }
+              ]
+            },
+            {
+              "heading": "Type of exam:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": ""
+                }
+              ]
+            },
+            {
+              "heading": "Library:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": ".",
+                  "before": "Important books are in"
+                }
+              ]
+            },
+            {
+              "heading": "Focus of course:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": ".",
+                  "before": "Focus on"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "talk / give a talk"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "write up"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "choose / choose the topic"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "open book exam / open book / open-book exam / open-book"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "closed reserve"
+        },
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "vocational subjects / vocational / preparing for work / work / employment"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 32–41.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-01-academic-listening-test-1-4.mp3",
+      "content": "Questions 32-33\n\nCircle the appropriate letter.\n\nQuestions 34-36\n\nComplete the notes in NO MORE THAN THREE WORDS. The subjects taken in the first semester in this course are psychology, sociology, [34] . Students may have problems with meeting [35] and [36] .\n\nQuestions 37-41\n\nCircle the appropriate letter.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 32-33\n\nCircle the appropriate letter."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "The speaker works within the Faculty of",
+          "options": [
+            "A. Science and Technology.",
+            "B. Arts and Social Sciences.",
+            "C. Architecture.",
+            "D. Law."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "The Faculty consists firstly of",
+          "options": [
+            "A. subjects.",
+            "B. degrees.",
+            "C. divisions.",
+            "D. departments."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 34-36\n\nComplete the notes in NO MORE THAN THREE WORDS."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": ".",
+                  "before": "The subjects taken in the first semester in this course are psychology, sociology,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "and",
+                  "before": "Students may have problems with meeting"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 37-41\n\nCircle the appropriate letter."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 37,
+          "prompt": "The speaker says students can visit her",
+          "options": [
+            "A. every morning.",
+            "B. some mornings.",
+            "C. mornings only.",
+            "D. Friday morning."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 38,
+          "prompt": "According to the speaker, a tutorial",
+          "options": [
+            "A. is a type of lecture.",
+            "B. is less important than a lecture.",
+            "C. provides a chance to share views.",
+            "D. provides an alternative to groupwork."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 39,
+          "prompt": "When writing essays, the speaker advises the students to",
+          "options": [
+            "A. research their work well.",
+            "B. name the books they have read.",
+            "C. share work with their friends.",
+            "D. avoid using other writers’ ideas."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 40,
+          "prompt": "The speaker thinks that plagiarism is",
+          "options": [
+            "A. a common problem.",
+            "B. an acceptable risk.",
+            "C. a minor concern.",
+            "D. a serious offence."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 41,
+          "prompt": "The speaker’s aims are to",
+          "options": [
+            "A. introduce students to university expectations.",
+            "B. introduce students to the members of staff.",
+            "C. warn students about the difficulties of studying.",
+            "D. guide students round the university."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "history and economics / history,economics / history economics"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "deadlines / a deadline / deadlines for essays"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "attendance"
+        },
+        {
+          "id": 37,
+          "type": "multiple-choice",
+          "label": "37",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 38,
+          "type": "multiple-choice",
+          "label": "38",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 41,
+          "type": "multiple-choice",
+          "label": "41",
+          "correctAnswer": "A"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "multiple-choice",
+      "label": "1",
+      "question": "What does her briefcase look like?",
+      "options": [
+        "A. Picture A",
+        "B. Picture B",
+        "C. Picture C",
+        "D. Picture D"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 2,
+      "type": "multiple-choice",
+      "label": "2",
+      "question": "Which picture shows the distinguishing features?",
+      "options": [
+        "A. Picture A",
+        "B. Picture B",
+        "C. Picture C",
+        "D. Picture D"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 3,
+      "type": "multiple-choice",
+      "label": "3",
+      "question": "What did she have inside her briefcase?",
+      "options": [
+        "A. wallet, pens and novel",
+        "B. papers and wallet",
+        "C. pens and novel",
+        "D. papers, pens and novel"
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 4,
+      "type": "multiple-choice",
+      "label": "4",
+      "question": "Where was she standing when she lost her briefcase?",
+      "options": [
+        "A. Picture A",
+        "B. Picture B",
+        "C. Picture C",
+        "D. Picture D"
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "What time was it when she lost her briefcase?",
+      "options": [
+        "A. Picture A",
+        "B. Picture B",
+        "C. Picture C",
+        "D. Picture D"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Prescott"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "41"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Fountain"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "752239"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "65"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Tick the THREE other items which are mentioned in the news headlines.",
+      "options": [
+        "A. Rivers flood in the north",
+        "B. Money promised for drought victims",
+        "C. Nurses on strike in Melbourne",
+        "D. Passengers rescued from ship",
+        "E. Passengers rescued from plane",
+        "F. Bus and train drivers national strike threat",
+        "G. Teachers demand more pay",
+        "H. New uniform for QANTAS staff",
+        "I. National airports under new management"
+      ],
+      "correctAnswer": "E / F / H"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Tick the THREE other items which are mentioned in the news headlines.",
+      "options": [
+        "A. Rivers flood in the north",
+        "B. Money promised for drought victims",
+        "C. Nurses on strike in Melbourne",
+        "D. Passengers rescued from ship",
+        "E. Passengers rescued from plane",
+        "F. Bus and train drivers national strike threat",
+        "G. Teachers demand more pay",
+        "H. New uniform for QANTAS staff",
+        "I. National airports under new management"
+      ],
+      "correctAnswer": "E / F / H"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Tick the THREE other items which are mentioned in the news headlines.",
+      "options": [
+        "A. Rivers flood in the north",
+        "B. Money promised for drought victims",
+        "C. Nurses on strike in Melbourne",
+        "D. Passengers rescued from ship",
+        "E. Passengers rescued from plane",
+        "F. Bus and train drivers national strike threat",
+        "G. Teachers demand more pay",
+        "H. New uniform for QANTAS staff",
+        "I. National airports under new management"
+      ],
+      "correctAnswer": "E / F / H"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "250 million / 250,000,000 / 250000000"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "roads / road system"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "too late"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "school children / boys"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "3 / three"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "pleasure craft"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "pilot"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "musical instruments / instruments"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The orientation meeting",
+      "options": [
+        "A. took place recently.",
+        "B. took place last term.",
+        "C. will take place tomorrow.",
+        "D. will take place next week."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Attendance at lectures is",
+      "options": [
+        "A. optional after 4 pm.",
+        "B. closely monitored.",
+        "C. difficult to enforce.",
+        "D. sometimes unnecessary."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Tutorials take place",
+      "options": [
+        "A. every morning.",
+        "B. twice a week.",
+        "C. three mornings a week.",
+        "D. three afternoons a week."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "The lecturer’s name is",
+      "options": [
+        "A. Roberts.",
+        "B. Rawson.",
+        "C. Rogers.",
+        "D. Robertson."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "talk / give a talk"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "write up"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "choose / choose the topic"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "open book exam / open book / open-book exam / open-book"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "closed reserve"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vocational subjects / vocational / preparing for work / work / employment"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "The speaker works within the Faculty of",
+      "options": [
+        "A. Science and Technology.",
+        "B. Arts and Social Sciences.",
+        "C. Architecture.",
+        "D. Law."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "The Faculty consists firstly of",
+      "options": [
+        "A. subjects.",
+        "B. degrees.",
+        "C. divisions.",
+        "D. departments."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "history and economics / history,economics / history economics"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "deadlines / a deadline / deadlines for essays"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "attendance"
+    },
+    {
+      "id": 37,
+      "type": "multiple-choice",
+      "label": "37",
+      "question": "The speaker says students can visit her",
+      "options": [
+        "A. every morning.",
+        "B. some mornings.",
+        "C. mornings only.",
+        "D. Friday morning."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 38,
+      "type": "multiple-choice",
+      "label": "38",
+      "question": "According to the speaker, a tutorial",
+      "options": [
+        "A. is a type of lecture.",
+        "B. is less important than a lecture.",
+        "C. provides a chance to share views.",
+        "D. provides an alternative to groupwork."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "When writing essays, the speaker advises the students to",
+      "options": [
+        "A. research their work well.",
+        "B. name the books they have read.",
+        "C. share work with their friends.",
+        "D. avoid using other writers’ ideas."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "The speaker thinks that plagiarism is",
+      "options": [
+        "A. a common problem.",
+        "B. an acceptable risk.",
+        "C. a minor concern.",
+        "D. a serious offence."
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 41,
+      "type": "multiple-choice",
+      "label": "41",
+      "question": "The speaker’s aims are to",
+      "options": [
+        "A. introduce students to university expectations.",
+        "B. introduce students to the members of staff.",
+        "C. warn students about the difficulties of studying.",
+        "D. guide students round the university."
+      ],
+      "correctAnswer": "A"
+    }
+  ]
+}

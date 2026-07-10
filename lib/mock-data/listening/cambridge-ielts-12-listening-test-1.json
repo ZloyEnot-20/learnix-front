@@ -1,0 +1,1029 @@
+{
+  "testId": "cambridge-ielts-12-academic-listening-test-1",
+  "title": "Cambridge IELTS 12 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-12-academic-listening-test-1/",
+  "book": 12,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-1-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. FAMILY EXCURSIONS Cruise on a lake Example Travel on an old ….. steamship ….. Can take photos of the [1] that surround the lake Farm visit Children can help feed the sheep Visit can include a 40-minute ride on a [2] Visitors can walk in the farm’s [3] by the lake [4] is available at extra cost Cycling trips Cyclists explore the Back Road A [5] is provided Only suitable for cyclists who have some [6] – Bikes can be hired from [7] (near the Cruise Ship Terminal) Cyclists need: – a repair kit – food and drink – a [8] (can be hired) There are no [9] or accommodation in the area Cost Total cost for whole family of cruise and farm visit: $ [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "that surround the lake Farm visit Children can help feed the sheep Visit can include a 40-minute ride on a",
+                  "before": "Can take photos of the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "Visitors can walk in the farm’s",
+                  "before": "that surround the lake Farm visit Children can help feed the sheep Visit can include a 40-minute ride on a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "by the lake",
+                  "before": "Visitors can walk in the farm’s"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "is available at extra cost Cycling trips Cyclists explore the Back Road A",
+                  "before": "by the lake"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "is provided Only suitable for cyclists who have some",
+                  "before": "is available at extra cost Cycling trips Cyclists explore the Back Road A"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "– Bikes can be hired from",
+                  "before": "is provided Only suitable for cyclists who have some"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "(near the Cruise Ship Terminal) Cyclists need: – a repair kit – food and drink – a",
+                  "before": "– Bikes can be hired from"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "(can be hired) There are no",
+                  "before": "(near the Cruise Ship Terminal) Cyclists need: – a repair kit – food and drink – a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "or accommodation in the area Cost Total cost for whole family of cruise and farm visit: $",
+                  "before": "(can be hired) There are no"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "or accommodation in the area Cost Total cost for whole family of cruise and farm visit: $"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "mountains"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "horse"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "garden / gardens"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "lunch"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "map"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "experience"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Ratchesons"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "helmet"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "shops"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "267"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-1-audio-2.mp3",
+      "content": "Questions 11-14\n\nChoose the correct letter, A , B or C . Talk to new kitchen assistants\n\nQuestions 15-16\n\nChoose TWO letters, A-E .\n\nQuestions 17-20\n\nWhat is the responsibility of each of the following restaurant staff? Choose FOUR answers from the box and write the correct letter, A-F , next to Questions Responsibilities Restaurant staff",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-14\n\nChoose the correct letter, A, B or C.\n\nTalk to new kitchen assistants"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "According to the manager, what do most people like about the job of kitchen assistant?",
+          "options": [
+            "A. the variety of work",
+            "B. the friendly atmosphere",
+            "C. the opportunities for promotion"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "The manager is concerned about some of the new staff’s",
+          "options": [
+            "A. jewellery.",
+            "B. hair styles.",
+            "C. shoes."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "The manager says that the day is likely to be busy for kitchen staff because",
+          "options": [
+            "A. it is a public holiday.",
+            "B. the head chef is absent.",
+            "C. the restaurant is almost fully booked."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "Only kitchen staff who are 18 or older are allowed to use",
+          "options": [
+            "A. the waste disposal unit.",
+            "B. the electric mixer.",
+            "C. the meat slicer."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-16\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            15,
+            16
+          ],
+          "label": "15-16",
+          "prompt": "According to the manager, which TWO things can make the job of kitchen assistant stressful?",
+          "options": [
+            "A. They have to follow orders immediately.",
+            "B. The kitchen gets very hot.",
+            "C. They may not be able to take a break.",
+            "D. They have to do overtime.",
+            "E. The work is physically demanding."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nWhat is the responsibility of each of the following restaurant staff?\n\nChoose FOUR answers from the box and write the correct letter, A-F, next to Questions\n\nResponsibilities\n\nRestaurant staff"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Joy Parkins",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "David Field",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "Dexter Wills",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "Mike Smith",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. training courses",
+            "B. food stocks",
+            "C. first aid",
+            "D. breakages",
+            "E. staff discounts",
+            "F. timetables"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-1-audio-3.mp3",
+      "content": "Questions 21-23\n\nChoose the correct letter, A , B or C . Paper on Public Libraries\n\nQuestions 24-30\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Study of local library: possible questions whether it has a [24] of its own its policy regarding noise of various kinds how it’s affected by laws regarding all aspects of [25] how the design needs to take the [26] of customers into account what [27] is required in case of accidents why a famous person’s [28] is located in the library whether it has a [29] of local organisations how it’s different from a library in a [30]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-23\n\nChoose the correct letter, A, B or C.\n\nPaper on Public Libraries"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "What will be the main topic of Trudie and Stewart’s paper?",
+          "options": [
+            "A. how public library services are organised in different countries",
+            "B. how changes in society are reflected in public libraries",
+            "C. how the funding of public libraries has changed"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "They agree that one disadvantage of free digitalised books is that",
+          "options": [
+            "A. they may take a long time to read.",
+            "B. they can be difficult to read.",
+            "C. they are generally old."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "Stewart expect that in the future libraries will",
+          "options": [
+            "A. maintain their traditional function.",
+            "B. become centres for local communities.",
+            "C. no longer contain any books."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 24-30\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Study of local library: possible questions",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "of its own",
+                  "before": "whether it has a"
+                },
+                {
+                  "kind": "text",
+                  "text": "its policy regarding noise of various kinds"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": "",
+                  "before": "how it’s affected by laws regarding all aspects of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "of customers into account",
+                  "before": "how the design needs to take the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "is required in case of accidents",
+                  "before": "what"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "is located in the library",
+                  "before": "why a famous person’s"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "of local organisations",
+                  "before": "whether it has a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "",
+                  "before": "how it’s different from a library in a"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "budget"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "employment"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "safety"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "insurance"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "diary"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "database"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "museum"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-1-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write NO MORE THAN TWO WORDS for each answer. Four business values Many business values can result in [31] . Senior managers need to understand and deal with the potential [32] that may result. Collaboration During a training course, the speaker was in a team that had to build a [33] . Other teams experienced [34] from trying to collaborate. The speaker’s team won because they reduced collaboration. Sales of a [35] were poor because of collaboration. Industriousness Hard work may be a bad use of various company [36] . The word ‘lazy’ in this context refers to people who avoid doing tasks that are [37] . Creativity An advertising campaign for a [38] was memorable but failed to boost sales. Creativity should be used as a response to a particular [39] . Excellence According to one study, on average, pioneers had a [40] that was far higher than that of followers. Companies that always aim at excellence may miss opportunities.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Four business values",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": ".",
+                  "before": "Many business values can result in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "that may result.",
+                  "before": "Senior managers need to understand and deal with the potential"
+                }
+              ]
+            },
+            {
+              "heading": "Collaboration",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": ".",
+                  "before": "During a training course, the speaker was in a team that had to build a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "from trying to collaborate.",
+                  "before": "Other teams experienced"
+                },
+                {
+                  "kind": "text",
+                  "text": "The speaker’s team won because they reduced collaboration.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "were poor because of collaboration.",
+                  "before": "Sales of a"
+                }
+              ]
+            },
+            {
+              "heading": "Industriousness",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": ".",
+                  "before": "Hard work may be a bad use of various company"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ".",
+                  "before": "The word ‘lazy’ in this context refers to people who avoid doing tasks that are"
+                }
+              ]
+            },
+            {
+              "heading": "Creativity",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "was memorable but failed to boost sales.",
+                  "before": "An advertising campaign for a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ".",
+                  "before": "Creativity should be used as a response to a particular"
+                }
+              ]
+            },
+            {
+              "heading": "Excellence",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "that was far higher than that of followers.",
+                  "before": "According to one study, on average, pioneers had a"
+                },
+                {
+                  "kind": "text",
+                  "text": "Companies that always aim at excellence may miss opportunities.",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "damage"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "side effects"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "bridge"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "confusion"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "smartphone"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "resources"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "unnecessary / not necessary"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "chocolate bar"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "problem"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "market share"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mountains"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "horse"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "garden / gardens"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lunch"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "map"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "experience"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Ratchesons"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "helmet"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shops"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "267"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "According to the manager, what do most people like about the job of kitchen assistant?",
+      "options": [
+        "A. the variety of work",
+        "B. the friendly atmosphere",
+        "C. the opportunities for promotion"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "The manager is concerned about some of the new staff’s",
+      "options": [
+        "A. jewellery.",
+        "B. hair styles.",
+        "C. shoes."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "The manager says that the day is likely to be busy for kitchen staff because",
+      "options": [
+        "A. it is a public holiday.",
+        "B. the head chef is absent.",
+        "C. the restaurant is almost fully booked."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Only kitchen staff who are 18 or older are allowed to use",
+      "options": [
+        "A. the waste disposal unit.",
+        "B. the electric mixer.",
+        "C. the meat slicer."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "According to the manager, which TWO things can make the job of kitchen assistant stressful?",
+      "options": [
+        "A. They have to follow orders immediately.",
+        "B. The kitchen gets very hot.",
+        "C. They may not be able to take a break.",
+        "D. They have to do overtime.",
+        "E. The work is physically demanding."
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "According to the manager, which TWO things can make the job of kitchen assistant stressful?",
+      "options": [
+        "A. They have to follow orders immediately.",
+        "B. The kitchen gets very hot.",
+        "C. They may not be able to take a break.",
+        "D. They have to do overtime.",
+        "E. The work is physically demanding."
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• Joy Parkins",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• David Field",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• Dexter Wills",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• Mike Smith",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "What will be the main topic of Trudie and Stewart’s paper?",
+      "options": [
+        "A. how public library services are organised in different countries",
+        "B. how changes in society are reflected in public libraries",
+        "C. how the funding of public libraries has changed"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "They agree that one disadvantage of free digitalised books is that",
+      "options": [
+        "A. they may take a long time to read.",
+        "B. they can be difficult to read.",
+        "C. they are generally old."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Stewart expect that in the future libraries will",
+      "options": [
+        "A. maintain their traditional function.",
+        "B. become centres for local communities.",
+        "C. no longer contain any books."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "budget"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "employment"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "safety"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "insurance"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "diary"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "database"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "museum"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "damage"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "side effects"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bridge"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "confusion"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "smartphone"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "resources"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "unnecessary / not necessary"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "chocolate bar"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "problem"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "market share"
+    }
+  ]
+}

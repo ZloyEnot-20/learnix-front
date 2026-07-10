@@ -1,0 +1,1052 @@
+{
+  "testId": "cambridge-ielts-03-academic-listening-test-3",
+  "title": "Cambridge IELTS 03 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-03-academic-listening-test-3/",
+  "book": 3,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. NOTES – Christmas Dinner Date of dinner: 21 December Choices for venue: First choice [1] Tel. number: not known Second choice [2] Tel. number: 777192 Third choice [3] Tel. number: [4] Price per person: £12 Restaurant must have vegetarian food and a [5] Menu: First course - French Onion Soup OR Fruit Juice Main course - Roast Dinner OR [6] Dessert - Plum Pudding OR Apple Pie - Coffee Restaurant requires from us: £ [7] deposit and letter of confirmation and we must [8] in advance. Must confirm in writing by: [9] Put notice in [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "NOTES – Christmas Dinner",
+          "sections": [
+            {
+              "heading": "Date of dinner: 21 December",
+              "lines": []
+            },
+            {
+              "heading": "Choices for venue:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "Tel. number: not known",
+                  "before": "First choice"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "Tel. number: 777192",
+                  "before": "Second choice"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "Tel. number:",
+                  "before": "Third choice"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": ""
+                }
+              ]
+            },
+            {
+              "heading": "Price per person: £12",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Restaurant must have vegetarian food and a"
+                }
+              ]
+            },
+            {
+              "heading": "Menu: First course - French Onion Soup OR Fruit Juice",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Main course - Roast Dinner OR"
+                }
+              ]
+            },
+            {
+              "heading": "Dessert - Plum Pudding OR Apple Pie",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "- Coffee",
+                  "bullet": false
+                }
+              ]
+            },
+            {
+              "heading": "Restaurant requires from us:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "deposit and letter of confirmation",
+                  "before": "£"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "in advance.",
+                  "before": "and we must"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Must confirm in writing by:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "Put notice in"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Rajdoot"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Park View Hotel / Park View"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "London Arms"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "208657"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "no-smoking section / non-smoking section"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Lentil curry"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "fifty / 50"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "choose the menu / choose menu"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "4th November / November 4th / 4th of November / 4 November / November 4"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "the Newsletter / Newsletter"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-3-2.mp3",
+      "content": "Questions 11-13\n\nComplete the table below. Write NO MORE THAN THREE WORDS OR A NUMBER for each answer. MEMBERSHIP OF SPORTS CENTRE Cost £ [11] as an [12] fee Where? [13] When? 2 to 6 pm, Monday to Thursday Bring: Union card Photo Fee\n\nQuestions 14-16\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. Always bring sports [14] when you come to [15] or use the Centre’s facilities. Opening hours 9 am to 10 pm on [16] 10 am to 6 pm on Saturdays 50% ‘morning discount’ 9 am to 12 noon on weekdays\n\nQuestions 17-20\n\nLook at the map of the Sports Complex below. Label the buildings on the map of the Sports Complex. Choose your answers from the box below. Arts Studio | Football Pitch | Tennis Courts Dance Studio | Fitness Room | Reception Squash Courts",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "MEMBERSHIP OF SPORTS CENTRE",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": "as an",
+                  "before": "Cost £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": "fee",
+                  "before": "as an"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": "",
+                  "before": "Where?"
+                },
+                {
+                  "kind": "text",
+                  "text": "When?",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Bring",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-16\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "when you come to",
+                  "before": "Always bring sports"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 15,
+                  "after": "or use the Centre’s facilities.",
+                  "before": "when you come to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 16,
+                  "after": "10 am to 6 pm on Saturdays",
+                  "before": "Opening hours 9 am to 10 pm on"
+                },
+                {
+                  "kind": "text",
+                  "text": "50% ‘morning discount’",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nLook at the map of the Sports Complex below.\n\nLabel the buildings on the map of the Sports Complex.\n\nChoose your answers from the box below.\n\nArts Studio | Football Pitch | Tennis Courts\n\nDance Studio | Fitness Room | Reception\n\nSquash Courts"
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-3-4-diagram-6a277c03b26a1.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "text",
+          "text": "[17]"
+        },
+        {
+          "type": "text",
+          "text": "[18]"
+        },
+        {
+          "type": "text",
+          "text": "[19]"
+        },
+        {
+          "type": "text",
+          "text": "[20]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "9.50"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "annual"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "reception"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "card"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "book"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "weekdays"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "Reception Area / Reception"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "Dance Studio"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "Squash Courts"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "Fitness Room"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-3-3.mp3",
+      "content": "Questions 21-30\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR NUMBER for each answer. YOUNG ELECTRONIC ENGINEER COMPETITION Name(s) of designer(s): - John Brown - [21] Age: [22] Name of design: [23] Dimensions of equipment: Width Length Depth 20 cm 50 cm [24] cm Power: Battery Special features: - [25] - [26] - [27] Cost: parts $5 [28] $9.50 Other comments: need help to make [29] would like to develop range of sizes Send by: [30]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-30\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "YOUNG ELECTRONIC",
+          "sections": [
+            {
+              "heading": "ENGINEER COMPETITION",
+              "lines": []
+            },
+            {
+              "heading": "Name(s) of designer(s):",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "- John Brown",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": "",
+                  "before": "Age:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 23,
+                  "after": "",
+                  "before": "Name of design:"
+                }
+              ]
+            },
+            {
+              "heading": "Dimensions of equipment:",
+              "lines": []
+            },
+            {
+              "heading": "Power: Battery",
+              "lines": []
+            },
+            {
+              "heading": "Special features:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "",
+                  "before": "-"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "",
+                  "before": "-"
+                }
+              ]
+            },
+            {
+              "heading": "Cost: parts $5",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "$9.50"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "",
+                  "before": "Other comments: need help to make"
+                }
+              ]
+            },
+            {
+              "heading": "would like to develop range of sizes",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "",
+                  "before": "Send by:"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "Anne Rea"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "16 years old / 16 / both 16"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "Blind Jigsaw Puzzle / Blind Puzzle"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "2.5"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "safe for children"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "educational"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "price is good / good price / cheap price / cheap"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "electrics"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "plastic pieces / in plastic"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "1st July / July 1st / 1st of July / first of July / 1 July / July 1"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-3-4.mp3",
+      "content": "Questions 31-33\n\nComplete the table below. Write NO MORE THAN TWO WORDS for each answer. \"NEW\" MEAT CAN BE COMPARED TO PROBLEM kangaroo [31] [32] crocodile chicken fatty ostrich [33]\n\nQuestions 34-36\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. OSTRICH PRODUCT USE Ostrich feathers tribal ceremonial dress [34] decorated hats Ostrich hide delicate [35] Ostrich [36] ‘biltong’\n\nQuestions 37-40\n\nChoose the correct letters A-C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-33\n\nComplete the table below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "\"NEW\" MEAT",
+            "CAN BE COMPARED TO",
+            "PROBLEM"
+          ],
+          "rows": [
+            [
+              "kangaroo",
+              "[31]",
+              "[32]"
+            ],
+            [
+              "crocodile",
+              "chicken",
+              "fatty"
+            ],
+            [
+              "ostrich",
+              "[33]",
+              ""
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 34-36\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "OSTRICH PRODUCT",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "decorated hats",
+                  "before": "Ostrich feathers tribal ceremonial dress"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "Ostrich hide delicate"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 37-40\n\nChoose the correct letters A-C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 37,
+          "prompt": "Ostrich meat",
+          "options": [
+            "A. has more protein than beef.",
+            "B. tastes nearly as good as beef.",
+            "C. is very filling."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 38,
+          "prompt": "One problem with ostrich farming in Britain is",
+          "options": [
+            "A. the climate.",
+            "B. the cost of transporting birds.",
+            "C. the price of ostrich eggs."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 39,
+          "prompt": "Ostrich chicks reared on farms",
+          "options": [
+            "A. must be kept in incubators until mature.",
+            "B. are very independent.",
+            "C. need looking after carefully."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 40,
+          "prompt": "The speaker suggests ostrich farms are profitable because",
+          "options": [
+            "A. little initial outlay is required.",
+            "B. farmed birds are very productive.",
+            "C. there is a good market for the meat."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "rabbit meat / rabbit"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "rather tough / tough"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "beef"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "ladies' feather fans / ladies' fans / feather fans / fans"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "leather"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "meat"
+        },
+        {
+          "id": 37,
+          "type": "multiple-choice",
+          "label": "37",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 38,
+          "type": "multiple-choice",
+          "label": "38",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "B"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Rajdoot"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Park View Hotel / Park View"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "London Arms"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "208657"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "no-smoking section / non-smoking section"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Lentil curry"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fifty / 50"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "choose the menu / choose menu"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4th November / November 4th / 4th of November / 4 November / November 4"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the Newsletter / Newsletter"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "9.50"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "annual"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "reception"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "card"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "book"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "weekdays"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Reception Area / Reception"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Dance Studio"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Squash Courts"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Fitness Room"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Anne Rea"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "16 years old / 16 / both 16"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Blind Jigsaw Puzzle / Blind Puzzle"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "2.5"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "safe for children"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "educational"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "price is good / good price / cheap price / cheap"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "electrics"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "plastic pieces / in plastic"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1st July / July 1st / 1st of July / first of July / 1 July / July 1"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rabbit meat / rabbit"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rather tough / tough"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "beef"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ladies' feather fans / ladies' fans / feather fans / fans"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "leather"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "meat"
+    },
+    {
+      "id": 37,
+      "type": "multiple-choice",
+      "label": "37",
+      "question": "Ostrich meat",
+      "options": [
+        "A. has more protein than beef.",
+        "B. tastes nearly as good as beef.",
+        "C. is very filling."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 38,
+      "type": "multiple-choice",
+      "label": "38",
+      "question": "One problem with ostrich farming in Britain is",
+      "options": [
+        "A. the climate.",
+        "B. the cost of transporting birds.",
+        "C. the price of ostrich eggs."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "Ostrich chicks reared on farms",
+      "options": [
+        "A. must be kept in incubators until mature.",
+        "B. are very independent.",
+        "C. need looking after carefully."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "The speaker suggests ostrich farms are profitable because",
+      "options": [
+        "A. little initial outlay is required.",
+        "B. farmed birds are very productive.",
+        "C. there is a good market for the meat."
+      ],
+      "correctAnswer": "B"
+    }
+  ]
+}

@@ -1,0 +1,1059 @@
+{
+  "testId": "cambridge-ielts-05-academic-listening-test-4",
+  "title": "Cambridge IELTS 05 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-05-academic-listening-test-4/",
+  "book": 5,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-10\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR NUMBERS for each answer. Example Name: Answer Jenny Chan Present address: Sea View Guest House, [1] Daytime phone number: 2237676 [NB Best time to contact is between 9 and [2] ] Age: 19 Intended length of stay: [3] Occupation while in UK: student General level of English: [4] Preferred location: in the [5] Special diet: [6] Other requirements: own facilities own television [7] to be [8] Maximum price: £ [9] a week Preferred starting date: [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR NUMBERS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Present address: Sea View Guest House,"
+                }
+              ]
+            },
+            {
+              "heading": "Daytime phone number: 2237676",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "]",
+                  "before": "[NB Best time to contact is between 9 and"
+                }
+              ]
+            },
+            {
+              "heading": "Age: 19",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Intended length of stay:"
+                }
+              ]
+            },
+            {
+              "heading": "Occupation while in UK: student",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "General level of English:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Preferred location: in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Special diet:"
+                }
+              ]
+            },
+            {
+              "heading": "Other requirements: own facilities",
+              "lines": []
+            },
+            {
+              "heading": "own television",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": ""
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "",
+                  "before": "to be"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "a week",
+                  "before": "Maximum price: £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "Preferred starting date:"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "14 Hill Road"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "9.30 / 9:30"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "1 year / a year / one year"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "intermediate"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "North-West / Northwest"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "vegetarian"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "a real garden / a garden / real garden / garden"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "the only guest / only guest"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "100"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "23rd March / March 23rd / Monday 23rd March / 23 March / March 23"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-13\n\nComplete the sentences below. Write NO MORE THAN TWO WORDS for each answer. The next meeting of the soccer club will be in the [11] in King's Park on 2 July. The first event is a [12] . At the final dinner, players receive [13] .\n\nQuestions 14-17\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Competition Number of Teams Games Begin Training Session (in King's Park) Junior [14] 8.30 am [15] Senior [16] 2.00 pm [17]\n\nQuestions 18-20\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. Name of Office Bearer Responsibility Robert Young: President to manage meetings Gina Costello: Treasurer to [18] David West: Secretary to [19] Jason Dokic: Head Coach to [20]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nComplete the sentences below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": "in King's Park on 2 July.",
+                  "before": "The next meeting of the soccer club will be in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": ".",
+                  "before": "The first event is a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": ".",
+                  "before": "At the final dinner, players receive"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-17\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Competition",
+            "Number of Teams",
+            "Games Begin",
+            "Training Session\n(in King's Park)"
+          ],
+          "rows": [
+            [
+              "Junior",
+              "[14]",
+              "8.30 am",
+              "[15]"
+            ],
+            [
+              "Senior",
+              "[16]",
+              "2.00 pm",
+              "[17]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 18-20\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Name of Office Bearer",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Robert Young: President",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 18,
+                  "after": "",
+                  "before": "Gina Costello: Treasurer to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 19,
+                  "after": "",
+                  "before": "David West: Secretary to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 20,
+                  "after": "",
+                  "before": "Jason Dokic: Head Coach to"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "clubhouse"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "picnic"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "prizes"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "10"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "Wednesday afternoons / Wednesday afternoon"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "4"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "Sunday afternoons / Sunday afternoon"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "collect the fees / collect fees / collect the money / collect money"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "send out newsletters / send out newsletter / send the newsletters / send the newsletter / send newsletters / send newsletter"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "supervise the teams / supervise teams"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-24\n\nComplete the notes below. Write NO MORE THAN THREE WORDS for each answer. Box Telecom Problems: been affected by drop in [21] growing [22] delays due to a strike Causes of problems: high [23] lack of good [24]\n\nQuestions 25-27\n\nChoose the correct letter, A, B or C.\n\nQuestions 28-30\n\nWhich opinion does each person express about Box Telecom? Choose your answers from the box and write the letters A-F.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-24\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Box Telecom",
+          "sections": [
+            {
+              "heading": "Problems: been affected by",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "",
+                  "before": "drop in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": "",
+                  "before": "growing"
+                },
+                {
+                  "kind": "text",
+                  "text": "delays due to a strike"
+                }
+              ]
+            },
+            {
+              "heading": "Causes of problems:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 23,
+                  "after": "",
+                  "before": "high"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "",
+                  "before": "lack of good"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-27\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What does Karin think the company will do?",
+          "options": [
+            "A. look for private investors",
+            "B. accept a takeover offer",
+            "C. issue some new shares"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "How does the tutor suggest the company can recover?",
+          "options": [
+            "A. by appointing a new managing director",
+            "B. by changing the way it is organised",
+            "C. by closing some of its retail outlets"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "The tutor wants Jason and Karin to produce a report which",
+          "options": [
+            "A. offers solutions to Box Telecom's problems.",
+            "B. analyses the UK market.",
+            "C. compares different companies."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 28-30\n\nWhich opinion does each person express about Box Telecom?\n\nChoose your answers from the box and write the letters A-F."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Karin",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Jason",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "the tutor",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. its workers are motivated",
+            "B. it has too little investment",
+            "C. it will overcome its problems",
+            "D. its marketing campaign needs improvement",
+            "E. it is old-fashioned",
+            "F. it has strong managers"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "sales"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "competition"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "interest rates / rates of interest"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "training"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "D"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-36\n\nChoose the correct letter, A, B or C.\n\nQuestions 37-40\n\nWhich section of the university will help postgraduate students with their dissertations in the following ways? Write the correct letter, A, B or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-36\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "During the first week of term, students are invited to",
+          "options": [
+            "A. be shown round the library by the librarian.",
+            "B. listen to descriptions of library resources.",
+            "C. do an intensive course in the computer centre."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "The speaker warns the students that",
+          "options": [
+            "A. internet materials can be unreliable.",
+            "B. downloaded information must be acknowledged.",
+            "C. computer access may be limited at times."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "The library is acquiring more CDs as a resource because",
+          "options": [
+            "A. they are a cheap source of information.",
+            "B. they take up very little space.",
+            "C. they are more up to date than the reference books."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "Students are encouraged to use journals online because",
+          "options": [
+            "A. the articles do not need to be returned to the shelves.",
+            "B. reading online is cheaper than photocopying articles.",
+            "C. the stock of printed articles is to be reduced."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 35,
+          "prompt": "Why might some students continue to use reference books?",
+          "options": [
+            "A. they can be taken away from the library",
+            "B. they provide information unavailable elsewhere",
+            "C. they can be borrowed for an extended loan period"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 36,
+          "prompt": "What is the responsibility of the Training Supervisor?",
+          "options": [
+            "A. to supervise and support library staff",
+            "B. to provide orientation to the library facilities",
+            "C. to identify needs and inform section managers"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 37-40\n\nWhich section of the university will help postgraduate students with their dissertations in the following ways?\n\nWrite the correct letter, A, B or C."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "training in specialised computer programs",
+              "questionId": 37
+            },
+            {
+              "stepLabel": "advising on bibliography presentation",
+              "questionId": 38
+            },
+            {
+              "stepLabel": "checking the draft of the dissertation",
+              "questionId": 39
+            },
+            {
+              "stepLabel": "providing language support",
+              "questionId": 40
+            }
+          ],
+          "options": [
+            "A. the postgraduate's own department or tutor",
+            "B. library staff",
+            "C. another section of the university"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "label": "35",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 36,
+          "type": "multiple-choice",
+          "label": "36",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 37,
+          "type": "matching",
+          "label": "37",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 38,
+          "type": "matching",
+          "label": "38",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 39,
+          "type": "matching",
+          "label": "39",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 40,
+          "type": "matching",
+          "label": "40",
+          "correctAnswer": "C"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "14 Hill Road"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "9.30 / 9:30"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1 year / a year / one year"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "intermediate"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "North-West / Northwest"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vegetarian"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a real garden / a garden / real garden / garden"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the only guest / only guest"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "100"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "23rd March / March 23rd / Monday 23rd March / 23 March / March 23"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "clubhouse"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "picnic"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "prizes"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Wednesday afternoons / Wednesday afternoon"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Sunday afternoons / Sunday afternoon"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "collect the fees / collect fees / collect the money / collect money"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "send out newsletters / send out newsletter / send the newsletters / send the newsletter / send newsletters / send newsletter"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "supervise the teams / supervise teams"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sales"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "competition"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "interest rates / rates of interest"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "training"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What does Karin think the company will do?",
+      "options": [
+        "A. look for private investors",
+        "B. accept a takeover offer",
+        "C. issue some new shares"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "How does the tutor suggest the company can recover?",
+      "options": [
+        "A. by appointing a new managing director",
+        "B. by changing the way it is organised",
+        "C. by closing some of its retail outlets"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "The tutor wants Jason and Karin to produce a report which",
+      "options": [
+        "A. offers solutions to Box Telecom's problems.",
+        "B. analyses the UK market.",
+        "C. compares different companies."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• Karin",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• Jason",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• the tutor",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "During the first week of term, students are invited to",
+      "options": [
+        "A. be shown round the library by the librarian.",
+        "B. listen to descriptions of library resources.",
+        "C. do an intensive course in the computer centre."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "The speaker warns the students that",
+      "options": [
+        "A. internet materials can be unreliable.",
+        "B. downloaded information must be acknowledged.",
+        "C. computer access may be limited at times."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "The library is acquiring more CDs as a resource because",
+      "options": [
+        "A. they are a cheap source of information.",
+        "B. they take up very little space.",
+        "C. they are more up to date than the reference books."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "Students are encouraged to use journals online because",
+      "options": [
+        "A. the articles do not need to be returned to the shelves.",
+        "B. reading online is cheaper than photocopying articles.",
+        "C. the stock of printed articles is to be reduced."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "label": "35",
+      "question": "Why might some students continue to use reference books?",
+      "options": [
+        "A. they can be taken away from the library",
+        "B. they provide information unavailable elsewhere",
+        "C. they can be borrowed for an extended loan period"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 36,
+      "type": "multiple-choice",
+      "label": "36",
+      "question": "What is the responsibility of the Training Supervisor?",
+      "options": [
+        "A. to supervise and support library staff",
+        "B. to provide orientation to the library facilities",
+        "C. to identify needs and inform section managers"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 37,
+      "type": "matching",
+      "label": "37",
+      "question": "• training in specialised computer programs",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 38,
+      "type": "matching",
+      "label": "38",
+      "question": "• advising on bibliography presentation",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 39,
+      "type": "matching",
+      "label": "39",
+      "question": "• checking the draft of the dissertation",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 40,
+      "type": "matching",
+      "label": "40",
+      "question": "• providing language support",
+      "options": [],
+      "correctAnswer": "C"
+    }
+  ]
+}

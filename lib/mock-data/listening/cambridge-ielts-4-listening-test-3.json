@@ -1,0 +1,1180 @@
+{
+  "testId": "cambridge-ielts-04-academic-listening-test-3",
+  "title": "Cambridge IELTS 04 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-04-academic-listening-test-3/",
+  "book": 4,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-4\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR NUMBERS for each answer. Accommodation Request Form Example Name: Sara Lim Age: 23 Length of time in Australia: [1] and a half Present address: Flat 1, 539, [2] Road, Canterbury 2036 Present course: [3] English Accommodation required from: [4] , 7th September\n\nQuestions 5-7\n\nChoose the correct letter, A, B or C.\n\nQuestions 8-10\n\nComplete the sentences below. Write NO MORE THAN ONE WORD for each answer. The [8] will be $320. She needs to pay the rent by cash or cheque on a [9] basis. She needs to pay her part of the [10] bill.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-4\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR NUMBERS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Accommodation Request Form",
+          "sections": [
+            {
+              "heading": "Example",
+              "lines": []
+            },
+            {
+              "heading": "Name: Sara Lim",
+              "lines": []
+            },
+            {
+              "heading": "Age: 23",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "and a half",
+                  "before": "Length of time in Australia:"
+                }
+              ]
+            },
+            {
+              "heading": "Present address:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "Road, Canterbury 2036",
+                  "before": "Flat 1, 539,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "English",
+                  "before": "Present course:"
+                }
+              ]
+            },
+            {
+              "heading": "Accommodation required from:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": ", 7th September"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 5-7\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 5,
+          "prompt": "Sara requires a",
+          "options": [
+            "A. single room.",
+            "B. twin room.",
+            "C. triple room."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 6,
+          "prompt": "She would prefer to live with a",
+          "options": [
+            "A. family.",
+            "B. single person.",
+            "C. couple."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 7,
+          "prompt": "She would like to live in a",
+          "options": [
+            "A. flat.",
+            "B. house.",
+            "C. studio apartment."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 8-10\n\nComplete the sentences below.\n\nWrite NO MORE THAN ONE WORD for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "will be $320.",
+                  "before": "The"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "basis.",
+                  "before": "She needs to pay the rent by cash or cheque on a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "bill.",
+                  "before": "She needs to pay her part of the"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "1 year / one year / a year"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Forest / Forrest"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Academic"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Thursday"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 6,
+          "type": "multiple-choice",
+          "label": "6",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 7,
+          "type": "multiple-choice",
+          "label": "7",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "deposit"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "monthly"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "telephone / phone"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-3-2.mp3",
+      "content": "Questions 11-14\n\nChoose the correct letter, A, B or C.\n\nQuestions 15-20\n\nComplete the notes below. Write NO MORE THAN THREE WORDS for each answer. Where Type of performance Highlights Type of audience Circus Romano Clowns and acrobats Music and [15] [16] Circus Electrica [17] Dancers and magicians Aerial displays [18] Mekong Water Puppets [19] Puppets Seeing the puppeteers at the end [20]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-14\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "When is this year's festival being held?",
+          "options": [
+            "A. 1-13 January",
+            "B. 5-17 January",
+            "C. 25-31 January"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "What will the reviewer concentrate on today?",
+          "options": [
+            "A. theatre",
+            "B. dance",
+            "C. exhibitions"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "How many circuses are there in the festival?",
+          "options": [
+            "A. one",
+            "B. two",
+            "C. several"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "Where does Circus Romano perform?",
+          "options": [
+            "A. in a theatre",
+            "B. in a tent",
+            "C. in a stadium"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "Where",
+            "Type of performance",
+            "Highlights",
+            "Type of audience"
+          ],
+          "rows": [
+            [
+              "Circus Romano",
+              "",
+              "Clowns and acrobats",
+              "Music and\n[15]",
+              "[16]"
+            ],
+            [
+              "Circus Electrica",
+              "[17]",
+              "Dancers and magicians",
+              "Aerial displays",
+              "[18]"
+            ],
+            [
+              "Mekong Water Puppets",
+              "[19]",
+              "Puppets",
+              "Seeing the puppeteers at the end",
+              "[20]"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "lighting / lights / light"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "adult / adults"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "at Studio Theatre / the Studio Theatre / Studio Theatre / at Studio Theater / the Studio Theater / Studio Theater"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "the whole family / whole family / all the family / families"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "in City Gardens / City Gardens / the City Gardens / outdoors"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "young children / younger children / children"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-3-3.mp3",
+      "content": "Questions 21-25\n\nChoose the correct letter, A, B or C.\n\nQuestions 26-30\n\nChoose the correct letter, A, B or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "The man wants information on courses for",
+          "options": [
+            "A. people going back to college.",
+            "B. postgraduate students.",
+            "C. business executives."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The 'Study for Success' seminar lasts for",
+          "options": [
+            "A. one day.",
+            "B. two days.",
+            "C. three days."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "In the seminar the work on writing aims to improve",
+          "options": [
+            "A. confidence.",
+            "B. speed.",
+            "C. clarity."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Reading sessions help students to read",
+          "options": [
+            "A. analytically.",
+            "B. as fast as possible.",
+            "C. thoroughly."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "The seminar tries to",
+          "options": [
+            "A. prepare learners physically.",
+            "B. encourage interest in learning.",
+            "C. develop literacy skills."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "A key component of the course is learning how to",
+          "options": [
+            "A. use time effectively.",
+            "B. stay healthy.",
+            "C. select appropriate materials."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "Students who want to do the 'Study for Success' seminar should",
+          "options": [
+            "A. register with the Faculty Office.",
+            "B. contact their Course Convenor.",
+            "C. reserve a place in advance."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "The 'Learning Skills for University Study' course takes place on",
+          "options": [
+            "A. Monday, Wednesday and Friday.",
+            "B. Monday, Tuesday and Wednesday.",
+            "C. Monday, Thursday and Friday."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "A feature of this course is",
+          "options": [
+            "A. a physical training component.",
+            "B. advice on coping with stress.",
+            "C. a detailed weekly planner."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "The man chooses the 'Study for Success' seminar because",
+          "options": [
+            "A. he is over forty.",
+            "B. he wants to start at the beginning.",
+            "C. he seeks to revise his skills."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–42.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-3-4.mp3",
+      "content": "Questions 31-32\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. New Union Building Procedures to establish student opinion: students were asked to give written suggestions on the building's design these points informed the design of a [31] (there were [32] respondents) results collated and report produced by Union Committee\n\nQuestions 33-37\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. CHOICE OF SITE Site One Site Two Site Three Location City centre near Faculty of [33] Outskirts near park Out of town near the [34] Advantages and/or disadvantages Problems with [35] Close to [36] Access to living quarters. Larger site, so more [37]\n\nQuestions 38-39\n\nChoose TWO letters A-G.\n\nQuestions 40-40\n\nChoose the correct letter, A, B or C.\n\nQuestions 41-42\n\nChoose TWO letters A-E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-32\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "New Union Building",
+          "sections": [
+            {
+              "heading": "Procedures to establish student opinion:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "students were asked to give written suggestions on the building's design"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "(there were",
+                  "before": "these points informed the design of a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "respondents)"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "respondents)",
+                  "before": "(there were"
+                },
+                {
+                  "kind": "text",
+                  "text": "results collated and report produced by Union Committee"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 33-37\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "CHOICE OF SITE",
+            "Site One",
+            "Site Two",
+            "Site Three"
+          ],
+          "rows": [
+            [
+              "Location",
+              "City centre near Faculty of\n[33]",
+              "Outskirts near park",
+              "Out of town near the\n[34]"
+            ],
+            [
+              "Advantages and/or disadvantages",
+              "Problems with\n[35]",
+              "Close to\n[36]",
+              "Access to living quarters. Larger site, so more\n[37]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 38-39\n\nChoose TWO letters A-G."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            38,
+            39
+          ],
+          "label": "38-39",
+          "prompt": "Which TWO facilities did the students request in the new Union building?",
+          "options": [
+            "A. a library",
+            "B. a games room",
+            "C. a student health centre",
+            "D. a mini fitness centre",
+            "E. a large swimming pool",
+            "F. a travel agency",
+            "G. a lecture theatre"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 40-40\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 40,
+          "prompt": "Which argument was used AGAINST having a drama theatre?",
+          "options": [
+            "A. It would be expensive and no students would use it.",
+            "B. It would be a poor use of resources because only a minority would use it.",
+            "C. It could not accommodate large productions of plays."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 41-42\n\nChoose TWO letters A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            41,
+            42
+          ],
+          "label": "41-42",
+          "prompt": "Which TWO security measures have been requested?",
+          "options": [
+            "A. closed-circuit TV",
+            "B. show Union Card on entering the building",
+            "C. show Union Card when asked",
+            "D. spot searches of bags",
+            "E. permanent Security Office on site"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "questionnaire"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "approximately 2,000 / about 2,000 / approximately 2000 / about 2000"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "Education"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "halls of residence / living quarters"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "traffic,parking / parking,traffic / traffic and parking / parking and traffic"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "most lecture rooms / lecture rooms / lecture halls / lecture theatres / lecture theaters"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "choice of facilities / facilities / room for facilities"
+        },
+        {
+          "id": 38,
+          "type": "multiple-choice",
+          "label": "38",
+          "correctAnswer": "D / F"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "D / F"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 41,
+          "type": "multiple-choice",
+          "label": "41",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 42,
+          "type": "multiple-choice",
+          "label": "42",
+          "correctAnswer": "A / C"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1 year / one year / a year"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Forest / Forrest"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Academic"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Thursday"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "Sara requires a",
+      "options": [
+        "A. single room.",
+        "B. twin room.",
+        "C. triple room."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 6,
+      "type": "multiple-choice",
+      "label": "6",
+      "question": "She would prefer to live with a",
+      "options": [
+        "A. family.",
+        "B. single person.",
+        "C. couple."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 7,
+      "type": "multiple-choice",
+      "label": "7",
+      "question": "She would like to live in a",
+      "options": [
+        "A. flat.",
+        "B. house.",
+        "C. studio apartment."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "deposit"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "monthly"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "telephone / phone"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "When is this year's festival being held?",
+      "options": [
+        "A. 1-13 January",
+        "B. 5-17 January",
+        "C. 25-31 January"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "What will the reviewer concentrate on today?",
+      "options": [
+        "A. theatre",
+        "B. dance",
+        "C. exhibitions"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "How many circuses are there in the festival?",
+      "options": [
+        "A. one",
+        "B. two",
+        "C. several"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Where does Circus Romano perform?",
+      "options": [
+        "A. in a theatre",
+        "B. in a tent",
+        "C. in a stadium"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lighting / lights / light"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "adult / adults"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "at Studio Theatre / the Studio Theatre / Studio Theatre / at Studio Theater / the Studio Theater / Studio Theater"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the whole family / whole family / all the family / families"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "in City Gardens / City Gardens / the City Gardens / outdoors"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "young children / younger children / children"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "The man wants information on courses for",
+      "options": [
+        "A. people going back to college.",
+        "B. postgraduate students.",
+        "C. business executives."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The 'Study for Success' seminar lasts for",
+      "options": [
+        "A. one day.",
+        "B. two days.",
+        "C. three days."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "In the seminar the work on writing aims to improve",
+      "options": [
+        "A. confidence.",
+        "B. speed.",
+        "C. clarity."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Reading sessions help students to read",
+      "options": [
+        "A. analytically.",
+        "B. as fast as possible.",
+        "C. thoroughly."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "The seminar tries to",
+      "options": [
+        "A. prepare learners physically.",
+        "B. encourage interest in learning.",
+        "C. develop literacy skills."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "A key component of the course is learning how to",
+      "options": [
+        "A. use time effectively.",
+        "B. stay healthy.",
+        "C. select appropriate materials."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "Students who want to do the 'Study for Success' seminar should",
+      "options": [
+        "A. register with the Faculty Office.",
+        "B. contact their Course Convenor.",
+        "C. reserve a place in advance."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "The 'Learning Skills for University Study' course takes place on",
+      "options": [
+        "A. Monday, Wednesday and Friday.",
+        "B. Monday, Tuesday and Wednesday.",
+        "C. Monday, Thursday and Friday."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "A feature of this course is",
+      "options": [
+        "A. a physical training component.",
+        "B. advice on coping with stress.",
+        "C. a detailed weekly planner."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "The man chooses the 'Study for Success' seminar because",
+      "options": [
+        "A. he is over forty.",
+        "B. he wants to start at the beginning.",
+        "C. he seeks to revise his skills."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "questionnaire"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "approximately 2,000 / about 2,000 / approximately 2000 / about 2000"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Education"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "halls of residence / living quarters"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "traffic,parking / parking,traffic / traffic and parking / parking and traffic"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "most lecture rooms / lecture rooms / lecture halls / lecture theatres / lecture theaters"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "choice of facilities / facilities / room for facilities"
+    },
+    {
+      "id": 38,
+      "type": "multiple-choice",
+      "label": "38",
+      "question": "Which TWO facilities did the students request in the new Union building?",
+      "options": [
+        "A. a library",
+        "B. a games room",
+        "C. a student health centre",
+        "D. a mini fitness centre",
+        "E. a large swimming pool",
+        "F. a travel agency",
+        "G. a lecture theatre"
+      ],
+      "correctAnswer": "D / F"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "Which TWO facilities did the students request in the new Union building?",
+      "options": [
+        "A. a library",
+        "B. a games room",
+        "C. a student health centre",
+        "D. a mini fitness centre",
+        "E. a large swimming pool",
+        "F. a travel agency",
+        "G. a lecture theatre"
+      ],
+      "correctAnswer": "D / F"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "Which argument was used AGAINST having a drama theatre?",
+      "options": [
+        "A. It would be expensive and no students would use it.",
+        "B. It would be a poor use of resources because only a minority would use it.",
+        "C. It could not accommodate large productions of plays."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 41,
+      "type": "multiple-choice",
+      "label": "41",
+      "question": "Which TWO security measures have been requested?",
+      "options": [
+        "A. closed-circuit TV",
+        "B. show Union Card on entering the building",
+        "C. show Union Card when asked",
+        "D. spot searches of bags",
+        "E. permanent Security Office on site"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 42,
+      "type": "multiple-choice",
+      "label": "42",
+      "question": "Which TWO security measures have been requested?",
+      "options": [
+        "A. closed-circuit TV",
+        "B. show Union Card on entering the building",
+        "C. show Union Card when asked",
+        "D. spot searches of bags",
+        "E. permanent Security Office on site"
+      ],
+      "correctAnswer": "A / C"
+    }
+  ]
+}

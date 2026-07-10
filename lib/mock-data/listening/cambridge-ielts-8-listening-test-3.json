@@ -1,0 +1,1090 @@
+{
+  "testId": "cambridge-ielts-08-academic-listening-test-3",
+  "title": "Cambridge IELTS 08 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-08-academic-listening-test-3/",
+  "book": 8,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-3\n\nComplete the form below. Write ONE WORD AND/OR A NUMBER for each answer. Rented Properties Customer's Requirements Name: Steven Godfrey Example No. of bedrooms: Answer four Preferred location: in the [1] area of town Maximum monthly rent: £ [2] Length of let required: [3] Starting: September 1st\n\nQuestions 4-8\n\nComplete the table below. Write ONE WORD AND/OR A NUMBER for each answer. Address Rooms Monthly rent Problem Oakington Avenue living/dining room, separate kitchen £550 no [4] Mead Street large living room and kitchen, bathroom and a cloakroom £580 the [5] is too large Hamilton Road living room, kitchen-diner, and a [6] £550 too [7] Devon Close living room, dining room, small kitchen £ [8] none\n\nQuestions 9-10\n\nChoose TWO letters, A-E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-3\n\nComplete the form below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Name",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Example No. of bedrooms",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "area of town",
+                  "before": "Preferred location in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Maximum monthly rent £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Length of let required"
+                },
+                {
+                  "kind": "text",
+                  "text": "Starting",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 4-8\n\nComplete the table below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Address",
+            "Rooms",
+            "Monthly rent",
+            "Problem"
+          ],
+          "rows": [
+            [
+              "Oakington Avenue",
+              "living/dining room, separate kitchen",
+              "£550",
+              "no\n[4]"
+            ],
+            [
+              "Mead Street",
+              "large living room and kitchen, bathroom and a cloakroom",
+              "£580",
+              "the\n[5]\nis too large"
+            ],
+            [
+              "Hamilton Road",
+              "living room, kitchen-diner, and a\n[6]",
+              "£550",
+              "too\n[7]"
+            ],
+            [
+              "Devon Close",
+              "living room, dining room, small kitchen",
+              "£\n[8]",
+              "none"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 9-10\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            9,
+            10
+          ],
+          "label": "9-10",
+          "prompt": "Which TWO facilities in the district of Devon Close are open to the public at the moment?",
+          "options": [
+            "A. museum",
+            "B. concert hall",
+            "C. cinema",
+            "D. sports centre",
+            "E. swimming pool"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "central"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "600"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "2 years / 2 year"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "garage"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "garden"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "study"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "noisy"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "595"
+        },
+        {
+          "id": 9,
+          "type": "multiple-choice",
+          "label": "9",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 10,
+          "type": "multiple-choice",
+          "label": "10",
+          "correctAnswer": "B / E"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-3-2.mp3",
+      "content": "Questions 11-16\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. THE NATIONAL ARTS CENTRE Well known for: [11] Complex consists of: concert rooms theatres cinemas art galleries public library restaurants a [12] Historical background: 1940 – area destroyed by bombs 1960s–1970s – Centre was [13] and built in [14] – opened to public Managed by: the [15] Open: [16] days per year\n\nQuestions 17-20\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Day Time Event Venue Ticket price Monday and Tuesday 7.30 p.m. 'The Magic Flute' (opera by Mozart) [17] from £8.00 Wednesday 8.00 p.m. ' [18] ' (Canadian film) Cinema 2 £ [19] Saturday and Sunday 11 a.m. to 10 p.m. ' [20] ' (art exhibition) Gallery 1 free",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "THE NATIONAL ARTS CENTRE",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": "",
+                  "before": "Well known for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": "",
+                  "before": "Complex consists of concert rooms theatres cinemas art galleries public library restaurants a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": "and built in",
+                  "before": "Historical background 1940 – area destroyed by bombs 1960s–1970s – Centre was"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "– opened to public",
+                  "before": "and built in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 15,
+                  "after": "",
+                  "before": "Managed by the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 16,
+                  "after": "days per year",
+                  "before": "Open"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Day",
+            "Time",
+            "Event",
+            "Venue",
+            "Ticket price"
+          ],
+          "rows": [
+            [
+              "Monday and Tuesday",
+              "7.30 p.m.",
+              "'The Magic Flute'\n(opera by Mozart)",
+              "[17]",
+              "from £8.00"
+            ],
+            [
+              "Wednesday",
+              "8.00 p.m.",
+              "'\n[18]\n'\n(Canadian film)",
+              "Cinema 2",
+              "£\n[19]"
+            ],
+            [
+              "Saturday and Sunday",
+              "11 a.m. to 10 p.m.",
+              "'\n[20]\n'\n(art exhibition)",
+              "Gallery 1",
+              "free"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "classical music / classical concerts / music concerts / concerts"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "bookshop / bookstore"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "planned"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "1983 / the 1980s / 1980s"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "City Council"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "363"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "the Garden Hall / Garden Hall"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "Three Lives / 3 Lives"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "4.50"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "Faces of China"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-3-3.mp3",
+      "content": "Questions 21-26\n\nChoose the correct letter, A, B or C.\n\nQuestions 27-30\n\nWhat does Paul decide about each of the following modules? Write the correct letter, A, B or C, next to questions 27-30.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-26\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Paul decided to get work experience in South America because he wanted",
+          "options": [
+            "A. to teach English there.",
+            "B. to improve his Spanish.",
+            "C. to learn about Latin American life."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "What project work did Paul originally intend to get involved in?",
+          "options": [
+            "A. construction",
+            "B. agriculture",
+            "C. tourism"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "Why did Paul change from one project to another?",
+          "options": [
+            "A. His first job was not well organised.",
+            "B. He found doing the routine work very boring.",
+            "C. The work was too physically demanding."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "In the village community, he learnt how important it was to",
+          "options": [
+            "A. respect family life.",
+            "B. develop trust.",
+            "C. use money wisely."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What does Paul say about his project manager?",
+          "options": [
+            "A. He let Paul do most of the work.",
+            "B. His plans were too ambitious.",
+            "C. He was very supportive of Paul."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "Paul was surprised to be given",
+          "options": [
+            "A. a computer to use.",
+            "B. so little money to live on.",
+            "C. an extension to his contract."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nWhat does Paul decide about each of the following modules?\n\nWrite the correct letter, A, B or C, next to questions 27-30."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Gender Studies in Latin America",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "Second Language Acquisition",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Indigenous Women's Lives",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "Portuguese Language Studies",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. He will do this.",
+            "B. He might do this.",
+            "C. He won't do this."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-3-4.mp3",
+      "content": "Questions 31-34\n\nChoose the correct letter, A, B or C.\n\nQuestions 35-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Setting up systems based on an existing process Two mistakes Manager tries to: improve on the original process create an ideal [35] from the best parts of several processes Cause of problems information was inaccurate comparison between the business settings was invalid disadvantages were overlooked, e.g. effect of changes on [36] Solution change [37] impose rigorous [38] copy original very closely: physical features of the [39] the [40] of original employees",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-34\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "Compared to introducing new business processes, attempts to copy existing processes are",
+          "options": [
+            "A. more attractive.",
+            "B. more frequent.",
+            "C. more straightforward."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "Most research into the repetition of success in business has",
+          "options": [
+            "A. been done outside the United States.",
+            "B. produced consistent findings.",
+            "C. related to only a few contexts."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "What does the speaker say about consulting experts?",
+          "options": [
+            "A. Too few managers ever do it.",
+            "B. It can be useful in certain circumstances.",
+            "C. Experts are sometimes unwilling to give advice."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "An expert's knowledge about a business system may be incomplete because",
+          "options": [
+            "A. some details are difficult for workers to explain.",
+            "B. workers choose not to mention certain details.",
+            "C. details are sometimes altered by workers."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 35-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Setting up systems based on an existing process",
+          "sections": [
+            {
+              "heading": "Two mistakes",
+              "lines": []
+            },
+            {
+              "heading": "Manager tries to:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "improve on the original process"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "from the best parts of several processes",
+                  "before": "create an ideal"
+                }
+              ]
+            },
+            {
+              "heading": "Cause of problems",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "information was inaccurate"
+                },
+                {
+                  "kind": "text",
+                  "text": "comparison between the business settings was invalid"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "",
+                  "before": "disadvantages were overlooked, e.g. effect of changes on"
+                }
+              ]
+            },
+            {
+              "heading": "Solution",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "",
+                  "before": "change"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "",
+                  "before": "impose rigorous"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "the",
+                  "before": "copy original very closely: physical features of the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "of original employees"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "",
+                  "before": "physical features of the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "of original employees",
+                  "before": "the"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "combination"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "safety"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "attitudes"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "controls"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "factory / factories"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "skills"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "central"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "600"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "2 years / 2 year"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "garage"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "garden"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "study"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "noisy"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "595"
+    },
+    {
+      "id": 9,
+      "type": "multiple-choice",
+      "label": "9",
+      "question": "Which TWO facilities in the district of Devon Close are open to the public at the moment?",
+      "options": [
+        "A. museum",
+        "B. concert hall",
+        "C. cinema",
+        "D. sports centre",
+        "E. swimming pool"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 10,
+      "type": "multiple-choice",
+      "label": "10",
+      "question": "Which TWO facilities in the district of Devon Close are open to the public at the moment?",
+      "options": [
+        "A. museum",
+        "B. concert hall",
+        "C. cinema",
+        "D. sports centre",
+        "E. swimming pool"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "classical music / classical concerts / music concerts / concerts"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bookshop / bookstore"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "planned"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1983 / the 1980s / 1980s"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "City Council"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "363"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the Garden Hall / Garden Hall"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Three Lives / 3 Lives"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4.50"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Faces of China"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Paul decided to get work experience in South America because he wanted",
+      "options": [
+        "A. to teach English there.",
+        "B. to improve his Spanish.",
+        "C. to learn about Latin American life."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "What project work did Paul originally intend to get involved in?",
+      "options": [
+        "A. construction",
+        "B. agriculture",
+        "C. tourism"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Why did Paul change from one project to another?",
+      "options": [
+        "A. His first job was not well organised.",
+        "B. He found doing the routine work very boring.",
+        "C. The work was too physically demanding."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "In the village community, he learnt how important it was to",
+      "options": [
+        "A. respect family life.",
+        "B. develop trust.",
+        "C. use money wisely."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What does Paul say about his project manager?",
+      "options": [
+        "A. He let Paul do most of the work.",
+        "B. His plans were too ambitious.",
+        "C. He was very supportive of Paul."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "Paul was surprised to be given",
+      "options": [
+        "A. a computer to use.",
+        "B. so little money to live on.",
+        "C. an extension to his contract."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• Gender Studies in Latin America",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• Second Language Acquisition",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• Indigenous Women's Lives",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• Portuguese Language Studies",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "Compared to introducing new business processes, attempts to copy existing processes are",
+      "options": [
+        "A. more attractive.",
+        "B. more frequent.",
+        "C. more straightforward."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "Most research into the repetition of success in business has",
+      "options": [
+        "A. been done outside the United States.",
+        "B. produced consistent findings.",
+        "C. related to only a few contexts."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "What does the speaker say about consulting experts?",
+      "options": [
+        "A. Too few managers ever do it.",
+        "B. It can be useful in certain circumstances.",
+        "C. Experts are sometimes unwilling to give advice."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "An expert's knowledge about a business system may be incomplete because",
+      "options": [
+        "A. some details are difficult for workers to explain.",
+        "B. workers choose not to mention certain details.",
+        "C. details are sometimes altered by workers."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "combination"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "safety"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "attitudes"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "controls"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "factory / factories"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "skills"
+    }
+  ]
+}

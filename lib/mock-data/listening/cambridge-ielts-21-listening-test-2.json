@@ -1,0 +1,1046 @@
+{
+  "testId": "cambridge-ielts-21-academic-listening-test-2",
+  "title": "Cambridge IELTS 21 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-21-academic-listening-test-2/",
+  "book": 21,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-21-academic-listening-test-2-1.mp3",
+      "content": "Questions 1-10\n\nComplete the table below. Write ONE WORD AND/OR A NUMBER for each answer. Course Date Cost Notes Vietnamese food [1] £59 It provides information on the use of herbs. There are no places at present. Bread making 20 March £ [2] There is also an extra charge for ingredients. Participants make white bread, sourdough and [3]. Face massage 23 February £35 The teacher trained in [4]. Bring a [5]. Candle making [6] £52 Only [7] ingredients are used. The candles can be used as presents. Silk painting 18 May £ [8] Bring an apron or old [9]. DIY for beginners 24 February £125 Learn how to • use a drill, saw and [10] • put up a shelf.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the table below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Course",
+            "Date",
+            "Cost",
+            "Notes"
+          ],
+          "rows": [
+            [
+              "Vietnamese food",
+              "[1]",
+              "£59",
+              "It provides information on the use of herbs.\nThere are no places at present."
+            ],
+            [
+              "Bread making",
+              "20 March",
+              "£\n[2]",
+              "There is also an extra charge for ingredients.\nParticipants make white bread, sourdough and\n[3]\n."
+            ],
+            [
+              "Face massage",
+              "23 February",
+              "£35",
+              "The teacher trained in\n[4]\n.\nBring a\n[5]\n."
+            ],
+            [
+              "Candle making",
+              "[6]",
+              "£52",
+              "Only\n[7]\ningredients are used.\nThe candles can be used as presents."
+            ],
+            [
+              "Silk painting",
+              "18 May",
+              "£\n[8]",
+              "Bring an apron or old\n[9]\n."
+            ],
+            [
+              "DIY for beginners",
+              "24 February",
+              "£125",
+              "Learn how to\n• use a drill, saw and\n[10]\n• put up a shelf."
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "[1]"
+        },
+        {
+          "type": "text",
+          "text": "[2]"
+        },
+        {
+          "type": "text",
+          "text": "[3]"
+        },
+        {
+          "type": "text",
+          "text": "[4]"
+        },
+        {
+          "type": "text",
+          "text": "[5]"
+        },
+        {
+          "type": "text",
+          "text": "[6]"
+        },
+        {
+          "type": "text",
+          "text": "[7]"
+        },
+        {
+          "type": "text",
+          "text": "[8]"
+        },
+        {
+          "type": "text",
+          "text": "[9]"
+        },
+        {
+          "type": "text",
+          "text": "[10]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "13th January / 13 January / January 13th / January 13 / 13.01 / 13.1"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "48"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "pizza"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "India"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "mirror"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "6th April / 6 April / April 6th / April 6 / 06.04 / 6.4"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "natural"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "67.50"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "shirt"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "hammer"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-21-academic-listening-test-2-2.mp3",
+      "content": "Questions 11-12\n\nChoose TWO letters, A-E.\n\nQuestions 13-14\n\nChoose TWO letters, A-E.\n\nQuestions 15-20\n\nLabel the map below. Write the correct letter, A-I, next to Questions 15-20.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-12\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            11,
+            12
+          ],
+          "label": "11-12",
+          "prompt": "Which TWO pieces of advice are given about the Marsden Coastal Walk?",
+          "options": [
+            "A. Stop for lunch in an ancient town.",
+            "B. Don't miss the ruins of a certain building.",
+            "C. Catch a boat to the start of this walk.",
+            "D. Be careful of the steep and rocky paths.",
+            "E. Don't worry about getting lost."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 13-14\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            13,
+            14
+          ],
+          "label": "13-14",
+          "prompt": "Which TWO things are said about the Melby Heritage Walk?",
+          "options": [
+            "A. This walk is mostly downhill.",
+            "B. The paths can get busy during the day.",
+            "C. This is a circular walk.",
+            "D. A tower stands on the site of an older structure.",
+            "E. There are far-reaching views the whole way."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nLabel the map below.\n\nWrite the correct letter, A-I, next to Questions 15-20."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-21-academic-listening-test-2-4-diagram-6a3cf580846f3.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+          ],
+          "rows": [
+            {
+              "questionId": 15,
+              "label": "Exhibition"
+            },
+            {
+              "questionId": 16,
+              "label": "Baths"
+            },
+            {
+              "questionId": 17,
+              "label": "Tools"
+            },
+            {
+              "questionId": 18,
+              "label": "Vehicles"
+            },
+            {
+              "questionId": 19,
+              "label": "Ponies"
+            },
+            {
+              "questionId": 20,
+              "label": "Education centre"
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C / D"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C / D"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "E"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-21-academic-listening-test-2-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A-E.\n\nQuestions 23-24\n\nChoose TWO letters, A-E.\n\nQuestions 25-26\n\nChoose TWO letters, A-E.\n\nQuestions 27-30\n\nComplete the flow-chart below. Choose FOUR answers from the box and write the correct letter, A-F, next to Questions 27-30. Student project: developing a new food product Initial aim [27] Literature review [28] Product development [29] Product production [30] Drag and drop an option to fill in each blank. A. This was challenging but enjoyable. B. This led to some disagreement. C. This was easy to decide on. D. This was helped by the guidelines provided. E. This seemed like an unnecessary stage. F. This involved selecting a new ingredient.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "Which TWO facts in the sessions on food safety were new information for Nadia and Fergus?",
+          "options": [
+            "A. the amount of plastic in the ocean",
+            "B. the number of diseases caused by contaminated food",
+            "C. the amount of food that is wasted",
+            "D. the number of people who are obese",
+            "E. the result of treating animals with antibiotics"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-24\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            23,
+            24
+          ],
+          "label": "23-24",
+          "prompt": "Which TWO features of a project aiming to prevent food fraud impressed Fergus?",
+          "options": [
+            "A. the new technology it used",
+            "B. the publicity it received",
+            "C. the use of multiple tests on food items",
+            "D. the variety of dietary requirements included",
+            "E. the way information was made widely accessible"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-26\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            25,
+            26
+          ],
+          "label": "25-26",
+          "prompt": "Which TWO topics do both students recommend should be included in the course?",
+          "options": [
+            "A. sustainable fishing",
+            "B. targeted nutrition",
+            "C. global differences in consumption",
+            "D. sustainable agriculture",
+            "E. digital technology and food"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nComplete the flow-chart below.\n\nChoose FOUR answers from the box and write the correct letter, A-F, next to Questions 27-30.\n\nStudent project: developing a new food product\n\nInitial aim"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Initial aim",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "Literature review",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Product development",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "Product production",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. This was challenging but enjoyable.",
+            "B. This led to some disagreement.",
+            "C. This was easy to decide on.",
+            "D. This was helped by the guidelines provided.",
+            "E. This seemed like an unnecessary stage.",
+            "F. This involved selecting a new ingredient."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C / D"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "C / D"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-21-academic-listening-test-2-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Challenges facing the cruise ship industry Problems with overtourism • [31] is one of the worst problems. • A tourist [32] is being introduced in some cities to reduce numbers, e.g. Barcelona. • Bruges: action was taken to limit day trips from the nearby port because the city was becoming a 'theme park' (e.g. many shops were only stocking [33] and souvenirs). • Dubrovnik: limits the number of tourists by managing the [34] of cruise ship arrivals. Problems of perception • Cruises are generally associated with the elderly. • There is an assumption about the [35] of cruises. • People think there may be too many [36]. Solutions Cruise lines are attracting younger customers by: • becoming more sustainable e.g. using hybrid engines. • having a wide range of activities e.g. boxing, [37] and well-being programmes. • offering a diverse selection of food including [38] options. • providing reliable [39]. • improving marketing on social media with high quality [40].",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Challenges facing the cruise ship industry",
+          "sections": [
+            {
+              "heading": "Problems with overtourism",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "is one of the worst problems."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "is being introduced in some cities to reduce numbers, e.g. Barcelona.",
+                  "before": "A tourist"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "and souvenirs).",
+                  "before": "Bruges: action was taken to limit day trips from the nearby port because the city was becoming a 'theme park' (e.g. many shops were only stocking"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "of cruise ship arrivals.",
+                  "before": "Dubrovnik: limits the number of tourists by managing the"
+                }
+              ]
+            },
+            {
+              "heading": "Problems of perception",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Cruises are generally associated with the elderly."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "of cruises.",
+                  "before": "There is an assumption about the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": ".",
+                  "before": "People think there may be too many"
+                }
+              ]
+            },
+            {
+              "heading": "Solutions",
+              "lines": []
+            },
+            {
+              "heading": "Cruise lines are attracting younger customers by:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "becoming more sustainable e.g. using hybrid engines."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "and well-being programmes.",
+                  "before": "having a wide range of activities e.g. boxing,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "options.",
+                  "before": "offering a diverse selection of food including"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ".",
+                  "before": "providing reliable"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ".",
+                  "before": "improving marketing on social media with high quality"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "Pollution"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "tax"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "chocolate"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "timing"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "cost"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "rules"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "diving"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "vegan"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "wifi / wi-fi"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "videos"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "13th January / 13 January / January 13th / January 13 / 13.01 / 13.1"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "48"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "pizza"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "India"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mirror"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "6th April / 6 April / April 6th / April 6 / 06.04 / 6.4"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "natural"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "67.50"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shirt"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "hammer"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Which TWO pieces of advice are given about the Marsden Coastal Walk?",
+      "options": [
+        "A. Stop for lunch in an ancient town.",
+        "B. Don't miss the ruins of a certain building.",
+        "C. Catch a boat to the start of this walk.",
+        "D. Be careful of the steep and rocky paths.",
+        "E. Don't worry about getting lost."
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Which TWO pieces of advice are given about the Marsden Coastal Walk?",
+      "options": [
+        "A. Stop for lunch in an ancient town.",
+        "B. Don't miss the ruins of a certain building.",
+        "C. Catch a boat to the start of this walk.",
+        "D. Be careful of the steep and rocky paths.",
+        "E. Don't worry about getting lost."
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Which TWO things are said about the Melby Heritage Walk?",
+      "options": [
+        "A. This walk is mostly downhill.",
+        "B. The paths can get busy during the day.",
+        "C. This is a circular walk.",
+        "D. A tower stands on the site of an older structure.",
+        "E. There are far-reaching views the whole way."
+      ],
+      "correctAnswer": "C / D"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Which TWO things are said about the Melby Heritage Walk?",
+      "options": [
+        "A. This walk is mostly downhill.",
+        "B. The paths can get busy during the day.",
+        "C. This is a circular walk.",
+        "D. A tower stands on the site of an older structure.",
+        "E. There are far-reaching views the whole way."
+      ],
+      "correctAnswer": "C / D"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Exhibition",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Baths",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Tools",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Vehicles",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Ponies",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Education centre",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Which TWO facts in the sessions on food safety were new information for Nadia and Fergus?",
+      "options": [
+        "A. the amount of plastic in the ocean",
+        "B. the number of diseases caused by contaminated food",
+        "C. the amount of food that is wasted",
+        "D. the number of people who are obese",
+        "E. the result of treating animals with antibiotics"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Which TWO facts in the sessions on food safety were new information for Nadia and Fergus?",
+      "options": [
+        "A. the amount of plastic in the ocean",
+        "B. the number of diseases caused by contaminated food",
+        "C. the amount of food that is wasted",
+        "D. the number of people who are obese",
+        "E. the result of treating animals with antibiotics"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Which TWO features of a project aiming to prevent food fraud impressed Fergus?",
+      "options": [
+        "A. the new technology it used",
+        "B. the publicity it received",
+        "C. the use of multiple tests on food items",
+        "D. the variety of dietary requirements included",
+        "E. the way information was made widely accessible"
+      ],
+      "correctAnswer": "C / D"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Which TWO features of a project aiming to prevent food fraud impressed Fergus?",
+      "options": [
+        "A. the new technology it used",
+        "B. the publicity it received",
+        "C. the use of multiple tests on food items",
+        "D. the variety of dietary requirements included",
+        "E. the way information was made widely accessible"
+      ],
+      "correctAnswer": "C / D"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Which TWO topics do both students recommend should be included in the course?",
+      "options": [
+        "A. sustainable fishing",
+        "B. targeted nutrition",
+        "C. global differences in consumption",
+        "D. sustainable agriculture",
+        "E. digital technology and food"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "Which TWO topics do both students recommend should be included in the course?",
+      "options": [
+        "A. sustainable fishing",
+        "B. targeted nutrition",
+        "C. global differences in consumption",
+        "D. sustainable agriculture",
+        "E. digital technology and food"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Pollution"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tax"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "chocolate"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "timing"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cost"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "rules"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "diving"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vegan"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "wifi / wi-fi"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "videos"
+    }
+  ]
+}

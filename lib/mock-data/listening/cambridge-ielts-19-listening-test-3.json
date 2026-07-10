@@ -1,0 +1,1069 @@
+{
+  "testId": "cambridge-ielts-19-academic-listening-test-3",
+  "title": "Cambridge IELTS 19 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-19-academic-listening-test-3/",
+  "book": 19,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-3-audio-1.mp3",
+      "content": "Questions 1-6\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Local food shops Where to go - Kite Place - near the [1] Fish market - cross the [2] and turn right - best to go before [3] pm, earlier than closing time Organic shop - called [4] - below a restaurant in the large, grey building - look for the large [5] outside Supermarket take a [6] minibus, number 289\n\nQuestions 7-10\n\nComplete the table below. Write ONE WORD ONLY for each answer. Shopping To buy Other ideas Fish market a dozen prawns a handful of [7] (type of seaweed) Organic shop beans and a [8] for dessert spices and [9] Bakery a brown loaf a [10] tart",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-6\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Local food shops",
+          "sections": [
+            {
+              "heading": "Where to go",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "- Kite Place - near the"
+                }
+              ]
+            },
+            {
+              "heading": "Fish market",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "and turn right",
+                  "before": "- cross the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "pm, earlier than closing time",
+                  "before": "- best to go before"
+                }
+              ]
+            },
+            {
+              "heading": "Organic shop",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "- called"
+                },
+                {
+                  "kind": "text",
+                  "text": "- below a restaurant in the large, grey building",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "outside",
+                  "before": "- look for the large"
+                }
+              ]
+            },
+            {
+              "heading": "Supermarket",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "minibus, number 289",
+                  "before": "take a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 7-10\n\nComplete the table below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Shopping",
+            "To buy",
+            "Other ideas"
+          ],
+          "rows": [
+            [
+              "Fish market",
+              "a dozen prawns",
+              "a handful of\n[7]\n(type of seaweed)"
+            ],
+            [
+              "Organic shop",
+              "beans and a\n[8]\nfor dessert",
+              "spices and\n[9]"
+            ],
+            [
+              "Bakery",
+              "a brown loaf",
+              "a\n[10]\ntart"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "[7]"
+        },
+        {
+          "type": "text",
+          "text": "[8]"
+        },
+        {
+          "type": "text",
+          "text": "[9]"
+        },
+        {
+          "type": "text",
+          "text": "[10]"
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "harbour / harbor"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "bridge"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "3.30 / 3:30 / three thirty / half 3 / three"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Rose / rose"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "sign"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "purple"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "samphire"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "melon"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "coconut"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "strawberry"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-3-audio-2.mp3",
+      "content": "Questions 11-16\n\nWhat information is given about each of the following festival workshops? Choose SIX answers from the box and write the correct letter, A-H.\n\nQuestions 17-18\n\nChoose TWO letters, A–E.\n\nQuestions 19-20\n\nChoose TWO letters, A–E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nWhat information is given about each of the following festival workshops?\n\nChoose SIX answers from the box and write the correct letter, A-H."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Superheroes",
+              "questionId": 11
+            },
+            {
+              "stepLabel": "Just do it",
+              "questionId": 12
+            },
+            {
+              "stepLabel": "Count on me",
+              "questionId": 13
+            },
+            {
+              "stepLabel": "Speak up",
+              "questionId": 14
+            },
+            {
+              "stepLabel": "Jump for joy",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "Sticks and stones",
+              "questionId": 16
+            }
+          ],
+          "options": [
+            "A. involves painting and drawing",
+            "B. will be led by a prize-winning author",
+            "C. is aimed at children with a disability",
+            "D. involves a drama activity",
+            "E. focuses on new relationships",
+            "F. is aimed at a specific age group",
+            "G. explores an unhappy feeling",
+            "H. raises awareness of a particular culture"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-18\n\nChoose TWO letters, A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            17,
+            18
+          ],
+          "label": "17-18",
+          "prompt": "Which TWO reasons does the speaker give for recommending Alive and Kicking",
+          "options": [
+            "A. It will appeal to both boys and girls.",
+            "B. The author is well known.",
+            "C. It has colourful illustrations.",
+            "D. It is funny.",
+            "E. It deals with an important topic."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nChoose TWO letters, A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            19,
+            20
+          ],
+          "label": "19-20",
+          "prompt": "Which TWO pieces of advice does the speaker give to parents about reading?",
+          "options": [
+            "A. Encourage children to write down new vocabulary.",
+            "B. Allow children to listen to audio books.",
+            "C. Get recommendations from librarians.",
+            "D. Give children a choice about what they read.",
+            "E. Only read aloud to children until they can read independently."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "matching",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "matching",
+          "label": "12",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 13,
+          "type": "matching",
+          "label": "13",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 14,
+          "type": "matching",
+          "label": "14",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "B / C"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-3-audio-3.mp3",
+      "content": "Questions 21-25\n\nChoose the correct letter, A, B or C. Science experiment for Year 12 students\n\nQuestions 26-30\n\nComplete the flowchart below. Choose FIVE answers from the box and write the correct letter, A-H. Choose mice which are all the same [26]. ⭣ Divide the mice into two groups, each with a different [27]. ⭣ Put each group in a separate cage. Feed group A commercial mouse food. Feed group B the same, but also sugar contained in [28]. ⭣ Take measurements using an electronic scale. Place them in a weighing chamber to prevent [29]. ⭣ Do all necessary [30]. Drag and drop an option to fill in each blank. A. size B. escape C. age D. water E. cereal F. calculations G. changes H. colour",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nChoose the correct letter, A, B or C.\n\nScience experiment for Year 12 students"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "How does Clare feel about the students in her Year 12 science class?",
+          "options": [
+            "A. worried that they are not making progress",
+            "B. challenged by their poor behaviour in class",
+            "C. frustrated at their lack of interest in the subject"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "How does Jake react to Clare’s suggestion about an experiment based on children’s diet?",
+          "options": [
+            "A. He is concerned that the results might not be meaningful.",
+            "B. He feels some of the data might be difficult to obtain.",
+            "C. He suspects that the conclusions might be upsetting."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "What problem do they agree may be involved in an experiment involving animals?",
+          "options": [
+            "A. Any results may not apply to humans.",
+            "B. It may be complicated to get permission.",
+            "C. Students may not be happy about animal experiments."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "What question do they decide the experiment should address?",
+          "options": [
+            "A. Are mice capable of controlling their food intake?",
+            "B. Does an increase in sugar lead to health problems?",
+            "C. How much do supplements of different kinds affect health?"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "Clare might also consider doing another experiment involving",
+          "options": [
+            "A. other types of food supplement.",
+            "B. different genetic strains of mice.",
+            "C. varying amounts of exercise."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nComplete the flowchart below.\n\nChoose FIVE answers from the box and write the correct letter, A-H."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Choose FIVE answers from the box and write the correct letter, A-H .",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "⭣",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "Feed group A commercial mouse food.",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Take measurements using an electronic scale.",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "⭣",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. size",
+            "B. escape",
+            "C. age",
+            "D. water",
+            "E. cereal",
+            "F. calculations",
+            "G. changes",
+            "H. colour"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "F"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2024/08/cambridge-ielts-19-academic-listening-3-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Microplastics Where microplastics come from fibres from some [31] during washing the breakdown of large pieces of plastic waste from industry the action of vehicle tyres on roads Effects of microplastics They cause injuries to the [32] of wildlife and affect their digestive systems. They enter the food chain, e.g., in bottled and tap water, [33] and seafood. They may not affect human health, but they are already banned in skin cleaning products and [34] in some countries. Microplastics enter the soil through the air, rain and [35]. Microplastics in the soil – a study by Anglia Ruskin University Earthworms are important because they add [36] to the soil. The study aimed to find whether microplastics in earthworms affect the [37] of plants. The study found that microplastics caused: [38] loss in earthworms fewer seeds to germinate a rise in the level of [39] in the soil. The study concluded: soil should be seen as an important natural process. changes to soil damage both ecosystems and [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Microplastics",
+          "sections": [
+            {
+              "heading": "Where microplastics come from",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "during washing",
+                  "before": "fibres from some"
+                }
+              ]
+            },
+            {
+              "heading": "the breakdown of large pieces of plastic",
+              "lines": []
+            },
+            {
+              "heading": "waste from industry",
+              "lines": []
+            },
+            {
+              "heading": "the action of vehicle tyres on roads",
+              "lines": []
+            },
+            {
+              "heading": "Effects of microplastics",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "of wildlife and affect their digestive systems.",
+                  "before": "They cause injuries to the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "and seafood.",
+                  "before": "They enter the food chain, e.g., in bottled and tap water,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "in some countries.",
+                  "before": "They may not affect human health, but they are already banned in skin cleaning products and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": ".",
+                  "before": "Microplastics enter the soil through the air, rain and"
+                }
+              ]
+            },
+            {
+              "heading": "Microplastics in the soil – a study by Anglia Ruskin University",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "to the soil.",
+                  "before": "Earthworms are important because they add"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "of plants.",
+                  "before": "The study aimed to find whether microplastics in earthworms affect the"
+                }
+              ]
+            },
+            {
+              "heading": "The study found that microplastics caused:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "loss in earthworms"
+                }
+              ]
+            },
+            {
+              "heading": "fewer seeds to germinate",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "in the soil.",
+                  "before": "a rise in the level of"
+                }
+              ]
+            },
+            {
+              "heading": "The study concluded:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "soil should be seen as an important natural process.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "changes to soil damage both ecosystems and"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "clothing"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "mouths"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "salt"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "toothpaste"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "fertilizers / fertilisers"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "nutrients"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "growth"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "weight"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "acid"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "society"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "harbour / harbor"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bridge"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "3.30 / 3:30 / three thirty / half 3 / three"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Rose / rose"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sign"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "purple"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "samphire"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "melon"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "coconut"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "strawberry"
+    },
+    {
+      "id": 11,
+      "type": "matching",
+      "label": "11",
+      "question": "• Superheroes",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "matching",
+      "label": "12",
+      "question": "• Just do it",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 13,
+      "type": "matching",
+      "label": "13",
+      "question": "• Count on me",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 14,
+      "type": "matching",
+      "label": "14",
+      "question": "• Speak up",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• Jump for joy",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• Sticks and stones",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Which TWO reasons does the speaker give for recommending Alive and Kicking",
+      "options": [
+        "A. It will appeal to both boys and girls.",
+        "B. The author is well known.",
+        "C. It has colourful illustrations.",
+        "D. It is funny.",
+        "E. It deals with an important topic."
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Which TWO reasons does the speaker give for recommending Alive and Kicking",
+      "options": [
+        "A. It will appeal to both boys and girls.",
+        "B. The author is well known.",
+        "C. It has colourful illustrations.",
+        "D. It is funny.",
+        "E. It deals with an important topic."
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Which TWO pieces of advice does the speaker give to parents about reading?",
+      "options": [
+        "A. Encourage children to write down new vocabulary.",
+        "B. Allow children to listen to audio books.",
+        "C. Get recommendations from librarians.",
+        "D. Give children a choice about what they read.",
+        "E. Only read aloud to children until they can read independently."
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Which TWO pieces of advice does the speaker give to parents about reading?",
+      "options": [
+        "A. Encourage children to write down new vocabulary.",
+        "B. Allow children to listen to audio books.",
+        "C. Get recommendations from librarians.",
+        "D. Give children a choice about what they read.",
+        "E. Only read aloud to children until they can read independently."
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "How does Clare feel about the students in her Year 12 science class?",
+      "options": [
+        "A. worried that they are not making progress",
+        "B. challenged by their poor behaviour in class",
+        "C. frustrated at their lack of interest in the subject"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "How does Jake react to Clare’s suggestion about an experiment based on children’s diet?",
+      "options": [
+        "A. He is concerned that the results might not be meaningful.",
+        "B. He feels some of the data might be difficult to obtain.",
+        "C. He suspects that the conclusions might be upsetting."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "What problem do they agree may be involved in an experiment involving animals?",
+      "options": [
+        "A. Any results may not apply to humans.",
+        "B. It may be complicated to get permission.",
+        "C. Students may not be happy about animal experiments."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "What question do they decide the experiment should address?",
+      "options": [
+        "A. Are mice capable of controlling their food intake?",
+        "B. Does an increase in sugar lead to health problems?",
+        "C. How much do supplements of different kinds affect health?"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Clare might also consider doing another experiment involving",
+      "options": [
+        "A. other types of food supplement.",
+        "B. different genetic strains of mice.",
+        "C. varying amounts of exercise."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "clothing"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mouths"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "salt"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "toothpaste"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fertilizers / fertilisers"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "nutrients"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "growth"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "weight"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "acid"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "society"
+    }
+  ]
+}

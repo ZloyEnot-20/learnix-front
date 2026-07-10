@@ -1,0 +1,1093 @@
+{
+  "testId": "cambridge-ielts-07-academic-listening-test-3",
+  "title": "Cambridge IELTS 07 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-07-academic-listening-test-3/",
+  "book": 7,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-2\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Example Type of job required: Part-time Student is studying [1] Student is in the [2] year of the course.\n\nQuestions 3-5\n\nComplete the table below. Write NO MORE THAN TWO WORDS for each answer. Position Available Where Problem Receptionist in the [3] evening lectures [4] in the Child Care Centre too early Clerical Assistant in the [5] evening lectures\n\nQuestions 6-10\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. STUDENT DETAILS Name: Anita Newman Address: [6] Room No. [7] Other skills: Speaks some Japanese Position available: [8] at the English Language Centre Duties: Respond to enquiries and [9] Time of interview: Friday at [10] a.m.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-2\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Example",
+          "sections": [
+            {
+              "heading": "Type of job required: Part-time",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Student is studying"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "year of the course.",
+                  "before": "Student is in the"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 3-5\n\nComplete the table below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Position Available",
+            "Where",
+            "Problem"
+          ],
+          "rows": [
+            [
+              "Receptionist",
+              "in the\n[3]",
+              "evening lectures"
+            ],
+            [
+              "[4]",
+              "in the Child Care Centre",
+              "too early"
+            ],
+            [
+              "Clerical Assistant",
+              "in the\n[5]",
+              "evening lectures"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 6-10\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "STUDENT DETAILS",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Name",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "Room No.",
+                  "before": "Address"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "",
+                  "before": "Room No."
+                },
+                {
+                  "kind": "text",
+                  "text": "Other skills",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "at the English Language Centre",
+                  "before": "Position available"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Duties Respond to enquiries and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "a.m.",
+                  "before": "Time of interview Friday at"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "business"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "third / 3rd"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Sports Centre / Sports Center"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "a cleaner / cleaner"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "Library"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "International House"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "B659"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "an office assistant / office assistant"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "answer the phone / answer phone"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "11.30 / 11:30"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-3-2.mp3",
+      "content": "Questions 11-16\n\nChoose the correct letter, A, B or C.\n\nQuestions 17-20\n\nComplete the form below. Write ONE WORD ONLY for each answer. ITINERARY Day 1 arrive in Kishba Day 2 rest day Day 3 spend all day in a [17] Day 4 visit a school Day 5 rest day Day 6 see a [18] with old carvings Day 7 rest day Day 8 swim in a [19] Day 9 visit a [20] Day 10 depart from Kishba",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "On the holiday, you will be walking for",
+          "options": [
+            "A. 6 days.",
+            "B. 8 days.",
+            "C. 10 days."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "What proportion of the sponsorship money goes to charity?",
+          "options": [
+            "A. Pie chart showing about one third",
+            "B. Pie chart showing a half",
+            "C. Pie chart showing about two thirds"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Each walker's sponsorship money goes to one",
+          "options": [
+            "A. student.",
+            "B. teacher.",
+            "C. school."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "When you start the trek you must be",
+          "options": [
+            "A. interested in getting fit.",
+            "B. already quite fit.",
+            "C. already very fit."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "As you walk you will carry",
+          "options": [
+            "A. all of your belongings.",
+            "B. some of your belongings.",
+            "C. none of your belongings."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 16,
+          "prompt": "The Semira Region has a long tradition of",
+          "options": [
+            "A. making carpets.",
+            "B. weaving blankets.",
+            "C. carving wood."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nComplete the form below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "ITINERARY",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 1",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 2",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 17,
+                  "after": "",
+                  "before": "Day 3 spend all day in a"
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 4",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 5",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 18,
+                  "after": "with old carvings",
+                  "before": "Day 6 see a"
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 7",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 19,
+                  "after": "",
+                  "before": "Day 8 swim in a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 20,
+                  "after": "",
+                  "before": "Day 9 visit a"
+                },
+                {
+                  "kind": "text",
+                  "text": "Day 10",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "forest"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "temple"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "waterfall"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "village"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-3-3.mp3",
+      "content": "Questions 21-22\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. OCEAN RESEARCH The Robotic Float Project • Float is shaped like a [21] • Scientists from [22] have worked on the project so far\n\nQuestions 23-25\n\nComplete the diagram below. Write ONE WORD AND/OR A NUMBER for each answer.\n\nQuestions 26-30\n\nIn what time period can data from the float projects help with the following things? Write the correct letter, A, B or C, next to questions 26-30.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "OCEAN RESEARCH",
+          "sections": [
+            {
+              "heading": "The Robotic Float Project",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "",
+                  "before": "Float is shaped like a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": "have worked on the project so far",
+                  "before": "Scientists from"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-25\n\nComplete the diagram below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-3-7-diagram-6a263695393af.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "text",
+          "text": "[23]"
+        },
+        {
+          "type": "text",
+          "text": "[24]"
+        },
+        {
+          "type": "text",
+          "text": "[25]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nIn what time period can data from the float projects help with the following things?\n\nWrite the correct letter, A, B or C, next to questions 26-30."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "understanding of El Niño",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "understanding of climate change",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "naval rescues",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "sustainable fishing practices",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "crop selection",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. At present",
+            "B. In the near future",
+            "C. In the long-term future"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "cigar"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "13 countries"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "activated"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "50 km / 50 kilometers / 50 kilometres"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "temperature"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-07-academic-listening-test-3-4.mp3",
+      "content": "Questions 31-34\n\nChoose the correct letter, A, B or C.\n\nQuestions 35-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. A company providing luxury serviced apartments aims to: • cater specifically for [35] travellers • provide a stylish [36] for guests to use • set a trend throughout the [37] which becomes permanent Traditional holiday hotels attract people by: • offering the chance to [38] their ordinary routine life • making sure that they are cared for in all respects – like a [39] • leaving small treats in their rooms – e.g. cosmetics or [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-34\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "According to the speaker, how might a guest feel when staying in a luxury hotel?",
+          "options": [
+            "A. impressed with the facilities",
+            "B. depressed by the experience",
+            "C. concerned at the high costs"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "According to recent research, luxury hotels overlook the need to",
+          "options": [
+            "A. provide for the demands of important guests.",
+            "B. create a comfortable environment.",
+            "C. offer an individual and personal welcome."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "The company focused their research on",
+          "options": [
+            "A. a wide variety of hotels.",
+            "B. large, luxury hotel chains.",
+            "C. exotic holiday hotels."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "What is the impact of the outside environment on a hotel guest?",
+          "options": [
+            "A. It has a considerable effect.",
+            "B. It has a very limited effect.",
+            "C. It has no effect whatsoever."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 35-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "A company providing luxury serviced apartments aims to:",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "travellers",
+                  "before": "cater specifically for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "for guests to use",
+                  "before": "provide a stylish"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "which becomes permanent",
+                  "before": "set a trend throughout the"
+                }
+              ]
+            },
+            {
+              "heading": "Traditional holiday hotels attract people by:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "their ordinary routine life",
+                  "before": "offering the chance to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "",
+                  "before": "making sure that they are cared for in all respects – like a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "leaving small treats in their rooms – e.g. cosmetics or"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "business"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "kitchen"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "world"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "escape"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "baby"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "chocolate"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "business"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "third / 3rd"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Sports Centre / Sports Center"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a cleaner / cleaner"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Library"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "International House"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "B659"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "an office assistant / office assistant"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "answer the phone / answer phone"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "11.30 / 11:30"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "On the holiday, you will be walking for",
+      "options": [
+        "A. 6 days.",
+        "B. 8 days.",
+        "C. 10 days."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "What proportion of the sponsorship money goes to charity?",
+      "options": [
+        "A. Pie chart showing about one third",
+        "B. Pie chart showing a half",
+        "C. Pie chart showing about two thirds"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Each walker's sponsorship money goes to one",
+      "options": [
+        "A. student.",
+        "B. teacher.",
+        "C. school."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "When you start the trek you must be",
+      "options": [
+        "A. interested in getting fit.",
+        "B. already quite fit.",
+        "C. already very fit."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "As you walk you will carry",
+      "options": [
+        "A. all of your belongings.",
+        "B. some of your belongings.",
+        "C. none of your belongings."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "The Semira Region has a long tradition of",
+      "options": [
+        "A. making carpets.",
+        "B. weaving blankets.",
+        "C. carving wood."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "forest"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "temple"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "waterfall"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "village"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cigar"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "13 countries"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "activated"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "50 km / 50 kilometers / 50 kilometres"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "temperature"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• understanding of El Niño",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• understanding of climate change",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• naval rescues",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• sustainable fishing practices",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• crop selection",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "According to the speaker, how might a guest feel when staying in a luxury hotel?",
+      "options": [
+        "A. impressed with the facilities",
+        "B. depressed by the experience",
+        "C. concerned at the high costs"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "According to recent research, luxury hotels overlook the need to",
+      "options": [
+        "A. provide for the demands of important guests.",
+        "B. create a comfortable environment.",
+        "C. offer an individual and personal welcome."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "The company focused their research on",
+      "options": [
+        "A. a wide variety of hotels.",
+        "B. large, luxury hotel chains.",
+        "C. exotic holiday hotels."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "What is the impact of the outside environment on a hotel guest?",
+      "options": [
+        "A. It has a considerable effect.",
+        "B. It has a very limited effect.",
+        "C. It has no effect whatsoever."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "business"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "kitchen"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "world"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "escape"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "baby"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "chocolate"
+    }
+  ]
+}

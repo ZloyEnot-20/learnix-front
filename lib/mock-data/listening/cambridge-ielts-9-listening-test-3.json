@@ -1,0 +1,1001 @@
+{
+  "testId": "cambridge-ielts-09-academic-listening-test-3",
+  "title": "Cambridge IELTS 09 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-09-academic-listening-test-3/",
+  "book": 9,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-09-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-5\n\nComplete the table below. Write ONE WORD AND/OR A NUMBER for each answer. Apartments Facilities Other Information Cost Rose Garden Apartments studio flat Example entertainment programme: Greek dancing £219 Blue Bay Apartments large salt-water swimming pool - just [1] metres from beach - near shops £275 [2] Apartments terrace watersports £490 The Grand - Greek paintings - [3] - overlooking [4] - near a supermarket and a disco £ [5]\n\nQuestions 6-10\n\nComplete the table below. Write ONE WORD AND/OR A NUMBER for each answer. GREEK ISLAND HOLIDAYS Insurance Benefits Maximum Amount Cancellation £ [6] Hospital £600. Additional benefit allows a [7] to travel to resort [8] departure Up to £1000. Depends on reason Personal belongings Up to £3000; £500 for one [9] Name of Assistant Manager: Ben [10] Direct phone line: 081260 543216",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-5\n\nComplete the table below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Apartments",
+            "Facilities",
+            "Other Information",
+            "Cost"
+          ],
+          "rows": [
+            [
+              "Rose Garden Apartments",
+              "studio flat",
+              "Example\nentertainment programme: Greek dancing",
+              "£219"
+            ],
+            [
+              "Blue Bay Apartments",
+              "large salt-water swimming pool",
+              "- just\n[1]\nmetres from beach\n- near shops",
+              "£275"
+            ],
+            [
+              "[2]\nApartments",
+              "terrace",
+              "watersports",
+              "£490"
+            ],
+            [
+              "The Grand",
+              "- Greek paintings\n-\n[3]",
+              "- overlooking\n[4]\n- near a supermarket and a disco",
+              "£\n[5]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 6-10\n\nComplete the table below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "GREEK ISLAND HOLIDAYS",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Insurance Benefits",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Cancellation £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "to travel to resort",
+                  "before": "Hospital £600. Additional benefit allows a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Personal belongings Up to £3000; £500 for one"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "Name of Assistant Manager: Ben"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "300"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Sunshade"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "balcony"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "forest / forests"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "319"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "10,000 / 10000"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "relative"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "missed"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "item"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "Ludlow"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-09-academic-listening-test-3-2.mp3",
+      "content": "Questions 11-13\n\nChoose the correct letter, A, B or C.\n\nQuestions 14-18\n\nWhat is currently the main area of work of each of the following people? Choose FIVE answers from the box and write the correct letter, A-H.\n\nQuestions 19-20\n\nComplete the table below. Write ONE WORD AND/OR NUMBERS for each answer. Feature Size Biggest challenge Target age group Railway 1.2 km Making tunnels Go-Kart arena [19] m² Removing mounds on the track 5 to [20] year-olds",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "Simon's idea for a theme park came from",
+          "options": [
+            "A. his childhood hobby.",
+            "B. his interest in landscape design.",
+            "C. his visit to another park."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "When they started, the family decided to open the park only when",
+          "options": [
+            "A. the weather was expected to be good.",
+            "B. the children weren't at school.",
+            "C. there were fewer farming commitments."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Since opening, the park has had",
+          "options": [
+            "A. 50,000 visitors.",
+            "B. 1,000,000 visitors.",
+            "C. 1,500,000 visitors."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-18\n\nWhat is currently the main area of work of each of the following people?\n\nChoose FIVE answers from the box and write the correct letter, A-H."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Simon (the speaker)",
+              "questionId": 14
+            },
+            {
+              "stepLabel": "Liz",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "Sarah",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "Duncan",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "Judith",
+              "questionId": 18
+            }
+          ],
+          "options": [
+            "A. advertising",
+            "B. animal care",
+            "C. building",
+            "D. educational links",
+            "E. engine maintenance",
+            "F. food and drink",
+            "G. sales",
+            "H. staffing"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nComplete the table below.\n\nWrite ONE WORD AND/OR NUMBERS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Feature",
+            "Size",
+            "Biggest challenge",
+            "Target age group"
+          ],
+          "rows": [
+            [
+              "Railway",
+              "1.2 km",
+              "Making tunnels",
+              ""
+            ],
+            [
+              "Go-Kart arena",
+              "[19]\nm²",
+              "Removing mounds on the track",
+              "5 to\n[20]\nyear-olds"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 14,
+          "type": "matching",
+          "label": "14",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "120"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "12"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-09-academic-listening-test-3-3.mp3",
+      "content": "Questions 21-30\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. Study Skills Tutorial – Caroline Benning Dissertation topic: the [21] Strengths: [22] computer modelling Weaknesses: lack of background information poor [23] skills Possible strategy Benefits Problems peer group discussion increases [24] dissertations tend to contain the same [25] use the [26] service provides structured programme limited [27] consult study skills books are a good source of reference can be too [28] Recommendations: use a card index read all notes [29] Next tutorial date: [30] January",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-30\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Study Skills Tutorial – Caroline Benning",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "",
+                  "before": "Dissertation topic: the"
+                }
+              ]
+            },
+            {
+              "heading": "Strengths:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": ""
+                },
+                {
+                  "kind": "text",
+                  "text": "computer modelling"
+                }
+              ]
+            },
+            {
+              "heading": "Weaknesses:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "lack of background information"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 23,
+                  "after": "skills",
+                  "before": "poor"
+                }
+              ]
+            },
+            {
+              "heading": "Recommendations:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "use a card index"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "",
+                  "before": "read all notes"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "January",
+                  "before": "Next tutorial date:"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "fishing industry"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "statistics"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "note-taking"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "confidence"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "ideas"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "student support"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "places"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "general"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "3 times / three times"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "25 / 25th"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-09-academic-listening-test-3-4.mp3",
+      "content": "Questions 31-32\n\nChoose the correct letter, A, B or C.\n\nQuestions 33-40\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. The Underground House Design Built in the earth, with two floors The south-facing side was constructed of two layers of [33] Photovoltaic tiles were attached A layer of foam was used to improve the [34] of the building Special features To increase the light, the building has many internal mirrors and [35] In future, the house may produce more [36] than it needs Recycled wood was used for the [37] of the house The system for processing domestic [38] is organic Environmental issues The use of large quantities of [39] in construction was environmentally harmful But the house will have paid its 'environmental debt' within [40]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-32\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "The owners of the underground house",
+          "options": [
+            "A. had no experience of living in a rural area.",
+            "B. were interested in environmental issues.",
+            "C. wanted a professional project manager."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "What does the speaker say about the site of the house?",
+          "options": [
+            "A. The land was quite cheap.",
+            "B. Stone was being extracted nearby.",
+            "C. It was in a completely unspoilt area."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 33-40\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "The Underground House",
+          "sections": [
+            {
+              "heading": "Design",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Built in the earth, with two floors"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "The south-facing side was constructed of two layers of"
+                },
+                {
+                  "kind": "text",
+                  "text": "Photovoltaic tiles were attached"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "of the building",
+                  "before": "A layer of foam was used to improve the"
+                }
+              ]
+            },
+            {
+              "heading": "Special features",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "To increase the light, the building has many internal mirrors and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "than it needs",
+                  "before": "In future, the house may produce more"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "of the house",
+                  "before": "Recycled wood was used for the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "is organic",
+                  "before": "The system for processing domestic"
+                }
+              ]
+            },
+            {
+              "heading": "Environmental issues",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "in construction was environmentally harmful",
+                  "before": "The use of large quantities of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "But the house will have paid its 'environmental debt' within"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "glass"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "insulation"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "windows"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "electricity"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "floor / floors"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "waste"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "concrete"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "15 years"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "300"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Sunshade"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "balcony"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "forest / forests"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "319"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10,000 / 10000"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "relative"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "missed"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "item"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Ludlow"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Simon's idea for a theme park came from",
+      "options": [
+        "A. his childhood hobby.",
+        "B. his interest in landscape design.",
+        "C. his visit to another park."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "When they started, the family decided to open the park only when",
+      "options": [
+        "A. the weather was expected to be good.",
+        "B. the children weren't at school.",
+        "C. there were fewer farming commitments."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Since opening, the park has had",
+      "options": [
+        "A. 50,000 visitors.",
+        "B. 1,000,000 visitors.",
+        "C. 1,500,000 visitors."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "type": "matching",
+      "label": "14",
+      "question": "• Simon (the speaker)",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• Liz",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• Sarah",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• Duncan",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• Judith",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "120"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "12"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fishing industry"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "statistics"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "note-taking"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "confidence"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ideas"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "student support"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "places"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "general"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "3 times / three times"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "25 / 25th"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "The owners of the underground house",
+      "options": [
+        "A. had no experience of living in a rural area.",
+        "B. were interested in environmental issues.",
+        "C. wanted a professional project manager."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "What does the speaker say about the site of the house?",
+      "options": [
+        "A. The land was quite cheap.",
+        "B. Stone was being extracted nearby.",
+        "C. It was in a completely unspoilt area."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "glass"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "insulation"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "windows"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "electricity"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "floor / floors"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "waste"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "concrete"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "15 years"
+    }
+  ]
+}

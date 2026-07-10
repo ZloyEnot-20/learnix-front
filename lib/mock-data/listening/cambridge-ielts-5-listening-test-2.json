@@ -1,0 +1,991 @@
+{
+  "testId": "cambridge-ielts-05-academic-listening-test-2",
+  "title": "Cambridge IELTS 05 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-05-academic-listening-test-2/",
+  "book": 5,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-2-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. LIBRARY INFORMATION Example Minimum joining age: Answer 18 years For registration, must take two [1] and two forms of I.D. e.g. driving licence, [2] Cost to join per year (without current student card): £ [3] Number of items allowed: (members of public) [4] Loan times: four weeks Fines start at £ [5] Computers can be booked up to [6] hours in advance Library holds most national papers, all [7] , and magazines Need [8] to use photocopier Creative Writing class tutor is John [9] held on [10] evenings",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "LIBRARY INFORMATION",
+          "sections": [
+            {
+              "heading": "For registration, must take",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "and",
+                  "before": "two"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "two forms of I.D. e.g. driving licence,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Cost to join per year (without current student card): £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "Number of items allowed: (members of public)"
+                }
+              ]
+            },
+            {
+              "heading": "Loan times: four weeks",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Fines start at £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "hours in advance",
+                  "before": "Computers can be booked up to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": ", and magazines",
+                  "before": "Library holds most national papers, all"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "to use photocopier",
+                  "before": "Need"
+                }
+              ]
+            },
+            {
+              "heading": "Creative Writing class",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "tutor is John"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "evenings",
+                  "before": "held on"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "passport photos / photos / passport photographs / photographs"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "a bank statement / bank statement"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "125 per year / 125"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "8"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "1.50"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "48"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "local papers / local newspapers"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "a card / card / cards"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "Grantingham"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "Friday"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-2-2.mp3",
+      "content": "Questions 11-15\n\nChoose the correct letter, A, B or C.\n\nQuestions 16-17\n\nAnswer the questions below. Write NO MORE THAN ONE WORD OR A NUMBER for each answer.\n\nQuestions 18-20\n\nChoose THREE letters A-G.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-15\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "In 1993 Dan Pearman went to Ecuador",
+          "options": [
+            "A. as a tourist guide.",
+            "B. as part of his studies.",
+            "C. as a voluntary worker."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "Dan's neighbour was successful in business because he",
+          "options": [
+            "A. employed carpenters from the area.",
+            "B. was the most skilled craftsman in the town.",
+            "C. found it easy to reach customers."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Dan says the charity relies on",
+          "options": [
+            "A. getting enough bicycles to send regularly.",
+            "B. finding new areas which need the bicycles.",
+            "C. charging for the bicycles it sends abroad."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "What does Dan say about the town of Rivas?",
+          "options": [
+            "A. It has received the greatest number of bikes.",
+            "B. It has almost as many bikes as Amsterdam.",
+            "C. Its economy has been totally transformed."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "What problem did the charity face in August 2000?",
+          "options": [
+            "A. It couldn't meet its overheads.",
+            "B. It had to delay sending the bikes.",
+            "C. It was criticised in the British media."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-17\n\nAnswer the questions below.\n\nWrite NO MORE THAN ONE WORD OR A NUMBER for each answer."
+        },
+        {
+          "type": "text",
+          "text": "[16]"
+        },
+        {
+          "type": "text",
+          "text": "[17]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 18-20\n\nChoose THREE letters A-G."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            18,
+            19,
+            20
+          ],
+          "label": "18-20",
+          "prompt": "Which THREE things can the general public do to help the charity Pedal Power?",
+          "options": [
+            "A. organise a bicycle collection",
+            "B. repair the donated bikes",
+            "C. donate their unwanted tools",
+            "D. do voluntary work in its office",
+            "E. hold an event to raise money",
+            "F. identify areas that need bikes",
+            "G. write to the government"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "75,000 / 75000"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "computers"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "C / E / F"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "C / E / F"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "C / E / F"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-2-3.mp3",
+      "content": "Questions 21-30\n\nComplete the table below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. 'Student Life' video project Cristina Ibrahim Enjoyed: using the camera going to a British [21] contact with students doing other courses (has asked some to [22] with him) Most useful language practice: listening to instructions learning [23] vocabulary listening to British students' language because of: - normal speed - large amount of [24] General usefulness: operating video camera working with other people: - learning about [25] - compromising - [26] people who have different views the importance of [27] Things to do differently in future: decide when to [28] each stage at the beginning make more effort to [29] with the camera don't make the film too [30]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-30\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer.\n\n'Student Life' video project"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "Cristina",
+            "Ibrahim"
+          ],
+          "rows": [
+            [
+              "Enjoyed:",
+              "using the camera\ngoing to a British\n[21]",
+              "contact with students doing other courses (has asked some to\n[22]\nwith him)"
+            ],
+            [
+              "Most useful language practice:",
+              "listening to instructions\nlearning\n[23]\nvocabulary",
+              "listening to British students' language because of:\n- normal speed\n- large amount of\n[24]"
+            ],
+            [
+              "General usefulness:",
+              "operating video camera\nworking with other people:\n- learning about\n[25]\n- compromising\n-\n[26]\npeople who have different views",
+              "the importance of\n[27]"
+            ],
+            [
+              "Things to do differently in future:",
+              "decide when to\n[28]\neach stage at the beginning\nmake more effort to\n[29]\nwith the camera",
+              "don't make the film too\n[30]"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "home / student's home"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "have dinner / dinner / come to dinner / go to dinner"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "technical"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "slang"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "cooperating / cooperation"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "persuading"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "editing"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "complete"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "experiment"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "long"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-2-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. ANTARCTICA GEOGRAPHY world's highest, coldest and windiest continent more than [31] times as big as the UK most of the area is classified as [32] RESEARCH STATIONS international teams work together [33] is integrated with technical support stations contain accommodation, work areas, a kitchen, a [34] and a gym supplies were brought to Zero One station by sledge from a [35] at the edge of the ice 15 km away problem of snow build-ups solved by building stations on [36] with adjustable legs FOOD AND DIET average daily requirement for an adult in Antarctica is approximately [37] kilocalories rations for field work prepared by process of freeze-drying RESEARCH The most important research focuses on climate change, including measuring changes in the ice-cap (because of effects on sea levels and [38] ) monitoring the hole in the ozone layer analysing air from bubbles in ice to measure [39] caused by human activity WORK OPPORTUNITIES Many openings for [40] people including research assistants administrative and technical positions",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "ANTARCTICA",
+          "sections": [
+            {
+              "heading": "GEOGRAPHY",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "world's highest, coldest and windiest continent"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "times as big as the UK",
+                  "before": "more than"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "most of the area is classified as"
+                }
+              ]
+            },
+            {
+              "heading": "RESEARCH STATIONS",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "international teams work together"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "is integrated with technical support"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "and a gym",
+                  "before": "stations contain accommodation, work areas, a kitchen, a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "at the edge of the ice 15 km away",
+                  "before": "supplies were brought to Zero One station by sledge from a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "with adjustable legs",
+                  "before": "problem of snow build-ups solved by building stations on"
+                }
+              ]
+            },
+            {
+              "heading": "FOOD AND DIET",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "kilocalories",
+                  "before": "average daily requirement for an adult in Antarctica is approximately"
+                },
+                {
+                  "kind": "text",
+                  "text": "rations for field work prepared by process of freeze-drying"
+                }
+              ]
+            },
+            {
+              "heading": "RESEARCH",
+              "lines": []
+            },
+            {
+              "heading": "The most important research focuses on climate change, including",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": ")",
+                  "before": "measuring changes in the ice-cap (because of effects on sea levels and"
+                },
+                {
+                  "kind": "text",
+                  "text": "monitoring the hole in the ozone layer"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "caused by human activity",
+                  "before": "analysing air from bubbles in ice to measure"
+                }
+              ]
+            },
+            {
+              "heading": "WORK OPPORTUNITIES",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "people including",
+                  "before": "Many openings for"
+                },
+                {
+                  "kind": "text",
+                  "text": "research assistants"
+                },
+                {
+                  "kind": "text",
+                  "text": "administrative and technical positions"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "58"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "desert"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "science"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "hospital / small hospital"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "ship"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "platforms"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "3,500 / 3500"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "currents / ocean currents"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "the pollution / pollution"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "young"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "passport photos / photos / passport photographs / photographs"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a bank statement / bank statement"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "125 per year / 125"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "8"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1.50"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "48"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "local papers / local newspapers"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a card / card / cards"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Grantingham"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Friday"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "In 1993 Dan Pearman went to Ecuador",
+      "options": [
+        "A. as a tourist guide.",
+        "B. as part of his studies.",
+        "C. as a voluntary worker."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Dan's neighbour was successful in business because he",
+      "options": [
+        "A. employed carpenters from the area.",
+        "B. was the most skilled craftsman in the town.",
+        "C. found it easy to reach customers."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Dan says the charity relies on",
+      "options": [
+        "A. getting enough bicycles to send regularly.",
+        "B. finding new areas which need the bicycles.",
+        "C. charging for the bicycles it sends abroad."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "What does Dan say about the town of Rivas?",
+      "options": [
+        "A. It has received the greatest number of bikes.",
+        "B. It has almost as many bikes as Amsterdam.",
+        "C. Its economy has been totally transformed."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "What problem did the charity face in August 2000?",
+      "options": [
+        "A. It couldn't meet its overheads.",
+        "B. It had to delay sending the bikes.",
+        "C. It was criticised in the British media."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "How much money in pounds did the charity receive when it won an award?",
+      "options": [],
+      "correctAnswer": "75,000 / 75000"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "What is the charity currently hoping to buy?",
+      "options": [],
+      "correctAnswer": "computers"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Which THREE things can the general public do to help the charity Pedal Power?",
+      "options": [
+        "A. organise a bicycle collection",
+        "B. repair the donated bikes",
+        "C. donate their unwanted tools",
+        "D. do voluntary work in its office",
+        "E. hold an event to raise money",
+        "F. identify areas that need bikes",
+        "G. write to the government"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Which THREE things can the general public do to help the charity Pedal Power?",
+      "options": [
+        "A. organise a bicycle collection",
+        "B. repair the donated bikes",
+        "C. donate their unwanted tools",
+        "D. do voluntary work in its office",
+        "E. hold an event to raise money",
+        "F. identify areas that need bikes",
+        "G. write to the government"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Which THREE things can the general public do to help the charity Pedal Power?",
+      "options": [
+        "A. organise a bicycle collection",
+        "B. repair the donated bikes",
+        "C. donate their unwanted tools",
+        "D. do voluntary work in its office",
+        "E. hold an event to raise money",
+        "F. identify areas that need bikes",
+        "G. write to the government"
+      ],
+      "correctAnswer": "C / E / F"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "home / student's home"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "have dinner / dinner / come to dinner / go to dinner"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "technical"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "slang"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "cooperating / cooperation"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "persuading"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "editing"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "complete"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "experiment"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "long"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "58"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "desert"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "science"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "hospital / small hospital"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "ship"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "platforms"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "3,500 / 3500"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "currents / ocean currents"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the pollution / pollution"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "young"
+    }
+  ]
+}

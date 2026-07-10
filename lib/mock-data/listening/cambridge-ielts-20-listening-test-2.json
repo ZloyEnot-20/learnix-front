@@ -1,0 +1,1087 @@
+{
+  "testId": "cambridge-ielts-20-academic-listening-test-2",
+  "title": "Cambridge IELTS 20 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-20-academic-listening-test-2/",
+  "book": 20,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-2-audio1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Local Councils can Arrange Practical Support to Help those Caring for Elderly people at Home. This can give the carer: – time for other responsibilities – a [1] Assessment of mother’s needs This may include discussion of: – how much [2] the caring involves What types of tasks are involved, e.g.: – help with dressing – helping her have a [3] – shopping – helping with meals – dealing with [4] Any aspects of caring that are especially difficult, e.g.: – loss of [5] – [6] her – preventing a [7] Types of support that may be offered to carers – transport costs, e.g. cost of a [8] – car-related costs, e.g. fuel and [9] – help with housework – help to reduce [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Local Councils can Arrange Practical Support to Help those Caring for Elderly people at Home.",
+                  "bullet": false
+                }
+              ]
+            },
+            {
+              "heading": "This can give the carer:",
+              "lines": []
+            },
+            {
+              "heading": "– time for other responsibilities",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "–  a"
+                }
+              ]
+            },
+            {
+              "heading": "Assessment of mother’s needs",
+              "lines": []
+            },
+            {
+              "heading": "This may include discussion of:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "the caring involves",
+                  "before": "– how much"
+                }
+              ]
+            },
+            {
+              "heading": "What types of tasks are involved, e.g.:",
+              "lines": []
+            },
+            {
+              "heading": "– help with dressing",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "– helping her have a"
+                }
+              ]
+            },
+            {
+              "heading": "– shopping",
+              "lines": []
+            },
+            {
+              "heading": "– helping with meals",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "– dealing with"
+                }
+              ]
+            },
+            {
+              "heading": "Any aspects of caring that are especially difficult, e.g.:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "– loss of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "her",
+                  "before": "–"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "",
+                  "before": "– preventing a"
+                }
+              ]
+            },
+            {
+              "heading": "Types of support that may be offered to carers",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "",
+                  "before": "– transport costs, e.g. cost of a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "– car-related costs, e.g. fuel and"
+                }
+              ]
+            },
+            {
+              "heading": "– help with housework",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "– help to reduce"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Break"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "Time"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Shower"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Money"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "Memory"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Lifting"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Fall"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "Taxi"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "Insurance"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "Stress"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-2-audio-part-2.mp3",
+      "content": "Questions 11-16\n\nWhat is the role of the volunteers in each of the following activities? Choose SIX answers from the box and write the correct letter, A-I, next to Questions Community Volunteering and Local Festival Events Information\n\nQuestions 17-20\n\nChoose the correct letter, A, B or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nWhat is the role of the volunteers in each of the following activities?\n\nChoose SIX answers from the box and write the correct letter, A-I, next to Questions\n\nCommunity Volunteering and Local Festival Events\n\nInformation"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "walking around the town centre",
+              "questionId": 11
+            },
+            {
+              "stepLabel": "helping at concerts",
+              "questionId": 12
+            },
+            {
+              "stepLabel": "getting involved with community groups",
+              "questionId": 13
+            },
+            {
+              "stepLabel": "helping with a magazine",
+              "questionId": 14
+            },
+            {
+              "stepLabel": "participating at lunches for retired people",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "helping with the website",
+              "questionId": 16
+            }
+          ],
+          "options": [
+            "A. providing entertainment",
+            "B. providing publicity about a council service",
+            "C. contacting local businesses",
+            "D. giving advice to visitors",
+            "E. collecting feedback on events",
+            "F. selling tickets",
+            "G. introducing guest speakers at an event",
+            "H. encouraging cooperation between local organisations",
+            "I. helping people find their seats"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-20\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 17,
+          "prompt": "Which event requires the largest number of volunteers?",
+          "options": [
+            "A. the music festival",
+            "B. the science festival",
+            "C. the book festival"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 18,
+          "prompt": "What is the most important requirement for volunteers at the festivals?",
+          "options": [
+            "A. interpersonal skills",
+            "B. personal interest in the event",
+            "C. flexibility"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 19,
+          "prompt": "New volunteers will start working in the week beginning",
+          "options": [
+            "A. 2 September",
+            "B. 9 September",
+            "C. 23 September"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 20,
+          "prompt": "What is the next annual event for volunteers?",
+          "options": [
+            "A. a boat trip",
+            "B. a barbecue",
+            "C. a party"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "matching",
+          "label": "11",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 12,
+          "type": "matching",
+          "label": "12",
+          "correctAnswer": "I"
+        },
+        {
+          "id": 13,
+          "type": "matching",
+          "label": "13",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 14,
+          "type": "matching",
+          "label": "14",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-2-audio-3.mp3",
+      "content": "Questions 21-25\n\nWhat is Rosie and Colin’s opinion about each of the following aspects of human geography? Choose FIVE answers from the box and write the correct letter, A-G, next to Questions Urban Development and Human Geography Discussion Opinion\n\nQuestions 26-30\n\nChoose the correct letter, A, B or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nWhat is Rosie and Colin’s opinion about each of the following aspects of human geography?\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to Questions\n\nUrban Development and Human Geography Discussion\n\nOpinion"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Population",
+              "questionId": 21
+            },
+            {
+              "stepLabel": "Health",
+              "questionId": 22
+            },
+            {
+              "stepLabel": "Economies",
+              "questionId": 23
+            },
+            {
+              "stepLabel": "Culture",
+              "questionId": 24
+            },
+            {
+              "stepLabel": "Poverty",
+              "questionId": 25
+            }
+          ],
+          "options": [
+            "A. The information given about this was too vague.",
+            "B. This may not be relevant to their course.",
+            "C. This will involve only a small number of statistics.",
+            "D. It will be easy to find facts about this.",
+            "E. The facts about this may not be reliable.",
+            "F. No useful research has been done on this.",
+            "G. The information provided about this was interesting."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "Rosie says that in her own city the main problem is",
+          "options": [
+            "A. Crime",
+            "B. Housing",
+            "C. Unemployment"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 27,
+          "prompt": "What recent additions to the outskirts of their cities are both students happy about?",
+          "options": [
+            "A. Conference centres",
+            "B. Sports centres",
+            "C. Retail centres"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 28,
+          "prompt": "The students agree that developing disused industrial sites may",
+          "options": [
+            "A. Have unexpected costs",
+            "B. Damage the urban environment",
+            "C. Destroy valuable historical buildings"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 29,
+          "prompt": "The students will mention Masdar City as an example of an attempt to achieve",
+          "options": [
+            "A. Daily collections for waste recycling",
+            "B. Sustainable energy use",
+            "C. Free transport for everyone"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 30,
+          "prompt": "When discussing the ecotown of Greenhill Abbots, Colin is uncertain about",
+          "options": [
+            "A. What its objectives were",
+            "B. Why there was opposition to it",
+            "C. How much of it has actually been built"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "matching",
+          "label": "21",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 22,
+          "type": "matching",
+          "label": "22",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 23,
+          "type": "matching",
+          "label": "23",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 24,
+          "type": "matching",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 28,
+          "type": "multiple-choice",
+          "label": "28",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 29,
+          "type": "multiple-choice",
+          "label": "29",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 30,
+          "type": "multiple-choice",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2025/07/cambridge-ielts-20-academic-listening-2-audio-part-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Developing Food Trends The growth in interest in food fashions started with [31] of food being shared on social media. The UK food industry is constantly developing products which are newor different. Influencers on social media become ‘ambassadors’ for a brand. Sales of [32] food brands have grown rapidly this way. Supermarkets track demand for ingredients on social media. Famous [33] are influential. Marketing campaigns The avocado: — [34] were invited to visit growers in South Africa. — Advertising focused on its [35] benefits. Oat milk: — A Swedish brand’s media campaign received publicity by upsetting competitors. — Promotion in the USA through [36] shops reduced the need for advertising. — It appealed to consumers who are concerned about the [37] Norwegian skrei: — has helped strengthen the [38] of Norwegian seafood. — Ethical concerns Quinoa: — Its success led to an increase in its [39]. — Overuse of resources resulted in poor quality [40].",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Developing Food Trends",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "of food being shared on social media.",
+                  "before": "The growth in interest in food fashions started with"
+                },
+                {
+                  "kind": "text",
+                  "text": "The UK food industry is constantly developing products which are newor different.",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Influencers on social media become ‘ambassadors’ for a brand.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "food brands have grown rapidly this way.",
+                  "before": "Sales of"
+                },
+                {
+                  "kind": "text",
+                  "text": "Supermarkets track demand for ingredients on social media.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "are influential.",
+                  "before": "Famous"
+                }
+              ]
+            },
+            {
+              "heading": "Marketing campaigns",
+              "lines": []
+            },
+            {
+              "heading": "The avocado:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "were invited to visit growers in South Africa.",
+                  "before": "—"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "benefits.",
+                  "before": "— Advertising focused on its"
+                }
+              ]
+            },
+            {
+              "heading": "Oat milk:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "— A Swedish brand’s media campaign received publicity by upsetting competitors.",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "shops reduced the need for advertising.",
+                  "before": "— Promotion in the USA through"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "",
+                  "before": "— It appealed to consumers who are concerned about the"
+                }
+              ]
+            },
+            {
+              "heading": "Norwegian skrei:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "of Norwegian seafood.",
+                  "before": "— has helped strengthen the"
+                }
+              ]
+            },
+            {
+              "heading": "— Ethical concerns",
+              "lines": []
+            },
+            {
+              "heading": "Quinoa:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ".",
+                  "before": "— Its success led to an increase in its"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ".",
+                  "before": "— Overuse of resources resulted in poor quality"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "Photos / Photographs / Pictures"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "Vegan"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "Chefs / Cooks"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "Journalists / Reporters"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "Health"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "Coffee"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "Environment"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "Reputation"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "Price / Cost"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "Soil"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Break"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Time"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Shower"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Money"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Memory"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Lifting"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Fall"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Taxi"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Insurance"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Stress"
+    },
+    {
+      "id": 11,
+      "type": "matching",
+      "label": "11",
+      "question": "• walking around the town centre",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 12,
+      "type": "matching",
+      "label": "12",
+      "question": "• helping at concerts",
+      "options": [],
+      "correctAnswer": "I"
+    },
+    {
+      "id": 13,
+      "type": "matching",
+      "label": "13",
+      "question": "• getting involved with community groups",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 14,
+      "type": "matching",
+      "label": "14",
+      "question": "• helping with a magazine",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• participating at lunches for retired people",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• helping with the website",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Which event requires the largest number of volunteers?",
+      "options": [
+        "A. the music festival",
+        "B. the science festival",
+        "C. the book festival"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "What is the most important requirement for volunteers at the festivals?",
+      "options": [
+        "A. interpersonal skills",
+        "B. personal interest in the event",
+        "C. flexibility"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "New volunteers will start working in the week beginning",
+      "options": [
+        "A. 2 September",
+        "B. 9 September",
+        "C. 23 September"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "What is the next annual event for volunteers?",
+      "options": [
+        "A. a boat trip",
+        "B. a barbecue",
+        "C. a party"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "matching",
+      "label": "21",
+      "question": "• Population",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 22,
+      "type": "matching",
+      "label": "22",
+      "question": "• Health",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 23,
+      "type": "matching",
+      "label": "23",
+      "question": "• Economies",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 24,
+      "type": "matching",
+      "label": "24",
+      "question": "• Culture",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• Poverty",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "Rosie says that in her own city the main problem is",
+      "options": [
+        "A. Crime",
+        "B. Housing",
+        "C. Unemployment"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "What recent additions to the outskirts of their cities are both students happy about?",
+      "options": [
+        "A. Conference centres",
+        "B. Sports centres",
+        "C. Retail centres"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 28,
+      "type": "multiple-choice",
+      "label": "28",
+      "question": "The students agree that developing disused industrial sites may",
+      "options": [
+        "A. Have unexpected costs",
+        "B. Damage the urban environment",
+        "C. Destroy valuable historical buildings"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 29,
+      "type": "multiple-choice",
+      "label": "29",
+      "question": "The students will mention Masdar City as an example of an attempt to achieve",
+      "options": [
+        "A. Daily collections for waste recycling",
+        "B. Sustainable energy use",
+        "C. Free transport for everyone"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 30,
+      "type": "multiple-choice",
+      "label": "30",
+      "question": "When discussing the ecotown of Greenhill Abbots, Colin is uncertain about",
+      "options": [
+        "A. What its objectives were",
+        "B. Why there was opposition to it",
+        "C. How much of it has actually been built"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Photos / Photographs / Pictures"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Vegan"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Chefs / Cooks"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Journalists / Reporters"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Health"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Coffee"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Environment"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Reputation"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Price / Cost"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Soil"
+    }
+  ]
+}

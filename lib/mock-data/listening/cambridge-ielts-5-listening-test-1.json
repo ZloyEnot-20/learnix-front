@@ -1,0 +1,999 @@
+{
+  "testId": "cambridge-ielts-05-academic-listening-test-1",
+  "title": "Cambridge IELTS 05 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-05-academic-listening-test-1/",
+  "book": 5,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-1-1.mp3",
+      "content": "Questions 1-4\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. Dreamtime travel agency Tour information Holiday length 2 days Type of transportation [1] Maximum group size [2] Next tour date [3] Hotel name The [4]\n\nQuestions 5-6\n\nChoose TWO letters A–E.\n\nQuestions 7-10\n\nComplete the sentences below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. The tour costs $ [7] . Bookings must be made no later than [8] days in advance. A [9] deposit is required. The customer's reference number is [10] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-4\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Dreamtime travel agency",
+          "sections": [
+            {
+              "heading": "Tour information",
+              "lines": []
+            },
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Holiday length",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Type of transportation"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Maximum group size"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Next tour date"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "Hotel name The"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 5-6\n\nChoose TWO letters A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            5,
+            6
+          ],
+          "label": "5-6",
+          "prompt": "Which TWO things are included in the price of the tour?",
+          "options": [
+            "A. fishing trip",
+            "B. guided bushwalk",
+            "C. reptile park entry",
+            "D. table tennis",
+            "E. tennis"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 7-10\n\nComplete the sentences below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": ".",
+                  "before": "The tour costs $"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "days in advance.",
+                  "before": "Bookings must be made no later than"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "deposit is required.",
+                  "before": "A"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ".",
+                  "before": "The customer's reference number is"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "minibus / by minibus / a minibus"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "15 / 15 people"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "April the 18th / April 18th / 18th of April / 18th April / 18 April / April 18"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "Pallisades"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 6,
+          "type": "multiple-choice",
+          "label": "6",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "280"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "14"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "20 % / 20 percent"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "39745T"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-1-2.mp3",
+      "content": "Questions 11-19\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. Brand of Cot Good Points Problems Verdict Baby Safe Easy to [11] • Did not have any [12] • Babies could trap their [13] in the side bar [14] Choice Cots Easy to [15] • Side did not drop down • Spaces between the bars were [16] [17] Mother's Choice Base of cot could be moved • Did not have any [18] • Pictures could be removed easily [19]\n\nQuestions 20-20\n\nComplete the notes below. Write ONE WORD ONLY for the answer. Metal should not be rusted or bent Edges of cot should not be [20]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-19\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Brand of Cot",
+            "Good Points",
+            "Problems",
+            "Verdict"
+          ],
+          "rows": [
+            [
+              "Baby Safe",
+              "Easy to\n[11]",
+              "• Did not have any\n[12]\n• Babies could trap their\n[13]\nin the side bar",
+              "[14]"
+            ],
+            [
+              "Choice Cots",
+              "Easy to\n[15]",
+              "• Side did not drop down\n• Spaces between the bars were\n[16]",
+              "[17]"
+            ],
+            [
+              "Mother's Choice",
+              "Base of cot could be moved",
+              "• Did not have any\n[18]\n• Pictures could be removed easily",
+              "[19]"
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 20-20\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for the answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Metal should not be rusted or bent"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 20,
+                  "after": "",
+                  "before": "Edges of cot should not be"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "move around / move about"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "brakes"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "fingers"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "satisfactory"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "put it together / put together"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "too wide"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "dangerous"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "wheels"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "the best / best / the best buy / best buy / safe"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "sharp"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-1-3.mp3",
+      "content": "Questions 21-23\n\nChoose the correct letter, A, B or C.\n\nQuestions 24-25\n\nChoose TWO letters A–E.\n\nQuestions 26-30\n\nComplete the summary below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Modular Courses Students study [26] during each module. A module takes [27] and the work is very [28] . To get a Diploma each student has to study [29] and then work on [30] in depth.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-23\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Andrew has worked at the hospital for",
+          "options": [
+            "A. two years.",
+            "B. three years.",
+            "C. five years."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "During the course Andrew's employers will pay",
+          "options": [
+            "A. his fees.",
+            "B. his living costs.",
+            "C. his salary."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "The part-time course lasts for",
+          "options": [
+            "A. one whole year.",
+            "B. 18 months.",
+            "C. two years."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 24-25\n\nChoose TWO letters A–E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            24,
+            25
+          ],
+          "label": "24-25",
+          "prompt": "What TWO types of coursework are required each month on the part-time course?",
+          "options": [
+            "A. a case study",
+            "B. an essay",
+            "C. a survey",
+            "D. a short report",
+            "E. a study diary"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nComplete the summary below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Modular Courses",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "during each module. A module takes",
+                  "before": "Students study"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "and the work is very"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": ". To get a Diploma each student has to study"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "and then work on"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "in depth."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B / D"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "full-time / full time"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "a term / one term / 1 term"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "intensive"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "two modules / 2 modules / for two terms / two terms / for 2 terms / 2 terms"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "a topic / one topic / 1 topic"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-05-academic-listening-test-1-4.mp3",
+      "content": "Questions 31-35\n\nComplete the sentences below. Write NO MORE THAN THREE WORDS for each answer. According to George Bernard Shaw, men are supposed to understand [31] , economics and finance. However, women are more prepared to [32] about them. Women tend to save for [33] and a house. Men tend to save for [34] and for retirement. Women who are left alone may have to pay for [35] when they are old.\n\nQuestions 36-40\n\nComplete the summary below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Saving for the future Research indicates that many women only think about their financial future when a [36] occurs. This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their [37] . A good way for women to develop their [38] in dealing with financial affairs would be to attend classes in [39] . When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in [40] . In such ways, women can have a comfortable, independent retirement.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-35\n\nComplete the sentences below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": ", economics and finance.",
+                  "before": "According to George Bernard Shaw, men are supposed to understand"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "about them.",
+                  "before": "However, women are more prepared to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "and a house.",
+                  "before": "Women tend to save for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "and for retirement.",
+                  "before": "Men tend to save for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "when they are old.",
+                  "before": "Women who are left alone may have to pay for"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 36-40\n\nComplete the summary below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Saving for the future",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "occurs. This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their",
+                  "before": "Research indicates that many women only think about their financial future when a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ". A good way for women to develop their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "in dealing with financial affairs would be to attend classes in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": ". When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": ". In such ways, women can have a comfortable, independent retirement."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "politics"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "learn"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "children's education / their children's education"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "a car"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "nursing care"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "crisis"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "early twenties / early 20s"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "confidence"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "money management"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "low-risk investments"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "minibus / by minibus / a minibus"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "15 / 15 people"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "April the 18th / April 18th / 18th of April / 18th April / 18 April / April 18"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Pallisades"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "Which TWO things are included in the price of the tour?",
+      "options": [
+        "A. fishing trip",
+        "B. guided bushwalk",
+        "C. reptile park entry",
+        "D. table tennis",
+        "E. tennis"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 6,
+      "type": "multiple-choice",
+      "label": "6",
+      "question": "Which TWO things are included in the price of the tour?",
+      "options": [
+        "A. fishing trip",
+        "B. guided bushwalk",
+        "C. reptile park entry",
+        "D. table tennis",
+        "E. tennis"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "280"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "14"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "20 % / 20 percent"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "39745T"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "move around / move about"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "brakes"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fingers"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "satisfactory"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "put it together / put together"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "too wide"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dangerous"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "wheels"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the best / best / the best buy / best buy / safe"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sharp"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Andrew has worked at the hospital for",
+      "options": [
+        "A. two years.",
+        "B. three years.",
+        "C. five years."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "During the course Andrew's employers will pay",
+      "options": [
+        "A. his fees.",
+        "B. his living costs.",
+        "C. his salary."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "The part-time course lasts for",
+      "options": [
+        "A. one whole year.",
+        "B. 18 months.",
+        "C. two years."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "What TWO types of coursework are required each month on the part-time course?",
+      "options": [
+        "A. a case study",
+        "B. an essay",
+        "C. a survey",
+        "D. a short report",
+        "E. a study diary"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What TWO types of coursework are required each month on the part-time course?",
+      "options": [
+        "A. a case study",
+        "B. an essay",
+        "C. a survey",
+        "D. a short report",
+        "E. a study diary"
+      ],
+      "correctAnswer": "B / D"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "full-time / full time"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a term / one term / 1 term"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "intensive"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "two modules / 2 modules / for two terms / two terms / for 2 terms / 2 terms"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a topic / one topic / 1 topic"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "politics"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "learn"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "children's education / their children's education"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a car"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "nursing care"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "crisis"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "early twenties / early 20s"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "confidence"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "money management"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "low-risk investments"
+    }
+  ]
+}

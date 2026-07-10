@@ -1,0 +1,991 @@
+{
+  "testId": "cambridge-ielts-03-academic-listening-test-4",
+  "title": "Cambridge IELTS 03 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-03-academic-listening-test-4/",
+  "book": 3,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-2\n\nComplete the form opposite. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. Birth Statistics Sex: male First name: Tom Surname: Lightfoot Weight: [1] kgs Length: [2] cms Colour of hair: black\n\nQuestions 3-5\n\nLabel the map. Choose your answers from the box below. Write the appropriate letters A-E on the map. A. State Bank | B. St George’s Hospital | C. Garage D. Library | E. University\n\nQuestions 6-10\n\nWrite NO MORE THAN THREE WORDS OR A NUMBER for each answer. Gift for Susan Gift for baby What will they buy? [6] [7] Where will they buy the gifts? [8] [9] Approximate prices? $15 $ [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-2\n\nComplete the form opposite.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Birth Statistics",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Sex",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "First name",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "Surname",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "kgs",
+                  "before": "Weight"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "cms",
+                  "before": "Length"
+                },
+                {
+                  "kind": "text",
+                  "text": "Colour of hair",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 3-5\n\nLabel the map. Choose your answers from the box below. Write the appropriate letters A-E on the map.\n\nA. State Bank | B. St George’s Hospital | C. Garage\n\nD. Library | E. University"
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-2-diagram-6a277c915657c.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "rows": [
+            {
+              "questionId": 3,
+              "label": ""
+            },
+            {
+              "questionId": 4,
+              "label": ""
+            },
+            {
+              "questionId": 5,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 6-10\n\nWrite NO MORE THAN THREE WORDS OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "Gift for Susan",
+            "Gift for baby"
+          ],
+          "rows": [
+            [
+              "What will they buy?",
+              "[6]",
+              "[7]"
+            ],
+            [
+              "Where will they buy the gifts?",
+              "[8]",
+              "[9]"
+            ],
+            [
+              "Approximate prices?",
+              "$15",
+              "$\n[10]"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "4.25 / four and quarter / 4 and a quarter / 4 and quarter"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "46 / forty-six"
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "label": "3",
+          "correctAnswer": "A / State Bank"
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "label": "4",
+          "correctAnswer": "D / Library"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "C / Garage"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "chocolates / box of chocolates"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "a soft toy / a toy / soft toy / toy / a teddy bear / teddy bear / a teddy / teddy / a bear / bear"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "at the markets / markets / at the market / market"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "at the markets / markets / at the market / market"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "35 / thirty-five"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-20\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. For the recommendation column, write A You must buy this. B Maybe you should buy this. C You should never buy this. Name Advantage(s) Disadvantage(s) Recommendation Unbreakable Vacuum Flask • Contains no [11] • Steel guaranteed for 20 years • Keeps warm for [12] • Expensive • Leaves [13] B Whistle Key Holder • Press-button light - useful for finding keyhole • [14] • Unpleasant noise • Doesn't work through [15] [16] Army Flashlight (squeeze light) • Useful for [17] • Works [18] • Has [19] C Decoy Camera (to trick burglars) • Realistic [20] • Difficult to fix onto wall A",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-20\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer.\n\nFor the recommendation column, write\n\nA You must buy this.\n\nB Maybe you should buy this.\n\nC You should never buy this."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Name",
+            "Advantage(s)",
+            "Disadvantage(s)",
+            "Recommendation"
+          ],
+          "rows": [
+            [
+              "Unbreakable Vacuum Flask",
+              "• Contains no\n[11]\n• Steel guaranteed for 20 years\n• Keeps warm for\n[12]",
+              "• Expensive\n• Leaves\n[13]",
+              "B"
+            ],
+            [
+              "Whistle Key Holder",
+              "• Press-button light - useful for finding keyhole\n•\n[14]",
+              "• Unpleasant noise\n• Doesn't work through\n[15]",
+              "[16]"
+            ],
+            [
+              "Army Flashlight (squeeze light)",
+              "• Useful for\n[17]\n• Works\n[18]",
+              "• Has\n[19]",
+              "C"
+            ],
+            [
+              "Decoy Camera (to trick burglars)",
+              "• Realistic\n[20]",
+              "• Difficult to fix onto wall",
+              "A"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "glass"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "eighteen hours / 18 hours"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "a strange taste / a taste / strange taste / taste"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "the small size / small size / small / the size / size"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "metal"
+        },
+        {
+          "id": 16,
+          "type": "fill-in-blank",
+          "label": "16",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 17,
+          "type": "fill-in-blank",
+          "label": "17",
+          "correctAnswer": "outside / outdoor activities / outdoors"
+        },
+        {
+          "id": 18,
+          "type": "fill-in-blank",
+          "label": "18",
+          "correctAnswer": "underwater / beneath water"
+        },
+        {
+          "id": 19,
+          "type": "fill-in-blank",
+          "label": "19",
+          "correctAnswer": "a weak light / weak light"
+        },
+        {
+          "id": 20,
+          "type": "fill-in-blank",
+          "label": "20",
+          "correctAnswer": "flashing light"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-23\n\nChoose the correct letters A—C.\n\nQuestions 24-26\n\nWhat suggestions does Dr Bryson make? Complete the table as follows. Write A if he says KEEP UNCHANGED Write B if he says REWRITE Write C if he says REMOVE COMPLETELY Information on housing [24] Interview data [25] Chronology [26]\n\nQuestions 27-30\n\nComplete the notes below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. SCHEDULE OF ACTION Read 'Approaches to Local History' by John Mervis. Read [27] by Kate Oakwell. Make changes and show to [28] . Do [29] by 29 June. Laser print before [30] . Hand in to Faculty Office.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-23\n\nChoose the correct letters A—C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Amina’s project is about a local",
+          "options": [
+            "A. school.",
+            "B. hospital.",
+            "C. factory."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "Dr Bryson particularly liked",
+          "options": [
+            "A. the introduction.",
+            "B. the first chapter.",
+            "C. the middle section."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "Amina was surprised because she",
+          "options": [
+            "A. thought it was bad.",
+            "B. wrote it quickly.",
+            "C. found it difficult to do."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 24-26\n\nWhat suggestions does Dr Bryson make? Complete the table as follows."
+        },
+        {
+          "type": "notes",
+          "title": "Write A if he says KEEP UNCHANGED",
+          "sections": [
+            {
+              "heading": "Write B if he says REWRITE",
+              "lines": []
+            },
+            {
+              "heading": "Write C if he says REMOVE COMPLETELY",
+              "lines": []
+            },
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "",
+                  "before": "Information on housing"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": "",
+                  "before": "Interview data"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "",
+                  "before": "Chronology"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "SCHEDULE OF ACTION",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Read 'Approaches to Local History' by John Mervis."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "by Kate Oakwell.",
+                  "before": "Read"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": ".",
+                  "before": "Make changes and show to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "by 29 June.",
+                  "before": "Do"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": ".",
+                  "before": "Laser print before"
+                },
+                {
+                  "kind": "text",
+                  "text": "Hand in to Faculty Office."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "Sight and Sound"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "Support Tutor"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "proof reading / proof read"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "10th July / July 10th / 10th of July / 10 July / July 10"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-34\n\nWrite NUMBERS AND/OR NO MORE THAN FOUR WORDS for each answer.\n\nQuestions 35-35\n\nChoose the correct letter A-D.\n\nQuestions 36-38\n\nComplete the table showing where devices used in reducing noise could be fitted in the houses. Write: W for walls D for doors C for ceilings [36] double thickness plaster board [37] mechanical ventilation [38] air conditioning\n\nQuestions 39-39\n\nChoose the correct letters A-D.\n\nQuestions 40-40\n\nChoose the correct letters A-D.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-34\n\nWrite NUMBERS AND/OR NO MORE THAN FOUR WORDS for each answer."
+        },
+        {
+          "type": "text",
+          "text": "[31]"
+        },
+        {
+          "type": "text",
+          "text": "[32]"
+        },
+        {
+          "type": "text",
+          "text": "[33]"
+        },
+        {
+          "type": "text",
+          "text": "[34]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 35-35\n\nChoose the correct letter A-D."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 35,
+          "prompt": "The noise levels at the site can reach",
+          "options": [
+            "A. 45 decibels.",
+            "B. 55 decibels.",
+            "C. 67 decibels.",
+            "D. 70 decibels."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 36-38\n\nComplete the table showing where devices used in reducing noise could be fitted in the houses.\n\nWrite: W for walls\n\nD for doors\n\nC for ceilings"
+        },
+        {
+          "type": "text",
+          "text": "Questions 39-39\n\nChoose the correct letters A-D."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-11-diagram-6a277c9191d43.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "rows": [
+            {
+              "questionId": 39,
+              "label": "Which is the correct construction for acoustic double glazing?"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 40-40\n\nChoose the correct letters A-D."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-03-academic-listening-test-4-12-diagram-6a277c919c0b3.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "rows": [
+            {
+              "questionId": 40,
+              "label": "What is the best layout for the houses?"
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "7.30pm to 5.30am / 7:30pm to 5:30am / 7:30pm and 5:30am"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "housewives / housewifes"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "Sundays / Sunday"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "about $25,000 / $25,000 / about $25000 / $25000 / about 25,000 dollars / 25,000 dollars / about 25000 dollars / 25000 dollars"
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "label": "35",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "W"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "C"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4.25 / four and quarter / 4 and a quarter / 4 and quarter"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "46 / forty-six"
+    },
+    {
+      "id": 3,
+      "type": "multiple-choice",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A / State Bank"
+    },
+    {
+      "id": 4,
+      "type": "multiple-choice",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "D / Library"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C / Garage"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "chocolates / box of chocolates"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a soft toy / a toy / soft toy / toy / a teddy bear / teddy bear / a teddy / teddy / a bear / bear"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "at the markets / markets / at the market / market"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "at the markets / markets / at the market / market"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "35 / thirty-five"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "glass"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "eighteen hours / 18 hours"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a strange taste / a taste / strange taste / taste"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the small size / small size / small / the size / size"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "metal"
+    },
+    {
+      "id": 16,
+      "type": "fill-in-blank",
+      "label": "16",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 17,
+      "type": "fill-in-blank",
+      "label": "17",
+      "question": "",
+      "options": [],
+      "correctAnswer": "outside / outdoor activities / outdoors"
+    },
+    {
+      "id": 18,
+      "type": "fill-in-blank",
+      "label": "18",
+      "question": "",
+      "options": [],
+      "correctAnswer": "underwater / beneath water"
+    },
+    {
+      "id": 19,
+      "type": "fill-in-blank",
+      "label": "19",
+      "question": "",
+      "options": [],
+      "correctAnswer": "a weak light / weak light"
+    },
+    {
+      "id": 20,
+      "type": "fill-in-blank",
+      "label": "20",
+      "question": "",
+      "options": [],
+      "correctAnswer": "flashing light"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Amina’s project is about a local",
+      "options": [
+        "A. school.",
+        "B. hospital.",
+        "C. factory."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "Dr Bryson particularly liked",
+      "options": [
+        "A. the introduction.",
+        "B. the first chapter.",
+        "C. the middle section."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Amina was surprised because she",
+      "options": [
+        "A. thought it was bad.",
+        "B. wrote it quickly.",
+        "C. found it difficult to do."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Sight and Sound"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Support Tutor"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "proof reading / proof read"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10th July / July 10th / 10th of July / 10 July / July 10"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "Between what times is the road traffic lightest?",
+      "options": [],
+      "correctAnswer": "7.30pm to 5.30am / 7:30pm to 5:30am / 7:30pm and 5:30am"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "Who will notice the noise most?",
+      "options": [],
+      "correctAnswer": "housewives / housewifes"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "Which day of the week has the least traffic?",
+      "options": [],
+      "correctAnswer": "Sundays / Sunday"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "What will be the extra cost of modifying houses?",
+      "options": [],
+      "correctAnswer": "about $25,000 / $25,000 / about $25000 / $25000 / about 25,000 dollars / 25,000 dollars / about 25000 dollars / 25000 dollars"
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "label": "35",
+      "question": "The noise levels at the site can reach",
+      "options": [
+        "A. 45 decibels.",
+        "B. 55 decibels.",
+        "C. 67 decibels.",
+        "D. 70 decibels."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "W"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "Which is the correct construction for acoustic double glazing?",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "What is the best layout for the houses?",
+      "options": [],
+      "correctAnswer": "C"
+    }
+  ]
+}

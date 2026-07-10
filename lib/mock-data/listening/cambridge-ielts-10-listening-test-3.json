@@ -1,0 +1,1062 @@
+{
+  "testId": "cambridge-ielts-10-academic-listening-test-3",
+  "title": "Cambridge IELTS 10 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-10-academic-listening-test-3/",
+  "book": 10,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-10-academic-listening-3-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the form below. Write ONE WORD AND/OR A NUMBER for each answer. Early Learning Childcare Centre Enrolment Form Example Parent or guardian: Carol ………. Smith ………. Personal Details Child’s name: Kate Age: [1] Address: [2] Road, Woodside, 4032 Phone: 3345 9865 Childcare Information Days enrolled for: Monday and [3] Start time: [4] am Childcare group: the [5] group Which meal/s are required each day? [6] Medical conditions: needs [7] Emergency contact: Jenny [8] Phone: 3346 7523 Relationship to child: [9] Fees Will pay each [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the form below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "Address:",
+                  "before": "Personal Details Child’s name: Kate Age:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "Road, Woodside, 4032 Phone: 3345 9865 Childcare Information Days enrolled for: Monday and",
+                  "before": "Address:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "Start time:",
+                  "before": "Road, Woodside, 4032 Phone: 3345 9865 Childcare Information Days enrolled for: Monday and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "am Childcare group: the",
+                  "before": "Start time:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "group Which meal/s are required each day?",
+                  "before": "am Childcare group: the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "Medical conditions: needs",
+                  "before": "group Which meal/s are required each day?"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "Emergency contact: Jenny",
+                  "before": "Medical conditions: needs"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "Phone: 3346 7523 Relationship to child:",
+                  "before": "Emergency contact: Jenny"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "Fees Will pay each",
+                  "before": "Phone: 3346 7523 Relationship to child:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "Fees Will pay each"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "4"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "46 Wombat"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Thursday"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "8.30 / 8:30"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "red"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "lunch"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "glasses"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "BALL"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "aunt"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "month"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-10-academic-listening-3-audio-2.mp3",
+      "content": "Questions 11-12\n\nChoose TWO letters, A-E .\n\nQuestions 13-15\n\nChoose the correct letter, A , B or C .\n\nQuestions 16-20\n\nWhich dolphin does Alice make each of the following comments about? Write the correct letter, A , B , C or D , next to questions Dolphins Comments",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-12\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            11,
+            12
+          ],
+          "label": "11-12",
+          "prompt": "Which TWO things does Alice say about the Dolphin Conservation Trust?",
+          "options": [
+            "A. Children make up most of the membership.",
+            "B. It’s the country’s largest conservation organisation.",
+            "C. It helps finance campaigns for changes in fishing practices.",
+            "D. It employs several dolphin experts full-time.",
+            "E. Volunteers help in various ways."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 13-15\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "Why is Alice so pleased the Trust has won the Charity Commission award?",
+          "options": [
+            "A. It has brought in extra money.",
+            "B. It made the work of the trust better known.",
+            "C. It has attracted more members."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "Alice says oil exploration causes problems to dolphins because of",
+          "options": [
+            "A. noise.",
+            "B. oil leaks.",
+            "C. movement of ships."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "Alice became interested in dolphins when",
+          "options": [
+            "A. she saw one swimming near her home.",
+            "B. she heard a speaker at her school.",
+            "C. she read a book about them."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-20\n\nWhich dolphin does Alice make each of the following comments about?\n\nWrite the correct letter, A, B, C or D, next to questions\n\nDolphins\n\nComments"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "It has not been seen this year.",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "It is photographed more than the others.",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "It is always very energetic.",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "It is the newest one in the scheme.",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "It has an unusual shape.",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. Moondancer",
+            "B. Echo",
+            "C. Kiwi",
+            "D. Samson"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-10-academic-listening-3-audio-3.mp3",
+      "content": "Questions 21-25\n\nChoose the correct letter, A , B or C . Theatre Studies Course\n\nQuestions 26-30\n\nWhat action is needed for the following stages in doing the ‘year abroad’ option? Choose FIVE answers from the box and write the correct letter, A-G , next to questions Action Stages in doing the ‘year abroad’ option",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nChoose the correct letter, A, B or C.\n\nTheatre Studies Course"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "What helped Rob to prepare to play the character of a doctor?",
+          "options": [
+            "A. the stories his grandfather told him",
+            "B. the times when he watched his grandfather working",
+            "C. the way he imagined his grandfather at work"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "In the play’s first scene, the boredom of village life was suggested by",
+          "options": [
+            "A. repetition of words and phrases.",
+            "B. scenery painted in dull colours.",
+            "C. long pauses within conversations."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "What has Rob learned about himself through working in a group?",
+          "options": [
+            "A. He likes to have clear guidelines.",
+            "B. He copes well with stress.",
+            "C. He thinks he is a good leader."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "To support the production, research material was used which described",
+          "options": [
+            "A. political developments.",
+            "B. changing social attitudes.",
+            "C. economic transformations."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What problem did the students overcome in the final rehearsal?",
+          "options": [
+            "A. one person forgetting their words",
+            "B. an equipment failure",
+            "C. the injury of one character"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nWhat action is needed for the following stages in doing the ‘year abroad’ option?\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to questions\n\nAction\n\nStages in doing the ‘year abroad’ option"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "in the second year of the course",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "when first choosing where to go",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "when sending in your choices",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "when writing your personal statement",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "when doing the year abroad",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. be on time",
+            "B. get a letter of recommendation",
+            "C. plan for the final year",
+            "D. make sure the institution’s focus is relevant",
+            "E. show ability in Theatre Studies",
+            "F. make travel arrangements and bookings",
+            "G. ask for help"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-10-academic-listening-3-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. ‘Self-regulatory focus theory’ and leadership Self-regulatory focus theory People’s focus is to approach pleasure or avoid pain Promotion goals focus on [31] Prevention goals emphasise avoiding punishment Factors that affect people’s focus The Chronic Factor comes from one’s [32] The [33] Factor we are more likely to focus on promotion goals when with a [34] we are more likely to focus on prevention goals with our boss How people’s focus affects them Promotion Focus: People think about an ideal version of themselves, their [35] and their gains. Prevention Focus: People think about their ‘ought’ self and their obligations Leaders Leadership behaviour and [36] affects people’s focus Transformational Leaders: pay special attention to the [37] of their followers passionately communicate a clear [38] inspire promotion focus in followers Transactional Leaders: create [39] to make expectations clear emphasise the results of a mistake inspire prevention focus in followers Conclusion Promotion Focus is good for jobs requiring [40] Prevention Focus is good for work such as a surgeon Leaders’ actions affect which focus people use",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "‘Self-regulatory focus theory’ and leadership",
+          "sections": [
+            {
+              "heading": "Self-regulatory focus theory",
+              "lines": []
+            },
+            {
+              "heading": "People’s focus is to approach pleasure or avoid pain",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "",
+                  "before": "Promotion goals focus on"
+                }
+              ]
+            },
+            {
+              "heading": "Prevention goals emphasise avoiding punishment",
+              "lines": []
+            },
+            {
+              "heading": "Factors that affect people’s focus",
+              "lines": []
+            },
+            {
+              "heading": "The Chronic Factor",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "comes from one’s"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "Factor",
+                  "before": "The"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "",
+                  "before": "we are more likely to focus on promotion goals when with a"
+                },
+                {
+                  "kind": "text",
+                  "text": "we are more likely to focus on prevention goals with our boss"
+                }
+              ]
+            },
+            {
+              "heading": "How people’s focus affects them",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "and their gains.",
+                  "before": "Promotion Focus: People think about an ideal version of themselves, their"
+                }
+              ]
+            },
+            {
+              "heading": "Prevention Focus: People think about their ‘ought’ self and their obligations",
+              "lines": []
+            },
+            {
+              "heading": "Leaders",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "affects people’s focus",
+                  "before": "Leadership behaviour and"
+                }
+              ]
+            },
+            {
+              "heading": "Transformational Leaders:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "of their followers",
+                  "before": "pay special attention to the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "",
+                  "before": "passionately communicate a clear"
+                },
+                {
+                  "kind": "text",
+                  "text": "inspire promotion focus in followers"
+                }
+              ]
+            },
+            {
+              "heading": "Transactional Leaders:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "to make expectations clear",
+                  "before": "create"
+                },
+                {
+                  "kind": "text",
+                  "text": "emphasise the results of a mistake"
+                },
+                {
+                  "kind": "text",
+                  "text": "inspire prevention focus in followers"
+                }
+              ]
+            },
+            {
+              "heading": "Conclusion",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "",
+                  "before": "Promotion Focus is good for jobs requiring"
+                }
+              ]
+            },
+            {
+              "heading": "Prevention Focus is good for work such as a surgeon",
+              "lines": []
+            },
+            {
+              "heading": "Leaders’ actions affect which focus people use",
+              "lines": []
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "achievement / achievements"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "personality / character"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "Situational"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "friend"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "aspirations / ambitions"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "style"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "development"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "vision"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "structures"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "innovation / innovations"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "46 Wombat"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Thursday"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "8.30 / 8:30"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "red"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lunch"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "glasses"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "BALL"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "aunt"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "month"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Which TWO things does Alice say about the Dolphin Conservation Trust?",
+      "options": [
+        "A. Children make up most of the membership.",
+        "B. It’s the country’s largest conservation organisation.",
+        "C. It helps finance campaigns for changes in fishing practices.",
+        "D. It employs several dolphin experts full-time.",
+        "E. Volunteers help in various ways."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Which TWO things does Alice say about the Dolphin Conservation Trust?",
+      "options": [
+        "A. Children make up most of the membership.",
+        "B. It’s the country’s largest conservation organisation.",
+        "C. It helps finance campaigns for changes in fishing practices.",
+        "D. It employs several dolphin experts full-time.",
+        "E. Volunteers help in various ways."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Why is Alice so pleased the Trust has won the Charity Commission award?",
+      "options": [
+        "A. It has brought in extra money.",
+        "B. It made the work of the trust better known.",
+        "C. It has attracted more members."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Alice says oil exploration causes problems to dolphins because of",
+      "options": [
+        "A. noise.",
+        "B. oil leaks.",
+        "C. movement of ships."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Alice became interested in dolphins when",
+      "options": [
+        "A. she saw one swimming near her home.",
+        "B. she heard a speaker at her school.",
+        "C. she read a book about them."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• It has not been seen this year.",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• It is photographed more than the others.",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• It is always very energetic.",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• It is the newest one in the scheme.",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• It has an unusual shape.",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "What helped Rob to prepare to play the character of a doctor?",
+      "options": [
+        "A. the stories his grandfather told him",
+        "B. the times when he watched his grandfather working",
+        "C. the way he imagined his grandfather at work"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "In the play’s first scene, the boredom of village life was suggested by",
+      "options": [
+        "A. repetition of words and phrases.",
+        "B. scenery painted in dull colours.",
+        "C. long pauses within conversations."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "What has Rob learned about himself through working in a group?",
+      "options": [
+        "A. He likes to have clear guidelines.",
+        "B. He copes well with stress.",
+        "C. He thinks he is a good leader."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "To support the production, research material was used which described",
+      "options": [
+        "A. political developments.",
+        "B. changing social attitudes.",
+        "C. economic transformations."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What problem did the students overcome in the final rehearsal?",
+      "options": [
+        "A. one person forgetting their words",
+        "B. an equipment failure",
+        "C. the injury of one character"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• in the second year of the course",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• when first choosing where to go",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• when sending in your choices",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• when writing your personal statement",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• when doing the year abroad",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "achievement / achievements"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "personality / character"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Situational"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "friend"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "aspirations / ambitions"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "style"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "development"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "vision"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "structures"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "innovation / innovations"
+    }
+  ]
+}

@@ -1,0 +1,1071 @@
+{
+  "testId": "cambridge-ielts-08-academic-listening-test-4",
+  "title": "Cambridge IELTS 08 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-08-academic-listening-test-4/",
+  "book": 8,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-4-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. West Bay Hotel – details of job Example Answer Newspaper advert for temporary staff Vacancies for [1] Two shifts Can choose your [2] (must be the same each week) Pay: £5.50 per hour, including a [3] A [4] is provided in the hotel Total weekly pay: £231 Dress: a white shirt and [5] trousers (not supplied) a [6] (supplied) Starting date: [7] Call Jane [8] (Service Manager) before [9] tomorrow (Tel: 832009) She'll require a [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "West Bay Hotel – details of job",
+          "sections": [
+            {
+              "heading": "Example Answer",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Newspaper advert for temporary staff"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Vacancies for"
+                },
+                {
+                  "kind": "text",
+                  "text": "Two shifts"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "(must be the same each week)",
+                  "before": "Can choose your"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Pay: £5.50 per hour, including a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "is provided in the hotel",
+                  "before": "A"
+                },
+                {
+                  "kind": "text",
+                  "text": "Total weekly pay: £231"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "trousers (not supplied) a",
+                  "before": "Dress: a white shirt and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "(supplied)"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "(supplied)",
+                  "before": "a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "",
+                  "before": "Starting date:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "(Service Manager) before",
+                  "before": "Call Jane"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "tomorrow (Tel: 832009)"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "",
+                  "before": "She'll require a"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "waiters"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "day off"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "break"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "free meal / meal"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "dark"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "jacket"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "28 June / June 28 / 28th June / June 28th / 28th of June"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "Urwin"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "midday"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "reference"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-4-2.mp3",
+      "content": "Questions 11-13\n\nChoose the correct letter, A, B or C.\n\nQuestions 14-20\n\nLabel the map below. Write the correct letter, A-H.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "Community groups are mainly concerned about",
+          "options": [
+            "A. pedestrian safety.",
+            "B. traffic jams.",
+            "C. increased pollution."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "It has been decided that the overhead power lines will be",
+          "options": [
+            "A. extended.",
+            "B. buried.",
+            "C. repaired."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "The expenses related to the power lines will be paid for by",
+          "options": [
+            "A. the council.",
+            "B. the power company.",
+            "C. local businesses."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 14-20\n\nLabel the map below.\n\nWrite the correct letter, A-H."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-4-3-diagram-6a261f0469b72.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "rows": [
+            {
+              "questionId": 14,
+              "label": "trees"
+            },
+            {
+              "questionId": 15,
+              "label": "wider footpaths"
+            },
+            {
+              "questionId": 16,
+              "label": "coloured road surface"
+            },
+            {
+              "questionId": 17,
+              "label": "new sign"
+            },
+            {
+              "questionId": 18,
+              "label": "traffic lights"
+            },
+            {
+              "questionId": 19,
+              "label": "artwork"
+            },
+            {
+              "questionId": 20,
+              "label": "children's playground"
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "E"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-4-3.mp3",
+      "content": "Questions 21-22\n\nChoose TWO letters, A-E.\n\nQuestions 23-24\n\nChoose TWO letters, A-E.\n\nQuestions 25-26\n\nChoose the correct letter, A, B or C.\n\nQuestions 27-30\n\nComplete the flow-chart below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. Advice on exam preparation Make sure you know the exam requirements ↓ Find some past papers ↓ Work out your [27] for revision and write them on a card ↓ Make a [28] and keep it in view ↓ Divide revision into [29] for each day ↓ Write one [30] about each topic ↓ Practise writing some exam answers",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-22\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            21,
+            22
+          ],
+          "label": "21-22",
+          "prompt": "In which TWO ways is Dan financing his course?",
+          "options": [
+            "A. He is receiving money from the government.",
+            "B. His family are willing to help him.",
+            "C. The college is giving him a small grant.",
+            "D. His local council is supporting him for a limited period.",
+            "E. A former employer is providing partial funding."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 23-24\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            23,
+            24
+          ],
+          "label": "23-24",
+          "prompt": "Which TWO reasons does Jeannie give for deciding to leave some college clubs?",
+          "options": [
+            "A. She is not sufficiently challenged.",
+            "B. The activity interferes with her studies.",
+            "C. She does not have enough time.",
+            "D. The activity is too demanding physically.",
+            "E. She does not think she is any good at the activity."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-26\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What does Dan say about the seminars on the course?",
+          "options": [
+            "A. The other students do not give him a chance to speak.",
+            "B. The seminars make him feel inferior to the other students.",
+            "C. The preparation for seminars takes too much time."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 26,
+          "prompt": "What does Jeannie say about the tutorials on the course?",
+          "options": [
+            "A. They are an inefficient way of providing guidance.",
+            "B. They are more challenging than she had expected.",
+            "C. They are helping her to develop her study skills."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nComplete the flow-chart below.\n\nChoose NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Advice on exam preparation",
+          "sections": [
+            {
+              "heading": "Make sure you know the exam requirements",
+              "lines": []
+            },
+            {
+              "heading": "↓",
+              "lines": []
+            },
+            {
+              "heading": "Find some past papers",
+              "lines": []
+            },
+            {
+              "heading": "↓",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "for revision and write them on a card",
+                  "before": "Work out your"
+                }
+              ]
+            },
+            {
+              "heading": "↓",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "and keep it in view",
+                  "before": "Make a"
+                }
+              ]
+            },
+            {
+              "heading": "↓",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "for each day",
+                  "before": "Divide revision into"
+                }
+              ]
+            },
+            {
+              "heading": "↓",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "about each topic",
+                  "before": "Write one"
+                }
+              ]
+            },
+            {
+              "heading": "↓",
+              "lines": []
+            },
+            {
+              "heading": "Practise writing some exam answers",
+              "lines": []
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "priorities"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "timetable"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "small tasks / tasks"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "single paragraph / paragraph"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-4-4.mp3",
+      "content": "Questions 31-36\n\nWhich painting styles have the following features? Write the correct letter, A, B or C.\n\nQuestions 37-40\n\nComplete the notes below. Write NO MORE THAN TWO WORDS for each answer. Rainbow Serpent Project Aim of project: to identify the [37] used as the basis for the Rainbow Serpent Yam Period environmental changes led to higher [38] traditional activities were affected, especially [39] Rainbow Serpent image similar to a sea horse unusual because it appeared in inland areas symbolises [40] in Aboriginal culture",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-36\n\nWhich painting styles have the following features?\n\nWrite the correct letter, A, B or C."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "figures revealing bones",
+              "questionId": 31
+            },
+            {
+              "stepLabel": "rounded figures",
+              "questionId": 32
+            },
+            {
+              "stepLabel": "figures with parts missing",
+              "questionId": 33
+            },
+            {
+              "stepLabel": "figures smaller than life size",
+              "questionId": 34
+            },
+            {
+              "stepLabel": "sea creatures",
+              "questionId": 35
+            },
+            {
+              "stepLabel": "plants",
+              "questionId": 36
+            }
+          ],
+          "options": [
+            "A. Dynamic",
+            "B. Yam",
+            "C. Modern"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 37-40\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Rainbow Serpent Project",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "used as the basis for the Rainbow Serpent",
+                  "before": "Aim of project: to identify the"
+                }
+              ]
+            },
+            {
+              "heading": "Yam Period",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "",
+                  "before": "environmental changes led to higher"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "",
+                  "before": "traditional activities were affected, especially"
+                }
+              ]
+            },
+            {
+              "heading": "Rainbow Serpent image",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "similar to a sea horse"
+                },
+                {
+                  "kind": "text",
+                  "text": "unusual because it appeared in inland areas"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "in Aboriginal culture",
+                  "before": "symbolises"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "matching",
+          "label": "31",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 32,
+          "type": "matching",
+          "label": "32",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 33,
+          "type": "matching",
+          "label": "33",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 34,
+          "type": "matching",
+          "label": "34",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 35,
+          "type": "matching",
+          "label": "35",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 36,
+          "type": "matching",
+          "label": "36",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "animal / creature"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "sea levels / water levels"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "hunting"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "creation"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "waiters"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "day off"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "break"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "free meal / meal"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "dark"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "jacket"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "28 June / June 28 / 28th June / June 28th / 28th of June"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Urwin"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "midday"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "reference"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Community groups are mainly concerned about",
+      "options": [
+        "A. pedestrian safety.",
+        "B. traffic jams.",
+        "C. increased pollution."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "It has been decided that the overhead power lines will be",
+      "options": [
+        "A. extended.",
+        "B. buried.",
+        "C. repaired."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "The expenses related to the power lines will be paid for by",
+      "options": [
+        "A. the council.",
+        "B. the power company.",
+        "C. local businesses."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "trees",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "wider footpaths",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "coloured road surface",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "new sign",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "traffic lights",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "artwork",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "children's playground",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "In which TWO ways is Dan financing his course?",
+      "options": [
+        "A. He is receiving money from the government.",
+        "B. His family are willing to help him.",
+        "C. The college is giving him a small grant.",
+        "D. His local council is supporting him for a limited period.",
+        "E. A former employer is providing partial funding."
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "In which TWO ways is Dan financing his course?",
+      "options": [
+        "A. He is receiving money from the government.",
+        "B. His family are willing to help him.",
+        "C. The college is giving him a small grant.",
+        "D. His local council is supporting him for a limited period.",
+        "E. A former employer is providing partial funding."
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Which TWO reasons does Jeannie give for deciding to leave some college clubs?",
+      "options": [
+        "A. She is not sufficiently challenged.",
+        "B. The activity interferes with her studies.",
+        "C. She does not have enough time.",
+        "D. The activity is too demanding physically.",
+        "E. She does not think she is any good at the activity."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Which TWO reasons does Jeannie give for deciding to leave some college clubs?",
+      "options": [
+        "A. She is not sufficiently challenged.",
+        "B. The activity interferes with her studies.",
+        "C. She does not have enough time.",
+        "D. The activity is too demanding physically.",
+        "E. She does not think she is any good at the activity."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What does Dan say about the seminars on the course?",
+      "options": [
+        "A. The other students do not give him a chance to speak.",
+        "B. The seminars make him feel inferior to the other students.",
+        "C. The preparation for seminars takes too much time."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "What does Jeannie say about the tutorials on the course?",
+      "options": [
+        "A. They are an inefficient way of providing guidance.",
+        "B. They are more challenging than she had expected.",
+        "C. They are helping her to develop her study skills."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "priorities"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "timetable"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "small tasks / tasks"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "single paragraph / paragraph"
+    },
+    {
+      "id": 31,
+      "type": "matching",
+      "label": "31",
+      "question": "• figures revealing bones",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 32,
+      "type": "matching",
+      "label": "32",
+      "question": "• rounded figures",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "type": "matching",
+      "label": "33",
+      "question": "• figures with parts missing",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 34,
+      "type": "matching",
+      "label": "34",
+      "question": "• figures smaller than life size",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 35,
+      "type": "matching",
+      "label": "35",
+      "question": "• sea creatures",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 36,
+      "type": "matching",
+      "label": "36",
+      "question": "• plants",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "animal / creature"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "sea levels / water levels"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "hunting"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "creation"
+    }
+  ]
+}

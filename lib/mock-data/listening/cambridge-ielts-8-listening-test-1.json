@@ -1,0 +1,1079 @@
+{
+  "testId": "cambridge-ielts-08-academic-listening-test-1",
+  "title": "Cambridge IELTS 08 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-08-academic-listening-test-1/",
+  "book": 8,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-1-1.mp3",
+      "content": "Questions 1-2\n\nChoose the correct letter, A, B or C.\n\nQuestions 3-10\n\nComplete the form below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. SUMMER MUSIC FESTIVAL BOOKING FORM NAME: George O'Neill ADDRESS: [3] , Westsea POSTCODE: [4] TELEPHONE: [5] Date Event Price per ticket No. of tickets 5 June Instrumental group – Guitarrini £7.50 2 17 June Singer (price includes [6] in the garden) £6 2 22 June [7] (Anna Ventura) £7.00 1 23 June Spanish Dance & Guitar Concert £ [8] [9] NB Children / Students / Senior Citizens have [10] discount on all tickets.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-2\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 1,
+          "prompt": "In the lobby of the library George saw",
+          "options": [
+            "A. a group playing music.",
+            "B. a display of instruments.",
+            "C. a video about the festival."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 2,
+          "prompt": "George wants to sit at the back so they can",
+          "options": [
+            "A. see well.",
+            "B. hear clearly.",
+            "C. pay less."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 3-10\n\nComplete the form below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "SUMMER MUSIC FESTIVAL",
+          "sections": [
+            {
+              "heading": "BOOKING FORM",
+              "lines": []
+            },
+            {
+              "heading": "NAME: George O'Neill",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": ", Westsea",
+                  "before": "ADDRESS:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "POSTCODE:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "TELEPHONE:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "discount on all tickets.",
+                  "before": "NB Children / Students / Senior Citizens have"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "multiple-choice",
+          "label": "1",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "label": "2",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "48 North Avenue"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "WS6 2YH"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "01674 553242"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "free drinks / drinks / free refreshments / refreshments"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "the pianist / pianist"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "10.50"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "4"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "50% / 50 percent"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-1-2.mp3",
+      "content": "Questions 11-15\n\nComplete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. The museum closes at [11] p.m. on Mondays. The museum is not open on [12] . School groups are met by tour guides in the [13] . The whole visit takes 90 minutes, including [14] minutes for the guided tour. There are [15] behind the museum where students can have lunch.\n\nQuestions 16-18\n\nChoose THREE letters, A-G.\n\nQuestions 19-20\n\nChoose TWO letters, A-E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-15\n\nComplete the sentences below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 11,
+                  "after": "p.m. on Mondays.",
+                  "before": "The museum closes at"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 12,
+                  "after": ".",
+                  "before": "The museum is not open on"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 13,
+                  "after": ".",
+                  "before": "School groups are met by tour guides in the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 14,
+                  "after": "minutes for the guided tour.",
+                  "before": "The whole visit takes 90 minutes, including"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 15,
+                  "after": "behind the museum where students can have lunch.",
+                  "before": "There are"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-18\n\nChoose THREE letters, A-G."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            16,
+            17,
+            18
+          ],
+          "label": "16-18",
+          "prompt": "Which THREE things can students have with them in the museum?",
+          "options": [
+            "A. food",
+            "B. water",
+            "C. cameras",
+            "D. books",
+            "E. bags",
+            "F. pens",
+            "G. worksheets"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            19,
+            20
+          ],
+          "label": "19-20",
+          "prompt": "Which TWO activities can students do after the tour at present?",
+          "options": [
+            "A. build model dinosaurs",
+            "B. watch films",
+            "C. draw dinosaurs",
+            "D. find dinosaur eggs",
+            "E. play computer games"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "fill-in-blank",
+          "label": "11",
+          "correctAnswer": "1.30 / 1:30"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "25 December / 25th December / 25th of December"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "car park"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "45"
+        },
+        {
+          "id": 15,
+          "type": "fill-in-blank",
+          "label": "15",
+          "correctAnswer": "tables"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "C / F / G"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "C / F / G"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "C / F / G"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "B / E"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-1-3.mp3",
+      "content": "Questions 21-24\n\nChoose the correct letter, A, B or C.\n\nQuestions 25-27\n\nChoose THREE letters, A-G.\n\nQuestions 28-30\n\nComplete the sentences below. Write ONE WORD AND/OR A NUMBER for each answer. The tribal park covers [28] hectares. Sandra suggests that they share the [29] for transport. She says they could also explore the local [30] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-24\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "The tutor thinks that Sandra's proposal",
+          "options": [
+            "A. should be re-ordered in some parts.",
+            "B. needs a contents page.",
+            "C. ought to include more information."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "The proposal would be easier to follow if Sandra",
+          "options": [
+            "A. inserted subheadings.",
+            "B. used more paragraphs.",
+            "C. shortened her sentences."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "What was the problem with the formatting on Sandra's proposal?",
+          "options": [
+            "A. Separate points were not clearly identified.",
+            "B. The headings were not always clear.",
+            "C. Page numbering was not used in an appropriate way."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Sandra became interested in visiting the Navajo National Park through",
+          "options": [
+            "A. articles she read.",
+            "B. movies she saw as a child.",
+            "C. photographs she found on the internet."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-27\n\nChoose THREE letters, A-G."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            25,
+            26,
+            27
+          ],
+          "label": "25-27",
+          "prompt": "Which THREE topics does Sandra agree to include in the proposal?",
+          "options": [
+            "A. climate change",
+            "B. field trip activities",
+            "C. geographical features",
+            "D. impact of tourism",
+            "E. myths and legends",
+            "F. plant and animal life",
+            "G. social history"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 28-30\n\nComplete the sentences below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "hectares.",
+                  "before": "The tribal park covers"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "for transport.",
+                  "before": "Sandra suggests that they share the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": ".",
+                  "before": "She says they could also explore the local"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B / C / F"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "B / C / F"
+        },
+        {
+          "id": 27,
+          "type": "multiple-choice",
+          "label": "27",
+          "correctAnswer": "B / C / F"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "12,000 / 12000"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "horses"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "caves"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-1-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Geography Studying geography helps us to understand: the effects of different processes on the [31] of the Earth the dynamic between [32] and population Two main branches of study: physical features human lifestyles and their [33] Specific study areas: biophysical, topographic, political, social, economic, historical and [34] geography, and also cartography Key point: geography helps us to understand our surroundings and the associated [35] What do geographers do? find data – e.g. conduct censuses, collect information in the form of [36] using computer and satellite technology analyse data – identify [37] , e.g. cause and effect publish findings in form of:a) maps easy to carry can show physical features of large and small areas BUT a two-dimensional map will always have some [38] b) aerial photos can show vegetation problems, [39] density, ocean floor etc. c) Landsat pictures sent to receiving stations used for monitoring [40] conditions etc.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Geography",
+          "sections": [
+            {
+              "heading": "Studying geography helps us to understand:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "of the Earth",
+                  "before": "the effects of different processes on the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "and population",
+                  "before": "the dynamic between"
+                }
+              ]
+            },
+            {
+              "heading": "Two main branches of study:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "physical features"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "human lifestyles and their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "geography, and also cartography",
+                  "before": "Specific study areas: biophysical, topographic, political, social, economic, historical and"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "Key point: geography helps us to understand our surroundings and the associated"
+                }
+              ]
+            },
+            {
+              "heading": "What do geographers do?",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "using computer and satellite technology",
+                  "before": "find data – e.g. conduct censuses, collect information in the form of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ", e.g. cause and effect",
+                  "before": "analyse data – identify"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "b) aerial photos can show vegetation problems,",
+                  "before": "publish findings in form of:a) maps easy to carry can show physical features of large and small areas BUT a two-dimensional map will always have some"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "density, ocean floor etc. c) Landsat pictures sent to receiving stations used for monitoring"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "conditions etc."
+                },
+                {
+                  "kind": "text",
+                  "text": "easy to carry"
+                },
+                {
+                  "kind": "text",
+                  "text": "can show physical features of large and small areas"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "",
+                  "before": "BUT a two-dimensional map will always have some"
+                }
+              ]
+            },
+            {
+              "heading": "b) aerial photos",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "density, ocean floor etc.",
+                  "before": "can show vegetation problems,"
+                }
+              ]
+            },
+            {
+              "heading": "c) Landsat pictures sent to receiving stations",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "conditions etc.",
+                  "before": "used for monitoring"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "surface"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "environment"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "impacts / impact"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "urban"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "problems"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "images"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "patterns"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "distortion"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "traffic"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "weather"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "multiple-choice",
+      "label": "1",
+      "question": "In the lobby of the library George saw",
+      "options": [
+        "A. a group playing music.",
+        "B. a display of instruments.",
+        "C. a video about the festival."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 2,
+      "type": "multiple-choice",
+      "label": "2",
+      "question": "George wants to sit at the back so they can",
+      "options": [
+        "A. see well.",
+        "B. hear clearly.",
+        "C. pay less."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "48 North Avenue"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "WS6 2YH"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "01674 553242"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "free drinks / drinks / free refreshments / refreshments"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the pianist / pianist"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10.50"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "50% / 50 percent"
+    },
+    {
+      "id": 11,
+      "type": "fill-in-blank",
+      "label": "11",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1.30 / 1:30"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "25 December / 25th December / 25th of December"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "car park"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "45"
+    },
+    {
+      "id": 15,
+      "type": "fill-in-blank",
+      "label": "15",
+      "question": "",
+      "options": [],
+      "correctAnswer": "tables"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Which THREE things can students have with them in the museum?",
+      "options": [
+        "A. food",
+        "B. water",
+        "C. cameras",
+        "D. books",
+        "E. bags",
+        "F. pens",
+        "G. worksheets"
+      ],
+      "correctAnswer": "C / F / G"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Which THREE things can students have with them in the museum?",
+      "options": [
+        "A. food",
+        "B. water",
+        "C. cameras",
+        "D. books",
+        "E. bags",
+        "F. pens",
+        "G. worksheets"
+      ],
+      "correctAnswer": "C / F / G"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Which THREE things can students have with them in the museum?",
+      "options": [
+        "A. food",
+        "B. water",
+        "C. cameras",
+        "D. books",
+        "E. bags",
+        "F. pens",
+        "G. worksheets"
+      ],
+      "correctAnswer": "C / F / G"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Which TWO activities can students do after the tour at present?",
+      "options": [
+        "A. build model dinosaurs",
+        "B. watch films",
+        "C. draw dinosaurs",
+        "D. find dinosaur eggs",
+        "E. play computer games"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "Which TWO activities can students do after the tour at present?",
+      "options": [
+        "A. build model dinosaurs",
+        "B. watch films",
+        "C. draw dinosaurs",
+        "D. find dinosaur eggs",
+        "E. play computer games"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "The tutor thinks that Sandra's proposal",
+      "options": [
+        "A. should be re-ordered in some parts.",
+        "B. needs a contents page.",
+        "C. ought to include more information."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "The proposal would be easier to follow if Sandra",
+      "options": [
+        "A. inserted subheadings.",
+        "B. used more paragraphs.",
+        "C. shortened her sentences."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "What was the problem with the formatting on Sandra's proposal?",
+      "options": [
+        "A. Separate points were not clearly identified.",
+        "B. The headings were not always clear.",
+        "C. Page numbering was not used in an appropriate way."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Sandra became interested in visiting the Navajo National Park through",
+      "options": [
+        "A. articles she read.",
+        "B. movies she saw as a child.",
+        "C. photographs she found on the internet."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Which THREE topics does Sandra agree to include in the proposal?",
+      "options": [
+        "A. climate change",
+        "B. field trip activities",
+        "C. geographical features",
+        "D. impact of tourism",
+        "E. myths and legends",
+        "F. plant and animal life",
+        "G. social history"
+      ],
+      "correctAnswer": "B / C / F"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "Which THREE topics does Sandra agree to include in the proposal?",
+      "options": [
+        "A. climate change",
+        "B. field trip activities",
+        "C. geographical features",
+        "D. impact of tourism",
+        "E. myths and legends",
+        "F. plant and animal life",
+        "G. social history"
+      ],
+      "correctAnswer": "B / C / F"
+    },
+    {
+      "id": 27,
+      "type": "multiple-choice",
+      "label": "27",
+      "question": "Which THREE topics does Sandra agree to include in the proposal?",
+      "options": [
+        "A. climate change",
+        "B. field trip activities",
+        "C. geographical features",
+        "D. impact of tourism",
+        "E. myths and legends",
+        "F. plant and animal life",
+        "G. social history"
+      ],
+      "correctAnswer": "B / C / F"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "12,000 / 12000"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "horses"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "caves"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "surface"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "environment"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "impacts / impact"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "urban"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "problems"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "images"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "patterns"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "distortion"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "traffic"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "weather"
+    }
+  ]
+}

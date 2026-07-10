@@ -1,0 +1,1056 @@
+{
+  "testId": "cambridge-ielts-08-academic-listening-test-2",
+  "title": "Cambridge IELTS 08 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-08-academic-listening-test-2/",
+  "book": 8,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-2-1.mp3",
+      "content": "Questions 1-3\n\nComplete the form below. Write NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer. TOTAL INSURANCE INCIDENT REPORT Example Name Answer Michael Alexander Address 24 Manly Street, [1] , Sydney Shipping agent [2] Place of origin China Date of arrival [3] Reference number 601 ACK\n\nQuestions 4-10\n\nComplete the table below. Write ONE WORD AND/OR A NUMBER for each answer. Item Damage Cost to repair/replace Television The [4] needs to be replaced not known The [5] cabinet The [6] of the cabinet is damaged $ [7] Dining room table A [8] is split $200 Set of china Six [9] were broken about $ [10] in total",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-3\n\nComplete the form below.\n\nWrite NO MORE THAN THREE WORDS AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Example Name",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": ", Sydney",
+                  "before": "Address 24 Manly Street,"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Shipping agent"
+                },
+                {
+                  "kind": "text",
+                  "text": "Place of origin",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Date of arrival"
+                },
+                {
+                  "kind": "text",
+                  "text": "Reference number",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 4-10\n\nComplete the table below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Item",
+            "Damage",
+            "Cost to repair/replace"
+          ],
+          "rows": [
+            [
+              "Television",
+              "The\n[4]\nneeds to be replaced",
+              "not known"
+            ],
+            [
+              "The\n[5]\ncabinet",
+              "The\n[6]\nof\nthe cabinet is damaged",
+              "$\n[7]"
+            ],
+            [
+              "Dining room table",
+              "A\n[8]\nis\nsplit",
+              "$200"
+            ],
+            [
+              "Set of china",
+              "Six\n[9]\nwere broken",
+              "about\n$\n[10]\nin total"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Milperra"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "First Class Movers"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "28 November / 28th November / 28th of November"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "screen"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "bathroom"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "door"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "140"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "leg"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "plates"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "60"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-2-2.mp3",
+      "content": "Questions 11-11\n\nChoose the correct letter, A, B or C.\n\nQuestions 12-14\n\nLabel the plan below. Write NO MORE THAN TWO WORDS for each answer.\n\nQuestions 15-20\n\nChoose the correct letter, A, B or C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-11\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "According to the speaker, the main purposes of the park are",
+          "options": [
+            "A. education and entertainment.",
+            "B. research and education.",
+            "C. research and entertainment."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 12-14\n\nLabel the plan below.\n\nWrite NO MORE THAN TWO WORDS for each answer."
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-2-4-diagram-6a2619badcca5.jpg",
+          "alt": "Diagram"
+        },
+        {
+          "type": "text",
+          "text": "[12]"
+        },
+        {
+          "type": "text",
+          "text": "[13]"
+        },
+        {
+          "type": "text",
+          "text": "[14]"
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "When are the experimental areas closed to the public?",
+          "options": [
+            "A. all the year round",
+            "B. almost all the year",
+            "C. a short time every year"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 16,
+          "prompt": "How can you move around the park?",
+          "options": [
+            "A. by tram, walking or bicycle",
+            "B. by solar car or bicycle",
+            "C. by bicycle, walking or bus"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 17,
+          "prompt": "The rare breed animals kept in the park include",
+          "options": [
+            "A. hens and horses.",
+            "B. goats and cows.",
+            "C. goats and hens."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 18,
+          "prompt": "What is the main purpose of having the Rare Breeds Section?",
+          "options": [
+            "A. to save unusual animals",
+            "B. to keep a variety of breeds",
+            "C. to educate the public"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 19,
+          "prompt": "What can you see in the park at the present time?",
+          "options": [
+            "A. the arrival of wild birds",
+            "B. fruit tree blossom",
+            "C. a demonstration of fishing"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 20,
+          "prompt": "The shop contains books about",
+          "options": [
+            "A. animals.",
+            "B. local traditions.",
+            "C. the history of the park."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "fill-in-blank",
+          "label": "12",
+          "correctAnswer": "the Forest / Forest"
+        },
+        {
+          "id": 13,
+          "type": "fill-in-blank",
+          "label": "13",
+          "correctAnswer": "Fish Farms / Fish Farm"
+        },
+        {
+          "id": 14,
+          "type": "fill-in-blank",
+          "label": "14",
+          "correctAnswer": "Market Garden"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-2-3.mp3",
+      "content": "Questions 21-24\n\nChoose the correct letter, A, B or C.\n\nQuestions 25-30\n\nComplete the summary below. Write ONE WORD ONLY for each answer. Looking for Asian honey bees Birds called Rainbow Bee Eaters eat only [25] , and cough up small bits of skeleton and other products in a pellet. Researchers go to the locations the bee eaters like to use for [26] . They collect the pellets and take them to a [27] for analysis. Here [28] is used to soften them, and the researchers look for the [29] of Asian bees in the pellets. The benefit of this research is that the result is more [30] than searching for live Asian bees.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-24\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Where in Australia have Asian honey bees been found in the past?",
+          "options": [
+            "A. Queensland",
+            "B. New South Wales",
+            "C. several states"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "A problem with Asian honey bees is that they",
+          "options": [
+            "A. attack native bees.",
+            "B. carry parasites.",
+            "C. damage crops."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "What point is made about Australian bees?",
+          "options": [
+            "A. Their honey varies in quality.",
+            "B. Their size stops them from pollinating some flowers.",
+            "C. They are sold to customers abroad."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "Grant Freeman says that if Asian honey bees got into Australia,",
+          "options": [
+            "A. the country's economy would be affected.",
+            "B. they could be used in the study of allergies.",
+            "C. certain areas of agriculture would benefit."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-30\n\nComplete the summary below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Looking for Asian honey bees",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": ", and cough up small bits of skeleton and other products in a pellet.",
+                  "before": "Birds called Rainbow Bee Eaters eat only"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": ". They collect the pellets and take them to a",
+                  "before": "Researchers go to the locations the bee eaters like to use for"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "for analysis."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "is used to soften them, and the researchers look for the",
+                  "before": "Here"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 29,
+                  "after": "of Asian bees in the pellets."
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 30,
+                  "after": "than searching for live Asian bees.",
+                  "before": "The benefit of this research is that the result is more"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "insects"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "feeding / eating"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "laboratory"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "water"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "wings"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "reliable / accurate"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-08-academic-listening-test-2-4.mp3",
+      "content": "Questions 31-36\n\nChoose the correct letter, A, B or C.\n\nQuestions 37-40\n\nWhich statement applies to each of the following people who were interviewed by Shona? Choose FOUR answers from the box and write the correct letter, A-F, next to questions 37-40.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-36\n\nChoose the correct letter, A, B or C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "In order to set up her research programme, Shona got",
+          "options": [
+            "A. advice from personal friends in other countries.",
+            "B. help from students in other countries.",
+            "C. information from her tutor's contacts in other countries."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "What types of people were included in the research?",
+          "options": [
+            "A. young people in their first job",
+            "B. men who were working",
+            "C. women who were unemployed"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 33,
+          "prompt": "Shona says that in her questionnaire her aim was",
+          "options": [
+            "A. to get a wide range of data.",
+            "B. to limit people's responses.",
+            "C. to guide people through interviews."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "What do Shona's initial results show about medical services in Britain?",
+          "options": [
+            "A. Current concerns are misrepresented by the press.",
+            "B. Financial issues are critical to the government.",
+            "C. Reforms within hospitals have been unsuccessful."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 35,
+          "prompt": "Shona needs to do further research in order to",
+          "options": [
+            "A. present the government with her findings.",
+            "B. decide the level of extra funding needed.",
+            "C. identify the preferences of the public."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 36,
+          "prompt": "Shona has learnt from the research project that",
+          "options": [
+            "A. it is important to plan projects carefully.",
+            "B. people do not like answering questions.",
+            "C. colleagues do not always agree."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 37-40\n\nWhich statement applies to each of the following people who were interviewed by Shona?\n\nChoose FOUR answers from the box and write the correct letter, A-F, next to questions 37-40."
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "a person interviewed in the street",
+              "questionId": 37
+            },
+            {
+              "stepLabel": "an undergraduate at the university",
+              "questionId": 38
+            },
+            {
+              "stepLabel": "a colleague in her department",
+              "questionId": 39
+            },
+            {
+              "stepLabel": "a tutor in a foreign university",
+              "questionId": 40
+            }
+          ],
+          "options": [
+            "A. gave false data",
+            "B. decided to stop participating",
+            "C. refused to tell Shona about their job",
+            "D. kept changing their mind about participating",
+            "E. became very angry with Shona",
+            "F. was worried about confidentiality"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 33,
+          "type": "multiple-choice",
+          "label": "33",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "label": "35",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 36,
+          "type": "multiple-choice",
+          "label": "36",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 37,
+          "type": "matching",
+          "label": "37",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 38,
+          "type": "matching",
+          "label": "38",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 39,
+          "type": "matching",
+          "label": "39",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 40,
+          "type": "matching",
+          "label": "40",
+          "correctAnswer": "C"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Milperra"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "First Class Movers"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "28 November / 28th November / 28th of November"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "screen"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bathroom"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "door"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "140"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "leg"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "plates"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "60"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "According to the speaker, the main purposes of the park are",
+      "options": [
+        "A. education and entertainment.",
+        "B. research and education.",
+        "C. research and entertainment."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "fill-in-blank",
+      "label": "12",
+      "question": "",
+      "options": [],
+      "correctAnswer": "the Forest / Forest"
+    },
+    {
+      "id": 13,
+      "type": "fill-in-blank",
+      "label": "13",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Fish Farms / Fish Farm"
+    },
+    {
+      "id": 14,
+      "type": "fill-in-blank",
+      "label": "14",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Market Garden"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "When are the experimental areas closed to the public?",
+      "options": [
+        "A. all the year round",
+        "B. almost all the year",
+        "C. a short time every year"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "How can you move around the park?",
+      "options": [
+        "A. by tram, walking or bicycle",
+        "B. by solar car or bicycle",
+        "C. by bicycle, walking or bus"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "The rare breed animals kept in the park include",
+      "options": [
+        "A. hens and horses.",
+        "B. goats and cows.",
+        "C. goats and hens."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "What is the main purpose of having the Rare Breeds Section?",
+      "options": [
+        "A. to save unusual animals",
+        "B. to keep a variety of breeds",
+        "C. to educate the public"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "What can you see in the park at the present time?",
+      "options": [
+        "A. the arrival of wild birds",
+        "B. fruit tree blossom",
+        "C. a demonstration of fishing"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "The shop contains books about",
+      "options": [
+        "A. animals.",
+        "B. local traditions.",
+        "C. the history of the park."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Where in Australia have Asian honey bees been found in the past?",
+      "options": [
+        "A. Queensland",
+        "B. New South Wales",
+        "C. several states"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "A problem with Asian honey bees is that they",
+      "options": [
+        "A. attack native bees.",
+        "B. carry parasites.",
+        "C. damage crops."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "What point is made about Australian bees?",
+      "options": [
+        "A. Their honey varies in quality.",
+        "B. Their size stops them from pollinating some flowers.",
+        "C. They are sold to customers abroad."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "Grant Freeman says that if Asian honey bees got into Australia,",
+      "options": [
+        "A. the country's economy would be affected.",
+        "B. they could be used in the study of allergies.",
+        "C. certain areas of agriculture would benefit."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "insects"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "feeding / eating"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "laboratory"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "water"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "wings"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "reliable / accurate"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "In order to set up her research programme, Shona got",
+      "options": [
+        "A. advice from personal friends in other countries.",
+        "B. help from students in other countries.",
+        "C. information from her tutor's contacts in other countries."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "What types of people were included in the research?",
+      "options": [
+        "A. young people in their first job",
+        "B. men who were working",
+        "C. women who were unemployed"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "type": "multiple-choice",
+      "label": "33",
+      "question": "Shona says that in her questionnaire her aim was",
+      "options": [
+        "A. to get a wide range of data.",
+        "B. to limit people's responses.",
+        "C. to guide people through interviews."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "What do Shona's initial results show about medical services in Britain?",
+      "options": [
+        "A. Current concerns are misrepresented by the press.",
+        "B. Financial issues are critical to the government.",
+        "C. Reforms within hospitals have been unsuccessful."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "label": "35",
+      "question": "Shona needs to do further research in order to",
+      "options": [
+        "A. present the government with her findings.",
+        "B. decide the level of extra funding needed.",
+        "C. identify the preferences of the public."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 36,
+      "type": "multiple-choice",
+      "label": "36",
+      "question": "Shona has learnt from the research project that",
+      "options": [
+        "A. it is important to plan projects carefully.",
+        "B. people do not like answering questions.",
+        "C. colleagues do not always agree."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 37,
+      "type": "matching",
+      "label": "37",
+      "question": "• a person interviewed in the street",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 38,
+      "type": "matching",
+      "label": "38",
+      "question": "• an undergraduate at the university",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 39,
+      "type": "matching",
+      "label": "39",
+      "question": "• a colleague in her department",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 40,
+      "type": "matching",
+      "label": "40",
+      "question": "• a tutor in a foreign university",
+      "options": [],
+      "correctAnswer": "C"
+    }
+  ]
+}

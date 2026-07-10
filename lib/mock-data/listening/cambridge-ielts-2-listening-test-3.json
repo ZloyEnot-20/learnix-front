@@ -1,0 +1,1203 @@
+{
+  "testId": "cambridge-ielts-02-academic-listening-test-3",
+  "title": "Cambridge IELTS 02 Academic Listening Test 3",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-02-academic-listening-test-3/",
+  "book": 2,
+  "test": 3,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–13.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-3-1.mp3",
+      "content": "Questions 1-4\n\nCircle the correct letters A - C.\n\nQuestions 5-6\n\nChoose TWO letters A - E.\n\nQuestions 7-8\n\nChoose TWO letters A - E.\n\nQuestions 9-10\n\nChoose TWO letters A - E.\n\nQuestions 11-13\n\nCircle the correct letters A - C.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-4\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 1,
+          "prompt": "The respondent works on",
+          "options": [
+            "A. the professions.",
+            "B. business.",
+            "C. other."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 2,
+          "prompt": "The respondent has a salary of",
+          "options": [
+            "A. 0 – £ 15,000 a year.",
+            "B. £ 15,000 – £ 35,000 a year.",
+            "C. over £ 35,000 a year."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 3,
+          "prompt": "The respondent watches TV for",
+          "options": [
+            "A. relaxation.",
+            "B. entertainment.",
+            "C. information."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 4,
+          "prompt": "Every day the respondent watches TV for",
+          "options": [
+            "A. 30 minutes – 1 hour.",
+            "B. 1 hour – 2 hours.",
+            "C. more than 2 hours."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 5-6\n\nChoose TWO letters A - E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            5,
+            6
+          ],
+          "label": "5-6",
+          "prompt": "The respondent mainly watches TV ________",
+          "options": [
+            "A. in the early morning.",
+            "B. around midday.",
+            "C. in the afternoon.",
+            "D. in the early evening.",
+            "E. at night."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 7-8\n\nChoose TWO letters A - E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            7,
+            8
+          ],
+          "label": "7-8",
+          "prompt": "On the new channel, the respondent would like to see more ________",
+          "options": [
+            "A. children's programmes.",
+            "B. documentaries.",
+            "C. local service programmes.",
+            "D. travel programmes.",
+            "E. health programmes."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 9-10\n\nChoose TWO letters A - E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            9,
+            10
+          ],
+          "label": "9-10",
+          "prompt": "The respondent would advise the new channel to ________",
+          "options": [
+            "A. spend more money on drama.",
+            "B. train their broadcasters to higher standards.",
+            "C. improve sound quality.",
+            "D. broadcast interviews with famous people.",
+            "E. talk more to customers."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 11-13\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "The respondent feels that adverts should occur every ________",
+          "options": [
+            "A. 10 minutes.",
+            "B. 15 minutes.",
+            "C. 20 minutes."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "The respondent would like to attend special special promotions if ________",
+          "options": [
+            "A. expenses are paid.",
+            "B. he is invited specially.",
+            "C. they are held locally."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "The respondent would like to receive ________",
+          "options": [
+            "A. no mail.",
+            "B. requested mail.",
+            "C. all mail."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "multiple-choice",
+          "label": "1",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "label": "2",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "label": "3",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "label": "4",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 6,
+          "type": "multiple-choice",
+          "label": "6",
+          "correctAnswer": "A / E"
+        },
+        {
+          "id": 7,
+          "type": "multiple-choice",
+          "label": "7",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 8,
+          "type": "multiple-choice",
+          "label": "8",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 9,
+          "type": "multiple-choice",
+          "label": "9",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 10,
+          "type": "multiple-choice",
+          "label": "10",
+          "correctAnswer": "C / E"
+        },
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 14–23.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-3-2.mp3",
+      "content": "Questions 14-17\n\nCircle FOUR letters A - G. Which FOUR activities (in order) of the Union are mentioned by the speaker?\n\nQuestions 18-19\n\ncircle TWO letters A - E.\n\nQuestions 20-23\n\nWrite the appropriate letters A - C against Questions 17 - 20. What are the locations of the following places in Radford?",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 14-17\n\nCircle FOUR letters A - G.\n\nWhich FOUR activities (in order) of the Union are mentioned by the speaker?"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "-",
+              "questionId": 14
+            },
+            {
+              "stepLabel": "-",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "-",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "-",
+              "questionId": 17
+            }
+          ],
+          "options": [
+            "A. raising money for good causes",
+            "B. political campaigning",
+            "C. running a newsagent's",
+            "D. running a supermarket",
+            "E. providing cheap tickets",
+            "F. helping with accommodation",
+            "G. providing catering services"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 18-19\n\ncircle TWO letters A - E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            18,
+            19
+          ],
+          "label": "18-19",
+          "prompt": "Which TWO of the following can you get advice about from the Union?",
+          "options": [
+            "A. immigration",
+            "B. grants",
+            "C. medical problems",
+            "D. personal problems",
+            "E. legal matters"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 20-23\n\nWrite the appropriate letters A - C against Questions 17 - 20.\n\nWhat are the locations of the following places in Radford?"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "The hi-tech fitness centre",
+              "questionId": 20
+            },
+            {
+              "stepLabel": "the ice rink",
+              "questionId": 21
+            },
+            {
+              "stepLabel": "the new cinema",
+              "questionId": 22
+            },
+            {
+              "stepLabel": "the Theatre Royal",
+              "questionId": 23
+            }
+          ],
+          "options": [
+            "A. part of the Metro Tower building",
+            "B. in the main square in the centre of the town",
+            "C. some distance from the centre of the town"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 14,
+          "type": "matching",
+          "label": "14",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 21,
+          "type": "matching",
+          "label": "21",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 22,
+          "type": "matching",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "matching",
+          "label": "23",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 24–33.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-3-3.mp3",
+      "content": "Questions 24-26\n\nComplete the notes below. Write NO MORE THAN THREE WORDS or A NUMBER for each answer. DISSERTATION INFORMATION Hand-in date: [24] Length: 18,000 to [25] words Extra programme offered on: [26]\n\nQuestions 27-29\n\nComplete the table below. Write NO MORE THAN THREE WORDS for each answer. DISSERTATION TIMETABLE Date Action 31 January Basic bibliography 7 February [27] February-March [28] [29] Write up work 21 May Hand in work\n\nQuestions 30-33\n\nWhat is Dr Simon's opinion on the following points? Tick column A if he is in favour Tick column B if he has no strong opinion either way Tick column C if he is against",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 24-26\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS or A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "DISSERTATION INFORMATION",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "",
+                  "before": "Hand-in date:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 25,
+                  "after": "words",
+                  "before": "Length: 18,000 to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 26,
+                  "after": "",
+                  "before": "Extra programme offered on:"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-29\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "DISSERTATION TIMETABLE",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "Date",
+                  "bullet": false
+                },
+                {
+                  "kind": "text",
+                  "text": "31 January",
+                  "bullet": false
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 27,
+                  "after": "",
+                  "before": "7 February"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 28,
+                  "after": "",
+                  "before": "February-March"
+                },
+                {
+                  "kind": "text",
+                  "text": "21 May",
+                  "bullet": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 30-33\n\nWhat is Dr Simon's opinion on the following points?\n\nTick column A if he is in favour\n\nTick column B if he has no strong opinion either way\n\nTick column C if he is against"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Buying a computer",
+              "questionId": 30
+            },
+            {
+              "stepLabel": "Reading previous year's dissertations",
+              "questionId": 31
+            },
+            {
+              "stepLabel": "Using questionnaires as main research instrument",
+              "questionId": 32
+            },
+            {
+              "stepLabel": "Interviewing tutors",
+              "questionId": 33
+            }
+          ],
+          "options": [
+            "A. he is in favour",
+            "B. he has no strong opinion either way",
+            "C. he is against"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "21st May / May 21st / 21st of May / 21 May / May 21"
+        },
+        {
+          "id": 25,
+          "type": "fill-in-blank",
+          "label": "25",
+          "correctAnswer": "20,000 / 20000"
+        },
+        {
+          "id": 26,
+          "type": "fill-in-blank",
+          "label": "26",
+          "correctAnswer": "research methods"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "draft plan / plan"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "do research / research / doing the research"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "March-May / March to May"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 31,
+          "type": "matching",
+          "label": "31",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 32,
+          "type": "matching",
+          "label": "32",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 33,
+          "type": "matching",
+          "label": "33",
+          "correctAnswer": "B"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 34–43.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-02-academic-listening-test-3-4.mp3",
+      "content": "Questions 34-40\n\nCircle the correct letters A - C.\n\nQuestions 41-43\n\nCircle THREE letters A - E.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 34-40\n\nCircle the correct letters A - C."
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 34,
+          "prompt": "The driest continents is ________",
+          "options": [
+            "A. Australia.",
+            "B. Africa.",
+            "C. Antarctica."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 35,
+          "prompt": "The evaporation rate in Australia is ________",
+          "options": [
+            "A. lower than Africa.",
+            "B. higher than Africa.",
+            "C. about the same as Africa."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 36,
+          "prompt": "Rainfall in Australia hardly penetrates the soil because ________",
+          "options": [
+            "A. the soil is too hard.",
+            "B. the soil is too hot.",
+            "C. plants use it up."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 37,
+          "prompt": "In sandy soils water can ________",
+          "options": [
+            "A. evaporate quickly.",
+            "B. seep down to rock.",
+            "C. wash the soil away."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 38,
+          "prompt": "Water is mainly pumped up for ________",
+          "options": [
+            "A. people to drink.",
+            "B. animals to drink.",
+            "C. watering crops."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 39,
+          "prompt": "Natural springs are located ________",
+          "options": [
+            "A. in unexplored parts of Australia.",
+            "B. quite commonly over all Australia.",
+            "C. in a few areas of Australia."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 40,
+          "prompt": "Underground water supplies ________",
+          "options": [
+            "A. 18% of Australia's water.",
+            "B. 48% of Australia's water.",
+            "C. 80% of Australia's water."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 41-43\n\nCircle THREE letters A - E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            41,
+            42,
+            43
+          ],
+          "label": "41-43",
+          "prompt": "Which THREE of the following uses of dam water are mentioned?",
+          "options": [
+            "A. providing water for livestock",
+            "B. watering farmland",
+            "C. providing water for industry",
+            "D. controlling flood water",
+            "E. producing hydro-electric power"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 34,
+          "type": "multiple-choice",
+          "label": "34",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "label": "35",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 36,
+          "type": "multiple-choice",
+          "label": "36",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 37,
+          "type": "multiple-choice",
+          "label": "37",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 38,
+          "type": "multiple-choice",
+          "label": "38",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 41,
+          "type": "multiple-choice",
+          "label": "41",
+          "correctAnswer": "B / D / E"
+        },
+        {
+          "id": 42,
+          "type": "multiple-choice",
+          "label": "42",
+          "correctAnswer": "B / D / E"
+        },
+        {
+          "id": 43,
+          "type": "multiple-choice",
+          "label": "43",
+          "correctAnswer": "B / D / E"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "multiple-choice",
+      "label": "1",
+      "question": "The respondent works on",
+      "options": [
+        "A. the professions.",
+        "B. business.",
+        "C. other."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 2,
+      "type": "multiple-choice",
+      "label": "2",
+      "question": "The respondent has a salary of",
+      "options": [
+        "A. 0 – £ 15,000 a year.",
+        "B. £ 15,000 – £ 35,000 a year.",
+        "C. over £ 35,000 a year."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 3,
+      "type": "multiple-choice",
+      "label": "3",
+      "question": "The respondent watches TV for",
+      "options": [
+        "A. relaxation.",
+        "B. entertainment.",
+        "C. information."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 4,
+      "type": "multiple-choice",
+      "label": "4",
+      "question": "Every day the respondent watches TV for",
+      "options": [
+        "A. 30 minutes – 1 hour.",
+        "B. 1 hour – 2 hours.",
+        "C. more than 2 hours."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "The respondent mainly watches TV ________",
+      "options": [
+        "A. in the early morning.",
+        "B. around midday.",
+        "C. in the afternoon.",
+        "D. in the early evening.",
+        "E. at night."
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 6,
+      "type": "multiple-choice",
+      "label": "6",
+      "question": "The respondent mainly watches TV ________",
+      "options": [
+        "A. in the early morning.",
+        "B. around midday.",
+        "C. in the afternoon.",
+        "D. in the early evening.",
+        "E. at night."
+      ],
+      "correctAnswer": "A / E"
+    },
+    {
+      "id": 7,
+      "type": "multiple-choice",
+      "label": "7",
+      "question": "On the new channel, the respondent would like to see more ________",
+      "options": [
+        "A. children's programmes.",
+        "B. documentaries.",
+        "C. local service programmes.",
+        "D. travel programmes.",
+        "E. health programmes."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 8,
+      "type": "multiple-choice",
+      "label": "8",
+      "question": "On the new channel, the respondent would like to see more ________",
+      "options": [
+        "A. children's programmes.",
+        "B. documentaries.",
+        "C. local service programmes.",
+        "D. travel programmes.",
+        "E. health programmes."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 9,
+      "type": "multiple-choice",
+      "label": "9",
+      "question": "The respondent would advise the new channel to ________",
+      "options": [
+        "A. spend more money on drama.",
+        "B. train their broadcasters to higher standards.",
+        "C. improve sound quality.",
+        "D. broadcast interviews with famous people.",
+        "E. talk more to customers."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 10,
+      "type": "multiple-choice",
+      "label": "10",
+      "question": "The respondent would advise the new channel to ________",
+      "options": [
+        "A. spend more money on drama.",
+        "B. train their broadcasters to higher standards.",
+        "C. improve sound quality.",
+        "D. broadcast interviews with famous people.",
+        "E. talk more to customers."
+      ],
+      "correctAnswer": "C / E"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "The respondent feels that adverts should occur every ________",
+      "options": [
+        "A. 10 minutes.",
+        "B. 15 minutes.",
+        "C. 20 minutes."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "The respondent would like to attend special special promotions if ________",
+      "options": [
+        "A. expenses are paid.",
+        "B. he is invited specially.",
+        "C. they are held locally."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "The respondent would like to receive ________",
+      "options": [
+        "A. no mail.",
+        "B. requested mail.",
+        "C. all mail."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 14,
+      "type": "matching",
+      "label": "14",
+      "question": "• -",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• -",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• -",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• -",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Which TWO of the following can you get advice about from the Union?",
+      "options": [
+        "A. immigration",
+        "B. grants",
+        "C. medical problems",
+        "D. personal problems",
+        "E. legal matters"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "Which TWO of the following can you get advice about from the Union?",
+      "options": [
+        "A. immigration",
+        "B. grants",
+        "C. medical problems",
+        "D. personal problems",
+        "E. legal matters"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• The hi-tech fitness centre",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 21,
+      "type": "matching",
+      "label": "21",
+      "question": "• the ice rink",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "type": "matching",
+      "label": "22",
+      "question": "• the new cinema",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "matching",
+      "label": "23",
+      "question": "• the Theatre Royal",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "21st May / May 21st / 21st of May / 21 May / May 21"
+    },
+    {
+      "id": 25,
+      "type": "fill-in-blank",
+      "label": "25",
+      "question": "",
+      "options": [],
+      "correctAnswer": "20,000 / 20000"
+    },
+    {
+      "id": 26,
+      "type": "fill-in-blank",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "research methods"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "draft plan / plan"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "do research / research / doing the research"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "March-May / March to May"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• Buying a computer",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 31,
+      "type": "matching",
+      "label": "31",
+      "question": "• Reading previous year's dissertations",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 32,
+      "type": "matching",
+      "label": "32",
+      "question": "• Using questionnaires as main research instrument",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 33,
+      "type": "matching",
+      "label": "33",
+      "question": "• Interviewing tutors",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 34,
+      "type": "multiple-choice",
+      "label": "34",
+      "question": "The driest continents is ________",
+      "options": [
+        "A. Australia.",
+        "B. Africa.",
+        "C. Antarctica."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "label": "35",
+      "question": "The evaporation rate in Australia is ________",
+      "options": [
+        "A. lower than Africa.",
+        "B. higher than Africa.",
+        "C. about the same as Africa."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 36,
+      "type": "multiple-choice",
+      "label": "36",
+      "question": "Rainfall in Australia hardly penetrates the soil because ________",
+      "options": [
+        "A. the soil is too hard.",
+        "B. the soil is too hot.",
+        "C. plants use it up."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 37,
+      "type": "multiple-choice",
+      "label": "37",
+      "question": "In sandy soils water can ________",
+      "options": [
+        "A. evaporate quickly.",
+        "B. seep down to rock.",
+        "C. wash the soil away."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 38,
+      "type": "multiple-choice",
+      "label": "38",
+      "question": "Water is mainly pumped up for ________",
+      "options": [
+        "A. people to drink.",
+        "B. animals to drink.",
+        "C. watering crops."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "Natural springs are located ________",
+      "options": [
+        "A. in unexplored parts of Australia.",
+        "B. quite commonly over all Australia.",
+        "C. in a few areas of Australia."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "Underground water supplies ________",
+      "options": [
+        "A. 18% of Australia's water.",
+        "B. 48% of Australia's water.",
+        "C. 80% of Australia's water."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 41,
+      "type": "multiple-choice",
+      "label": "41",
+      "question": "Which THREE of the following uses of dam water are mentioned?",
+      "options": [
+        "A. providing water for livestock",
+        "B. watering farmland",
+        "C. providing water for industry",
+        "D. controlling flood water",
+        "E. producing hydro-electric power"
+      ],
+      "correctAnswer": "B / D / E"
+    },
+    {
+      "id": 42,
+      "type": "multiple-choice",
+      "label": "42",
+      "question": "Which THREE of the following uses of dam water are mentioned?",
+      "options": [
+        "A. providing water for livestock",
+        "B. watering farmland",
+        "C. providing water for industry",
+        "D. controlling flood water",
+        "E. producing hydro-electric power"
+      ],
+      "correctAnswer": "B / D / E"
+    },
+    {
+      "id": 43,
+      "type": "multiple-choice",
+      "label": "43",
+      "question": "Which THREE of the following uses of dam water are mentioned?",
+      "options": [
+        "A. providing water for livestock",
+        "B. watering farmland",
+        "C. providing water for industry",
+        "D. controlling flood water",
+        "E. producing hydro-electric power"
+      ],
+      "correctAnswer": "B / D / E"
+    }
+  ]
+}

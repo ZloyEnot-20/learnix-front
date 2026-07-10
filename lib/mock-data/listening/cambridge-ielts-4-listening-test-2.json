@@ -1,0 +1,1163 @@
+{
+  "testId": "cambridge-ielts-04-academic-listening-test-2",
+  "title": "Cambridge IELTS 04 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-04-academic-listening-test-2/",
+  "book": 4,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-2-1.mp3",
+      "content": "Questions 1-5\n\nChoose the correct letter, A, B or C\n\nQuestions 6-8\n\nComplete the notes below using words from the box. Art Gallery | Cathedral | Castle Gardens | Markets Tourist attractions open all day: [6] and Gardens Tourist attractions NOT open on Mondays: [7] and Castle Tourist attractions which have free entry: [8] and Markets\n\nQuestions 9-10\n\nComplete the sentences below. Write NO MORE THAN THREE WORDS for each answer. The first place Peter and Sally will visit is the [9] . At the Cathedral, Peter really wants to [10] .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-5\n\nChoose the correct letter, A, B or C"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 1,
+          "prompt": "What does Peter want to drink?",
+          "options": [
+            "A. tea",
+            "B. coffee",
+            "C. a cold drink"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 2,
+          "prompt": "What caused Peter problems at the bank?",
+          "options": [
+            "A. The exchange rate was down.",
+            "B. He was late.",
+            "C. The computers weren't working."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 3,
+          "prompt": "Who did Peter talk to at the bank?",
+          "options": [
+            "A. an old friend",
+            "B. an American man",
+            "C. a German man"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 4,
+          "prompt": "Henry gave Peter a map of",
+          "options": [
+            "A. the city.",
+            "B. the bus routes.",
+            "C. the train system."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 5,
+          "prompt": "What do Peter and Sally decide to order?",
+          "options": [
+            "A. food and drinks",
+            "B. just food",
+            "C. just drinks"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 6-8\n\nComplete the notes below using words from the box."
+        },
+        {
+          "type": "notes",
+          "title": "Art Gallery    |    Cathedral    |    Castle",
+          "sections": [
+            {
+              "heading": "Gardens    |    Markets",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "and Gardens",
+                  "before": "Tourist attractions open all day:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "and Castle",
+                  "before": "Tourist attractions NOT open on Mondays:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "and Markets",
+                  "before": "Tourist attractions which have free entry:"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 9-10\n\nComplete the sentences below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": ".",
+                  "before": "The first place Peter and Sally will visit is the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ".",
+                  "before": "At the Cathedral, Peter really wants to"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "multiple-choice",
+          "label": "1",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "label": "2",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "label": "3",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "label": "4",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "label": "5",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "Cathedral"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Markets"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "Gardens"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "Art Gallery"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "climb the tower / see the view"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-2-2.mp3",
+      "content": "Questions 11-20\n\nChoose the correct letter, A, B or C",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-20\n\nChoose the correct letter, A, B or C"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "The Counselling Service may contact tutors if",
+          "options": [
+            "A. they are too slow in marking assignments.",
+            "B. they give students a lot of work.",
+            "C. they don't inform students about their progress."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "Stress may be caused by",
+          "options": [
+            "A. new teachers.",
+            "B. time pressure.",
+            "C. unfamiliar subject matter."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "International students may find stress difficult to handle because",
+          "options": [
+            "A. they lack support from family and friends.",
+            "B. they don't have time to make new friends.",
+            "C. they find it difficult to socialise."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "A personal crisis may be caused by",
+          "options": [
+            "A. studying for too long overseas.",
+            "B. business problems in the student's own country.",
+            "C. disruptions to personal relationships."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "Students may lose self-esteem if",
+          "options": [
+            "A. they have to change courses.",
+            "B. they don't complete a course.",
+            "C. their family puts too much pressure on them."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 16,
+          "prompt": "Students should consult Glenda Roberts if",
+          "options": [
+            "A. their general health is poor.",
+            "B. their diet is too strict.",
+            "C. they can't eat the local food."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 17,
+          "prompt": "Students in financial difficulties can receive",
+          "options": [
+            "A. assistance to buy books.",
+            "B. a loan to pay their course fees.",
+            "C. a no-interest loan to cover study expenses."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 18,
+          "prompt": "Loans are also available to students who",
+          "options": [
+            "A. can't pay their rent.",
+            "B. need to buy furniture.",
+            "C. can't cover their living expenses."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 19,
+          "prompt": "The number of students counselled by the service last year was",
+          "options": [
+            "A. 214.",
+            "B. 240.",
+            "C. 2,600."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 20,
+          "prompt": "The speaker thinks the Counselling Service",
+          "options": [
+            "A. has been effective in spite of staff shortages.",
+            "B. is under-used by students.",
+            "C. has suffered badly because of staff cuts."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-2-3.mp3",
+      "content": "Questions 21-24\n\nComplete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer. DETAILS OF ASSIGNMENT Part 1 Essay Title: 'Assess the two main methods of [21] in social science research' Number of words: [22] Part 2 Small-scale study Choose one method. Gather data from at least [23] subjects. Part 3 Report on study Number of words: 3,000 to [24]\n\nQuestions 25-26\n\nChoose TWO letters A-E.\n\nQuestions 27-30\n\nComplete the table below. Write NO MORE THAN THREE WORDS OR A NUMBER for each answer. AUTHOR TITLE PUBLISHER YEAR OF PUBLICATION [27] 'Sample Surveys in Social Science Research' Bell [28] [29] Wilson 'Interviews That Work' Oxford University Press [30]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-24\n\nComplete the notes below.\n\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\n\nChoose one method."
+        },
+        {
+          "type": "notes",
+          "title": "DETAILS OF ASSIGNMENT",
+          "sections": [
+            {
+              "heading": "Part 1 Essay",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 21,
+                  "after": "in social science research'",
+                  "before": "Title: 'Assess the two main methods of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 22,
+                  "after": "",
+                  "before": "Number of words:"
+                }
+              ]
+            },
+            {
+              "heading": "Part 2 Small-scale study",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 23,
+                  "after": "subjects.",
+                  "before": "Gather data from at least"
+                }
+              ]
+            },
+            {
+              "heading": "Part 3 Report on study",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 24,
+                  "after": "",
+                  "before": "Number of words: 3,000 to"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-26\n\nChoose TWO letters A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            25,
+            26
+          ],
+          "label": "25-26",
+          "prompt": "What TWO disadvantages of the questionnaire form of data collection do the students discuss?",
+          "options": [
+            "A. The data is sometimes invalid.",
+            "B. Too few people may respond.",
+            "C. It is less likely to reveal the unexpected.",
+            "D. It can only be used with literate populations.",
+            "E. There is a delay between the distribution and return of questionnaires."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 27-30\n\nComplete the table below.\n\nWrite NO MORE THAN THREE WORDS OR A NUMBER for each answer."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "AUTHOR",
+            "TITLE",
+            "PUBLISHER",
+            "YEAR OF PUBLICATION"
+          ],
+          "rows": [
+            [
+              "[27]",
+              "'Sample Surveys in Social Science Research'",
+              "",
+              ""
+            ],
+            [
+              "Bell",
+              "[28]",
+              "[29]",
+              ""
+            ],
+            [
+              "Wilson",
+              "'Interviews That Work'",
+              "Oxford University Press",
+              "[30]"
+            ]
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "fill-in-blank",
+          "label": "21",
+          "correctAnswer": "collecting data / gathering data / data collection"
+        },
+        {
+          "id": 22,
+          "type": "fill-in-blank",
+          "label": "22",
+          "correctAnswer": "1,500 / 1500"
+        },
+        {
+          "id": 23,
+          "type": "fill-in-blank",
+          "label": "23",
+          "correctAnswer": "5 / five"
+        },
+        {
+          "id": 24,
+          "type": "fill-in-blank",
+          "label": "24",
+          "correctAnswer": "4,000 / 4000"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 26,
+          "type": "multiple-choice",
+          "label": "26",
+          "correctAnswer": "B / C"
+        },
+        {
+          "id": 27,
+          "type": "fill-in-blank",
+          "label": "27",
+          "correctAnswer": "Mehta"
+        },
+        {
+          "id": 28,
+          "type": "fill-in-blank",
+          "label": "28",
+          "correctAnswer": "Survey Research"
+        },
+        {
+          "id": 29,
+          "type": "fill-in-blank",
+          "label": "29",
+          "correctAnswer": "London University / London University Press"
+        },
+        {
+          "id": 30,
+          "type": "fill-in-blank",
+          "label": "30",
+          "correctAnswer": "1988"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2026/06/cambridge-ielts-04-academic-listening-test-2-4.mp3",
+      "content": "Questions 31-32\n\nChoose the correct letter, A, B or C\n\nQuestions 33-38\n\nComplete the notes below. Write NO MORE THAN THREE WORDS for each answer. Corporate crime has been ignored by: a) the [33] e.g. films b) [34] Reasons: a) often more complex, and needing [35] b) less human interest than conventional crime c) victims are often [36] Effects: a) Economic costs may appear unimportant to [37] can make large [38] for company cause more losses to individuals than conventional crimes b) Social costs make people lose trust in business world affect poorer people most\n\nQuestions 39-40\n\nChoose TWO letters A-F.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-32\n\nChoose the correct letter, A, B or C"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 31,
+          "prompt": "Corporate crime is generally committed",
+          "options": [
+            "A. against individuals.",
+            "B. by groups.",
+            "C. for companies."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 32,
+          "prompt": "Corporate crime does NOT include",
+          "options": [
+            "A. employees stealing from their company.",
+            "B. unintentional crime by employees.",
+            "C. fraud resulting from company policy."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 33-38\n\nComplete the notes below.\n\nWrite NO MORE THAN THREE WORDS for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Corporate crime has been ignored by:",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "e.g. films",
+                  "before": "a) the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "",
+                  "before": "b)"
+                }
+              ]
+            },
+            {
+              "heading": "Reasons:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "",
+                  "before": "a) often more complex, and needing"
+                }
+              ]
+            },
+            {
+              "heading": "b) less human interest than conventional crime",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "",
+                  "before": "c) victims are often"
+                }
+              ]
+            },
+            {
+              "heading": "Effects:",
+              "lines": []
+            },
+            {
+              "heading": "a) Economic costs",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "",
+                  "before": "may appear unimportant to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "for company",
+                  "before": "can make large"
+                },
+                {
+                  "kind": "text",
+                  "text": "cause more losses to individuals than conventional crimes"
+                }
+              ]
+            },
+            {
+              "heading": "b) Social costs",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "make people lose trust in business world"
+                },
+                {
+                  "kind": "text",
+                  "text": "affect poorer people most"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 39-40\n\nChoose TWO letters A-F."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            39,
+            40
+          ],
+          "label": "39-40",
+          "prompt": "The oil tanker explosion was an example of a crime which",
+          "options": [
+            "A. was no-one's fault.",
+            "B. was not a corporate crime.",
+            "C. was intentional.",
+            "D. was caused by indifference.",
+            "E. had tragic results.",
+            "F. made a large profit for the company."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "multiple-choice",
+          "label": "31",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 32,
+          "type": "multiple-choice",
+          "label": "32",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "mass media / media"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "academic circles / academics / researchers"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "specialist knowledge / specialised knowledge"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "unaware"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "individual customers / individual consumers / individuals"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "illegal profit / illegal profits"
+        },
+        {
+          "id": 39,
+          "type": "multiple-choice",
+          "label": "39",
+          "correctAnswer": "D / E"
+        },
+        {
+          "id": 40,
+          "type": "multiple-choice",
+          "label": "40",
+          "correctAnswer": "D / E"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "multiple-choice",
+      "label": "1",
+      "question": "What does Peter want to drink?",
+      "options": [
+        "A. tea",
+        "B. coffee",
+        "C. a cold drink"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 2,
+      "type": "multiple-choice",
+      "label": "2",
+      "question": "What caused Peter problems at the bank?",
+      "options": [
+        "A. The exchange rate was down.",
+        "B. He was late.",
+        "C. The computers weren't working."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 3,
+      "type": "multiple-choice",
+      "label": "3",
+      "question": "Who did Peter talk to at the bank?",
+      "options": [
+        "A. an old friend",
+        "B. an American man",
+        "C. a German man"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 4,
+      "type": "multiple-choice",
+      "label": "4",
+      "question": "Henry gave Peter a map of",
+      "options": [
+        "A. the city.",
+        "B. the bus routes.",
+        "C. the train system."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "label": "5",
+      "question": "What do Peter and Sally decide to order?",
+      "options": [
+        "A. food and drinks",
+        "B. just food",
+        "C. just drinks"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Cathedral"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Markets"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Gardens"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Art Gallery"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "climb the tower / see the view"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "The Counselling Service may contact tutors if",
+      "options": [
+        "A. they are too slow in marking assignments.",
+        "B. they give students a lot of work.",
+        "C. they don't inform students about their progress."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Stress may be caused by",
+      "options": [
+        "A. new teachers.",
+        "B. time pressure.",
+        "C. unfamiliar subject matter."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "International students may find stress difficult to handle because",
+      "options": [
+        "A. they lack support from family and friends.",
+        "B. they don't have time to make new friends.",
+        "C. they find it difficult to socialise."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "A personal crisis may be caused by",
+      "options": [
+        "A. studying for too long overseas.",
+        "B. business problems in the student's own country.",
+        "C. disruptions to personal relationships."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Students may lose self-esteem if",
+      "options": [
+        "A. they have to change courses.",
+        "B. they don't complete a course.",
+        "C. their family puts too much pressure on them."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "Students should consult Glenda Roberts if",
+      "options": [
+        "A. their general health is poor.",
+        "B. their diet is too strict.",
+        "C. they can't eat the local food."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "Students in financial difficulties can receive",
+      "options": [
+        "A. assistance to buy books.",
+        "B. a loan to pay their course fees.",
+        "C. a no-interest loan to cover study expenses."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "Loans are also available to students who",
+      "options": [
+        "A. can't pay their rent.",
+        "B. need to buy furniture.",
+        "C. can't cover their living expenses."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "The number of students counselled by the service last year was",
+      "options": [
+        "A. 214.",
+        "B. 240.",
+        "C. 2,600."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "The speaker thinks the Counselling Service",
+      "options": [
+        "A. has been effective in spite of staff shortages.",
+        "B. is under-used by students.",
+        "C. has suffered badly because of staff cuts."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 21,
+      "type": "fill-in-blank",
+      "label": "21",
+      "question": "",
+      "options": [],
+      "correctAnswer": "collecting data / gathering data / data collection"
+    },
+    {
+      "id": 22,
+      "type": "fill-in-blank",
+      "label": "22",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1,500 / 1500"
+    },
+    {
+      "id": 23,
+      "type": "fill-in-blank",
+      "label": "23",
+      "question": "",
+      "options": [],
+      "correctAnswer": "5 / five"
+    },
+    {
+      "id": 24,
+      "type": "fill-in-blank",
+      "label": "24",
+      "question": "",
+      "options": [],
+      "correctAnswer": "4,000 / 4000"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What TWO disadvantages of the questionnaire form of data collection do the students discuss?",
+      "options": [
+        "A. The data is sometimes invalid.",
+        "B. Too few people may respond.",
+        "C. It is less likely to reveal the unexpected.",
+        "D. It can only be used with literate populations.",
+        "E. There is a delay between the distribution and return of questionnaires."
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 26,
+      "type": "multiple-choice",
+      "label": "26",
+      "question": "What TWO disadvantages of the questionnaire form of data collection do the students discuss?",
+      "options": [
+        "A. The data is sometimes invalid.",
+        "B. Too few people may respond.",
+        "C. It is less likely to reveal the unexpected.",
+        "D. It can only be used with literate populations.",
+        "E. There is a delay between the distribution and return of questionnaires."
+      ],
+      "correctAnswer": "B / C"
+    },
+    {
+      "id": 27,
+      "type": "fill-in-blank",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Mehta"
+    },
+    {
+      "id": 28,
+      "type": "fill-in-blank",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Survey Research"
+    },
+    {
+      "id": 29,
+      "type": "fill-in-blank",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "London University / London University Press"
+    },
+    {
+      "id": 30,
+      "type": "fill-in-blank",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "1988"
+    },
+    {
+      "id": 31,
+      "type": "multiple-choice",
+      "label": "31",
+      "question": "Corporate crime is generally committed",
+      "options": [
+        "A. against individuals.",
+        "B. by groups.",
+        "C. for companies."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 32,
+      "type": "multiple-choice",
+      "label": "32",
+      "question": "Corporate crime does NOT include",
+      "options": [
+        "A. employees stealing from their company.",
+        "B. unintentional crime by employees.",
+        "C. fraud resulting from company policy."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mass media / media"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "academic circles / academics / researchers"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "specialist knowledge / specialised knowledge"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "unaware"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "individual customers / individual consumers / individuals"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "illegal profit / illegal profits"
+    },
+    {
+      "id": 39,
+      "type": "multiple-choice",
+      "label": "39",
+      "question": "The oil tanker explosion was an example of a crime which",
+      "options": [
+        "A. was no-one's fault.",
+        "B. was not a corporate crime.",
+        "C. was intentional.",
+        "D. was caused by indifference.",
+        "E. had tragic results.",
+        "F. made a large profit for the company."
+      ],
+      "correctAnswer": "D / E"
+    },
+    {
+      "id": 40,
+      "type": "multiple-choice",
+      "label": "40",
+      "question": "The oil tanker explosion was an example of a crime which",
+      "options": [
+        "A. was no-one's fault.",
+        "B. was not a corporate crime.",
+        "C. was intentional.",
+        "D. was caused by indifference.",
+        "E. had tragic results.",
+        "F. made a large profit for the company."
+      ],
+      "correctAnswer": "D / E"
+    }
+  ]
+}

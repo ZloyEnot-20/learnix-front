@@ -1,0 +1,1039 @@
+{
+  "testId": "cambridge-ielts-15-academic-listening-test-4",
+  "title": "Cambridge IELTS 15 Academic Listening Test 4",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-15-academic-listening-test-4/",
+  "book": 15,
+  "test": 4,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/12/cambridge-ielts-15-academic-listening-4-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the form below. Write ONE WORD AND/OR A NUMBER for each answer. Customer Satisfaction Survey Customer details Name: Sophie Bird Occupation: [1] Reason for travel today: [2] Journey information Name of station returning to: [3] Type of ticket purchased: Standard [4] ticket Cost of ticket: £ [5] When ticket was purchased: Yesterday Where ticket was bought: [6] Satisfaction with journey Most satisfied with: the wifi Least satisfied with: the [7] this morning. Satisfaction with station facilities Most satisfied with: how much [8] was provided Least satisfied with: lack of seats, particularly on the [9] Neither satisfied nor dissatisfied with: the [10] available",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the form below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Customer Satisfaction Survey",
+          "sections": [
+            {
+              "heading": "Customer details",
+              "lines": []
+            },
+            {
+              "heading": "Name:                                                               Sophie Bird",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Occupation:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "",
+                  "before": "Reason for travel today:"
+                }
+              ]
+            },
+            {
+              "heading": "Journey information",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "",
+                  "before": "Name of station returning to:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "ticket",
+                  "before": "Type of ticket purchased:                             Standard"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "Cost of ticket:                                                 £"
+                }
+              ]
+            },
+            {
+              "heading": "When ticket was purchased:                       Yesterday",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Where ticket was bought:"
+                }
+              ]
+            },
+            {
+              "heading": "Satisfaction with journey",
+              "lines": []
+            },
+            {
+              "heading": "Most satisfied with:                                       the wifi",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "this morning.",
+                  "before": "Least satisfied with:                                      the"
+                }
+              ]
+            },
+            {
+              "heading": "Satisfaction with station facilities",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "was provided",
+                  "before": "Most satisfied with:                                       how much"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "",
+                  "before": "Least satisfied with:                                      lack of seats, particularly on the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "available",
+                  "before": "Neither satisfied nor dissatisfied with:     the"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "journalist"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "shopping"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Staunfirth"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "return"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "23.70"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "online"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "delay"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "information"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "platform / platforms"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "parking"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/12/cambridge-ielts-15-academic-listening-4-audio-2.mp3",
+      "content": "Questions 11-16\n\nLabel the map below. Write the correct letter, A-H , next to Questions\n\nQuestions 17-18\n\nChoose TWO letters, A-E .\n\nQuestions 19-20\n\nChoose TWO letters, A-E .",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-16\n\nLabel the map below.\n\nWrite the correct letter, A-H, next to Questions"
+        },
+        {
+          "type": "image",
+          "url": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-15-academic-listening-test-4-11-16.jpg",
+          "alt": "Cambridge IELTS 15 Academic Listening Test 4 - 11 - 16"
+        },
+        {
+          "type": "matching-grid",
+          "columns": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "rows": [
+            {
+              "questionId": 11,
+              "label": "café"
+            },
+            {
+              "questionId": 12,
+              "label": "toilets"
+            },
+            {
+              "questionId": 13,
+              "label": "formal gardens"
+            },
+            {
+              "questionId": 14,
+              "label": "outdoor gym"
+            },
+            {
+              "questionId": 15,
+              "label": "skateboard ramp"
+            },
+            {
+              "questionId": 16,
+              "label": "wild flowers"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 17-18\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            17,
+            18
+          ],
+          "label": "17-18",
+          "prompt": "What does the speakers say about the adventure playground?",
+          "options": [
+            "A. Children must be supervised.",
+            "B. It costs more in winter.",
+            "C. Some activities are only for younger children.",
+            "D. No payment is required.",
+            "E. It was recently expanded."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 19-20\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            19,
+            20
+          ],
+          "label": "19-20",
+          "prompt": "What does the speaker say about the glass houses?",
+          "options": [
+            "A. They are closed at weekends.",
+            "B. Volunteers are needed to work there.",
+            "C. They were badly damaged by fire.",
+            "D. More money is needed to repair some of the glass.",
+            "E. Visitors can see palm trees from tropical regions."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "H"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 16,
+          "type": "multiple-choice",
+          "label": "16",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 17,
+          "type": "multiple-choice",
+          "label": "17",
+          "correctAnswer": "A / D"
+        },
+        {
+          "id": 18,
+          "type": "multiple-choice",
+          "label": "18",
+          "correctAnswer": "A / D"
+        },
+        {
+          "id": 19,
+          "type": "multiple-choice",
+          "label": "19",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 20,
+          "type": "multiple-choice",
+          "label": "20",
+          "correctAnswer": "A / C"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/12/cambridge-ielts-15-academic-listening-4-audio-3.mp3",
+      "content": "Questions 21-24\n\nChoose the correct letter, A , B or C . Presentation about refrigeration\n\nQuestions 25-30\n\nWho is going to do research into each topic? Write the correct letter, A , B or C , next to Questions. People Topics",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-24\n\nChoose the correct letter, A, B or C.\n\nPresentation about refrigeration"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "What did Annie discover from reading about icehouses?",
+          "options": [
+            "A. why they were first created",
+            "B. how the ice was kept frozen",
+            "C. where they were located"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "What point does Annie make about refrigeration in ancient Rome?",
+          "options": [
+            "A. It became a commercial business.",
+            "B. It used snow from nearby.",
+            "C. It took a long time to become popular."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "In connection with modern refrigerator, both Annie and Jack are worried about",
+          "options": [
+            "A. the complexity of the technology.",
+            "B. the fact that some are disposed of irresponsibly.",
+            "C. the large number that quickly break down."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "What do Jack and Annie agree regarding domestic fridges?",
+          "options": [
+            "A. They are generally good value for money.",
+            "B. There are plenty of useful variations.",
+            "C. They are more useful than other domestic appliances."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 25-30\n\nWho is going to do research into each topic?\n\nWrite the correct letter, A, B or C, next to Questions.\n\nPeople\n\nTopics"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "the goods that are refrigerated",
+              "questionId": 25
+            },
+            {
+              "stepLabel": "the effects on health",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "the impact on food producers",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "the impact on cities",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "refrigerated transport",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "domestic fridges",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. Annie",
+            "B. Jack",
+            "C. both Annie and Jack"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "matching",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/12/cambridge-ielts-15-academic-listening-4-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. How the Industrial Revolution affected life in Britain 19th century For the first time, people’s possessions were used to measure Britain’s [31] . Developments in production of goods and in [32] greatly changed lives. MAIN AREAS OF CHANGE Manufacturing The Industrial Revolution would not have happened without the new types of [33] that were used then. The leading industry was [34] (its products became widely available). New [35] made factories necessary and so more people moved into towns. Transport The railways took the place of canals. Because of the new transport: – greater access to [36] Made people more aware of what they could buy in shops. – when shopping, people were not limited to buying [37] goods. Retailing The first department stores were opened. The displays of goods were more visible: – inside stores because of better [38] . – outside stores, because [39] were bigger. [40] that was persuasive became much more common.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "How the Industrial Revolution affected life in Britain",
+          "sections": [
+            {
+              "heading": "19th century",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": ".",
+                  "before": "For the first time, people’s possessions were used to measure Britain’s"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "greatly changed lives.",
+                  "before": "Developments in production of goods and in"
+                }
+              ]
+            },
+            {
+              "heading": "MAIN AREAS OF CHANGE",
+              "lines": []
+            },
+            {
+              "heading": "Manufacturing",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "that were used then.",
+                  "before": "The Industrial Revolution would not have happened without the new types of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "(its products became widely available).",
+                  "before": "The leading industry was"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "made factories necessary and so more people moved into towns.",
+                  "before": "New"
+                }
+              ]
+            },
+            {
+              "heading": "Transport",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "The railways took the place of canals."
+                },
+                {
+                  "kind": "text",
+                  "text": "Because of the new transport:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "Made people more aware of what they could buy in shops.",
+                  "before": "–  greater access to"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "goods.",
+                  "before": "–  when shopping, people were not limited to buying"
+                }
+              ]
+            },
+            {
+              "heading": "Retailing",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "The first department stores were opened."
+                },
+                {
+                  "kind": "text",
+                  "text": "The displays of goods were more visible:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": ".",
+                  "before": "–  inside stores because of better"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "were bigger.",
+                  "before": "–  outside stores, because"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "that was persuasive became much more common."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "wealth"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "technology"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "power"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "textile / textiles"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "machines"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "newspapers"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "local"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "lighting"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "windows"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "Advertising"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "journalist"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "shopping"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Staunfirth"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "return"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "23.70"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "online"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "delay"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "information"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "platform / platforms"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "parking"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "café",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "toilets",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "formal gardens",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "outdoor gym",
+      "options": [],
+      "correctAnswer": "H"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "skateboard ramp",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 16,
+      "type": "multiple-choice",
+      "label": "16",
+      "question": "wild flowers",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 17,
+      "type": "multiple-choice",
+      "label": "17",
+      "question": "What does the speakers say about the adventure playground?",
+      "options": [
+        "A. Children must be supervised.",
+        "B. It costs more in winter.",
+        "C. Some activities are only for younger children.",
+        "D. No payment is required.",
+        "E. It was recently expanded."
+      ],
+      "correctAnswer": "A / D"
+    },
+    {
+      "id": 18,
+      "type": "multiple-choice",
+      "label": "18",
+      "question": "What does the speakers say about the adventure playground?",
+      "options": [
+        "A. Children must be supervised.",
+        "B. It costs more in winter.",
+        "C. Some activities are only for younger children.",
+        "D. No payment is required.",
+        "E. It was recently expanded."
+      ],
+      "correctAnswer": "A / D"
+    },
+    {
+      "id": 19,
+      "type": "multiple-choice",
+      "label": "19",
+      "question": "What does the speaker say about the glass houses?",
+      "options": [
+        "A. They are closed at weekends.",
+        "B. Volunteers are needed to work there.",
+        "C. They were badly damaged by fire.",
+        "D. More money is needed to repair some of the glass.",
+        "E. Visitors can see palm trees from tropical regions."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 20,
+      "type": "multiple-choice",
+      "label": "20",
+      "question": "What does the speaker say about the glass houses?",
+      "options": [
+        "A. They are closed at weekends.",
+        "B. Volunteers are needed to work there.",
+        "C. They were badly damaged by fire.",
+        "D. More money is needed to repair some of the glass.",
+        "E. Visitors can see palm trees from tropical regions."
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "What did Annie discover from reading about icehouses?",
+      "options": [
+        "A. why they were first created",
+        "B. how the ice was kept frozen",
+        "C. where they were located"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "What point does Annie make about refrigeration in ancient Rome?",
+      "options": [
+        "A. It became a commercial business.",
+        "B. It used snow from nearby.",
+        "C. It took a long time to become popular."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "In connection with modern refrigerator, both Annie and Jack are worried about",
+      "options": [
+        "A. the complexity of the technology.",
+        "B. the fact that some are disposed of irresponsibly.",
+        "C. the large number that quickly break down."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "What do Jack and Annie agree regarding domestic fridges?",
+      "options": [
+        "A. They are generally good value for money.",
+        "B. There are plenty of useful variations.",
+        "C. They are more useful than other domestic appliances."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "matching",
+      "label": "25",
+      "question": "• the goods that are refrigerated",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• the effects on health",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• the impact on food producers",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• the impact on cities",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• refrigerated transport",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• domestic fridges",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "wealth"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "technology"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "power"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "textile / textiles"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "machines"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "newspapers"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "local"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "lighting"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "windows"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Advertising"
+    }
+  ]
+}

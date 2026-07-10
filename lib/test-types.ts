@@ -53,12 +53,61 @@ export interface ListeningQuestion {
   correctAnswer: string
 }
 
+export type ListeningMatchingRow = {
+  questionId: number
+  label: string
+}
+
+export type ListeningFlowChartStep = {
+  stepLabel: string
+  questionId: number
+}
+
+export type ListeningNoteLine =
+  | { kind: "text"; text: string; bullet?: boolean }
+  | { kind: "blank"; questionId: number; before?: string; after: string }
+
+export type ListeningNoteSection = {
+  heading?: string
+  lines: ListeningNoteLine[]
+}
+
+export type ListeningContentBlock =
+  | { type: "text"; text: string }
+  | { type: "table"; headers: string[]; rows: string[][] }
+  | { type: "image"; url: string; alt?: string }
+  | {
+      type: "multi-select-group"
+      questionIds: number[]
+      label?: string
+      prompt: string
+      options: string[]
+    }
+  | {
+      type: "matching-grid"
+      columns: string[]
+      rows: ListeningMatchingRow[]
+    }
+  | {
+      type: "flow-chart"
+      title?: string
+      steps: ListeningFlowChartStep[]
+      options: string[]
+    }
+  | {
+      type: "notes"
+      intro?: string
+      title?: string
+      sections: ListeningNoteSection[]
+    }
+
 export interface ListeningPart {
   partNumber: number
   title: string
   instruction: string
   audioUrl: string
   content: string // HTML content with embedded input fields
+  contentBlocks?: ListeningContentBlock[]
   questions: ListeningQuestion[]
 }
 

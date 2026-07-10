@@ -1,0 +1,1010 @@
+{
+  "testId": "cambridge-ielts-12-academic-listening-test-2",
+  "title": "Cambridge IELTS 12 Academic Listening Test 2",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-12-academic-listening-test-2/",
+  "book": 12,
+  "test": 2,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-2-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the notes below. Write ONE WORD AND/OR A NUMBER for each answer. Events during Kenton Festival Example Start date: ………. 16th ………. May Opening ceremony (first day) In town centre, starting at [1] The mayor will make a speech A [2] will perform Performance of a [3] About Helen Tungate (a [4] ) Evening fireworks display situated across the [5] Other events Video about relationships that children have with their [6] Venue: [7] House Performance of [8] Dances Venue: the [9] market in the town centre Time: 2 and 5 pm every day except 1st day of festival Several professional concerts and one by children Venue: library Time: 6.30 pm on the 18th Tickets available online from festival box office and from shops which have the festival [10] in their windows",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the notes below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": null,
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "The mayor will make a speech A",
+                  "before": "Opening ceremony (first day) In town centre, starting at"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": "will perform Performance of a",
+                  "before": "The mayor will make a speech A"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "About Helen Tungate (a",
+                  "before": "will perform Performance of a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": ") Evening fireworks display situated across the",
+                  "before": "About Helen Tungate (a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "Other events Video about relationships that children have with their",
+                  "before": ") Evening fireworks display situated across the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "Venue:",
+                  "before": "Other events Video about relationships that children have with their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "House Performance of",
+                  "before": "Venue:"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "Dances Venue: the",
+                  "before": "House Performance of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "market in the town centre Time: 2 and 5 pm every day except 1st day of festival Several professional concerts and one by children Venue: library Time: 6.30 pm on the 18th Tickets available online from festival box office and from shops which have the festival",
+                  "before": "Dances Venue: the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": "in their windows",
+                  "before": "market in the town centre Time: 2 and 5 pm every day except 1st day of festival Several professional concerts and one by children Venue: library Time: 6.30 pm on the 18th Tickets available online from festival box office and from shops which have the festival"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "2.45"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "band"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "play"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "scientist"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "river"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "grandparents"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "Handsworth"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "traditional"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "outdoor"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "logo"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-2-audio-2.mp3",
+      "content": "Questions 11-15\n\nChoose the correct letter, A , B or C . Theatre trip to Munich\n\nQuestions 16-20\n\nWhat does the man say about the play on each of the following days? Choose FIVE answers from the box and write the correct letter, A-G , next to Questions Comments Days",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-15\n\nChoose the correct letter, A, B or C.\n\nTheatre trip to Munich"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 11,
+          "prompt": "When the group meet at the airport they will have",
+          "options": [
+            "A. breakfast.",
+            "B. coffee.",
+            "C. lunch."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 12,
+          "prompt": "The group will be met at Munich Airport by",
+          "options": [
+            "A. an employee at the National Theatre.",
+            "B. a theatre manager.",
+            "C. a tour operator."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 13,
+          "prompt": "How much will they pay per night for a double room at the hotel?",
+          "options": [
+            "A. 110 euros",
+            "B. 120 euros",
+            "C. 150 euros"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 14,
+          "prompt": "What type of restaurant will they go to on Tuesday evening?",
+          "options": [
+            "A. an Italian restaurant",
+            "B. a Lebanese restaurant",
+            "C. a typical restaurant of the region"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 15,
+          "prompt": "Who will they meet on Wednesday afternoon?",
+          "options": [
+            "A. an actor",
+            "B. a playwright",
+            "C. a theatre director"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 16-20\n\nWhat does the man say about the play on each of the following days?\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to Questions\n\nComments\n\nDays"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Wednesday",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "Thursday",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "Friday",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "Saturday",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "Monday",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. The playwright will be present.",
+            "B. The play was written to celebrate an anniversary.",
+            "C. The play will be performed inside a historic building.",
+            "D. The play will be accompanied by live music.",
+            "E. The play will be performed outdoors.",
+            "F. The play will be performed for the first time.",
+            "G. The performance will be attended by officials from the town."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 15,
+          "type": "multiple-choice",
+          "label": "15",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-2-audio-3.mp3",
+      "content": "Questions 21-25\n\nChoose the correct letter, A , B or C . Scandinavian Studies\n\nQuestions 26-30\n\nComplete the flow-chart below. Choose FIVE answers from the box and write the correct letter, A-G , next to Questions How James will write his paper on the Vikings He’ll read a [26] and choose his topic. ↓ He’ll borrow a [27] from Beth. ↓ He’ll plan the [28] of the paper. ↓ He’ll read some source material and write [29] . ↓ He’ll write the paper using [30] . ↓ He’ll write the complete paper. Drag and drop an option to fill in each blank. A. bullet points B. film C. notes D. structure E. student paper F. textbook G. documentary",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nChoose the correct letter, A, B or C.\n\nScandinavian Studies"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "James chose to take Scandinavian Studies because when he was a child",
+          "options": [
+            "A. he was often taken to Denmark.",
+            "B. his mother spoke to him in Danish.",
+            "C. a number of Danish people visited his family."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "When he graduates, James would like to",
+          "options": [
+            "A. take a postgraduate course.",
+            "B. work in the media.",
+            "C. become a translator."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "Which course will end this term?",
+          "options": [
+            "A. Swedish cinema",
+            "B. Danish television programmes",
+            "C. Scandinavian literature"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "They agree that James’s literature paper this term will be on",
+          "options": [
+            "A. 19th century playwrights",
+            "B. the Icelandic sagas",
+            "C. modern Scandinavian novels."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "Beth recommends that James’s paper should be",
+          "options": [
+            "A. a historical overview of the genre.",
+            "B. an in-depth analysis of a single writer.",
+            "C. a study of the social background to the literature."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nComplete the flow-chart below.\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to Questions\n\nHow James will write his paper on the Vikings"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "He’ll read a 26 Drop answer here and choose his topic. ↓ He’ll borrow a 27 Drop answer here from Beth. ↓ He’ll plan the 28 Drop answer here of the paper. ↓ He’ll read some source material and write 29 Drop answer here . ↓ He’ll write the paper using 30 Drop answer here . ↓ He’ll write the complete paper.",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "↓",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "↓",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "↓",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "↓",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. bullet points",
+            "B. film",
+            "C. notes",
+            "D. structure",
+            "E. student paper",
+            "F. textbook",
+            "G. documentary"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "E"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "D"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "A"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-12-academic-listening-2-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Conflict at work Conflict mostly consists of behaviour in the general category of [31] Often a result of people wanting to prove their [32] Also caused by differences in [33] between people ‘ [34] ’ conflicts: people more concerned about own team than about company Conflict-related stress can cause [35] that may last for months Chief Executives (CEOs) Many have both [36] and anxiety May not like to have their decisions questioned There may be conflict between people who have different [37] Other managers A structure that is more [38] may create a feeling of uncertainly about who staff should report to. Minimising conflict Bosses need to try hard to gain [39] Someone from outside the company may be given the role of [40] in order to resolve conflicts.",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Conflict at work",
+          "sections": [
+            {
+              "heading": null,
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "",
+                  "before": "Conflict mostly consists of behaviour in the general category of"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "",
+                  "before": "Often a result of people wanting to prove their"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "between people ‘",
+                  "before": "Also caused by differences in"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "’ conflicts: people more concerned about own team than about company"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "that may last for months",
+                  "before": "Conflict-related stress can cause"
+                }
+              ]
+            },
+            {
+              "heading": "Chief Executives (CEOs)",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "and anxiety",
+                  "before": "Many have both"
+                }
+              ]
+            },
+            {
+              "heading": "May not like to have their decisions questioned",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": "",
+                  "before": "There may be conflict between people who have different"
+                }
+              ]
+            },
+            {
+              "heading": "Other managers",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "may create a feeling of uncertainly about who staff should report to.",
+                  "before": "A structure that is more"
+                }
+              ]
+            },
+            {
+              "heading": "Minimising conflict",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "",
+                  "before": "Bosses need to try hard to gain"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "in order to resolve conflicts.",
+                  "before": "Someone from outside the company may be given the role of"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "bullying"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "superiority"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "personality"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "structural"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "absence"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "confidence"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "visions"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "democratic"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "respect"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "mediator"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "2.45"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "band"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "play"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "scientist"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "river"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "grandparents"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Handsworth"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "traditional"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "outdoor"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "logo"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "When the group meet at the airport they will have",
+      "options": [
+        "A. breakfast.",
+        "B. coffee.",
+        "C. lunch."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "The group will be met at Munich Airport by",
+      "options": [
+        "A. an employee at the National Theatre.",
+        "B. a theatre manager.",
+        "C. a tour operator."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "How much will they pay per night for a double room at the hotel?",
+      "options": [
+        "A. 110 euros",
+        "B. 120 euros",
+        "C. 150 euros"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "What type of restaurant will they go to on Tuesday evening?",
+      "options": [
+        "A. an Italian restaurant",
+        "B. a Lebanese restaurant",
+        "C. a typical restaurant of the region"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 15,
+      "type": "multiple-choice",
+      "label": "15",
+      "question": "Who will they meet on Wednesday afternoon?",
+      "options": [
+        "A. an actor",
+        "B. a playwright",
+        "C. a theatre director"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• Wednesday",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• Thursday",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• Friday",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• Saturday",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• Monday",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "James chose to take Scandinavian Studies because when he was a child",
+      "options": [
+        "A. he was often taken to Denmark.",
+        "B. his mother spoke to him in Danish.",
+        "C. a number of Danish people visited his family."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "When he graduates, James would like to",
+      "options": [
+        "A. take a postgraduate course.",
+        "B. work in the media.",
+        "C. become a translator."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "Which course will end this term?",
+      "options": [
+        "A. Swedish cinema",
+        "B. Danish television programmes",
+        "C. Scandinavian literature"
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "They agree that James’s literature paper this term will be on",
+      "options": [
+        "A. 19th century playwrights",
+        "B. the Icelandic sagas",
+        "C. modern Scandinavian novels."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "Beth recommends that James’s paper should be",
+      "options": [
+        "A. a historical overview of the genre.",
+        "B. an in-depth analysis of a single writer.",
+        "C. a study of the social background to the literature."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "",
+      "options": [],
+      "correctAnswer": "E"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "",
+      "options": [],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bullying"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "superiority"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "personality"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "structural"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "absence"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "confidence"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "visions"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "democratic"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "respect"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "mediator"
+    }
+  ]
+}

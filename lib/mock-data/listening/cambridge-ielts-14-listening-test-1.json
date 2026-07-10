@@ -1,0 +1,1101 @@
+{
+  "testId": "cambridge-ielts-14-academic-listening-test-1",
+  "title": "Cambridge IELTS 14 Academic Listening Test 1",
+  "sourceUrl": "https://engnovate.com/ielts-listening-tests/cambridge-ielts-14-academic-listening-test-1/",
+  "book": 14,
+  "test": 1,
+  "totalTime": 30,
+  "parts": [
+    {
+      "partNumber": 1,
+      "title": "Part 1",
+      "instruction": "Listen and answer questions 1–10.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-14-academic-listening-1-audio-1.mp3",
+      "content": "Questions 1-10\n\nComplete the form below. Write ONE WORD AND/OR A NUMBER for each answer. CRIME REPORT FORM Type of crime : theft Personal information Example Name Louise … Taylor … Nationality [1] Date of birth 14 December 1977 Occupation interior designer Reason for visit business (to buy antique [2] ) Length of stay two months Current address [3] Apartments (No 15) Details of theft Items stolen – a wallet containing approximately £ [4] – a [5] Date of theft [6] Possible time and place of theft Location outside the [7] at about 4 pm Details of suspect – some boys asked for the [8] then ran off – one had a T-shirt with a picture of a tiger – he was about 12, slim build with [9] hair Crime reference number allocated [10]",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 1-10\n\nComplete the form below.\n\nWrite ONE WORD AND/OR A NUMBER for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "CRIME REPORT FORM",
+          "sections": [
+            {
+              "heading": "Type of crime :             theft",
+              "lines": []
+            },
+            {
+              "heading": "Personal information",
+              "lines": []
+            },
+            {
+              "heading": "Example",
+              "lines": []
+            },
+            {
+              "heading": "Name                    Louise … Taylor …",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 1,
+                  "after": "",
+                  "before": "Nationality"
+                }
+              ]
+            },
+            {
+              "heading": "Date of birth        14 December 1977",
+              "lines": []
+            },
+            {
+              "heading": "Occupation           interior designer",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 2,
+                  "after": ")",
+                  "before": "Reason for visit    business (to buy antique"
+                }
+              ]
+            },
+            {
+              "heading": "Length of stay       two months",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 3,
+                  "after": "Apartments (No 15)",
+                  "before": "Current address"
+                }
+              ]
+            },
+            {
+              "heading": "Details of theft",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 4,
+                  "after": "",
+                  "before": "Items stolen         – a wallet containing approximately £"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 5,
+                  "after": "",
+                  "before": "– a"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 6,
+                  "after": "",
+                  "before": "Date of theft"
+                }
+              ]
+            },
+            {
+              "heading": "Possible time and place of theft",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 7,
+                  "after": "at about 4 pm",
+                  "before": "Location                    outside the"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 8,
+                  "after": "then ran off",
+                  "before": "Details of suspect      – some boys asked for the"
+                }
+              ]
+            },
+            {
+              "heading": "– one had a T-shirt with a picture of a tiger",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 9,
+                  "after": "hair",
+                  "before": "– he was about 12, slim build with"
+                }
+              ]
+            },
+            {
+              "heading": "Crime reference number allocated",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 10,
+                  "after": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 1,
+          "type": "fill-in-blank",
+          "label": "1",
+          "correctAnswer": "Canadian"
+        },
+        {
+          "id": 2,
+          "type": "fill-in-blank",
+          "label": "2",
+          "correctAnswer": "furniture"
+        },
+        {
+          "id": 3,
+          "type": "fill-in-blank",
+          "label": "3",
+          "correctAnswer": "Park"
+        },
+        {
+          "id": 4,
+          "type": "fill-in-blank",
+          "label": "4",
+          "correctAnswer": "250 / 250 sterling"
+        },
+        {
+          "id": 5,
+          "type": "fill-in-blank",
+          "label": "5",
+          "correctAnswer": "phone"
+        },
+        {
+          "id": 6,
+          "type": "fill-in-blank",
+          "label": "6",
+          "correctAnswer": "10 September / 10th September"
+        },
+        {
+          "id": 7,
+          "type": "fill-in-blank",
+          "label": "7",
+          "correctAnswer": "museum"
+        },
+        {
+          "id": 8,
+          "type": "fill-in-blank",
+          "label": "8",
+          "correctAnswer": "time"
+        },
+        {
+          "id": 9,
+          "type": "fill-in-blank",
+          "label": "9",
+          "correctAnswer": "blond / blonde"
+        },
+        {
+          "id": 10,
+          "type": "fill-in-blank",
+          "label": "10",
+          "correctAnswer": "87954 82361 / 8795482361"
+        }
+      ]
+    },
+    {
+      "partNumber": 2,
+      "title": "Part 2",
+      "instruction": "Listen and answer questions 11–20.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-14-academic-listening-1-audio-2.mp3",
+      "content": "Questions 11-12\n\nChoose TWO letters, A-E .\n\nQuestions 13-14\n\nChoose TWO letters, A-E .\n\nQuestions 15-20\n\nWhat does the manager say about each of the following aspects of the company policy for apprentices? Write the correct letter, A , B or C , next to Questions. Company policy for apprentices",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 11-12\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            11,
+            12
+          ],
+          "label": "11-12",
+          "prompt": "Which TWO pieces of advice for the first week of an apprenticeship does the manager give?",
+          "options": [
+            "A. get to know colleagues",
+            "B. learn from any mistakes",
+            "C. ask lots of questions",
+            "D. react positively to feedback",
+            "E. enjoy new challenges"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 13-14\n\nChoose TWO letters, A-E."
+        },
+        {
+          "type": "multi-select-group",
+          "questionIds": [
+            13,
+            14
+          ],
+          "label": "13-14",
+          "prompt": "Which TWO things does the manager say mentors can help with?",
+          "options": [
+            "A. confidence-building",
+            "B. making career plans",
+            "C. completing difficult tasks",
+            "D. making a weekly timetable",
+            "E. reviewing progress"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 15-20\n\nWhat does the manager say about each of the following aspects of the company policy for apprentices?\n\nWrite the correct letter, A, B or C, next to Questions.\n\nCompany policy for apprentices"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Using the internet",
+              "questionId": 15
+            },
+            {
+              "stepLabel": "Flexible working",
+              "questionId": 16
+            },
+            {
+              "stepLabel": "Booking holidays",
+              "questionId": 17
+            },
+            {
+              "stepLabel": "Working overtime",
+              "questionId": 18
+            },
+            {
+              "stepLabel": "Wearing trainers",
+              "questionId": 19
+            },
+            {
+              "stepLabel": "Bringing food to work",
+              "questionId": 20
+            }
+          ],
+          "options": [
+            "A. It is encouraged.",
+            "B. There are some restrictions.",
+            "C. It is against the rules."
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 11,
+          "type": "multiple-choice",
+          "label": "11",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 12,
+          "type": "multiple-choice",
+          "label": "12",
+          "correctAnswer": "A / C"
+        },
+        {
+          "id": 13,
+          "type": "multiple-choice",
+          "label": "13",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 14,
+          "type": "multiple-choice",
+          "label": "14",
+          "correctAnswer": "B / E"
+        },
+        {
+          "id": 15,
+          "type": "matching",
+          "label": "15",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 16,
+          "type": "matching",
+          "label": "16",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 17,
+          "type": "matching",
+          "label": "17",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 18,
+          "type": "matching",
+          "label": "18",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 19,
+          "type": "matching",
+          "label": "19",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 20,
+          "type": "matching",
+          "label": "20",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 3,
+      "title": "Part 3",
+      "instruction": "Listen and answer questions 21–30.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-14-academic-listening-1-audio-3.mp3",
+      "content": "Questions 21-25\n\nChoose the correct letter, A , B or C . Cities built by the sea\n\nQuestions 26-30\n\nWhat decision do the students make about each of the following parts of their presentation? Choose FIVE answers from the box and write the correct letter, A-G, next to Questions. Decisions Parts of the presentation",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 21-25\n\nChoose the correct letter, A, B or C.\n\nCities built by the sea"
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 21,
+          "prompt": "Carla and Rob were surprised to learn that coastal cities",
+          "options": [
+            "A. contain nearly half the world’s population.",
+            "B. include most of the world’s largest cities.",
+            "C. are growing twice as fast as other cities."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 22,
+          "prompt": "According to Rob, building coastal cities near to rivers",
+          "options": [
+            "A. may bring pollution to the cities.",
+            "B. may reduce the land available for agriculture.",
+            "C. may mean the countryside is spoiled by industry."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 23,
+          "prompt": "What mistake was made when building water drainage channels in Miami in the 1950s?",
+          "options": [
+            "A. There were not enough for them.",
+            "B. They were made of unsuitable materials.",
+            "C. They did not allow for the effects of climate change."
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 24,
+          "prompt": "What do Rob and Carla think that the authorities in Miami should do immediately?",
+          "options": [
+            "A. take measures to restore ecosystems",
+            "B. pay for a new flood prevention system",
+            "C. stop disposing of waste materials into the ocean"
+          ]
+        },
+        {
+          "type": "multiple-choice",
+          "questionId": 25,
+          "prompt": "What do they agree should be the priority for international action?",
+          "options": [
+            "A. greater coordination of activities",
+            "B. more sharing of information",
+            "C. agreement on shared policies"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Questions 26-30\n\nWhat decision do the students make about each of the following parts of their presentation?\n\nChoose FIVE answers from the box and write the correct letter, A-G, next to Questions.\n\nDecisions\n\nParts of the presentation"
+        },
+        {
+          "type": "flow-chart",
+          "steps": [
+            {
+              "stepLabel": "Historical background",
+              "questionId": 26
+            },
+            {
+              "stepLabel": "Geographical factors",
+              "questionId": 27
+            },
+            {
+              "stepLabel": "Past mistakes",
+              "questionId": 28
+            },
+            {
+              "stepLabel": "Future risks",
+              "questionId": 29
+            },
+            {
+              "stepLabel": "International implications",
+              "questionId": 30
+            }
+          ],
+          "options": [
+            "A. use visuals",
+            "B. keep it short",
+            "C. involve other students",
+            "D. check the information is accurate",
+            "E. provide a handout",
+            "F. focus on one example",
+            "G. do online research"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 21,
+          "type": "multiple-choice",
+          "label": "21",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 22,
+          "type": "multiple-choice",
+          "label": "22",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 23,
+          "type": "multiple-choice",
+          "label": "23",
+          "correctAnswer": "C"
+        },
+        {
+          "id": 24,
+          "type": "multiple-choice",
+          "label": "24",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 25,
+          "type": "multiple-choice",
+          "label": "25",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 26,
+          "type": "matching",
+          "label": "26",
+          "correctAnswer": "B"
+        },
+        {
+          "id": 27,
+          "type": "matching",
+          "label": "27",
+          "correctAnswer": "A"
+        },
+        {
+          "id": 28,
+          "type": "matching",
+          "label": "28",
+          "correctAnswer": "F"
+        },
+        {
+          "id": 29,
+          "type": "matching",
+          "label": "29",
+          "correctAnswer": "G"
+        },
+        {
+          "id": 30,
+          "type": "matching",
+          "label": "30",
+          "correctAnswer": "C"
+        }
+      ]
+    },
+    {
+      "partNumber": 4,
+      "title": "Part 4",
+      "instruction": "Listen and answer questions 31–40.",
+      "audioUrl": "https://engnovate.com/wp-content/uploads/2023/07/cambridge-ielts-14-academic-listening-1-audio-4.mp3",
+      "content": "Questions 31-40\n\nComplete the notes below. Write ONE WORD ONLY for each answer. Marine renewable energy (ocean energy) Introduction More energy required because of growth in population and [31] What’s needed: renewable energy sources methods that won’t create pollution Wave energy Advantage: waves provide a [32] source of renewable energy Electricity can be generated using offshore or onshore systems Onshore systems may use a reservoir Problems: waves can move in any [33] movement of sand, etc. on the [34] of the ocean may be affected Tidal energy Tides are more [35] than waves Planned tidal lagoon in Wales: will be created in a [36] at Swansea breakwater (dam) containing 16 turbines rising tide forces water through turbines, generating electricity stored water is released through [37] , driving the turbines in the reverse direction Advantages: not dependent on weather no [38] is required to make it work likely to create a number of [39] Problem: may ham fish and birds, e.g. by affecting [40] and building up silt Ocean thermal energy conversion Uses a difference in temperature between the surface and lower levels Water brought to the surface in a pipe",
+      "contentBlocks": [
+        {
+          "type": "text",
+          "text": "Questions 31-40\n\nComplete the notes below.\n\nWrite ONE WORD ONLY for each answer."
+        },
+        {
+          "type": "notes",
+          "title": "Marine renewable energy (ocean energy)",
+          "sections": [
+            {
+              "heading": "Introduction",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 31,
+                  "after": "",
+                  "before": "More energy required because of growth in population and"
+                }
+              ]
+            },
+            {
+              "heading": "What’s needed:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "renewable energy sources"
+                },
+                {
+                  "kind": "text",
+                  "text": "methods that won’t create pollution"
+                }
+              ]
+            },
+            {
+              "heading": "Wave energy",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 32,
+                  "after": "source of renewable energy",
+                  "before": "Advantage: waves provide a"
+                }
+              ]
+            },
+            {
+              "heading": "Electricity can be generated using offshore or onshore systems",
+              "lines": []
+            },
+            {
+              "heading": "Onshore systems may use a reservoir",
+              "lines": []
+            },
+            {
+              "heading": "Problems:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 33,
+                  "after": "",
+                  "before": "waves can move in any"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 34,
+                  "after": "of the ocean may be affected",
+                  "before": "movement of sand, etc. on the"
+                }
+              ]
+            },
+            {
+              "heading": "Tidal energy",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 35,
+                  "after": "than waves",
+                  "before": "Tides are more"
+                }
+              ]
+            },
+            {
+              "heading": "Planned tidal lagoon in Wales:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 36,
+                  "after": "at Swansea",
+                  "before": "will be created in a"
+                },
+                {
+                  "kind": "text",
+                  "text": "breakwater (dam) containing 16 turbines"
+                },
+                {
+                  "kind": "text",
+                  "text": "rising tide forces water through turbines, generating electricity"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 37,
+                  "after": ", driving the turbines in the reverse direction",
+                  "before": "stored water is released through"
+                }
+              ]
+            },
+            {
+              "heading": "Advantages:",
+              "lines": [
+                {
+                  "kind": "text",
+                  "text": "not dependent on weather"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 38,
+                  "after": "is required to make it work",
+                  "before": "no"
+                },
+                {
+                  "kind": "blank",
+                  "questionId": 39,
+                  "after": "",
+                  "before": "likely to create a number of"
+                }
+              ]
+            },
+            {
+              "heading": "Problem:",
+              "lines": [
+                {
+                  "kind": "blank",
+                  "questionId": 40,
+                  "after": "and building up silt",
+                  "before": "may ham fish and birds, e.g. by affecting"
+                }
+              ]
+            },
+            {
+              "heading": "Ocean thermal energy conversion",
+              "lines": []
+            },
+            {
+              "heading": "Uses a difference in temperature between the surface and lower levels",
+              "lines": []
+            },
+            {
+              "heading": "Water brought to the surface in a pipe",
+              "lines": []
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": 31,
+          "type": "fill-in-blank",
+          "label": "31",
+          "correctAnswer": "industry"
+        },
+        {
+          "id": 32,
+          "type": "fill-in-blank",
+          "label": "32",
+          "correctAnswer": "constant"
+        },
+        {
+          "id": 33,
+          "type": "fill-in-blank",
+          "label": "33",
+          "correctAnswer": "direction"
+        },
+        {
+          "id": 34,
+          "type": "fill-in-blank",
+          "label": "34",
+          "correctAnswer": "floor"
+        },
+        {
+          "id": 35,
+          "type": "fill-in-blank",
+          "label": "35",
+          "correctAnswer": "predictable"
+        },
+        {
+          "id": 36,
+          "type": "fill-in-blank",
+          "label": "36",
+          "correctAnswer": "bay"
+        },
+        {
+          "id": 37,
+          "type": "fill-in-blank",
+          "label": "37",
+          "correctAnswer": "gates"
+        },
+        {
+          "id": 38,
+          "type": "fill-in-blank",
+          "label": "38",
+          "correctAnswer": "fuel"
+        },
+        {
+          "id": 39,
+          "type": "fill-in-blank",
+          "label": "39",
+          "correctAnswer": "jobs"
+        },
+        {
+          "id": 40,
+          "type": "fill-in-blank",
+          "label": "40",
+          "correctAnswer": "migration"
+        }
+      ]
+    }
+  ],
+  "transcripts": {},
+  "questionDetails": [
+    {
+      "id": 1,
+      "type": "fill-in-blank",
+      "label": "1",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Canadian"
+    },
+    {
+      "id": 2,
+      "type": "fill-in-blank",
+      "label": "2",
+      "question": "",
+      "options": [],
+      "correctAnswer": "furniture"
+    },
+    {
+      "id": 3,
+      "type": "fill-in-blank",
+      "label": "3",
+      "question": "",
+      "options": [],
+      "correctAnswer": "Park"
+    },
+    {
+      "id": 4,
+      "type": "fill-in-blank",
+      "label": "4",
+      "question": "",
+      "options": [],
+      "correctAnswer": "250 / 250 sterling"
+    },
+    {
+      "id": 5,
+      "type": "fill-in-blank",
+      "label": "5",
+      "question": "",
+      "options": [],
+      "correctAnswer": "phone"
+    },
+    {
+      "id": 6,
+      "type": "fill-in-blank",
+      "label": "6",
+      "question": "",
+      "options": [],
+      "correctAnswer": "10 September / 10th September"
+    },
+    {
+      "id": 7,
+      "type": "fill-in-blank",
+      "label": "7",
+      "question": "",
+      "options": [],
+      "correctAnswer": "museum"
+    },
+    {
+      "id": 8,
+      "type": "fill-in-blank",
+      "label": "8",
+      "question": "",
+      "options": [],
+      "correctAnswer": "time"
+    },
+    {
+      "id": 9,
+      "type": "fill-in-blank",
+      "label": "9",
+      "question": "",
+      "options": [],
+      "correctAnswer": "blond / blonde"
+    },
+    {
+      "id": 10,
+      "type": "fill-in-blank",
+      "label": "10",
+      "question": "",
+      "options": [],
+      "correctAnswer": "87954 82361 / 8795482361"
+    },
+    {
+      "id": 11,
+      "type": "multiple-choice",
+      "label": "11",
+      "question": "Which TWO pieces of advice for the first week of an apprenticeship does the manager give?",
+      "options": [
+        "A. get to know colleagues",
+        "B. learn from any mistakes",
+        "C. ask lots of questions",
+        "D. react positively to feedback",
+        "E. enjoy new challenges"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 12,
+      "type": "multiple-choice",
+      "label": "12",
+      "question": "Which TWO pieces of advice for the first week of an apprenticeship does the manager give?",
+      "options": [
+        "A. get to know colleagues",
+        "B. learn from any mistakes",
+        "C. ask lots of questions",
+        "D. react positively to feedback",
+        "E. enjoy new challenges"
+      ],
+      "correctAnswer": "A / C"
+    },
+    {
+      "id": 13,
+      "type": "multiple-choice",
+      "label": "13",
+      "question": "Which TWO things does the manager say mentors can help with?",
+      "options": [
+        "A. confidence-building",
+        "B. making career plans",
+        "C. completing difficult tasks",
+        "D. making a weekly timetable",
+        "E. reviewing progress"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 14,
+      "type": "multiple-choice",
+      "label": "14",
+      "question": "Which TWO things does the manager say mentors can help with?",
+      "options": [
+        "A. confidence-building",
+        "B. making career plans",
+        "C. completing difficult tasks",
+        "D. making a weekly timetable",
+        "E. reviewing progress"
+      ],
+      "correctAnswer": "B / E"
+    },
+    {
+      "id": 15,
+      "type": "matching",
+      "label": "15",
+      "question": "• Using the internet",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 16,
+      "type": "matching",
+      "label": "16",
+      "question": "• Flexible working",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "type": "matching",
+      "label": "17",
+      "question": "• Booking holidays",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "type": "matching",
+      "label": "18",
+      "question": "• Working overtime",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 19,
+      "type": "matching",
+      "label": "19",
+      "question": "• Wearing trainers",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 20,
+      "type": "matching",
+      "label": "20",
+      "question": "• Bringing food to work",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 21,
+      "type": "multiple-choice",
+      "label": "21",
+      "question": "Carla and Rob were surprised to learn that coastal cities",
+      "options": [
+        "A. contain nearly half the world’s population.",
+        "B. include most of the world’s largest cities.",
+        "C. are growing twice as fast as other cities."
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 22,
+      "type": "multiple-choice",
+      "label": "22",
+      "question": "According to Rob, building coastal cities near to rivers",
+      "options": [
+        "A. may bring pollution to the cities.",
+        "B. may reduce the land available for agriculture.",
+        "C. may mean the countryside is spoiled by industry."
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 23,
+      "type": "multiple-choice",
+      "label": "23",
+      "question": "What mistake was made when building water drainage channels in Miami in the 1950s?",
+      "options": [
+        "A. There were not enough for them.",
+        "B. They were made of unsuitable materials.",
+        "C. They did not allow for the effects of climate change."
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "type": "multiple-choice",
+      "label": "24",
+      "question": "What do Rob and Carla think that the authorities in Miami should do immediately?",
+      "options": [
+        "A. take measures to restore ecosystems",
+        "B. pay for a new flood prevention system",
+        "C. stop disposing of waste materials into the ocean"
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 25,
+      "type": "multiple-choice",
+      "label": "25",
+      "question": "What do they agree should be the priority for international action?",
+      "options": [
+        "A. greater coordination of activities",
+        "B. more sharing of information",
+        "C. agreement on shared policies"
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 26,
+      "type": "matching",
+      "label": "26",
+      "question": "• Historical background",
+      "options": [],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 27,
+      "type": "matching",
+      "label": "27",
+      "question": "• Geographical factors",
+      "options": [],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 28,
+      "type": "matching",
+      "label": "28",
+      "question": "• Past mistakes",
+      "options": [],
+      "correctAnswer": "F"
+    },
+    {
+      "id": 29,
+      "type": "matching",
+      "label": "29",
+      "question": "• Future risks",
+      "options": [],
+      "correctAnswer": "G"
+    },
+    {
+      "id": 30,
+      "type": "matching",
+      "label": "30",
+      "question": "• International implications",
+      "options": [],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 31,
+      "type": "fill-in-blank",
+      "label": "31",
+      "question": "",
+      "options": [],
+      "correctAnswer": "industry"
+    },
+    {
+      "id": 32,
+      "type": "fill-in-blank",
+      "label": "32",
+      "question": "",
+      "options": [],
+      "correctAnswer": "constant"
+    },
+    {
+      "id": 33,
+      "type": "fill-in-blank",
+      "label": "33",
+      "question": "",
+      "options": [],
+      "correctAnswer": "direction"
+    },
+    {
+      "id": 34,
+      "type": "fill-in-blank",
+      "label": "34",
+      "question": "",
+      "options": [],
+      "correctAnswer": "floor"
+    },
+    {
+      "id": 35,
+      "type": "fill-in-blank",
+      "label": "35",
+      "question": "",
+      "options": [],
+      "correctAnswer": "predictable"
+    },
+    {
+      "id": 36,
+      "type": "fill-in-blank",
+      "label": "36",
+      "question": "",
+      "options": [],
+      "correctAnswer": "bay"
+    },
+    {
+      "id": 37,
+      "type": "fill-in-blank",
+      "label": "37",
+      "question": "",
+      "options": [],
+      "correctAnswer": "gates"
+    },
+    {
+      "id": 38,
+      "type": "fill-in-blank",
+      "label": "38",
+      "question": "",
+      "options": [],
+      "correctAnswer": "fuel"
+    },
+    {
+      "id": 39,
+      "type": "fill-in-blank",
+      "label": "39",
+      "question": "",
+      "options": [],
+      "correctAnswer": "jobs"
+    },
+    {
+      "id": 40,
+      "type": "fill-in-blank",
+      "label": "40",
+      "question": "",
+      "options": [],
+      "correctAnswer": "migration"
+    }
+  ]
+}
