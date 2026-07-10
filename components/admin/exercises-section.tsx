@@ -81,6 +81,12 @@ import {
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
 import {
+  listListenings,
+  fetchListeningSummaries,
+  listeningHomeworkSlug,
+  type IeltsListeningSummary,
+} from "@/lib/listening-data"
+import {
   collectAvailableReadingTypes,
   filterReadingsByQuestionType,
   readingQuestionTypeLabel,
@@ -293,6 +299,7 @@ export default function ExercisesSection({
   const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
   const [assignPodcast, setAssignPodcast] = useState<PodcastEpisode | null>(null)
   const [assignReading, setAssignReading] = useState<IeltsReadingSummary | null>(null)
+  const [assignListening, setAssignListening] = useState<IeltsListeningSummary | null>(null)
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
   const [previewReading, setPreviewReading] = useState<IeltsReadingSummary | null>(null)
@@ -332,11 +339,19 @@ export default function ExercisesSection({
 
   const [readings, setReadings] = useState<IeltsReadingSummary[]>(() => listReadings())
   const [readingsLoading, setReadingsLoading] = useState(true)
+  const [listenings, setListenings] = useState<IeltsListeningSummary[]>(() => listListenings())
+  const [listeningsLoading, setListeningsLoading] = useState(true)
   const [readingTypeFilter, setReadingTypeFilter] = useState<string | null>(null)
   useEffect(() => {
     void fetchReadingSummaries()
       .then(setReadings)
       .finally(() => setReadingsLoading(false))
+  }, [])
+
+  useEffect(() => {
+    void fetchListeningSummaries()
+      .then(setListenings)
+      .finally(() => setListeningsLoading(false))
   }, [])
 
   const readingQuestionTypes = useMemo(
@@ -352,7 +367,7 @@ export default function ExercisesSection({
     setReadingTypeFilter(null)
   }, [selectedCategory])
 
-  const ieltsStats = useMemo(() => ieltsFolderStats(readings), [readings])
+  const ieltsStats = useMemo(() => ieltsFolderStats(readings, listenings), [readings, listenings])
 
   // Exactly the six fixed levels, with their content folded in. Topics/decks
   // whose CEFR band falls outside A1–C2 are bucketed into the nearest fixed band.
@@ -676,6 +691,18 @@ export default function ExercisesSection({
           }}
           createdByName={createdByName}
         />
+        <AssignListeningDialog
+          test={assignListening}
+          groups={assignableGroups}
+          open={!!assignListening}
+          onOpenChange={(open) => !open && setAssignListening(null)}
+          onAssigned={() => {
+            toast({ title: "Listening task assigned" })
+            setAssignListening(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
       </div>
     )
   }
@@ -685,7 +712,7 @@ export default function ExercisesSection({
     const subjectFolders = isIeltsLevel(selectedLevel) ? IELTS_SUBJECT_FOLDERS : CEFR_SUBJECT_FOLDERS
     const statsFor = (id: string): { count: number; lines: string[] } => {
       if (isIeltsLevel(selectedLevel)) {
-        return ieltsCategoryStats(id, readings)
+        return ieltsCategoryStats(id, readings, listenings)
       }
       if (id === "vocabulary") {
         const words = vocabDecksForLevel.reduce((acc, d) => acc + d.words.length, 0)
@@ -800,6 +827,7 @@ export default function ExercisesSection({
     const isVocab = selectedCategory === "vocabulary"
     const isPodcasts = selectedCategory === "podcasts"
     const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
+    const isListening = selectedCategory === "listening" && isIeltsLevel(selectedLevel)
     const topics = levelTopics.filter((t) => t.category === selectedCategory)
     const count = isVocab
       ? vocabDecksForLevel.length
@@ -807,7 +835,9 @@ export default function ExercisesSection({
         ? podcastsForLevel.length
         : isReading
           ? readings.length
-          : topics.length
+          : isListening
+            ? listenings.length
+            : topics.length
     const levelLabel = isIeltsLevel(selectedLevel) ? IELTS_LEVEL.label : selectedLevel
     return (
       <div className="space-y-5">
@@ -828,7 +858,7 @@ export default function ExercisesSection({
           <h2 className="text-2xl font-bold text-slate-900">{subject?.label ?? selectedCategory}</h2>
           <p className="mt-1 text-sm text-slate-500">
             {levelLabel} · {count}{" "}
-            {isVocab ? "deck" : isPodcasts ? "podcast" : isReading ? "passage" : "topic"}
+            {isVocab ? "deck" : isPodcasts ? "podcast" : isReading ? "passage" : isListening ? "test" : "topic"}
             {count === 1 ? "" : "s"}
           </p>
         </div>
@@ -842,7 +872,7 @@ export default function ExercisesSection({
           <ChevronLeft className="h-4 w-4" />
           Back
         </Button>
-        {count === 0 && !(isReading && readingsLoading) ? (
+        {count === 0 && !(isReading && readingsLoading) && !(isListening && listeningsLoading) ? (
           <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
             <p className="font-medium text-slate-900">Coming soon</p>
             <p className="text-sm text-slate-500">
@@ -930,6 +960,25 @@ export default function ExercisesSection({
               )}
             </>
           )
+        ) : isListening ? (
+          listeningsLoading ? (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-48 rounded-2xl" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {listenings.map((test) => (
+                <ListeningCard
+                  key={test.slug}
+                  test={test}
+                  canAssign={canAssign}
+                  onAssign={() => setAssignListening(test)}
+                />
+              ))}
+            </div>
+          )
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {topics.map((t) => (
@@ -990,6 +1039,19 @@ export default function ExercisesSection({
           onAssigned={() => {
             toast({ title: "Reading task assigned" })
             setAssignReading(null)
+            onHomeworkAssigned?.()
+          }}
+          createdByName={createdByName}
+        />
+
+        <AssignListeningDialog
+          test={assignListening}
+          groups={assignableGroups}
+          open={!!assignListening}
+          onOpenChange={(open) => !open && setAssignListening(null)}
+          onAssigned={() => {
+            toast({ title: "Listening task assigned" })
+            setAssignListening(null)
             onHomeworkAssigned?.()
           }}
           createdByName={createdByName}
@@ -1923,6 +1985,234 @@ function ReadingCard({
         </Button>
       </div>
     </div>
+  )
+}
+
+function ListeningCard({
+  test,
+  canAssign,
+  onAssign,
+}: {
+  test: IeltsListeningSummary
+  canAssign: boolean
+  onAssign: () => void
+}) {
+  return (
+    <div className="flex h-full flex-col rounded-2xl border border-amber-200/80 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          <span
+            aria-hidden
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm sm:h-10 sm:w-10"
+          >
+            <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
+          </span>
+          <div className="min-w-0 space-y-1.5">
+            <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
+            <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
+              {test.subtitle ? (
+                <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
+                  {test.subtitle}
+                </span>
+              ) : null}
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                {test.questionCount} questions
+              </span>
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                {test.totalTimeMinutes} min
+              </span>
+            </div>
+          </div>
+        </div>
+        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
+          IELTS
+        </span>
+      </div>
+      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">
+        Full Cambridge listening test with continuous audio playback and auto-scoring.
+      </p>
+      {canAssign ? (
+        <div className="mt-3 sm:mt-4">
+          <Button
+            size="sm"
+            onClick={onAssign}
+            className="h-9 w-full gap-1.5 bg-amber-500 text-white hover:bg-amber-600"
+          >
+            <UserPlus className="h-4 w-4" />
+            Assign to group
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function AssignListeningDialog({
+  test,
+  groups,
+  open,
+  onOpenChange,
+  onAssigned,
+  createdByName,
+}: {
+  test: IeltsListeningSummary | null
+  groups: Group[]
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onAssigned: () => void
+  createdByName: string
+}) {
+  const { toast } = useToast()
+  const [groupId, setGroupId] = useState<string>("")
+  const [dueDate, setDueDate] = useState<string>("")
+  const [unlimited, setUnlimited] = useState(true)
+  const [timeLimit, setTimeLimit] = useState<string>("30")
+  const [assigning, setAssigning] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    setGroupId("")
+    setUnlimited(true)
+    setTimeLimit(String(Math.max(30, test?.totalTimeMinutes || 30)))
+    setDueDate(new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString().slice(0, 10))
+  }, [open, test])
+
+  const submit = async () => {
+    if (!test) return
+    if (!groupId) {
+      toast({ title: "Pick a group", variant: "destructive" })
+      return
+    }
+    if (!dueDate) {
+      toast({ title: "Pick a due date", variant: "destructive" })
+      return
+    }
+    const parsedLimit = Number.parseInt(timeLimit, 10)
+    if (!unlimited && (!Number.isFinite(parsedLimit) || parsedLimit <= 0)) {
+      toast({ title: "Enter a valid time limit", variant: "destructive" })
+      return
+    }
+    const limitMinutes = unlimited ? undefined : parsedLimit
+    const estimatedMinutes = limitMinutes ?? Math.max(30, test.totalTimeMinutes || 30)
+    setAssigning(true)
+    try {
+      await homeworkApi.create({
+        title: `Listening: ${test.title}`,
+        description: `Complete the IELTS listening test "${test.title}" (${test.questionCount} questions).`,
+        subject: "listening",
+        groupId,
+        dueAt: new Date(dueDate).toISOString(),
+        estimatedMinutes,
+        timeLimitMinutes: limitMinutes,
+        createdBy: createdByName,
+        exerciseSlug: listeningHomeworkSlug(test.slug),
+      })
+      onAssigned()
+    } catch (err) {
+      toast({
+        title: "Could not assign",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setAssigning(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-slate-500" />
+            Assign listening
+          </DialogTitle>
+          <DialogDescription>
+            {test ? (
+              <>
+                <span className="font-medium text-slate-900">{test.title}</span>
+                <span className="text-slate-500"> · {test.questionCount} questions</span>
+              </>
+            ) : (
+              "Pick a group and a due date"
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label>Group *</Label>
+            <Select value={groupId} onValueChange={setGroupId}>
+              <SelectTrigger>
+                <SelectValue placeholder={groups.length === 0 ? "No groups yet" : "Pick a group"} />
+              </SelectTrigger>
+              <SelectContent>
+                {groups.map((g) => (
+                  <SelectItem key={g.id} value={g.id}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="assign-listening-due">Due date *</Label>
+            <Input
+              id="assign-listening-due"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Time limit</Label>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setUnlimited((v) => !v)}
+                aria-pressed={unlimited}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                  unlimited
+                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    : "border-slate-200 bg-white text-slate-500 hover:bg-slate-50",
+                )}
+              >
+                <Infinity className="h-3.5 w-3.5" />
+                Unlimited
+              </button>
+              {!unlimited && (
+                <div className="flex items-center gap-1.5">
+                  <div className="relative">
+                    <Clock className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      type="number"
+                      min={1}
+                      value={timeLimit}
+                      onChange={(e) => setTimeLimit(e.target.value)}
+                      className="h-9 w-24 pl-8"
+                    />
+                  </div>
+                  <span className="text-xs text-slate-500">minutes</span>
+                </div>
+              )}
+            </div>
+            <p className="text-[11px] text-slate-500">
+              {unlimited
+                ? "Audio plays once automatically, like the real exam."
+                : "A countdown timer will be shown during the listening task."}
+            </p>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={assigning}>
+            Cancel
+          </Button>
+          <Button onClick={() => void submit()} disabled={assigning || !test}>
+            {assigning ? "Assigning…" : "Assign"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

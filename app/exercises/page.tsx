@@ -50,6 +50,11 @@ import {
   listReadings,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
+import {
+  fetchListeningSummaries,
+  listListenings,
+  type IeltsListeningSummary,
+} from "@/lib/listening-data"
 import { ReadingTypeFilters } from "@/components/exercises/reading-type-filters"
 import {
   collectAvailableReadingTypes,
@@ -240,6 +245,8 @@ export default function ExercisesIndexPage() {
 
   const [readings, setReadings] = useState<IeltsReadingSummary[]>(() => listReadings())
   const [readingsLoading, setReadingsLoading] = useState(true)
+  const [listenings, setListenings] = useState<IeltsListeningSummary[]>(() => listListenings())
+  const [listeningsLoading, setListeningsLoading] = useState(true)
   const [readingTypeFilter, setReadingTypeFilter] = useState<string | null>(null)
   useEffect(() => {
     void fetchReadingSummaries()
@@ -247,7 +254,13 @@ export default function ExercisesIndexPage() {
       .finally(() => setReadingsLoading(false))
   }, [])
 
-  const ieltsStats = useMemo(() => ieltsFolderStats(readings), [readings])
+  useEffect(() => {
+    void fetchListeningSummaries()
+      .then(setListenings)
+      .finally(() => setListeningsLoading(false))
+  }, [])
+
+  const ieltsStats = useMemo(() => ieltsFolderStats(readings, listenings), [readings, listenings])
 
   // Exactly the six fixed levels with their content folded in.
   const levelFolders = useMemo(() => {
@@ -317,7 +330,7 @@ export default function ExercisesIndexPage() {
     categoryId: string,
   ): { count: number; lines: string[] } => {
     if (isIeltsLevel(level)) {
-      return ieltsCategoryStats(categoryId, readings)
+      return ieltsCategoryStats(categoryId, readings, listenings)
     }
     if (categoryId === "vocabulary") {
       const decks = vocabDecks.filter((d) => clampToFixedLevel(primaryLevel([d.level])) === level)
@@ -490,6 +503,7 @@ export default function ExercisesIndexPage() {
               const isVocab = selectedCategory === "vocabulary"
               const isPodcasts = selectedCategory === "podcasts"
               const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
+              const isListening = selectedCategory === "listening" && isIeltsLevel(selectedLevel)
               const topics = levelTopics.filter((t) => t.category === selectedCategory)
               const count = isVocab
                 ? vocabDecksForLevel.length
@@ -497,7 +511,9 @@ export default function ExercisesIndexPage() {
                   ? podcastsForLevel.length
                   : isReading
                     ? readings.length
-                    : topics.length
+                    : isListening
+                      ? listenings.length
+                      : topics.length
               const levelLabel = isIeltsLevel(selectedLevel)
                 ? IELTS_LEVEL.label
                 : selectedLevel!
@@ -522,6 +538,8 @@ export default function ExercisesIndexPage() {
                   <p className="mt-1 text-sm text-slate-500">
                     {isReading && readingsLoading ? (
                       <span className="inline-block h-4 w-48 animate-pulse rounded bg-slate-200" />
+                    ) : isListening && listeningsLoading ? (
+                      <span className="inline-block h-4 w-48 animate-pulse rounded bg-slate-200" />
                     ) : (
                       <>
                         {levelLabel} ·{" "}
@@ -534,7 +552,9 @@ export default function ExercisesIndexPage() {
                                   ? "podcast"
                                   : isReading
                                     ? "passage"
-                                    : "topic"
+                                    : isListening
+                                      ? "test"
+                                      : "topic"
                             }${count === 1 ? "" : "s"}`}
                         {isReading && readingTypeFilter ? (
                           <>
@@ -555,7 +575,7 @@ export default function ExercisesIndexPage() {
                     <ChevronLeft className="h-4 w-4" />
                     Back
                   </Button>
-                  {count === 0 && !(isReading && readingsLoading) ? (
+                  {count === 0 && !(isReading && readingsLoading) && !(isListening && listeningsLoading) ? (
                     <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
                       <p className="font-medium text-slate-900">Coming soon</p>
                       <p className="text-sm text-slate-500">
@@ -625,6 +645,18 @@ export default function ExercisesIndexPage() {
                           </div>
                         )}
                       </>
+                    )
+                  ) : isListening ? (
+                    listeningsLoading ? (
+                      <div className="mt-4">
+                        <CardGridSkeleton count={6} columns={3} />
+                      </div>
+                    ) : (
+                      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {listenings.map((test) => (
+                          <ListeningPracticeCard key={test.slug} test={test} />
+                        ))}
+                      </div>
                     )
                   ) : (
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -924,6 +956,52 @@ function PodcastCard({ episode }: { episode: PodcastEpisode }) {
             Finish listening to see {episode.words.length} words.
           </p>
         )}
+      </CardContent>
+    </Card>
+  )
+}
+
+function ListeningPracticeCard({ test }: { test: IeltsListeningSummary }) {
+  return (
+    <Card className="relative h-full rounded-2xl border-amber-200/80 bg-white transition-all duration-200 sm:rounded-3xl">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
+          <div className="flex min-w-0 flex-1 items-start gap-3">
+            <span
+              aria-hidden
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm sm:h-10 sm:w-10"
+            >
+              <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
+            </span>
+            <div className="min-w-0 space-y-1.5">
+              <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
+              <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                {test.book ? (
+                  <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
+                    Book {test.book}
+                  </span>
+                ) : null}
+                {test.test ? (
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                    Test {test.test}
+                  </span>
+                ) : null}
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                  {test.questionCount} questions
+                </span>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                  {test.totalTimeMinutes} min
+                </span>
+              </div>
+            </div>
+          </div>
+          <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
+            IELTS
+          </span>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-600">
+          {test.subtitle || "Full Cambridge listening test with continuous audio playback."}
+        </p>
       </CardContent>
     </Card>
   )

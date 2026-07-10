@@ -4,9 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { brand } from "@/lib/brand-colors"
 import {
   AlertTriangle,
-  ArrowDown,
-  ArrowRight,
-  ArrowUp,
   BookOpen,
   Calendar,
   Headphones,
@@ -14,13 +11,9 @@ import {
   PenTool,
   Sparkles,
   Target,
-  TrendingUp,
 } from "lucide-react"
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
-  Cell,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -45,6 +38,8 @@ import {
   type StudentIeltsProfile,
 } from "@/lib/api"
 import { cn } from "@/lib/utils"
+import { ieltsBandFillPercent } from "@/lib/language-profile"
+import { SkillProgressBarsBlock, type SkillProgressRow } from "./skill-progress-bars"
 import { StudentIeltsProfileSkeleton } from "./skeletons"
 
 const SKILL_META = {
@@ -67,20 +62,24 @@ export const READINESS_META: Record<
   insufficient_data: { label: "Insufficient data", cls: "bg-slate-100 text-slate-600" },
 }
 
-function TrendIcon({ trend }: { trend: "up" | "down" | "stable" }) {
-  if (trend === "up") return <ArrowUp className="h-3.5 w-3.5 text-emerald-600" />
-  if (trend === "down") return <ArrowDown className="h-3.5 w-3.5 text-rose-600" />
-  return <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-}
-
-function sourceLabel(source: string): string {
-  if (source === "mock_test") return "Mock test"
-  if (source === "homework") return "Homework"
-  return "No data"
-}
-
 function formatBand(band: number | null | undefined): string {
   return band != null ? band.toFixed(1) : "—"
+}
+
+function buildIeltsSkillRows(profile: StudentIeltsProfile): SkillProgressRow[] {
+  return profile.skills.map((skill) => {
+    const meta = SKILL_META[skill.skill as keyof typeof SKILL_META]
+    const hasData = skill.estimatedBand != null
+    const band = skill.estimatedBand ?? 0
+    return {
+      key: skill.skill,
+      label: meta?.label ?? skill.skill,
+      icon: meta?.icon ?? Sparkles,
+      hasData,
+      fillPercent: hasData ? ieltsBandFillPercent(band) : 0,
+      ieltsBand: hasData ? band : null,
+    }
+  })
 }
 
 function toDateInputValue(iso: string | null | undefined): string {
@@ -161,18 +160,10 @@ export function StudentIeltsProfileSection({ student }: StudentIeltsProfileSecti
       }))
   }, [profile?.bandHistory])
 
-  const skillChartData = useMemo(() => {
-    if (!profile) return []
-    return profile.skills.map((s) => {
-      const meta = SKILL_META[s.skill as keyof typeof SKILL_META]
-      return {
-        name: meta?.label ?? s.skill,
-        band: s.estimatedBand ?? 0,
-        color: meta?.color ?? "#cbd5e1",
-        hasData: s.estimatedBand != null,
-      }
-    })
-  }, [profile])
+  const skillRows = useMemo(
+    () => (profile ? buildIeltsSkillRows(profile) : []),
+    [profile],
+  )
 
   if (loading) {
     return <StudentIeltsProfileSkeleton />
@@ -273,90 +264,23 @@ export function StudentIeltsProfileSection({ student }: StudentIeltsProfileSecti
         {profile.recommendation}
       </p>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {profile.skills.map((skill) => {
-          const meta = SKILL_META[skill.skill as keyof typeof SKILL_META]
-          const Icon = meta?.icon ?? Sparkles
-          return (
-            <div
-              key={skill.skill}
-              className={cn(
-                "rounded-xl border bg-white p-3",
-                skill.belowTarget ? "border-rose-200" : "border-slate-200",
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <div
-                  className="flex h-8 w-8 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: meta?.color ?? "#e2e8f0" }}
-                >
-                  <Icon className="h-4 w-4 text-slate-900/80" />
-                </div>
-                <TrendIcon trend={skill.trend} />
-              </div>
-              <p className="mt-2 text-xs font-medium text-slate-500">{meta?.label ?? skill.skill}</p>
-              <p className="text-xl font-bold tabular-nums text-slate-900">
-                {formatBand(skill.estimatedBand)}
-              </p>
-              <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
-                  {sourceLabel(skill.source)}
-                </span>
-                {skill.attempts > 0 && (
-                  <span className="text-[10px] text-slate-400">{skill.attempts} attempts</span>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </div>
+      <SkillProgressBarsBlock rows={skillRows} />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
-            <TrendingUp className="h-4 w-4 text-emerald-600" />
-            Skill breakdown
-          </p>
-          {skillChartData.some((s) => s.hasData) ? (
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={skillChartData} barSize={36} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis domain={[0, 9]} ticks={[0, 3, 6, 9]} stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip
-                  formatter={(value: number, _name, item) => [
-                    item.payload.hasData ? value.toFixed(1) : "No data",
-                    "Band",
-                  ]}
-                />
-                <Bar dataKey="band" radius={[6, 6, 0, 0]}>
-                  {skillChartData.map((entry) => (
-                    <Cell key={entry.name} fill={entry.hasData ? entry.color : "#e2e8f0"} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          ) : (
-            <p className="py-8 text-center text-xs text-slate-400">No skill data yet</p>
-          )}
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <p className="mb-3 text-sm font-semibold text-slate-900">Mock test progress</p>
-          {chartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={chartData} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis domain={[4, 9]} stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip formatter={(value: number) => [value.toFixed(1), "Avg band"]} />
-                <Line type="monotone" dataKey="band" stroke={brand.primary} strokeWidth={2} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <p className="py-8 text-center text-xs text-slate-400">No mock test history</p>
-          )}
-        </div>
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="mb-3 text-sm font-semibold text-slate-900">Mock test progress</p>
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={chartData} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis domain={[4, 9]} stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+              <Tooltip formatter={(value: number) => [value.toFixed(1), "Avg band"]} />
+              <Line type="monotone" dataKey="band" stroke={brand.primary} strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <p className="py-8 text-center text-xs text-slate-400">No mock test history</p>
+        )}
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">

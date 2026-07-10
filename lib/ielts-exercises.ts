@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 import { BookOpen, Headphones, Mic, PenLine } from "lucide-react"
 import type { IeltsReadingSummary } from "./reading-data"
+import type { IeltsListeningSummary } from "./listening-data"
 
 export const IELTS_LEVEL_KEY = "ielts"
 
@@ -30,13 +31,18 @@ export function isIeltsLevel(level: string | null | undefined): boolean {
   return level === IELTS_LEVEL_KEY
 }
 
-export function ieltsFolderStats(readings: IeltsReadingSummary[]): {
+export function ieltsFolderStats(
+  readings: IeltsReadingSummary[],
+  listenings: IeltsListeningSummary[] = [],
+): {
   sectionCount: number
   passageCount: number
   questionCount: number
 } {
-  const passageCount = readings.length
-  const questionCount = readings.reduce((sum, r) => sum + r.questionCount, 0)
+  const passageCount = readings.length + listenings.length
+  const questionCount =
+    readings.reduce((sum, r) => sum + r.questionCount, 0) +
+    listenings.reduce((sum, t) => sum + t.questionCount, 0)
   return {
     sectionCount: IELTS_SUBJECT_FOLDERS.length,
     passageCount,
@@ -47,6 +53,7 @@ export function ieltsFolderStats(readings: IeltsReadingSummary[]): {
 export function ieltsCategoryStats(
   categoryId: string,
   readings: IeltsReadingSummary[],
+  listenings: IeltsListeningSummary[] = [],
 ): { count: number; lines: string[] } {
   if (categoryId === "reading") {
     return {
@@ -54,6 +61,16 @@ export function ieltsCategoryStats(
       lines: [
         `${readings.length} passage${readings.length === 1 ? "" : "s"}`,
         "IELTS-style questions",
+      ],
+    }
+  }
+  if (categoryId === "listening") {
+    const books = new Set(listenings.map((item) => item.book).filter(Boolean))
+    return {
+      count: listenings.length,
+      lines: [
+        `${listenings.length} test${listenings.length === 1 ? "" : "s"}`,
+        books.size > 0 ? `Books ${Math.min(...books)}–${Math.max(...books)}` : "40 questions each",
       ],
     }
   }

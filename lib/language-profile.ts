@@ -31,6 +31,29 @@ export function scoreClass(score: number): string {
   return "text-rose-700"
 }
 
+/** Learnix score (0–1000) → IELTS band equivalent (4.0–9.0, step 0.5). */
+export function learnixScoreToIeltsBand(score: number): number {
+  const clamped = Math.max(0, Math.min(1000, score))
+  const raw = 4 + (clamped / 1000) * 5
+  return Math.round(raw * 2) / 2
+}
+
+export function learnixScoreFillPercent(score: number): number {
+  return Math.max(0, Math.min(100, score / 10))
+}
+
+export function ieltsBandFillPercent(band: number): number {
+  return Math.max(0, Math.min(100, (band / 9) * 100))
+}
+
+/** Bar colour: red → yellow → green from fill % (green from 70%). */
+export function skillBarFillColor(fillPercent: number): string {
+  const p = Math.max(0, Math.min(100, fillPercent))
+  if (p >= 70) return "#22c55e"
+  if (p >= 40) return "#eab308"
+  return "#ef4444"
+}
+
 export function confidenceLabel(c: number): string {
   if (c >= 0.8) return "High"
   if (c >= 0.5) return "Medium"

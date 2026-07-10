@@ -4,10 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   AlertTriangle,
   BookMarked,
+  BookOpen,
   CheckCircle2,
   GraduationCap,
+  Headphones,
   Lightbulb,
   Mic,
+  PenTool,
   RefreshCw,
   Sparkles,
   TrendingUp,
@@ -30,7 +33,6 @@ import {
   studentsApi,
   type LanguageProfileHistory,
   type LanguageRecommendation,
-  type LanguageSkillProfile,
   type StudentLanguageProfile,
 } from "@/lib/api"
 import {
@@ -41,11 +43,14 @@ import {
   formatTopicLabel,
   groupTopicsByLevel,
   learnixLevelToCefr,
+  learnixScoreFillPercent,
+  learnixScoreToIeltsBand,
   scoreClass,
   type TopicWithSkill,
 } from "@/lib/language-profile"
 import { cn } from "@/lib/utils"
 import { LearnixLevelScale } from "./learnix-level-scale"
+import { SkillProgressBarsBlock, type SkillProgressRow } from "./skill-progress-bars"
 import { StudentLanguageProfileSkeleton } from "./skeletons"
 
 function priorityClass(p: string): string {
@@ -71,84 +76,28 @@ function recommendationLabel(rec: LanguageRecommendation): string {
   }
 }
 
-const SKILL_META = {
-  grammar: { label: "Grammar", icon: GraduationCap, color: "#fcd5a4" },
-  vocabulary: { label: "Vocabulary", icon: BookMarked, color: "#d8b4fe" },
-  speaking: { label: "Speaking", icon: Mic, color: "#9fcffb" },
-} as const
+const LANGUAGE_SKILL_ROWS = [
+  { key: "grammar", label: "Grammar", icon: GraduationCap },
+  { key: "vocabulary", label: "Vocabulary", icon: BookMarked },
+  { key: "reading", label: "Reading", icon: BookOpen },
+  { key: "listening", label: "Listening", icon: Headphones },
+  { key: "writing", label: "Writing", icon: PenTool },
+  { key: "speaking", label: "Speaking", icon: Mic },
+] as const
 
-interface SkillCardProps {
-  skillKey: keyof typeof SKILL_META
-  skill: LanguageSkillProfile
-  emptyLabel?: string
-}
-
-function SkillCard({ skillKey, skill, emptyLabel }: SkillCardProps) {
-  const meta = SKILL_META[skillKey]
-  const Icon = meta.icon
-  const mastered = skill.topics?.filter((t) => t.mastered).length ?? 0
-  const attempted = skill.topics?.length ?? 0
-  const cefr = learnixLevelToCefr(skill.level)
-
-  if (!skill.hasData) {
-    return (
-      <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/80 p-4">
-        <div className="flex items-center gap-2 text-slate-500">
-          <Icon className="h-4 w-4" style={{ color: meta.color }} />
-          <span className="text-sm font-medium">{meta.label}</span>
-        </div>
-        <p className="mt-2 text-xs text-slate-400">{emptyLabel ?? "Not enough data yet"}</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2.5">
-          <div
-            className="flex h-9 w-9 items-center justify-center rounded-lg"
-            style={{ backgroundColor: `${meta.color}33` }}
-          >
-            <Icon className="h-4 w-4" style={{ color: meta.color }} />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-slate-500">{meta.label}</p>
-            <p className={cn("text-2xl font-bold tabular-nums leading-tight", scoreClass(skill.score))}>
-              {skill.score}
-            </p>
-          </div>
-        </div>
-        <div className="text-right">
-          <Badge
-            variant="outline"
-            className="text-[10px]"
-            style={{
-              borderColor: `${CEFR_LEVEL_COLORS[cefr] ?? "#94a3b8"}66`,
-              color: CEFR_LEVEL_COLORS[cefr] ?? "#64748b",
-            }}
-          >
-            {cefr}
-          </Badge>
-          <p className="mt-1 text-[10px] text-slate-500">Level {skill.level}</p>
-        </div>
-      </div>
-
-      <div className="mt-3 space-y-2">
-        <div className="flex justify-between text-[10px] text-slate-500">
-          <span>{mastered} mastered</span>
-          <span>{attempted} topics touched</span>
-        </div>
-        <Progress
-          value={attempted > 0 ? (mastered / attempted) * 100 : 0}
-          className="h-1.5 bg-slate-100"
-        />
-        <p className="text-[10px] text-slate-400">
-          Confidence {Math.round(skill.confidence * 100)}%
-        </p>
-      </div>
-    </div>
-  )
+function buildLanguageSkillRows(profile: StudentLanguageProfile): SkillProgressRow[] {
+  return LANGUAGE_SKILL_ROWS.map((meta) => {
+    const skill = profile[meta.key]
+    const hasData = Boolean(skill?.hasData)
+    return {
+      key: meta.key,
+      label: meta.label,
+      icon: meta.icon,
+      hasData,
+      fillPercent: hasData ? learnixScoreFillPercent(skill.score) : 0,
+      ieltsBand: hasData ? learnixScoreToIeltsBand(skill.score) : null,
+    }
+  })
 }
 
 function OverallScoreCard({ profile }: { profile: StudentLanguageProfile }) {
@@ -159,7 +108,7 @@ function OverallScoreCard({ profile }: { profile: StudentLanguageProfile }) {
       : 0
 
   return (
-    <div className="col-span-2 rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4 sm:col-span-1">
+    <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4">
       <p className="text-[11px] font-medium uppercase tracking-wide text-violet-700/80">
         Overall Score
       </p>
@@ -442,16 +391,8 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <OverallScoreCard profile={profile} />
-            <SkillCard skillKey="grammar" skill={profile.grammar} />
-            <SkillCard skillKey="vocabulary" skill={profile.vocabulary} />
-            <SkillCard
-              skillKey="speaking"
-              skill={profile.speaking}
-              emptyLabel="No speaking assessments yet"
-            />
-          </div>
+          <OverallScoreCard profile={profile} />
+          <SkillProgressBarsBlock rows={buildLanguageSkillRows(profile)} />
 
           <LearnixLevelScale
             levelCoverage={profile.levelCoverage ?? {}}

@@ -1039,7 +1039,42 @@ export const exercisesApi = {
         totalTimeMinutes: number
         parts: unknown[]
       }
-    }>(`/exercises/reading/${slug}`),
+    }    >(`/exercises/reading/${slug}`),
+  listeningSummaries: () =>
+    api.get<
+      {
+        slug: string
+        title: string
+        subtitle: string
+        book?: number
+        test?: number
+        totalTimeMinutes: number
+        questionCount: number
+        order?: number
+      }[]
+    >("/exercises/listening/summary"),
+  listening: (slug: string) =>
+    api.get<{
+      slug: string
+      title: string
+      book?: number
+      test?: number
+      totalTimeMinutes: number
+      questionCount: number
+      fullAudioUrl: string
+      data: {
+        testId: string
+        title: string
+        book?: number
+        test?: number
+        catalogId?: string
+        totalTime: number
+        fullAudioUrl: string
+        parts: unknown[]
+        questionDetails?: unknown[]
+        transcripts?: Record<string, string>
+      }
+    }>(`/exercises/listening/${slug}`),
 }
 
 // ---------- Uploads ----------
