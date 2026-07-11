@@ -48,10 +48,11 @@ export function parsePodcastHomeworkSlug(exerciseSlug: string | undefined): stri
 }
 
 export function isPodcastHomework(
-  subject: string | undefined,
+  _subject: string | undefined,
   exerciseSlug?: string | undefined,
 ): boolean {
-  return subject === "listening" || parsePodcastHomeworkSlug(exerciseSlug) != null
+  // Both podcast and IELTS listening use subject "listening"; distinguish by slug prefix.
+  return parsePodcastHomeworkSlug(exerciseSlug) != null
 }
 
 /** Accent for podcast homework UI (emerald, matches mobile). */
