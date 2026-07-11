@@ -239,9 +239,10 @@ export function HomeworkStudentResults({
   }, [rows, homework.dueAt, homework.subject, sortKey, sortDir])
 
   const counts = useMemo(() => {
-    const c = { done: 0, working: 0, pending: 0, overdue: 0, cheating: 0 }
+    const c = { done: 0, working: 0, pending: 0, overdue: 0, cheating: 0, flagged: 0 }
     for (const r of rows) {
       if (isCheatingFailed(r.submission)) c.cheating += 1
+      else if (hasTrackedAppExits(r.submission)) c.flagged += 1
       if (r.status === "submitted" || r.status === "graded") c.done += 1
       else if (r.status === "in_progress" || r.status === "paused") c.working += 1
       else if (isOverdueRow(r, homework.dueAt)) c.overdue += 1
@@ -451,6 +452,12 @@ export function HomeworkStudentResults({
             {counts.cheating} cheating
           </span>
         )}
+        {counts.flagged > 0 && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-amber-800">
+            <AlertTriangle className="h-3 w-3" />
+            {counts.flagged} flagged
+          </span>
+        )}
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
@@ -522,6 +529,9 @@ export function HomeworkStudentResults({
                         >
                           {integrity === "detected" && <AlertTriangle className="h-3 w-3" />}
                           {INTEGRITY_META[integrity].label}
+                          {integrity === "suspicion" && (row.submission?.violationCount ?? 0) > 0
+                            ? ` · ${row.submission?.violationCount}`
+                            : null}
                         </span>
                       ) : (
                         <span className="text-xs text-slate-400">—</span>
@@ -811,9 +821,38 @@ function StudentDetail({
               Session entries: {row.submission?.entryCount}
             </p>
           )}
+          {(row.submission?.violationCount ?? 0) > 0 && (
+            <p className="mt-1 text-xs text-red-700/80">
+              App exits: {row.submission?.violationCount}
+            </p>
+          )}
           {row.submission?.submittedAt && (
             <p className="mt-2 text-[11px] text-red-700/80">
               Failed at {formatShortDateTime(row.submission.submittedAt)}
+            </p>
+          )}
+        </div>
+      )}
+
+      {hasTrackedAppExits(row.submission) && !cheatingFailed && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-700" />
+            <span className="text-sm font-semibold text-amber-900">App exit flagged</span>
+          </div>
+          <p className="mt-1 text-xs text-amber-800/90">
+            The student left the app {row.submission?.violationCount} time
+            {row.submission?.violationCount === 1 ? "" : "s"} during this homework. The session was
+            not auto-failed — review before grading.
+          </p>
+          {formatViolationReasons(row.submission) ? (
+            <p className="mt-1 text-xs text-amber-800/80">
+              Reasons: {formatViolationReasons(row.submission)}
+            </p>
+          ) : null}
+          {(row.submission?.entryCount ?? 0) > 0 && (
+            <p className="mt-1 text-xs text-amber-800/80">
+              Session entries: {row.submission?.entryCount}
             </p>
           )}
         </div>
@@ -1361,6 +1400,25 @@ function isCheatingFailed(sub?: HomeworkSubmission): boolean {
   return (
     sub?.integrityStatus === "cheating_detected" || sub?.attempt?.failedDueToCheating === true
   )
+}
+
+function hasTrackedAppExits(sub?: HomeworkSubmission): boolean {
+  return (
+    !isCheatingFailed(sub) &&
+    sub?.integrityStatus === "cheating_suspicion" &&
+    (sub.violationCount ?? 0) > 0
+  )
+}
+
+function formatViolationReasons(sub?: HomeworkSubmission): string | null {
+  const reasons = [
+    ...new Set(
+      (sub?.events ?? [])
+        .filter((e) => e.type === "violation" && e.reason)
+        .map((e) => String(e.reason).replace(/_/g, " ")),
+    ),
+  ]
+  return reasons.length > 0 ? reasons.join(", ") : null
 }
 
 function displayStatusMeta(

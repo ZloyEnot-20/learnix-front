@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
-import { Camera, CheckCircle2, Mic, Sparkles, XCircle } from "lucide-react"
+import { Camera, CheckCircle2, Mic, ShieldAlert, Sparkles, XCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 function SettingsGroupLabel({ children }: { children: React.ReactNode }) {
@@ -89,11 +89,12 @@ function OrgSettingsSkeleton() {
 export default function OrgSettingsSection() {
   const [allowScreenshots, setAllowScreenshots] = useState(false)
   const [entryTestAutocomplete, setEntryTestAutocomplete] = useState(false)
+  const [failHomeworkOnAppExit, setFailHomeworkOnAppExit] = useState(true)
   const [speechWorking, setSpeechWorking] = useState<boolean | null>(null)
   const [loading, setLoading] = useState(true)
-  const [savingKey, setSavingKey] = useState<"allowScreenshots" | "entryTestAutocomplete" | null>(
-    null,
-  )
+  const [savingKey, setSavingKey] = useState<
+    "allowScreenshots" | "entryTestAutocomplete" | "failHomeworkOnAppExit" | null
+  >(null)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
@@ -105,6 +106,7 @@ export default function OrgSettingsSection() {
       ])
       setAllowScreenshots(settings.allowScreenshots === true)
       setEntryTestAutocomplete(settings.entryTestAutocomplete === true)
+      setFailHomeworkOnAppExit(settings.failHomeworkOnAppExit !== false)
       setSpeechWorking(
         speechStatus ? Boolean(speechStatus.online && speechStatus.loaded) : false,
       )
@@ -128,6 +130,7 @@ export default function OrgSettingsSection() {
       const updated = await orgApi.updateSettings({ allowScreenshots: checked })
       setAllowScreenshots(updated.allowScreenshots === true)
       setEntryTestAutocomplete(updated.entryTestAutocomplete === true)
+      setFailHomeworkOnAppExit(updated.failHomeworkOnAppExit !== false)
     } catch {
       setAllowScreenshots(previous)
       setError("Could not save settings. Please try again.")
@@ -145,8 +148,27 @@ export default function OrgSettingsSection() {
       const updated = await orgApi.updateSettings({ entryTestAutocomplete: checked })
       setAllowScreenshots(updated.allowScreenshots === true)
       setEntryTestAutocomplete(updated.entryTestAutocomplete === true)
+      setFailHomeworkOnAppExit(updated.failHomeworkOnAppExit !== false)
     } catch {
       setEntryTestAutocomplete(previous)
+      setError("Could not save settings. Please try again.")
+    } finally {
+      setSavingKey(null)
+    }
+  }
+
+  const handleFailHomeworkOnAppExitToggle = async (checked: boolean) => {
+    const previous = failHomeworkOnAppExit
+    setFailHomeworkOnAppExit(checked)
+    setSavingKey("failHomeworkOnAppExit")
+    setError(null)
+    try {
+      const updated = await orgApi.updateSettings({ failHomeworkOnAppExit: checked })
+      setAllowScreenshots(updated.allowScreenshots === true)
+      setEntryTestAutocomplete(updated.entryTestAutocomplete === true)
+      setFailHomeworkOnAppExit(updated.failHomeworkOnAppExit !== false)
+    } catch {
+      setFailHomeworkOnAppExit(previous)
       setError("Could not save settings. Please try again.")
     } finally {
       setSavingKey(null)
@@ -181,6 +203,24 @@ export default function OrgSettingsSection() {
                 checked={allowScreenshots}
                 disabled={savingKey !== null}
                 onCheckedChange={(checked) => void handleAllowScreenshotsToggle(checked)}
+              />
+            }
+          />
+
+          <Separator className="my-2" />
+
+          <SettingsRow
+            icon={<ShieldAlert className="h-4 w-4 text-rose-600" />}
+            iconClassName="bg-rose-50"
+            title="Fail homework on app exit"
+            description="When off, leaving the app only flags the session for review — homework is not auto-failed."
+            htmlFor="fail-homework-on-app-exit"
+            control={
+              <Switch
+                id="fail-homework-on-app-exit"
+                checked={failHomeworkOnAppExit}
+                disabled={savingKey !== null}
+                onCheckedChange={(checked) => void handleFailHomeworkOnAppExitToggle(checked)}
               />
             }
           />

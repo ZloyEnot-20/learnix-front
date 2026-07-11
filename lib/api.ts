@@ -925,6 +925,8 @@ export interface OrgSettings {
   allowScreenshots: boolean
   /** Off unless explicitly enabled in organization settings. */
   entryTestAutocomplete?: boolean
+  /** When true, repeated app exits fail the homework session. */
+  failHomeworkOnAppExit?: boolean
 }
 
 export const orgApi = {
