@@ -73,6 +73,7 @@ import {
   type PodcastEpisode,
 } from "@/lib/podcast-data"
 import { ReadingTypeFilters } from "@/components/exercises/reading-type-filters"
+import { ListeningTypeFilters } from "@/components/exercises/listening-type-filters"
 import {
   listReadings,
   fetchReadingSummaries,
@@ -92,6 +93,12 @@ import {
   readingQuestionTypeLabel,
   sortReadingQuestionTypes,
 } from "@/lib/reading-question-types"
+import {
+  collectAvailableListeningTypes,
+  filterListeningsByQuestionType,
+  listeningQuestionTypeLabel,
+  sortListeningQuestionTypes,
+} from "@/lib/listening-question-types"
 import {
   IELTS_LEVEL,
   IELTS_LEVEL_KEY,
@@ -342,6 +349,7 @@ export default function ExercisesSection({
   const [listenings, setListenings] = useState<IeltsListeningSummary[]>(() => listListenings())
   const [listeningsLoading, setListeningsLoading] = useState(true)
   const [readingTypeFilter, setReadingTypeFilter] = useState<string | null>(null)
+  const [listeningTypeFilter, setListeningTypeFilter] = useState<string | null>(null)
   useEffect(() => {
     void fetchReadingSummaries()
       .then(setReadings)
@@ -362,9 +370,18 @@ export default function ExercisesSection({
     () => filterReadingsByQuestionType(readings, readingTypeFilter),
     [readings, readingTypeFilter],
   )
+  const listeningQuestionTypes = useMemo(
+    () => collectAvailableListeningTypes(listenings),
+    [listenings],
+  )
+  const filteredListenings = useMemo(
+    () => filterListeningsByQuestionType(listenings, listeningTypeFilter),
+    [listenings, listeningTypeFilter],
+  )
 
   useEffect(() => {
     setReadingTypeFilter(null)
+    setListeningTypeFilter(null)
   }, [selectedCategory])
 
   const ieltsStats = useMemo(() => ieltsFolderStats(readings, listenings), [readings, listenings])
@@ -962,22 +979,59 @@ export default function ExercisesSection({
           )
         ) : isListening ? (
           listeningsLoading ? (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-48 rounded-2xl" />
-              ))}
+            <div>
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="h-8 w-24 rounded-full" />
+                ))}
+              </div>
+              <div className="mt-4 space-y-2">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <Skeleton key={i} className="h-16 w-full rounded-xl" />
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {listenings.map((test) => (
-                <ListeningCard
-                  key={test.slug}
-                  test={test}
-                  canAssign={canAssign}
-                  onAssign={() => setAssignListening(test)}
-                />
-              ))}
-            </div>
+            <>
+              <ListeningTypeFilters
+                types={listeningQuestionTypes}
+                listenings={listenings}
+                activeType={listeningTypeFilter}
+                onChange={setListeningTypeFilter}
+              />
+              {filteredListenings.length === 0 ? (
+                <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                  <p className="font-medium text-slate-900">No listening tests found</p>
+                  <p className="text-sm text-slate-500">
+                    {listeningTypeFilter
+                      ? `No tests with “${listeningQuestionTypeLabel(listeningTypeFilter)}” questions.`
+                      : "Listening tests haven't been added yet."}
+                  </p>
+                  {listeningTypeFilter ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="mt-4"
+                      onClick={() => setListeningTypeFilter(null)}
+                    >
+                      Show all tests
+                    </Button>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="mt-4 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-sm">
+                  {filteredListenings.map((test) => (
+                    <ListeningListRow
+                      key={test.slug}
+                      test={test}
+                      canAssign={canAssign}
+                      onAssign={() => setAssignListening(test)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1988,7 +2042,7 @@ function ReadingCard({
   )
 }
 
-function ListeningCard({
+function ListeningListRow({
   test,
   canAssign,
   onAssign,
@@ -1997,51 +2051,57 @@ function ListeningCard({
   canAssign: boolean
   onAssign: () => void
 }) {
+  const typeLabels = sortListeningQuestionTypes(test.questionTypes ?? []).map(
+    listeningQuestionTypeLabel,
+  )
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-amber-200/80 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
-      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
-        <div className="flex min-w-0 flex-1 items-start gap-3">
-          <span
-            aria-hidden
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm sm:h-10 sm:w-10"
-          >
-            <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
-          </span>
-          <div className="min-w-0 space-y-1.5">
-            <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
-            <div className="flex flex-wrap gap-1.5 text-xs text-slate-600 sm:gap-2">
-              {test.subtitle ? (
-                <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
-                  {test.subtitle}
-                </span>
-              ) : null}
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                {test.questionCount} questions
+    <div className="flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
+      <div className="flex min-w-0 flex-1 items-start gap-3">
+        <span
+          aria-hidden
+          className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm"
+        >
+          <Headphones className="h-4 w-4" />
+        </span>
+        <div className="min-w-0 space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-sm font-semibold text-slate-900 sm:text-base">{test.title}</h3>
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              IELTS
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1.5 text-xs text-slate-600">
+            {test.subtitle ? (
+              <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
+                {test.subtitle}
               </span>
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                {test.totalTimeMinutes} min
+            ) : null}
+            {typeLabels.map((label) => (
+              <span
+                key={label}
+                className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700"
+              >
+                {label}
               </span>
-            </div>
+            ))}
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+              {test.questionCount} questions
+            </span>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+              {test.totalTimeMinutes} min
+            </span>
           </div>
         </div>
-        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
-          IELTS
-        </span>
       </div>
-      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 sm:mt-4">
-        Full Cambridge listening test with continuous audio playback and auto-scoring.
-      </p>
       {canAssign ? (
-        <div className="mt-3 sm:mt-4">
-          <Button
-            size="sm"
-            onClick={onAssign}
-            className="h-9 w-full gap-1.5 bg-amber-500 text-white hover:bg-amber-600"
-          >
-            <UserPlus className="h-4 w-4" />
-            Assign to group
-          </Button>
-        </div>
+        <Button
+          size="sm"
+          onClick={onAssign}
+          className="h-9 shrink-0 gap-1.5 bg-amber-500 text-white hover:bg-amber-600 sm:w-auto"
+        >
+          <UserPlus className="h-4 w-4" />
+          Assign
+        </Button>
       ) : null}
     </div>
   )

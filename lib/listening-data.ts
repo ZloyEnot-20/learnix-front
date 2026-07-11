@@ -10,6 +10,7 @@ export interface IeltsListeningSummary {
   test?: number
   totalTimeMinutes: number
   questionCount: number
+  questionTypes?: string[]
   order?: number
 }
 

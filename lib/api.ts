@@ -309,6 +309,8 @@ export interface StudentLanguageProfileSummary {
   grammarScore: number | null
   vocabularyScore: number | null
   speakingScore: number | null
+  readingScore?: number | null
+  listeningScore?: number | null
   hasData: boolean
 }
 
@@ -1052,6 +1054,7 @@ export const exercisesApi = {
         test?: number
         totalTimeMinutes: number
         questionCount: number
+        questionTypes?: string[]
         order?: number
       }[]
     >("/exercises/listening/summary"),

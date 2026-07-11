@@ -56,12 +56,19 @@ import {
   type IeltsListeningSummary,
 } from "@/lib/listening-data"
 import { ReadingTypeFilters } from "@/components/exercises/reading-type-filters"
+import { ListeningTypeFilters } from "@/components/exercises/listening-type-filters"
 import {
   collectAvailableReadingTypes,
   filterReadingsByQuestionType,
   readingQuestionTypeLabel,
   sortReadingQuestionTypes,
 } from "@/lib/reading-question-types"
+import {
+  collectAvailableListeningTypes,
+  filterListeningsByQuestionType,
+  listeningQuestionTypeLabel,
+  sortListeningQuestionTypes,
+} from "@/lib/listening-question-types"
 import {
   IELTS_LEVEL,
   IELTS_LEVEL_KEY,
@@ -248,6 +255,7 @@ export default function ExercisesIndexPage() {
   const [listenings, setListenings] = useState<IeltsListeningSummary[]>(() => listListenings())
   const [listeningsLoading, setListeningsLoading] = useState(true)
   const [readingTypeFilter, setReadingTypeFilter] = useState<string | null>(null)
+  const [listeningTypeFilter, setListeningTypeFilter] = useState<string | null>(null)
   useEffect(() => {
     void fetchReadingSummaries()
       .then(setReadings)
@@ -290,6 +298,7 @@ export default function ExercisesIndexPage() {
 
   useEffect(() => {
     setReadingTypeFilter(null)
+    setListeningTypeFilter(null)
   }, [selectedCategory])
 
   const readingQuestionTypes = useMemo(
@@ -299,6 +308,14 @@ export default function ExercisesIndexPage() {
   const filteredReadings = useMemo(
     () => filterReadingsByQuestionType(readings, readingTypeFilter),
     [readings, readingTypeFilter],
+  )
+  const listeningQuestionTypes = useMemo(
+    () => collectAvailableListeningTypes(listenings),
+    [listenings],
+  )
+  const filteredListenings = useMemo(
+    () => filterListeningsByQuestionType(listenings, listeningTypeFilter),
+    [listenings, listeningTypeFilter],
   )
 
   const activeLevelFolder = useMemo(
@@ -545,7 +562,9 @@ export default function ExercisesIndexPage() {
                         {levelLabel} ·{" "}
                         {isReading && readingTypeFilter
                           ? `${filteredReadings.length} of ${readings.length} passages`
-                          : `${count} ${
+                          : isListening && listeningTypeFilter
+                            ? `${filteredListenings.length} of ${listenings.length} tests`
+                            : `${count} ${
                               isVocab
                                 ? "deck"
                                 : isPodcasts
@@ -560,6 +579,12 @@ export default function ExercisesIndexPage() {
                           <>
                             {" "}
                             · {readingQuestionTypeLabel(readingTypeFilter)}
+                          </>
+                        ) : null}
+                        {isListening && listeningTypeFilter ? (
+                          <>
+                            {" "}
+                            · {listeningQuestionTypeLabel(listeningTypeFilter)}
                           </>
                         ) : null}
                       </>
@@ -648,15 +673,50 @@ export default function ExercisesIndexPage() {
                     )
                   ) : isListening ? (
                     listeningsLoading ? (
-                      <div className="mt-4">
-                        <CardGridSkeleton count={6} columns={3} />
-                      </div>
-                    ) : (
-                      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {listenings.map((test) => (
-                          <ListeningPracticeCard key={test.slug} test={test} />
+                      <div className="mt-4 space-y-2">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="h-16 animate-pulse rounded-xl bg-slate-200"
+                          />
                         ))}
                       </div>
+                    ) : (
+                      <>
+                        <ListeningTypeFilters
+                          types={listeningQuestionTypes}
+                          listenings={listenings}
+                          activeType={listeningTypeFilter}
+                          onChange={setListeningTypeFilter}
+                        />
+                        {filteredListenings.length === 0 ? (
+                          <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                            <p className="font-medium text-slate-900">No listening tests found</p>
+                            <p className="text-sm text-slate-500">
+                              {listeningTypeFilter
+                                ? `No tests with “${listeningQuestionTypeLabel(listeningTypeFilter)}” questions.`
+                                : "Listening tests haven't been added yet."}
+                            </p>
+                            {listeningTypeFilter ? (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="mt-4"
+                                onClick={() => setListeningTypeFilter(null)}
+                              >
+                                Show all tests
+                              </Button>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <div className="mt-4 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-sm">
+                            {filteredListenings.map((test) => (
+                              <ListeningPracticeRow key={test.slug} test={test} />
+                            ))}
+                          </div>
+                        )}
+                      </>
                     )
                   ) : (
                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -961,49 +1021,55 @@ function PodcastCard({ episode }: { episode: PodcastEpisode }) {
   )
 }
 
-function ListeningPracticeCard({ test }: { test: IeltsListeningSummary }) {
+function ListeningPracticeRow({ test }: { test: IeltsListeningSummary }) {
+  const typeLabels = sortListeningQuestionTypes(test.questionTypes ?? []).map(
+    listeningQuestionTypeLabel,
+  )
   return (
-    <Card className="relative h-full rounded-2xl border-amber-200/80 bg-white transition-all duration-200 sm:rounded-3xl">
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
-          <div className="flex min-w-0 flex-1 items-start gap-3">
-            <span
-              aria-hidden
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm sm:h-10 sm:w-10"
-            >
-              <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
+    <div className="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
+      <div className="flex min-w-0 flex-1 items-start gap-3">
+        <span
+          aria-hidden
+          className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm"
+        >
+          <Headphones className="h-4 w-4" />
+        </span>
+        <div className="min-w-0 space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-sm font-semibold text-slate-900 sm:text-base">{test.title}</h3>
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              IELTS
             </span>
-            <div className="min-w-0 space-y-1.5">
-              <h3 className="text-base font-semibold text-slate-900 sm:text-lg">{test.title}</h3>
-              <div className="flex flex-wrap gap-2 text-xs text-slate-600">
-                {test.book ? (
-                  <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
-                    Book {test.book}
-                  </span>
-                ) : null}
-                {test.test ? (
-                  <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                    Test {test.test}
-                  </span>
-                ) : null}
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                  {test.questionCount} questions
-                </span>
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
-                  {test.totalTimeMinutes} min
-                </span>
-              </div>
-            </div>
           </div>
-          <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
-            IELTS
-          </span>
+          <div className="flex flex-wrap gap-1.5 text-xs text-slate-600">
+            {test.book ? (
+              <span className="rounded-full bg-amber-50 px-2.5 py-1 font-medium text-amber-800">
+                Book {test.book}
+              </span>
+            ) : null}
+            {test.test ? (
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+                Test {test.test}
+              </span>
+            ) : null}
+            {typeLabels.map((label) => (
+              <span
+                key={label}
+                className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700"
+              >
+                {label}
+              </span>
+            ))}
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+              {test.questionCount} questions
+            </span>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 font-medium">
+              {test.totalTimeMinutes} min
+            </span>
+          </div>
         </div>
-        <p className="mt-4 text-sm leading-relaxed text-slate-600">
-          {test.subtitle || "Full Cambridge listening test with continuous audio playback."}
-        </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 

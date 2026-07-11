@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -58,7 +57,13 @@ import { listenedCoveragePercent, resolveListenedSegments } from "@/lib/podcast-
 import { useAdminData } from "@/lib/admin-data-context"
 import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
 import { isReadingHomework } from "@/lib/reading-data"
+import { isPodcastHomework } from "@/lib/podcast-data"
 import { ReadingAnswersReview } from "@/components/admin/reading-answers-review"
+import {
+  LEARNIX_LEVEL_META,
+  learnixScoreToSpeakingBand,
+  speakingBandToLearnixScore,
+} from "@/lib/language-profile"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -223,8 +228,8 @@ export function HomeworkStudentResults({
           break
         case "correct":
           cmp =
-            accuracyOf(a.submission, homework.subject) -
-            accuracyOf(b.submission, homework.subject)
+            accuracyOf(a.submission, homework.subject, homework.exerciseSlug) -
+            accuracyOf(b.submission, homework.subject, homework.exerciseSlug)
           break
         case "submitted": {
           const subA = submittedSortTime(a.submission, dueEnd)
@@ -337,14 +342,14 @@ export function HomeworkStudentResults({
       : undefined
     if (parsedScore !== undefined && (Number.isNaN(parsedScore) || parsedScore < 0 || parsedScore > 9)) {
       toast({
-        title: "Invalid score",
-        description: "Score must be between 0 and 9.",
+        title: "Invalid Learnix score",
+        description: "Pick a Learnix level or enter a score from 0 to 1000.",
         variant: "destructive",
       })
       return
     }
 
-    // Speaking homework: teacher gives ONE overall score (submission.score).
+    // Speaking homework: teacher gives ONE overall Learnix-aligned score (stored 0–9).
     // Per-recording grades (band/rubric) are intentionally not collected in the UI.
     const submittedAt =
       row.status === "submitted" || row.status === "graded"
@@ -360,7 +365,6 @@ export function HomeworkStudentResults({
       await homeworkApi.grade(row.submission.id, {
         status: nextStatus,
         score: parsedScore,
-        feedback: row.feedback.trim() || undefined,
         submittedAt,
       })
       setRows((prev) =>
@@ -378,7 +382,6 @@ export function HomeworkStudentResults({
                       ...r.submission,
                       status: nextStatus,
                       score: parsedScore,
-                      feedback: row.feedback.trim() || undefined,
                       submittedAt,
                       attempt: r.submission.attempt
                         ? {
@@ -415,6 +418,7 @@ export function HomeworkStudentResults({
 
   const isSpeaking = homework.subject === "speaking"
   const isListening = homework.subject === "listening"
+  const isPodcast = isPodcastHomework(homework.subject, homework.exerciseSlug)
   const isReading =
     homework.subject === "reading" ||
     isReadingHomework(homework.subject, homework.exerciseSlug)
@@ -486,7 +490,10 @@ export function HomeworkStudentResults({
               const attempt = row.submission?.attempt
               const recordingsCount = speakingRecordingsCount(row.submission)
               const accuracy =
-                !isSpeaking && !isListening && attempt && attempt.totalQuestions > 0
+                !isSpeaking &&
+                !(isListening && isPodcast) &&
+                attempt &&
+                attempt.totalQuestions > 0
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
               const numericScore = row.submission?.score
@@ -557,7 +564,7 @@ export function HomeworkStudentResults({
                             </span>
                           ) : null}
                         </span>
-                      ) : isListening && attempt?.listeningStats ? (
+                      ) : isPodcast && attempt?.listeningStats ? (
                         <span className="inline-flex flex-col gap-0.5 text-xs">
                           <span className="tabular-nums text-slate-700">
                             {formatListenDuration(attempt.listeningStats.totalListenSeconds)}
@@ -571,14 +578,26 @@ export function HomeworkStudentResults({
                           <span className="tabular-nums text-slate-700">
                             {attempt.correctCount}/{attempt.totalQuestions}
                           </span>
-                          <span
-                            className={cn(
-                              "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
-                              accuracyClass(accuracy),
-                            )}
-                          >
-                            {accuracy}%
-                          </span>
+                          {typeof numericScore === "number" && !Number.isNaN(numericScore) ? (
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
+                                bandClass(numericScore),
+                              )}
+                            >
+                              <Award className="h-3 w-3" />
+                              {numericScore.toFixed(1)}
+                            </span>
+                          ) : (
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
+                                accuracyClass(accuracy),
+                              )}
+                            >
+                              {accuracy}%
+                            </span>
+                          )}
                         </span>
                       ) : (
                         <span className="text-slate-400">—</span>
@@ -613,12 +632,12 @@ export function HomeworkStudentResults({
 
       <Dialog open={!!selectedRow} onOpenChange={(open) => !open && setSelectedId(null)}>
         <DialogContent
-          className="sm:max-w-3xl max-h-[85vh] flex flex-col p-0 gap-0"
+          className="sm:max-w-3xl max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {selectedRow && (
             <>
-              <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100">
+              <DialogHeader className="shrink-0 px-6 pt-6 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2 flex-wrap">
                   <StatusBadge
                     meta={displayStatusMeta(selectedRow.status, selectedRow.submission, homework.dueAt)}
@@ -653,7 +672,7 @@ export function HomeworkStudentResults({
                   {selectedRow.studentName}
                 </DialogTitle>
               </DialogHeader>
-              <ScrollArea className="flex-1 overflow-y-auto">
+              <ScrollArea className="min-h-0 flex-1 overflow-y-auto">
                 <div className="px-6 py-5">
                   <StudentDetail
                     row={selectedRow}
@@ -661,14 +680,19 @@ export function HomeworkStudentResults({
                     loadingDetails={detailLoadingId === selectedRow.studentId}
                     onUpdate={updateRow}
                     onRecordingGradeChange={updateRecordingGrade}
-                    onSave={saveRow}
                     onChanged={onChanged}
-                    onRequestRetry={() => setPendingRetry(selectedRow)}
-                    saving={savingId === selectedRow.studentId}
-                    retrying={retryingId === selectedRow.studentId}
                   />
                 </div>
               </ScrollArea>
+              <StudentReviewFooter
+                row={selectedRow}
+                homework={homework}
+                onUpdate={updateRow}
+                onSave={saveRow}
+                onRequestRetry={() => setPendingRetry(selectedRow)}
+                saving={savingId === selectedRow.studentId}
+                retrying={retryingId === selectedRow.studentId}
+              />
             </>
           )}
         </DialogContent>
@@ -703,11 +727,7 @@ function StudentDetail({
   loadingDetails = false,
   onUpdate,
   onRecordingGradeChange,
-  onSave,
   onChanged,
-  onRequestRetry,
-  saving = false,
-  retrying = false,
 }: {
   row: Row
   homework: HomeworkAssignment
@@ -717,11 +737,7 @@ function StudentDetail({
     questionId: number,
     patch: Partial<RecordingGradeDraft>,
   ) => void
-  onSave: (row: Row) => void
   onChanged?: () => void
-  onRequestRetry?: () => void
-  saving?: boolean
-  retrying?: boolean
   loadingDetails?: boolean
 }) {
   const { toast } = useToast()
@@ -735,6 +751,7 @@ function StudentDetail({
   const cheatingFailed = isCheatingFailed(row.submission)
   const isSpeaking = homework.subject === "speaking"
   const isListening = homework.subject === "listening"
+  const isPodcast = isPodcastHomework(homework.subject, homework.exerciseSlug)
   const isReading =
     homework.subject === "reading" ||
     isReadingHomework(homework.subject, homework.exerciseSlug)
@@ -751,12 +768,13 @@ function StudentDetail({
     attempt?.mistakes?.filter((m) => isAudioUrl(m.userAnswer)) ?? []
   const missingTranscription = speakingRecordings.some((m) => !m.transcription?.trim())
   const accuracy =
-    !isSpeaking && !isListening && attempt && attempt.totalQuestions > 0
+    !isSpeaking &&
+    !(isListening && isPodcast) &&
+    attempt &&
+    attempt.totalQuestions > 0
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
       : null
   const numericScore = row.submission?.score
-  const retryCount = retryCountFromEvents(row.submission)
-  const canRetry = canAssignRetry(row.submission)
   const overdueMissed = isOverdueRow(row, homework.dueAt)
   const submittedLate =
     row.submission?.submittedAt &&
@@ -874,7 +892,7 @@ function StudentDetail({
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-900 ring-1 ring-slate-200">
                 {isSpeaking
                   ? `${speakingRecordings.length}/${attempt.totalQuestions} submitted`
-                  : isListening && listeningStats
+                  : isPodcast && listeningStats
                     ? formatListenDuration(listeningStats.totalListenSeconds)
                     : `${attempt.correctCount}/${attempt.totalQuestions} correct`}
               </span>
@@ -933,7 +951,7 @@ function StudentDetail({
               />
             </div>
           )}
-          {isListening && listeningStats ? (
+          {isPodcast && listeningStats ? (
             <div className="mt-3 space-y-3">
               <div className="grid gap-2 sm:grid-cols-2">
                 <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 px-3 py-2.5">
@@ -1112,78 +1130,191 @@ function StudentDetail({
           <p>No detailed attempt recorded for this submission.</p>
         </div>
       )}
+    </div>
+  )
+}
 
-      <div className={cn("grid gap-3", isSpeaking ? "sm:grid-cols-2" : "")}>
-        {isSpeaking ? (
-          <div>
-            <label className="text-[11px] uppercase tracking-wider text-slate-500">
-              Score (0–9)
-            </label>
-            <Input
-              value={row.score}
-              onChange={(e) => onUpdate(row.studentId, { score: e.target.value })}
-              placeholder="e.g. 6.5"
-              className="mt-1"
-            />
-          </div>
-        ) : null}
-        <div className={isSpeaking ? "" : "sm:col-span-2"}>
-          <label className="text-[11px] uppercase tracking-wider text-slate-500">
-            Overall feedback
-          </label>
-          <Textarea
-            value={row.feedback}
-            onChange={(e) => onUpdate(row.studentId, { feedback: e.target.value })}
-            placeholder="Optional summary for the student"
-            rows={2}
-            className="mt-1 min-h-[72px] resize-y"
-          />
-        </div>
+function LearnixSpeakingScoreField({
+  bandValue,
+  onChange,
+}: {
+  bandValue: string
+  onChange: (band: string) => void
+}) {
+  const band = bandValue.trim() ? Number(bandValue.replace(",", ".")) : NaN
+  const hasBand = Number.isFinite(band) && band >= 0 && band <= 9
+  const learnixScore = hasBand ? speakingBandToLearnixScore(band) : null
+  const selectedLevel = hasBand ? Math.max(1, Math.min(9, Math.round(band))) : null
+  const levelMeta = selectedLevel
+    ? LEARNIX_LEVEL_META.find((m) => m.level === selectedLevel)
+    : null
+
+  const [learnixInput, setLearnixInput] = useState(
+    learnixScore != null ? String(learnixScore) : "",
+  )
+
+  useEffect(() => {
+    setLearnixInput(learnixScore != null ? String(learnixScore) : "")
+  }, [learnixScore])
+
+  const commitLearnixScore = () => {
+    if (!learnixInput.trim()) {
+      onChange("")
+      return
+    }
+    const n = Number(learnixInput.replace(",", "."))
+    if (Number.isNaN(n) || n < 0 || n > 1000) {
+      setLearnixInput(learnixScore != null ? String(learnixScore) : "")
+      return
+    }
+    onChange(String(learnixScoreToSpeakingBand(n)))
+  }
+
+  return (
+    <div className="space-y-3">
+      <div>
+        <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">
+          Learnix speaking score
+        </label>
+        <p className="mt-0.5 text-[11px] text-slate-500">
+          Grade on the Learnix 0–1000 scale (levels 1–9 · CEFR). This feeds the student language
+          profile.
+        </p>
       </div>
 
-      {retryCount > 0 && (
-        <p className="text-[11px] text-slate-500">
-          Retries assigned: <span className="font-semibold text-slate-700">{retryCount}</span>
-        </p>
-      )}
+      <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-9">
+        {LEARNIX_LEVEL_META.map((meta) => {
+          const active = selectedLevel === meta.level
+          return (
+            <button
+              key={meta.level}
+              type="button"
+              onClick={() => onChange(String(meta.level))}
+              className={cn(
+                "rounded-lg border px-1.5 py-2 text-center transition-colors",
+                active
+                  ? "border-emerald-500 bg-emerald-50 text-emerald-900"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50",
+              )}
+            >
+              <span className="block text-sm font-bold tabular-nums">{meta.level}</span>
+              <span className="block text-[9px] font-semibold uppercase tracking-wide opacity-80">
+                {meta.cefr}
+              </span>
+            </button>
+          )
+        })}
+      </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        {canRetry && onRequestRetry ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={onRequestRetry}
-            loading={retrying}
-            disabled={saving}
-            className="border-sky-200 text-sky-800 hover:bg-sky-50"
-          >
-            <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-            Assign retry
-          </Button>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="min-w-[140px] flex-1">
+          <label className="text-[10px] uppercase tracking-wider text-slate-500">
+            Score (0–1000)
+          </label>
+          <Input
+            value={learnixInput}
+            onChange={(e) => setLearnixInput(e.target.value)}
+            onBlur={commitLearnixScore}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                commitLearnixScore()
+              }
+            }}
+            placeholder="e.g. 670"
+            inputMode="numeric"
+            className="mt-1"
+          />
+        </div>
+        {learnixScore != null && levelMeta ? (
+          <p className="pb-2 text-xs text-slate-600">
+            <span className="font-semibold tabular-nums text-slate-900">{learnixScore}</span>
+            {" · "}
+            Level {levelMeta.level} · {levelMeta.cefr} · {levelMeta.title}
+          </p>
         ) : (
-          <span />
+          <p className="pb-2 text-xs text-slate-400">Select a level or enter a Learnix score</p>
         )}
-        <Button
-          size="sm"
-          onClick={() => onSave(row)}
-          loading={saving}
-          disabled={!row.dirty || retrying}
-          className={cn("bg-emerald-600 hover:bg-emerald-700", !row.dirty && "opacity-50")}
-        >
-          <Save className="h-3.5 w-3.5 mr-1.5" />
-          {row.dirty ? "Save" : "Saved"}
-        </Button>
       </div>
     </div>
   )
 }
 
-function accuracyOf(sub?: HomeworkSubmission, subject?: HomeworkAssignment["subject"]): number {
+function StudentReviewFooter({
+  row,
+  homework,
+  onUpdate,
+  onSave,
+  onRequestRetry,
+  saving = false,
+  retrying = false,
+}: {
+  row: Row
+  homework: HomeworkAssignment
+  onUpdate: (studentId: string, patch: Partial<Row>) => void
+  onSave: (row: Row) => void
+  onRequestRetry?: () => void
+  saving?: boolean
+  retrying?: boolean
+}) {
+  const isSpeaking = homework.subject === "speaking"
+  const retryCount = retryCountFromEvents(row.submission)
+  const canRetry = canAssignRetry(row.submission)
+
+  return (
+    <div className="shrink-0 border-t border-slate-200 bg-white px-6 py-4">
+      <div className="space-y-3">
+        {isSpeaking ? (
+          <LearnixSpeakingScoreField
+            bandValue={row.score}
+            onChange={(band) => onUpdate(row.studentId, { score: band })}
+          />
+        ) : null}
+
+        {retryCount > 0 && (
+          <p className="text-[11px] text-slate-500">
+            Retries assigned: <span className="font-semibold text-slate-700">{retryCount}</span>
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          {canRetry && onRequestRetry ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={onRequestRetry}
+              loading={retrying}
+              disabled={saving}
+              className="border-sky-200 text-sky-800 hover:bg-sky-50"
+            >
+              <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+              Assign retry
+            </Button>
+          ) : (
+            <span />
+          )}
+          <Button
+            size="sm"
+            onClick={() => onSave(row)}
+            loading={saving}
+            disabled={!row.dirty || retrying}
+            className={cn("bg-emerald-600 hover:bg-emerald-700", !row.dirty && "opacity-50")}
+          >
+            <Save className="h-3.5 w-3.5 mr-1.5" />
+            {row.dirty ? "Save" : "Saved"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function accuracyOf(sub?: HomeworkSubmission, subject?: HomeworkAssignment["subject"], exerciseSlug?: string): number {
   const a = sub?.attempt
   if (!a || a.totalQuestions === 0) return -1
   if (subject === "speaking") return speakingRecordingsCount(sub) / a.totalQuestions
-  if (subject === "listening") {
+  if (subject === "listening" && isPodcastHomework(subject, exerciseSlug)) {
     if (a.listeningStats?.completedListening) return 1
     return -1
   }

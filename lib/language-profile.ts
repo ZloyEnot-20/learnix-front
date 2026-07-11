@@ -38,9 +38,43 @@ export function learnixScoreToIeltsBand(score: number): number {
   return Math.round(raw * 2) / 2
 }
 
+/**
+ * Teacher speaking grade on the 0–9 scale → Learnix score (0–1000).
+ * Matches backend legacy mapping: (band / 9) * 1000.
+ */
+export function speakingBandToLearnixScore(band: number): number {
+  const clamped = Math.max(0, Math.min(9, band))
+  return Math.round((clamped / 9) * 1000)
+}
+
+/** Learnix score (0–1000) → speaking grade 0–9 (half-band steps). */
+export function learnixScoreToSpeakingBand(score: number): number {
+  const clamped = Math.max(0, Math.min(1000, score))
+  return Math.round((clamped / 1000) * 9 * 2) / 2
+}
+
+/** IELTS band (0–9) → Learnix score using the display inverse (band 4→0, 9→1000). */
+export function ieltsBandToLearnixScore(band: number): number {
+  const clamped = Math.max(0, Math.min(9, band))
+  return Math.round(Math.max(0, Math.min(1000, ((clamped - 4) / 5) * 1000)))
+}
+
 export function learnixScoreFillPercent(score: number): number {
   return Math.max(0, Math.min(100, score / 10))
 }
+
+/** Learnix level metadata for teacher grading UI. */
+export const LEARNIX_LEVEL_META = [
+  { level: 1, cefr: "A1", title: "Starter" },
+  { level: 2, cefr: "A2", title: "Elementary" },
+  { level: 3, cefr: "A2", title: "Pre-Intermediate" },
+  { level: 4, cefr: "B1", title: "Intermediate" },
+  { level: 5, cefr: "B1", title: "Upper-Intermediate" },
+  { level: 6, cefr: "B2", title: "B2 Core" },
+  { level: 7, cefr: "B2", title: "B2 Advanced" },
+  { level: 8, cefr: "C1", title: "C1" },
+  { level: 9, cefr: "C2", title: "C2" },
+] as const
 
 export function ieltsBandFillPercent(band: number): number {
   return Math.max(0, Math.min(100, (band / 9) * 100))
@@ -66,7 +100,7 @@ export function confidenceClass(c: number): string {
   return "bg-amber-100 text-amber-800"
 }
 
-export type TopicSkill = "grammar" | "vocabulary" | "speaking"
+export type TopicSkill = "grammar" | "vocabulary" | "speaking" | "reading" | "listening"
 
 export interface TopicWithSkill extends LanguageTopicStat {
   skill: TopicSkill
@@ -74,8 +108,8 @@ export interface TopicWithSkill extends LanguageTopicStat {
 
 export function collectAllTopics(profile: StudentLanguageProfile): TopicWithSkill[] {
   const rows: TopicWithSkill[] = []
-  for (const skill of ["grammar", "vocabulary", "speaking"] as const) {
-    for (const topic of profile[skill].topics ?? []) {
+  for (const skill of ["grammar", "vocabulary", "speaking", "reading", "listening"] as const) {
+    for (const topic of profile[skill]?.topics ?? []) {
       rows.push({ ...topic, skill })
     }
   }
