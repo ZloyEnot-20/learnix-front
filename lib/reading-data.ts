@@ -3,6 +3,9 @@
  * Summaries are loaded from the API; an empty list is used until the request completes.
  */
 
+import readingTypesBySlug from "@/public/reading-types.json"
+import { sortReadingQuestionTypes } from "@/lib/reading-question-types"
+
 export interface IeltsReadingSummary {
   slug: string
   title: string
@@ -69,28 +72,25 @@ export function listReadings(): IeltsReadingSummary[] {
   return []
 }
 
-async function fetchStaticReadingTypesBySlug(): Promise<Map<string, string[]>> {
-  try {
-    const res = await fetch("/reading-types.json")
-    if (!res.ok) return new Map()
-    const bySlug = (await res.json()) as Record<string, string[]>
-    return new Map(Object.entries(bySlug))
-  } catch {
-    return new Map()
-  }
-}
+const STATIC_TYPES_BY_SLUG = new Map<string, string[]>(
+  Object.entries(readingTypesBySlug as Record<string, string[]>),
+)
 
-function enrichReadingSummaries(
-  readings: IeltsReadingSummary[],
-  typesBySlug: Map<string, string[]>,
-): IeltsReadingSummary[] {
-  return readings.map((reading) => ({
-    ...reading,
-    totalTimeMinutes: reading.totalTimeMinutes > 0 ? reading.totalTimeMinutes : 20,
-    questionTypes: reading.questionTypes?.length
-      ? reading.questionTypes
-      : typesBySlug.get(reading.slug) ?? [],
-  }))
+function enrichReadingSummaries(readings: IeltsReadingSummary[]): IeltsReadingSummary[] {
+  return readings.map((reading) => {
+    const fromStatic = STATIC_TYPES_BY_SLUG.get(reading.slug) ?? []
+    // Prefer the generated catalogue: remote API may still serve legacy/coarse types
+    // until the backend is redeployed with the new classifier.
+    const questionTypes =
+      fromStatic.length > 0
+        ? sortReadingQuestionTypes(fromStatic)
+        : sortReadingQuestionTypes(reading.questionTypes ?? [])
+    return {
+      ...reading,
+      totalTimeMinutes: reading.totalTimeMinutes > 0 ? reading.totalTimeMinutes : 20,
+      questionTypes,
+    }
+  })
 }
 
 export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
@@ -104,8 +104,7 @@ export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
 
   if (remote.length === 0) return []
 
-  const typesBySlug = await fetchStaticReadingTypesBySlug()
-  return enrichReadingSummaries(remote, typesBySlug)
+  return enrichReadingSummaries(remote)
 }
 
 export async function fetchReading(slug: string): Promise<IeltsReadingDocument | undefined> {

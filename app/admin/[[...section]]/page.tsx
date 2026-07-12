@@ -13,6 +13,7 @@ import {
   ClipboardCheck,
   GraduationCap,
   BookMarked,
+  BookOpen,
   Wallet,
   UserSquare,
   ShieldAlert,
@@ -41,6 +42,7 @@ import OrgBillingSection from "@/components/admin/org-billing-section"
 import OrgSettingsSection from "@/components/admin/org-settings-section"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
+import TeacherLessonSection from "@/components/admin/live-lesson/teacher-lesson-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
 import { invalidateExercises } from "@/lib/exercises-cache"
@@ -64,6 +66,10 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
   entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
+  lessons: {
+    title: "Live lessons",
+    subtitle: "Run a book unit live with your group — open exercises and track progress",
+  },
   manage: { title: "Manage exercises", subtitle: "Add vocabulary and speaking content for your organization" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
@@ -82,6 +88,7 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   homework: ["students", "groups", "homeworkCount"],
   entry: ["students"],
   exercises: ["groups"],
+  lessons: ["students", "groups"],
   finance: ["students", "groups"],
   bot: ["students"],
   control: ["students", "groups"],
@@ -222,6 +229,7 @@ function AdminPanelContent() {
         { id: "stats", label: "Statistics", icon: BarChart3 },
         { id: "control", label: "Progress test", icon: Layers },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
+        { id: "lessons", label: "Live lessons", icon: BookOpen },
         ...(manageExercises
           ? [{ id: "manage", label: "Manage exercises", icon: BookMarked }]
           : []),
@@ -313,6 +321,7 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
+      {activeTab === "lessons" && <TeacherLessonSection />}
       {activeTab === "manage" && manageExercises && (
         <ManageExercisesSection onChanged={bumpCatalog} />
       )}
