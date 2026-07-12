@@ -1,19 +1,26 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   ArrowLeft,
   BookOpen,
   CheckCircle2,
   Circle,
-  Pause,
   Play,
   Radio,
   Square,
   Users,
-  Wifi,
-  WifiOff,
 } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -39,6 +46,8 @@ import { useAdminData } from "@/lib/admin-data-context"
 import { cn } from "@/lib/utils"
 
 type View = "books" | "units" | "workspace"
+
+const PROGRESS_POLL_MS = 2000
 
 function formatElapsed(seconds: number): string {
   const m = Math.floor(seconds / 60)
@@ -88,6 +97,12 @@ export default function TeacherLessonSection() {
   const [live, setLive] = useState<LiveLessonState | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [finishOpen, setFinishOpen] = useState(false)
+  const liveIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    liveIdRef.current = live?.id ?? null
+  }, [live?.id])
 
   useEffect(() => {
     void ensureLists(["groups", "students"])
@@ -129,7 +144,7 @@ export default function TeacherLessonSection() {
     }
   }
 
-  /** Preview only — does not assign the unit to students. */
+  /** Preview only — does not assign to students. */
   const openUnit = async (n: number, ready: boolean) => {
     if (!ready) return
     setUnitNumber(n)
@@ -153,24 +168,37 @@ export default function TeacherLessonSection() {
   const assignedUnit = live?.currentUnit ?? null
   const unitLocked = Boolean(live && assignedUnit != null && !live.unitCompleted)
   const viewingAssignedUnit =
-    live != null && unitNumber != null && Number(live.currentUnit) === Number(unitNumber) && !live.unitCompleted
+    live != null &&
+    unitNumber != null &&
+    Number(live.currentUnit) === Number(unitNumber) &&
+    !live.unitCompleted
 
   const onState = useCallback((state: LiveLessonState) => {
     setLive(state)
   }, [])
 
   const onPresence = useCallback(
-    (patch: { studentId: string; status: string; lastSeenAt?: string }) => {
+    (patch: {
+      studentId: string
+      status: string
+      progress?: number
+      score?: number | null
+      lastSeenAt?: string
+    }) => {
       setLive((prev) => {
         if (!prev) return prev
         const studentsNext = (prev.students ?? []).map((s) => {
           if (s.studentId !== patch.studentId) return s
-          // Never downgrade done → online from a stale heartbeat race
           const nextStatus =
             s.status === "done" && patch.status === "online"
               ? s.status
               : (patch.status as typeof s.status)
-          return { ...s, status: nextStatus }
+          return {
+            ...s,
+            status: nextStatus,
+            ...(typeof patch.progress === "number" ? { progress: patch.progress } : {}),
+            ...(patch.score !== undefined ? { score: patch.score } : {}),
+          }
         })
         return {
           ...prev,
@@ -182,11 +210,37 @@ export default function TeacherLessonSection() {
     [],
   )
 
-  const { connected } = useLiveLessonSocket(live?.id ?? null, {
+  useLiveLessonSocket(live?.id ?? null, {
     onState,
     onPresence,
     onError: (msg) => setError(msg),
   })
+
+  /** Reliable progress sync — sockets alone were missing student completes. */
+  useEffect(() => {
+    if (!live?.id) return
+    if (live.lessonStatus === "finished") return
+
+    let cancelled = false
+    const tick = async () => {
+      const id = liveIdRef.current
+      if (!id || cancelled) return
+      try {
+        const next = await liveLessonsApi.get(id)
+        if (!cancelled && liveIdRef.current === id) setLive(next)
+      } catch {
+        /* ignore transient poll errors */
+      }
+    }
+
+    const t = setInterval(() => {
+      void tick()
+    }, PROGRESS_POLL_MS)
+    return () => {
+      cancelled = true
+      clearInterval(t)
+    }
+  }, [live?.id, live?.lessonStatus])
 
   const syncLive = async (next: LiveLessonState) => {
     setLive(next)
@@ -221,22 +275,50 @@ export default function TeacherLessonSection() {
     }
   }
 
-  /** Local preview only — never resets student progress. */
   const selectExerciseLocal = (step: LessonStep) => {
     setSelectedStepId(step.id)
   }
 
-  const assignUnit = async (n: number) => {
-    if (!live) return
-    await runAction(() => liveLessonsApi.assignUnit(live.id, n))
-    if (unitNumber !== n) {
-      await openUnit(n, true)
+  /**
+   * Assign selected exercise to students immediately:
+   * ensures unit is active, then opens the exercise.
+   */
+  const assignExercise = async (step: LessonStep) => {
+    if (!live || unitNumber == null) return
+    if (live.lessonStatus !== "active") {
+      setError("Start the lesson before assigning an exercise")
+      return
+    }
+    if (unitLocked && Number(live.currentUnit) !== Number(unitNumber)) {
+      setError("Complete the active unit before assigning from another unit")
+      return
+    }
+
+    setBusy(true)
+    setError(null)
+    try {
+      let session = live
+      const needsUnit =
+        session.currentUnit == null ||
+        session.unitCompleted ||
+        Number(session.currentUnit) !== Number(unitNumber)
+      if (needsUnit) {
+        session = await liveLessonsApi.assignUnit(session.id, unitNumber)
+      }
+      session = await liveLessonsApi.selectExercise(session.id, step.exerciseId, true)
+      await syncLive(session)
+      setSelectedStepId(step.id)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to assign exercise")
+    } finally {
+      setBusy(false)
     }
   }
 
-  const openForStudents = async () => {
-    if (!live || !selectedStep || !viewingAssignedUnit) return
-    await runAction(() => liveLessonsApi.selectExercise(live.id, selectedStep.exerciseId, true))
+  const confirmFinish = async () => {
+    if (!live) return
+    setFinishOpen(false)
+    await runAction(() => liveLessonsApi.finish(live.id))
   }
 
   if (loading) {
@@ -322,45 +404,27 @@ export default function TeacherLessonSection() {
 
       {live && (
         <>
-          <Badge variant={connected ? "secondary" : "outline"} className="gap-1">
-            {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-            {connected ? "Live" : "Connecting…"}
-          </Badge>
-          <Button
-            size="sm"
-            disabled={busy || live.lessonStatus === "active"}
-            onClick={() => void runAction(() => liveLessonsApi.start(live.id))}
-          >
-            <Play className="mr-1 h-4 w-4" />
-            Start
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={busy || live.lessonStatus !== "active"}
-            onClick={() => void runAction(() => liveLessonsApi.pause(live.id))}
-          >
-            <Pause className="mr-1 h-4 w-4" />
-            Pause
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={busy || live.lessonStatus !== "paused"}
-            onClick={() => void runAction(() => liveLessonsApi.resume(live.id))}
-          >
-            <Play className="mr-1 h-4 w-4" />
-            Resume
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            disabled={busy || live.lessonStatus === "finished"}
-            onClick={() => void runAction(() => liveLessonsApi.finish(live.id))}
-          >
-            <Square className="mr-1 h-4 w-4" />
-            Finish
-          </Button>
+          {live.lessonStatus !== "active" && live.lessonStatus !== "finished" && (
+            <Button
+              size="sm"
+              disabled={busy}
+              onClick={() => void runAction(() => liveLessonsApi.start(live.id))}
+            >
+              <Play className="mr-1 h-4 w-4" />
+              Start lesson
+            </Button>
+          )}
+          {live.lessonStatus !== "finished" && (
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={busy}
+              onClick={() => setFinishOpen(true)}
+            >
+              <Square className="mr-1 h-4 w-4" />
+              Finish lesson
+            </Button>
+          )}
           <div className="ml-auto flex flex-wrap gap-3 text-xs text-slate-600">
             <span>
               Status: <strong className="capitalize">{live.lessonStatus}</strong>
@@ -387,21 +451,14 @@ export default function TeacherLessonSection() {
     return (
       <div className="space-y-6">
         <div className="flex items-start gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setView("books")
-              // Keep live session when browsing books within the same lesson
-            }}
-          >
+          <Button variant="ghost" size="sm" onClick={() => setView("books")}>
             <ArrowLeft className="mr-1 h-4 w-4" />
             Books
           </Button>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">{bookTitle}</h2>
             <p className="text-sm text-slate-500">
-              Preview any unit freely. Assign opens it for students (one active unit at a time).
+              Open a unit to preview. Assign each exercise from the lesson flow.
             </p>
           </div>
         </div>
@@ -417,74 +474,72 @@ export default function TeacherLessonSection() {
               live != null && Number(live.currentUnit) === u.unitNumber && !live.unitCompleted
             const isCompleted =
               live != null && Number(live.currentUnit) === u.unitNumber && Boolean(live.unitCompleted)
-            const canAssign =
-              Boolean(live) &&
-              live!.lessonStatus === "active" &&
-              u.ready &&
-              (!unitLocked || isActive)
             return (
-              <div
+              <button
                 key={u.unitNumber}
+                type="button"
+                disabled={!u.ready || busy}
+                onClick={() => void openUnit(u.unitNumber, u.ready)}
                 className={cn(
                   "rounded-2xl border p-4 text-left transition",
                   u.ready
-                    ? "border-slate-200 bg-white"
-                    : "border-slate-100 bg-slate-50 opacity-70",
+                    ? "border-slate-200 bg-white hover:border-sky-300 hover:shadow-sm"
+                    : "cursor-not-allowed border-slate-100 bg-slate-50 opacity-70",
                   isActive && "border-emerald-300 ring-1 ring-emerald-200",
                 )}
               >
-                <button
-                  type="button"
-                  disabled={!u.ready || busy}
-                  onClick={() => void openUnit(u.unitNumber, u.ready)}
-                  className="w-full text-left disabled:cursor-not-allowed"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-sky-800">Unit {u.unitNumber}</span>
-                    <div className="flex flex-wrap gap-1">
-                      {!u.ready && <Badge variant="secondary">Soon</Badge>}
-                      {isActive && (
-                        <Badge className="bg-emerald-600 hover:bg-emerald-600">Active</Badge>
-                      )}
-                      {isCompleted && <Badge variant="secondary">Completed</Badge>}
-                      {u.ready && !isActive && !isCompleted && (
-                        <Badge variant="outline">{u.stepCount} exercises</Badge>
-                      )}
-                    </div>
-                  </div>
-                  <h3 className="mt-2 font-medium text-slate-900">{u.title}</h3>
-                  {u.subtitle && <p className="mt-1 text-xs text-slate-500">{u.subtitle}</p>}
-                </button>
-                {u.ready && live && live.lessonStatus !== "idle" && live.lessonStatus !== "finished" && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Button
-                      size="sm"
-                      disabled={busy || !canAssign || isActive}
-                      onClick={() => void assignUnit(u.unitNumber)}
-                    >
-                      {isActive ? "Assigned" : "Assign"}
-                    </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-sky-800">Unit {u.unitNumber}</span>
+                  <div className="flex flex-wrap gap-1">
+                    {!u.ready && <Badge variant="secondary">Soon</Badge>}
                     {isActive && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={busy}
-                        onClick={() => void runAction(() => liveLessonsApi.completeUnit(live.id))}
-                      >
-                        Complete unit
-                      </Button>
+                      <Badge className="bg-emerald-600 hover:bg-emerald-600">Active</Badge>
+                    )}
+                    {isCompleted && <Badge variant="secondary">Completed</Badge>}
+                    {u.ready && !isActive && !isCompleted && (
+                      <Badge variant="outline">{u.stepCount} exercises</Badge>
                     )}
                   </div>
-                )}
-              </div>
+                </div>
+                <h3 className="mt-2 font-medium text-slate-900">{u.title}</h3>
+                {u.subtitle && <p className="mt-1 text-xs text-slate-500">{u.subtitle}</p>}
+              </button>
             )
           })}
         </div>
+
+        <AlertDialog open={finishOpen} onOpenChange={setFinishOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Finish this lesson?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Students will leave the live room. You cannot continue this session after finishing.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={busy}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={busy}
+                className="bg-destructive text-white hover:bg-destructive/90"
+                onClick={(e) => {
+                  e.preventDefault()
+                  void confirmFinish()
+                }}
+              >
+                Finish lesson
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     )
   }
 
   const unitMeta = units.find((u) => u.unitNumber === unitNumber)
+  const canAssignFromThisUnit =
+    Boolean(live) &&
+    live!.lessonStatus === "active" &&
+    (!unitLocked || Number(live!.currentUnit) === Number(unitNumber))
 
   return (
     <div className="space-y-4">
@@ -503,12 +558,22 @@ export default function TeacherLessonSection() {
             </h2>
             <p className="text-xs text-slate-500">
               {bookTitle}
-              {!viewingAssignedUnit && live?.lessonStatus === "active"
-                ? " · Preview only — Assign this unit to open it for students"
+              {live?.lessonStatus === "active"
+                ? " · Select an exercise, then Assign to open it for students"
                 : ""}
             </p>
           </div>
         </div>
+        {viewingAssignedUnit && (
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={!live || busy}
+            onClick={() => void runAction(() => liveLessonsApi.completeUnit(live!.id))}
+          >
+            Complete unit
+          </Button>
+        )}
       </div>
 
       {error && (
@@ -519,48 +584,7 @@ export default function TeacherLessonSection() {
 
       {lessonControls}
 
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-3 py-2">
-        {live && live.lessonStatus === "active" && !viewingAssignedUnit && unitNumber != null && (
-          <Button
-            size="sm"
-            disabled={busy || (unitLocked && Number(live.currentUnit) !== unitNumber)}
-            onClick={() => void assignUnit(unitNumber)}
-          >
-            Assign this unit
-          </Button>
-        )}
-        {viewingAssignedUnit && (
-          <>
-            <Button
-              size="sm"
-              variant={live?.openForStudents ? "default" : "secondary"}
-              disabled={!live || busy || !selectedStep}
-              onClick={() => void openForStudents()}
-            >
-              <Radio className="mr-1 h-4 w-4" />
-              Open exercise for students
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={!live || busy}
-              onClick={() => void runAction(() => liveLessonsApi.completeUnit(live!.id))}
-            >
-              Complete unit
-            </Button>
-            {live?.openForStudents && live.currentExercise && (
-              <span className="text-xs text-emerald-700">
-                Students see exercise {live.currentExercise}
-              </span>
-            )}
-          </>
-        )}
-        {!live && (
-          <p className="text-xs text-slate-500">Prepare and start a lesson to assign units.</p>
-        )}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)_280px]">
+      <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)_280px]">
         <aside className="rounded-2xl border border-slate-200 bg-white p-3">
           <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wide text-slate-500">
             Lesson flow
@@ -576,37 +600,63 @@ export default function TeacherLessonSection() {
                   selectedStep?.id ?? null,
                   viewingAssignedUnit,
                 )
-                const active = selectedStep?.id === step.id
+                const selected = selectedStep?.id === step.id
+                const isOpenForStudents =
+                  viewingAssignedUnit &&
+                  live?.openForStudents &&
+                  live.currentExercise === step.exerciseId
+                const showAssign =
+                  selected && canAssignFromThisUnit && !isOpenForStudents
+
                 return (
                   <li key={step.id}>
-                    <button
-                      type="button"
-                      onClick={() => selectExerciseLocal(step)}
+                    <div
                       className={cn(
-                        "flex w-full items-start gap-2 rounded-xl px-2.5 py-2 text-left text-sm transition",
-                        active ? "bg-sky-50 text-sky-950" : "hover:bg-slate-50",
+                        "flex items-center gap-1 rounded-xl transition",
+                        selected ? "bg-sky-50 text-sky-950" : "hover:bg-slate-50",
                       )}
                     >
-                      {status === "open" ? (
-                        <Radio className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                      ) : status === "current" ? (
-                        <Circle className="mt-0.5 h-4 w-4 shrink-0 fill-sky-500 text-sky-500" />
-                      ) : status === "done" ? (
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                      ) : (
-                        <Circle className="mt-0.5 h-4 w-4 shrink-0 text-slate-300" />
-                      )}
-                      <span className="min-w-0">
-                        <span className="block truncate font-medium">
-                          {step.exerciseId === "test_practice"
-                            ? step.sectionLabel
-                            : `Ex ${step.exerciseId}`}
+                      <button
+                        type="button"
+                        onClick={() => selectExerciseLocal(step)}
+                        className="flex min-w-0 flex-1 items-start gap-2 px-2.5 py-2 text-left text-sm"
+                      >
+                        {status === "open" ? (
+                          <Radio className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                        ) : status === "current" ? (
+                          <Circle className="mt-0.5 h-4 w-4 shrink-0 fill-sky-500 text-sky-500" />
+                        ) : status === "done" ? (
+                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                        ) : (
+                          <Circle className="mt-0.5 h-4 w-4 shrink-0 text-slate-300" />
+                        )}
+                        <span className="min-w-0">
+                          <span className="block truncate font-medium">
+                            {step.exerciseId === "test_practice"
+                              ? step.sectionLabel
+                              : `Ex ${step.exerciseId}`}
+                          </span>
+                          <span className="block truncate text-[11px] text-slate-500">
+                            {step.uiLabel}
+                          </span>
                         </span>
-                        <span className="block truncate text-[11px] text-slate-500">
-                          {step.uiLabel}
-                        </span>
-                      </span>
-                    </button>
+                      </button>
+                      {showAssign ? (
+                        <Button
+                          size="sm"
+                          className="mr-1.5 h-7 shrink-0 px-2 text-xs"
+                          disabled={busy}
+                          onClick={() => void assignExercise(step)}
+                        >
+                          Assign
+                        </Button>
+                      ) : null}
+                      {selected && isOpenForStudents ? (
+                        <Badge className="mr-1.5 shrink-0 bg-emerald-600 hover:bg-emerald-600">
+                          Live
+                        </Badge>
+                      ) : null}
+                    </div>
                   </li>
                 )
               })}
@@ -685,6 +735,30 @@ export default function TeacherLessonSection() {
           )}
         </aside>
       </div>
+
+      <AlertDialog open={finishOpen} onOpenChange={setFinishOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Finish this lesson?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Students will leave the live room. You cannot continue this session after finishing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={busy}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={busy}
+              className="bg-destructive text-white hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault()
+                void confirmFinish()
+              }}
+            >
+              Finish lesson
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

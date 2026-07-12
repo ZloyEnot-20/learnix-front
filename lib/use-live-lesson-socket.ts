@@ -10,6 +10,8 @@ type PresencePatch = {
   sessionId: string
   studentId: string
   status: string
+  progress?: number
+  score?: number | null
   lastSeenAt?: string
   persisted?: boolean
 }
