@@ -120,6 +120,18 @@ export interface LiveStudentProgress {
   status: StudentLiveStatus
   progress: number
   score: number | null
+  scoreDetail?: {
+    correct: number
+    total: number
+    items?: Array<{
+      id: string
+      label?: string
+      given: string
+      expected: string
+      ok: boolean
+    }>
+  }
+  answers?: unknown
   startedAt: string | null
   completedAt: string | null
   elapsedSeconds: number
@@ -144,4 +156,5 @@ export interface LiveLessonState {
   onlineCount: number
   workingCount: number
   doneCount: number
+  studentCount?: number
 }

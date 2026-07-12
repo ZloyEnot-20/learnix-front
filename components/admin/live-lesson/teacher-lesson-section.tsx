@@ -39,7 +39,7 @@ import {
   fetchLessonSteps,
   listUnitsFromMeta,
 } from "@/lib/books/catalog"
-import type { LessonStep, LiveLessonState } from "@/lib/books/types"
+import type { LessonStep, LiveLessonState, LiveStudentProgress } from "@/lib/books/types"
 import { liveLessonsApi, type LiveBookSummary } from "@/lib/live-lessons-api"
 import { useLiveLessonSocket } from "@/lib/use-live-lesson-socket"
 import { useAdminData } from "@/lib/admin-data-context"
@@ -98,6 +98,7 @@ export default function TeacherLessonSection() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [finishOpen, setFinishOpen] = useState(false)
+  const [inspectStudent, setInspectStudent] = useState<LiveStudentProgress | null>(null)
   const liveIdRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -166,12 +167,16 @@ export default function TeacherLessonSection() {
 
   const selectedStep = steps.find((s) => s.id === selectedStepId) ?? steps[0] ?? null
   const assignedUnit = live?.currentUnit ?? null
-  const unitLocked = Boolean(live && assignedUnit != null && !live.unitCompleted)
   const viewingAssignedUnit =
     live != null &&
     unitNumber != null &&
     Number(live.currentUnit) === Number(unitNumber) &&
-    !live.unitCompleted
+    Boolean(live.openForStudents || !live.unitCompleted)
+
+  const studentTotal = live?.students?.length ?? 0
+  const donePct =
+    studentTotal > 0 ? Math.round(((live?.doneCount ?? 0) / studentTotal) * 100) : 0
+  const liveExerciseOpen = Boolean(live?.openForStudents && live.currentExercise)
 
   const onState = useCallback((state: LiveLessonState) => {
     setLive(state)
@@ -183,6 +188,7 @@ export default function TeacherLessonSection() {
       status: string
       progress?: number
       score?: number | null
+      scoreDetail?: LiveStudentProgress["scoreDetail"] | null
       lastSeenAt?: string
     }) => {
       setLive((prev) => {
@@ -198,6 +204,9 @@ export default function TeacherLessonSection() {
             status: nextStatus,
             ...(typeof patch.progress === "number" ? { progress: patch.progress } : {}),
             ...(patch.score !== undefined ? { score: patch.score } : {}),
+            ...(patch.scoreDetail !== undefined
+              ? { scoreDetail: patch.scoreDetail ?? undefined }
+              : {}),
           }
         })
         return {
@@ -289,8 +298,12 @@ export default function TeacherLessonSection() {
       setError("Start the lesson before assigning an exercise")
       return
     }
-    if (unitLocked && Number(live.currentUnit) !== Number(unitNumber)) {
-      setError("Complete the active unit before assigning from another unit")
+    if (
+      live.openForStudents &&
+      live.currentUnit != null &&
+      Number(live.currentUnit) !== Number(unitNumber)
+    ) {
+      setError("Finish the current exercise before assigning from another unit")
       return
     }
 
@@ -319,6 +332,11 @@ export default function TeacherLessonSection() {
     if (!live) return
     setFinishOpen(false)
     await runAction(() => liveLessonsApi.finish(live.id))
+  }
+
+  const finishExercise = async () => {
+    if (!live) return
+    await runAction(() => liveLessonsApi.setOpen(live.id, false))
   }
 
   if (loading) {
@@ -539,7 +557,10 @@ export default function TeacherLessonSection() {
   const canAssignFromThisUnit =
     Boolean(live) &&
     live!.lessonStatus === "active" &&
-    (!unitLocked || Number(live!.currentUnit) === Number(unitNumber))
+    (live!.currentUnit == null ||
+      live!.unitCompleted ||
+      Number(live!.currentUnit) === Number(unitNumber) ||
+      !live!.openForStudents)
 
   return (
     <div className="space-y-4">
@@ -552,7 +573,7 @@ export default function TeacherLessonSection() {
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
               Unit {unitNumber}: {unitMeta?.title}
-              {viewingAssignedUnit && (
+              {Number(live?.currentUnit) === Number(unitNumber) && !live?.unitCompleted && (
                 <Badge className="ml-2 bg-emerald-600 align-middle hover:bg-emerald-600">Active</Badge>
               )}
             </h2>
@@ -564,16 +585,6 @@ export default function TeacherLessonSection() {
             </p>
           </div>
         </div>
-        {viewingAssignedUnit && (
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={!live || busy}
-            onClick={() => void runAction(() => liveLessonsApi.completeUnit(live!.id))}
-          >
-            Complete unit
-          </Button>
-        )}
       </div>
 
       {error && (
@@ -583,6 +594,32 @@ export default function TeacherLessonSection() {
       )}
 
       {lessonControls}
+
+      {liveExerciseOpen && live && (
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+            <Badge className="bg-emerald-600 hover:bg-emerald-600">
+              <Radio className="mr-1 h-3 w-3" />
+              Live
+            </Badge>
+            <span className="text-sm font-semibold text-emerald-950">
+              Unit {live.currentUnit} · Ex {live.currentExercise}
+            </span>
+            <span className="text-sm text-emerald-800">
+              {live.doneCount}/{studentTotal || live.studentCount || 0} completed · {donePct}%
+            </span>
+          </div>
+          <div className="h-2 w-28 overflow-hidden rounded-full bg-emerald-200 sm:w-40">
+            <div
+              className="h-full rounded-full bg-emerald-600 transition-all"
+              style={{ width: `${donePct}%` }}
+            />
+          </div>
+          <Button size="sm" variant="outline" disabled={busy} onClick={() => void finishExercise()}>
+            Finish exercise
+          </Button>
+        </div>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)_280px]">
         <aside className="rounded-2xl border border-slate-200 bg-white p-3">
@@ -601,12 +638,10 @@ export default function TeacherLessonSection() {
                   viewingAssignedUnit,
                 )
                 const selected = selectedStep?.id === step.id
-                const isOpenForStudents =
-                  viewingAssignedUnit &&
-                  live?.openForStudents &&
-                  live.currentExercise === step.exerciseId
+                const isLiveExercise =
+                  Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
                 const showAssign =
-                  selected && canAssignFromThisUnit && !isOpenForStudents
+                  selected && canAssignFromThisUnit && !isLiveExercise
 
                 return (
                   <li key={step.id}>
@@ -614,6 +649,7 @@ export default function TeacherLessonSection() {
                       className={cn(
                         "flex items-center gap-1 rounded-xl transition",
                         selected ? "bg-sky-50 text-sky-950" : "hover:bg-slate-50",
+                        isLiveExercise && "ring-1 ring-emerald-200",
                       )}
                     >
                       <button
@@ -651,7 +687,7 @@ export default function TeacherLessonSection() {
                           Assign
                         </Button>
                       ) : null}
-                      {selected && isOpenForStudents ? (
+                      {isLiveExercise ? (
                         <Badge className="mr-1.5 shrink-0 bg-emerald-600 hover:bg-emerald-600">
                           Live
                         </Badge>
@@ -683,40 +719,65 @@ export default function TeacherLessonSection() {
           )}
           {live && (
             <div className="max-h-[70vh] space-y-2 overflow-y-auto">
-              {(live.students ?? []).map((s) => (
-                <div
-                  key={s.studentId}
-                  className="rounded-xl border border-slate-100 bg-slate-50/80 px-3 py-2.5"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="truncate text-sm font-medium text-slate-900">{s.name}</p>
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "capitalize",
-                        s.status === "working" && "border-sky-300 text-sky-800",
-                        s.status === "done" && "border-emerald-300 text-emerald-800",
-                        s.status === "online" && "border-violet-300 text-violet-800",
+              {(live.students ?? []).map((s) => {
+                const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
+                const isDone = s.status === "done"
+                const scoreLabel =
+                  s.scoreDetail && s.scoreDetail.total > 0
+                    ? `${s.scoreDetail.correct}/${s.scoreDetail.total}`
+                    : s.score != null
+                      ? `${s.score}%`
+                      : null
+                return (
+                  <button
+                    key={s.studentId}
+                    type="button"
+                    onClick={() => setInspectStudent(s)}
+                    className={cn(
+                      "w-full rounded-xl border px-3 py-2.5 text-left transition hover:shadow-sm",
+                      isDone
+                        ? "border-emerald-200 bg-emerald-50/70"
+                        : "border-sky-100 bg-sky-50/40 hover:border-sky-200",
+                    )}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <span
+                          className={cn(
+                            "h-2.5 w-2.5 shrink-0 rounded-full",
+                            isOnline ? "bg-emerald-500" : "bg-slate-300",
+                          )}
+                          title={isOnline ? "Online" : "Offline"}
+                        />
+                        <p className="truncate text-sm font-medium text-slate-900">{s.name}</p>
+                      </div>
+                      {isDone ? (
+                        <Badge className="bg-emerald-600 hover:bg-emerald-600">Completed</Badge>
+                      ) : (
+                        <Badge variant="outline" className="capitalize text-slate-600">
+                          {s.status}
+                        </Badge>
                       )}
-                    >
-                      {s.status}
-                    </Badge>
-                  </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-sky-500 transition-all"
-                      style={{ width: `${Math.min(100, Math.max(0, s.progress ?? 0))}%` }}
-                    />
-                  </div>
-                  <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
-                    <span>{s.progress ?? 0}%</span>
-                    <span>
-                      {s.score != null ? `Score ${s.score}` : "—"} ·{" "}
-                      {formatElapsed(s.elapsedSeconds ?? 0)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                    </div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/80">
+                      <div
+                        className={cn(
+                          "h-full rounded-full transition-all",
+                          isDone ? "bg-emerald-500" : "bg-sky-500",
+                        )}
+                        style={{ width: `${Math.min(100, Math.max(0, s.progress ?? 0))}%` }}
+                      />
+                    </div>
+                    <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
+                      <span>{s.progress ?? 0}%</span>
+                      <span>
+                        {scoreLabel ? `Score ${scoreLabel}` : "—"} ·{" "}
+                        {formatElapsed(s.elapsedSeconds ?? 0)}
+                      </span>
+                    </div>
+                  </button>
+                )
+              })}
               {(live.students ?? []).length === 0 && (
                 <p className="text-sm text-slate-500">No students in this group.</p>
               )}
@@ -756,6 +817,72 @@ export default function TeacherLessonSection() {
             >
               Finish lesson
             </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={Boolean(inspectStudent)}
+        onOpenChange={(open) => {
+          if (!open) setInspectStudent(null)
+        }}
+      >
+        <AlertDialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{inspectStudent?.name ?? "Student"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {inspectStudent?.status === "done"
+                ? "Answers for the current exercise"
+                : "Student has not completed this exercise yet"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          {inspectStudent?.scoreDetail && inspectStudent.scoreDetail.total > 0 ? (
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-slate-800">
+                Score {inspectStudent.scoreDetail.correct}/{inspectStudent.scoreDetail.total}
+                {inspectStudent.score != null ? ` · ${inspectStudent.score}%` : ""}
+              </p>
+              <ul className="space-y-2">
+                {(inspectStudent.scoreDetail.items ?? []).map((item) => (
+                  <li
+                    key={item.id}
+                    className={cn(
+                      "rounded-xl border px-3 py-2 text-sm",
+                      item.ok
+                        ? "border-emerald-200 bg-emerald-50/80"
+                        : "border-rose-200 bg-rose-50/80",
+                    )}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-medium text-slate-900">{item.label ?? item.id}</span>
+                      <Badge
+                        variant="outline"
+                        className={item.ok ? "border-emerald-400 text-emerald-800" : "border-rose-400 text-rose-800"}
+                      >
+                        {item.ok ? "Correct" : "Mistake"}
+                      </Badge>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-600">
+                      Student: <strong>{item.given}</strong>
+                    </p>
+                    {!item.ok ? (
+                      <p className="text-xs text-slate-600">
+                        Expected: <strong>{item.expected}</strong>
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-500">
+              {inspectStudent?.answers
+                ? "Answers were saved, but this exercise type has no auto-grade key."
+                : "No graded answers yet. Ask the student to Mark complete after answering."}
+            </p>
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

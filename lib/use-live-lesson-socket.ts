@@ -12,6 +12,17 @@ type PresencePatch = {
   status: string
   progress?: number
   score?: number | null
+  scoreDetail?: {
+    correct: number
+    total: number
+    items?: Array<{
+      id: string
+      label?: string
+      given: string
+      expected: string
+      ok: boolean
+    }>
+  } | null
   lastSeenAt?: string
   persisted?: boolean
 }
