@@ -100,9 +100,11 @@ export default function StudentLiveLessonPage() {
   const currentStep = steps.find((s) => s.exerciseId === live?.currentExercise) ?? null
   const me = live?.students?.find((s) => s.studentId === user?.id)
   const open = Boolean(live?.openForStudents && live.lessonStatus === "active")
+  const isDone = me?.status === "done" || localProgress >= 100
 
-  const markWorking = async (progress: number) => {
+  const markWorking = async (progress: number, status?: "working" | "done") => {
     if (!live) return
+    const nextStatus = status ?? (progress >= 100 ? "done" : "working")
     setLocalProgress(progress)
     setSubmitting(true)
     try {
@@ -110,14 +112,14 @@ export default function StudentLiveLessonPage() {
         emit("lesson:progress", {
           sessionId: live.id,
           progress,
-          status: progress >= 100 ? "done" : "working",
-          score: progress >= 100 ? Math.round(progress) : null,
+          status: nextStatus,
+          score: nextStatus === "done" ? Math.round(progress) : null,
         })
       } else {
         const next = await liveLessonsApi.progress(live.id, {
           progress,
-          status: progress >= 100 ? "done" : "working",
-          score: progress >= 100 ? Math.round(progress) : null,
+          status: nextStatus,
+          score: nextStatus === "done" ? Math.round(progress) : null,
         })
         setLive(next)
       }
@@ -218,17 +220,29 @@ export default function StudentLiveLessonPage() {
             </div>
             <BookExerciseRenderer step={currentStep} showAnswers={false} />
             <div className="mt-6 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
-              <Button
-                variant="outline"
-                disabled={submitting}
-                onClick={() => void markWorking(Math.min(90, localProgress + 25))}
-              >
-                I&apos;m working ({Math.min(90, localProgress + 25)}%)
-              </Button>
-              <Button disabled={submitting} onClick={() => void markWorking(100)}>
-                <CheckCircle2 className="mr-1 h-4 w-4" />
-                Mark complete
-              </Button>
+              {isDone ? (
+                <Button
+                  variant="outline"
+                  disabled={submitting}
+                  onClick={() => void markWorking(Math.min(90, localProgress || 50), "working")}
+                >
+                  Change answers
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    disabled={submitting}
+                    onClick={() => void markWorking(Math.min(90, localProgress + 25))}
+                  >
+                    I&apos;m working ({Math.min(90, localProgress + 25)}%)
+                  </Button>
+                  <Button disabled={submitting} onClick={() => void markWorking(100, "done")}>
+                    <CheckCircle2 className="mr-1 h-4 w-4" />
+                    Mark complete
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}

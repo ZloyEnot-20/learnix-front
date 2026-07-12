@@ -46,12 +46,21 @@ function formatElapsed(seconds: number): string {
   return `${m}:${String(s).padStart(2, "0")}`
 }
 
+function recount(students: LiveLessonState["students"]) {
+  return {
+    onlineCount: students.filter((s) => s.status === "online" || s.status === "working").length,
+    workingCount: students.filter((s) => s.status === "working").length,
+    doneCount: students.filter((s) => s.status === "done").length,
+  }
+}
+
 function stepStatus(
   step: LessonStep,
   live: LiveLessonState | null,
   selectedId: string | null,
+  viewingAssignedUnit: boolean,
 ): "pending" | "current" | "open" | "done" {
-  if (!live) {
+  if (!live || !viewingAssignedUnit) {
     if (selectedId === step.id) return "current"
     return "pending"
   }
@@ -120,6 +129,7 @@ export default function TeacherLessonSection() {
     }
   }
 
+  /** Preview only — does not assign the unit to students. */
   const openUnit = async (n: number, ready: boolean) => {
     if (!ready) return
     setUnitNumber(n)
@@ -140,31 +150,37 @@ export default function TeacherLessonSection() {
   }
 
   const selectedStep = steps.find((s) => s.id === selectedStepId) ?? steps[0] ?? null
+  const assignedUnit = live?.currentUnit ?? null
+  const unitLocked = Boolean(live && assignedUnit != null && !live.unitCompleted)
+  const viewingAssignedUnit =
+    live != null && unitNumber != null && Number(live.currentUnit) === Number(unitNumber) && !live.unitCompleted
 
   const onState = useCallback((state: LiveLessonState) => {
     setLive(state)
   }, [])
 
-  const onPresence = useCallback((patch: { studentId: string; status: string; lastSeenAt?: string }) => {
-    setLive((prev) => {
-      if (!prev) return prev
-      return {
-        ...prev,
-        students: (prev.students ?? []).map((s) =>
-          s.studentId === patch.studentId
-            ? {
-                ...s,
-                status: patch.status as typeof s.status,
-              }
-            : s,
-        ),
-        onlineCount: (prev.students ?? []).filter((s) => {
-          const status = s.studentId === patch.studentId ? patch.status : s.status
-          return status === "online" || status === "working"
-        }).length,
-      }
-    })
-  }, [])
+  const onPresence = useCallback(
+    (patch: { studentId: string; status: string; lastSeenAt?: string }) => {
+      setLive((prev) => {
+        if (!prev) return prev
+        const studentsNext = (prev.students ?? []).map((s) => {
+          if (s.studentId !== patch.studentId) return s
+          // Never downgrade done → online from a stale heartbeat race
+          const nextStatus =
+            s.status === "done" && patch.status === "online"
+              ? s.status
+              : (patch.status as typeof s.status)
+          return { ...s, status: nextStatus }
+        })
+        return {
+          ...prev,
+          students: studentsNext,
+          ...recount(studentsNext),
+        }
+      })
+    },
+    [],
+  )
 
   const { connected } = useLiveLessonSocket(live?.id ?? null, {
     onState,
@@ -174,27 +190,6 @@ export default function TeacherLessonSection() {
 
   const syncLive = async (next: LiveLessonState) => {
     setLive(next)
-  }
-
-  const createAndStartPrep = async () => {
-    if (!groupId || unitNumber == null) {
-      setError("Select a group before starting the lesson")
-      return
-    }
-    setBusy(true)
-    setError(null)
-    try {
-      const session = await liveLessonsApi.create({
-        groupId,
-        bookId,
-        unitNumber,
-      })
-      await syncLive(session)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to create live lesson")
-    } finally {
-      setBusy(false)
-    }
   }
 
   const runAction = async (fn: () => Promise<LiveLessonState>) => {
@@ -209,14 +204,38 @@ export default function TeacherLessonSection() {
     }
   }
 
-  const selectExercise = async (step: LessonStep) => {
+  const prepareLesson = async () => {
+    if (!groupId) {
+      setError("Select a group before preparing the lesson")
+      return
+    }
+    setBusy(true)
+    setError(null)
+    try {
+      const session = await liveLessonsApi.create({ groupId, bookId })
+      await syncLive(session)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to create live lesson")
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  /** Local preview only — never resets student progress. */
+  const selectExerciseLocal = (step: LessonStep) => {
     setSelectedStepId(step.id)
+  }
+
+  const assignUnit = async (n: number) => {
     if (!live) return
-    await runAction(() => liveLessonsApi.selectExercise(live.id, step.exerciseId))
+    await runAction(() => liveLessonsApi.assignUnit(live.id, n))
+    if (unitNumber !== n) {
+      await openUnit(n, true)
+    }
   }
 
   const openForStudents = async () => {
-    if (!live || !selectedStep) return
+    if (!live || !selectedStep || !viewingAssignedUnit) return
     await runAction(() => liveLessonsApi.selectExercise(live.id, selectedStep.exerciseId, true))
   }
 
@@ -276,17 +295,114 @@ export default function TeacherLessonSection() {
     )
   }
 
+  const lessonControls = (
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3">
+      <Select
+        value={groupId || undefined}
+        onValueChange={setGroupId}
+        disabled={Boolean(live) && live.lessonStatus !== "finished"}
+      >
+        <SelectTrigger className="w-[200px]">
+          <SelectValue placeholder="Select group" />
+        </SelectTrigger>
+        <SelectContent>
+          {groups.map((g) => (
+            <SelectItem key={g.id} value={g.id}>
+              {g.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {!live && (
+        <Button disabled={busy || !groupId} onClick={() => void prepareLesson()}>
+          Prepare lesson
+        </Button>
+      )}
+
+      {live && (
+        <>
+          <Badge variant={connected ? "secondary" : "outline"} className="gap-1">
+            {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
+            {connected ? "Live" : "Connecting…"}
+          </Badge>
+          <Button
+            size="sm"
+            disabled={busy || live.lessonStatus === "active"}
+            onClick={() => void runAction(() => liveLessonsApi.start(live.id))}
+          >
+            <Play className="mr-1 h-4 w-4" />
+            Start
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={busy || live.lessonStatus !== "active"}
+            onClick={() => void runAction(() => liveLessonsApi.pause(live.id))}
+          >
+            <Pause className="mr-1 h-4 w-4" />
+            Pause
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={busy || live.lessonStatus !== "paused"}
+            onClick={() => void runAction(() => liveLessonsApi.resume(live.id))}
+          >
+            <Play className="mr-1 h-4 w-4" />
+            Resume
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            disabled={busy || live.lessonStatus === "finished"}
+            onClick={() => void runAction(() => liveLessonsApi.finish(live.id))}
+          >
+            <Square className="mr-1 h-4 w-4" />
+            Finish
+          </Button>
+          <div className="ml-auto flex flex-wrap gap-3 text-xs text-slate-600">
+            <span>
+              Status: <strong className="capitalize">{live.lessonStatus}</strong>
+            </span>
+            {assignedUnit != null && (
+              <span>
+                Unit {assignedUnit}
+                {live.unitCompleted ? " · completed" : " · active"}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1">
+              <Users className="h-3.5 w-3.5" />
+              Online {live.onlineCount}
+            </span>
+            <span>Working {live.workingCount}</span>
+            <span>Done {live.doneCount}</span>
+          </div>
+        </>
+      )}
+    </div>
+  )
+
   if (view === "units") {
     return (
       <div className="space-y-6">
         <div className="flex items-start gap-3">
-          <Button variant="ghost" size="sm" onClick={() => setView("books")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setView("books")
+              // Keep live session when browsing books within the same lesson
+            }}
+          >
             <ArrowLeft className="mr-1 h-4 w-4" />
             Books
           </Button>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">{bookTitle}</h2>
-            <p className="text-sm text-slate-500">Choose a unit to open Lesson Workspace</p>
+            <p className="text-sm text-slate-500">
+              Preview any unit freely. Assign opens it for students (one active unit at a time).
+            </p>
           </div>
         </div>
         {error && (
@@ -294,29 +410,75 @@ export default function TeacherLessonSection() {
             {error}
           </div>
         )}
+        {lessonControls}
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {units.map((u) => (
-            <button
-              key={u.unitNumber}
-              type="button"
-              disabled={!u.ready || busy}
-              onClick={() => void openUnit(u.unitNumber, u.ready)}
-              className={cn(
-                "rounded-2xl border p-4 text-left transition",
-                u.ready
-                  ? "border-slate-200 bg-white hover:border-sky-300 hover:shadow-sm"
-                  : "cursor-not-allowed border-slate-100 bg-slate-50 opacity-70",
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-semibold text-sky-800">Unit {u.unitNumber}</span>
-                {!u.ready && <Badge variant="secondary">Soon</Badge>}
-                {u.ready && <Badge variant="outline">{u.stepCount} exercises</Badge>}
+          {units.map((u) => {
+            const isActive =
+              live != null && Number(live.currentUnit) === u.unitNumber && !live.unitCompleted
+            const isCompleted =
+              live != null && Number(live.currentUnit) === u.unitNumber && Boolean(live.unitCompleted)
+            const canAssign =
+              Boolean(live) &&
+              live!.lessonStatus === "active" &&
+              u.ready &&
+              (!unitLocked || isActive)
+            return (
+              <div
+                key={u.unitNumber}
+                className={cn(
+                  "rounded-2xl border p-4 text-left transition",
+                  u.ready
+                    ? "border-slate-200 bg-white"
+                    : "border-slate-100 bg-slate-50 opacity-70",
+                  isActive && "border-emerald-300 ring-1 ring-emerald-200",
+                )}
+              >
+                <button
+                  type="button"
+                  disabled={!u.ready || busy}
+                  onClick={() => void openUnit(u.unitNumber, u.ready)}
+                  className="w-full text-left disabled:cursor-not-allowed"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-sky-800">Unit {u.unitNumber}</span>
+                    <div className="flex flex-wrap gap-1">
+                      {!u.ready && <Badge variant="secondary">Soon</Badge>}
+                      {isActive && (
+                        <Badge className="bg-emerald-600 hover:bg-emerald-600">Active</Badge>
+                      )}
+                      {isCompleted && <Badge variant="secondary">Completed</Badge>}
+                      {u.ready && !isActive && !isCompleted && (
+                        <Badge variant="outline">{u.stepCount} exercises</Badge>
+                      )}
+                    </div>
+                  </div>
+                  <h3 className="mt-2 font-medium text-slate-900">{u.title}</h3>
+                  {u.subtitle && <p className="mt-1 text-xs text-slate-500">{u.subtitle}</p>}
+                </button>
+                {u.ready && live && live.lessonStatus !== "idle" && live.lessonStatus !== "finished" && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      disabled={busy || !canAssign || isActive}
+                      onClick={() => void assignUnit(u.unitNumber)}
+                    >
+                      {isActive ? "Assigned" : "Assign"}
+                    </Button>
+                    {isActive && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={busy}
+                        onClick={() => void runAction(() => liveLessonsApi.completeUnit(live.id))}
+                      >
+                        Complete unit
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
-              <h3 className="mt-2 font-medium text-slate-900">{u.title}</h3>
-              {u.subtitle && <p className="mt-1 text-xs text-slate-500">{u.subtitle}</p>}
-            </button>
-          ))}
+            )
+          })}
         </div>
       </div>
     )
@@ -328,56 +490,24 @@ export default function TeacherLessonSection() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setView("units")
-              setLive(null)
-            }}
-          >
+          <Button variant="ghost" size="sm" onClick={() => setView("units")}>
             <ArrowLeft className="mr-1 h-4 w-4" />
             Units
           </Button>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
               Unit {unitNumber}: {unitMeta?.title}
+              {viewingAssignedUnit && (
+                <Badge className="ml-2 bg-emerald-600 align-middle hover:bg-emerald-600">Active</Badge>
+              )}
             </h2>
-            <p className="text-xs text-slate-500">{bookTitle}</p>
+            <p className="text-xs text-slate-500">
+              {bookTitle}
+              {!viewingAssignedUnit && live?.lessonStatus === "active"
+                ? " · Preview only — Assign this unit to open it for students"
+                : ""}
+            </p>
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Select value={groupId || undefined} onValueChange={setGroupId}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select group" />
-            </SelectTrigger>
-            <SelectContent>
-              {groups.map((g) => (
-                <SelectItem key={g.id} value={g.id}>
-                  {g.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {!live && (
-            <Button disabled={busy || !groupId} onClick={() => void createAndStartPrep()}>
-              Prepare lesson
-            </Button>
-          )}
-
-          {live && (
-            <>
-              <Badge variant={connected ? "secondary" : "outline"} className="gap-1">
-                {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-                {connected ? "Live" : "Connecting…"}
-              </Badge>
-              <span className="text-xs text-slate-500">
-                Students join from the app (their group)
-              </span>
-            </>
-          )}
         </div>
       </div>
 
@@ -387,66 +517,46 @@ export default function TeacherLessonSection() {
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3">
-        <Button
-          size="sm"
-          disabled={!live || busy || live.lessonStatus === "active"}
-          onClick={() => live && void runAction(() => liveLessonsApi.start(live.id))}
-        >
-          <Play className="mr-1 h-4 w-4" />
-          Start Lesson
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={!live || busy || live.lessonStatus !== "active"}
-          onClick={() => live && void runAction(() => liveLessonsApi.pause(live.id))}
-        >
-          <Pause className="mr-1 h-4 w-4" />
-          Pause
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={!live || busy || live.lessonStatus !== "paused"}
-          onClick={() => live && void runAction(() => liveLessonsApi.resume(live.id))}
-        >
-          <Play className="mr-1 h-4 w-4" />
-          Resume
-        </Button>
-        <Button
-          size="sm"
-          variant="destructive"
-          disabled={!live || busy || live.lessonStatus === "finished"}
-          onClick={() => live && void runAction(() => liveLessonsApi.finish(live.id))}
-        >
-          <Square className="mr-1 h-4 w-4" />
-          Finish
-        </Button>
-        <div className="mx-1 h-6 w-px bg-slate-200" />
-        <Button
-          size="sm"
-          variant={live?.openForStudents ? "default" : "secondary"}
-          disabled={!live || busy || !selectedStep || live.lessonStatus === "idle"}
-          onClick={() => void openForStudents()}
-        >
-          <Radio className="mr-1 h-4 w-4" />
-          Open For Students
-        </Button>
+      {lessonControls}
 
-        {live && (
-          <div className="ml-auto flex flex-wrap gap-3 text-xs text-slate-600">
-            <span>
-              Status: <strong className="capitalize">{live.lessonStatus}</strong>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Users className="h-3.5 w-3.5" />
-              Online {live.onlineCount}
-            </span>
-            <span>Working {live.workingCount}</span>
-            <span>Done {live.doneCount}</span>
-            {live.currentExercise && <span>Exercise {live.currentExercise}</span>}
-          </div>
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-3 py-2">
+        {live && live.lessonStatus === "active" && !viewingAssignedUnit && unitNumber != null && (
+          <Button
+            size="sm"
+            disabled={busy || (unitLocked && Number(live.currentUnit) !== unitNumber)}
+            onClick={() => void assignUnit(unitNumber)}
+          >
+            Assign this unit
+          </Button>
+        )}
+        {viewingAssignedUnit && (
+          <>
+            <Button
+              size="sm"
+              variant={live?.openForStudents ? "default" : "secondary"}
+              disabled={!live || busy || !selectedStep}
+              onClick={() => void openForStudents()}
+            >
+              <Radio className="mr-1 h-4 w-4" />
+              Open exercise for students
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={!live || busy}
+              onClick={() => void runAction(() => liveLessonsApi.completeUnit(live!.id))}
+            >
+              Complete unit
+            </Button>
+            {live?.openForStudents && live.currentExercise && (
+              <span className="text-xs text-emerald-700">
+                Students see exercise {live.currentExercise}
+              </span>
+            )}
+          </>
+        )}
+        {!live && (
+          <p className="text-xs text-slate-500">Prepare and start a lesson to assign units.</p>
         )}
       </div>
 
@@ -460,13 +570,18 @@ export default function TeacherLessonSection() {
           ) : (
             <ul className="max-h-[70vh] space-y-1 overflow-y-auto">
               {steps.map((step) => {
-                const status = stepStatus(step, live, selectedStep?.id ?? null)
+                const status = stepStatus(
+                  step,
+                  live,
+                  selectedStep?.id ?? null,
+                  viewingAssignedUnit,
+                )
                 const active = selectedStep?.id === step.id
                 return (
                   <li key={step.id}>
                     <button
                       type="button"
-                      onClick={() => void selectExercise(step)}
+                      onClick={() => selectExerciseLocal(step)}
                       className={cn(
                         "flex w-full items-start gap-2 rounded-xl px-2.5 py-2 text-left text-sm transition",
                         active ? "bg-sky-50 text-sky-950" : "hover:bg-slate-50",

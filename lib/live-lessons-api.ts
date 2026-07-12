@@ -36,13 +36,16 @@ export const liveLessonsApi = {
       exerciseIds: string[]
       answer_key?: Record<string, unknown> | null
     }>(`/live-lessons/books/${bookId}/units/${unitNumber}`),
-  create: (input: { groupId: string; bookId: string; unitNumber: number }) =>
+  create: (input: { groupId: string; bookId: string; unitNumber?: number }) =>
     api.post<LiveLessonState>("/live-lessons", input),
   get: (id: string) => api.get<LiveLessonState>(`/live-lessons/${id}`),
   start: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/start`),
   pause: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/pause`),
   resume: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/resume`),
   finish: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/finish`),
+  assignUnit: (id: string, unitNumber: number) =>
+    api.post<LiveLessonState>(`/live-lessons/${id}/assign-unit`, { unitNumber }),
+  completeUnit: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/complete-unit`),
   selectExercise: (id: string, exerciseId: string, openForStudents?: boolean) =>
     api.post<LiveLessonState>(`/live-lessons/${id}/exercise`, {
       exerciseId,
