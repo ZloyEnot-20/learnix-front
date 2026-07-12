@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { CheckCircle2, Loader2, Radio } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
@@ -13,9 +13,8 @@ import { liveLessonsApi } from "@/lib/live-lessons-api"
 import { useLiveLessonSocket } from "@/lib/use-live-lesson-socket"
 import { CardGridSkeleton } from "@/components/admin/skeletons"
 
+/** Student live lesson — joins via group membership, no code. */
 export default function StudentLiveLessonPage() {
-  const params = useParams<{ code: string }>()
-  const code = String(params.code ?? "").toUpperCase()
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
 
@@ -25,35 +24,44 @@ export default function StudentLiveLessonPage() {
   const [joining, setJoining] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [localProgress, setLocalProgress] = useState(0)
+  const [idle, setIdle] = useState(false)
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.replace(`/login?next=${encodeURIComponent(`/live/${code}`)}`)
+      router.replace(`/login?next=${encodeURIComponent("/live")}`)
     }
-  }, [authLoading, user, router, code])
+  }, [authLoading, user, router])
+
+  const joinActive = useCallback(async () => {
+    if (!user || user.type !== "student") return
+    setJoining(true)
+    setError(null)
+    setIdle(false)
+    try {
+      const active = await liveLessonsApi.getActive()
+      if (!active) {
+        setLive(null)
+        setIdle(true)
+        return
+      }
+      const joined = await liveLessonsApi.joinActive()
+      setLive(joined)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not join lesson")
+      setLive(null)
+    } finally {
+      setJoining(false)
+    }
+  }, [user])
 
   useEffect(() => {
-    if (!user || user.type !== "student") return
-    let cancelled = false
-    ;(async () => {
-      setJoining(true)
-      setError(null)
-      try {
-        const session = await liveLessonsApi.joinByCode(code)
-        const joined = await liveLessonsApi.join(session.id)
-        if (!cancelled) setLive(joined)
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Could not join lesson")
-      } finally {
-        if (!cancelled) setJoining(false)
-      }
-    })()
-    return () => {
-      cancelled = true
+    if (!user || user.type !== "student") {
+      setJoining(false)
+      return
     }
-  }, [user, code])
+    void joinActive()
+  }, [user, joinActive])
 
-  // Load unit content from DB API (answers stripped for students)
   useEffect(() => {
     if (!live?.bookId || live.currentUnit == null) {
       setSteps([])
@@ -76,14 +84,11 @@ export default function StudentLiveLessonPage() {
   const onState = useCallback((state: LiveLessonState) => {
     setLive(state)
     setLocalProgress(0)
+    if (state.lessonStatus === "finished") setIdle(true)
   }, [])
 
-  const { connected, emit } = useLiveLessonSocket(live?.id ?? null, { onState }, {
-    role: "student",
-    joinCode: code,
-  })
+  const { connected, emit } = useLiveLessonSocket(live?.id ?? null, { onState }, { role: "student" })
 
-  // Socket-only heartbeat every 30s — no parallel REST spam
   useEffect(() => {
     if (!live?.id || !connected) return
     const tick = () => emit("lesson:heartbeat", { sessionId: live.id })
@@ -94,13 +99,13 @@ export default function StudentLiveLessonPage() {
 
   const currentStep = steps.find((s) => s.exerciseId === live?.currentExercise) ?? null
   const me = live?.students?.find((s) => s.studentId === user?.id)
+  const open = Boolean(live?.openForStudents && live.lessonStatus === "active")
 
   const markWorking = async (progress: number) => {
     if (!live) return
     setLocalProgress(progress)
     setSubmitting(true)
     try {
-      // Prefer socket (single path); REST fallback if socket down
       if (connected) {
         emit("lesson:progress", {
           sessionId: live.id,
@@ -144,35 +149,26 @@ export default function StudentLiveLessonPage() {
     )
   }
 
-  if (error && !live) {
-    return (
-      <div className="mx-auto max-w-lg p-8 text-center">
-        <p className="text-rose-700">{error}</p>
-        <Button className="mt-4" variant="outline" onClick={() => router.refresh()}>
-          Retry
-        </Button>
-      </div>
-    )
-  }
-
-  const open = Boolean(live?.openForStudents && live.lessonStatus === "active")
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white">
       <header className="border-b border-sky-100 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-wide text-sky-700">Live lesson</p>
-            <h1 className="text-lg font-semibold text-slate-900">Code {code}</h1>
+            <h1 className="text-lg font-semibold text-slate-900">Your group</h1>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge variant={connected ? "secondary" : "outline"}>
-              {connected ? "Connected" : "Connecting…"}
+              {connected ? "Connected" : live ? "Connecting…" : "Idle"}
             </Badge>
-            <Badge variant="outline" className="capitalize">
-              {live?.lessonStatus ?? "…"}
-            </Badge>
-            {live?.currentExercise && <Badge variant="outline">Ex {live.currentExercise}</Badge>}
+            {live?.lessonStatus && (
+              <Badge variant="outline" className="capitalize">
+                {live.lessonStatus}
+              </Badge>
+            )}
+            <Button size="sm" variant="outline" onClick={() => void joinActive()}>
+              Refresh
+            </Button>
           </div>
         </div>
       </header>
@@ -184,12 +180,24 @@ export default function StudentLiveLessonPage() {
           </div>
         )}
 
-        {!open && (
+        {(idle || !live) && (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
+            <p className="font-medium text-slate-900">No live lesson yet</p>
+            <p className="mt-2 text-sm text-slate-500">
+              When your teacher starts a lesson for your group, tap Refresh to join.
+            </p>
+            <Button className="mt-4" onClick={() => void joinActive()}>
+              Check again
+            </Button>
+          </div>
+        )}
+
+        {live && !open && (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-sky-600" />
             <p className="mt-4 font-medium text-slate-900">Waiting for teacher</p>
             <p className="mt-1 text-sm text-slate-500">
-              The teacher will open an exercise for the class. Stay on this page.
+              You are in the lesson. The teacher will open an exercise for the class.
             </p>
             {me && (
               <p className="mt-3 text-xs text-slate-400">
@@ -223,10 +231,6 @@ export default function StudentLiveLessonPage() {
               </Button>
             </div>
           </div>
-        )}
-
-        {open && !currentStep && (
-          <p className="text-sm text-slate-500">Exercise content is not available for this step yet.</p>
         )}
       </main>
     </div>

@@ -50,11 +50,12 @@ export const liveLessonsApi = {
     }),
   setOpen: (id: string, openForStudents: boolean) =>
     api.post<LiveLessonState>(`/live-lessons/${id}/open`, { openForStudents }),
-  joinByCode: (code: string) => api.get<LiveLessonState>(`/live-lessons/join/${code}`),
+  getActive: () => api.get<LiveLessonState | null>("/live-lessons/active"),
+  joinActive: () => api.post<LiveLessonState>("/live-lessons/active/join"),
   join: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/join`),
   progress: (
     id: string,
     body: { progress: number; score?: number | null; status?: string; answers?: unknown },
   ) => api.post<LiveLessonState>(`/live-lessons/${id}/progress`, body),
-  heartbeat: (id: string) => api.post<LiveLessonState>(`/live-lessons/${id}/heartbeat`),
+  heartbeat: (id: string) => api.post(`/live-lessons/${id}/heartbeat`),
 }

@@ -369,24 +369,13 @@ export default function TeacherLessonSection() {
 
           {live && (
             <>
-              <Badge variant="outline" className="font-mono tracking-wider">
-                Code {live.code}
-              </Badge>
               <Badge variant={connected ? "secondary" : "outline"} className="gap-1">
                 {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
                 {connected ? "Live" : "Connecting…"}
               </Badge>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-xs text-slate-500"
-                onClick={() => {
-                  const url = `${window.location.origin}/live/${live.code}`
-                  void navigator.clipboard?.writeText(url)
-                }}
-              >
-                Copy student link
-              </Button>
+              <span className="text-xs text-slate-500">
+                Students join from the app (their group)
+              </span>
             </>
           )}
         </div>

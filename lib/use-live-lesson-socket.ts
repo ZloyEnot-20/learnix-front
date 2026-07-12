@@ -23,23 +23,22 @@ type LessonSocketHandlers = {
 type Role = "teacher" | "student"
 
 /**
- * Socket.IO connection for a live lesson room.
- * Teacher: lesson:subscribe · Student: lesson:join
- * Heartbeats emit lesson:presence (cheap), not full lesson:state.
+ * Socket.IO for a live lesson room.
+ * Teacher: lesson:subscribe · Student: lesson:join { sessionId }
  */
 export function useLiveLessonSocket(
   sessionId: string | null,
   handlers: LessonSocketHandlers = {},
-  options: { role?: Role; joinCode?: string | null } = {},
+  options: { role?: Role } = {},
 ) {
-  const { role = "teacher", joinCode = null } = options
+  const { role = "teacher" } = options
   const [connected, setConnected] = useState(false)
   const socketRef = useRef<Socket | null>(null)
   const handlersRef = useRef(handlers)
   handlersRef.current = handlers
 
   useEffect(() => {
-    if (!sessionId && !(role === "student" && joinCode)) return
+    if (!sessionId) return
 
     const token = getAccessToken()
     if (!token) return
@@ -58,11 +57,8 @@ export function useLiveLessonSocket(
     socket.on("connect", () => {
       setConnected(true)
       if (role === "student") {
-        socket.emit("lesson:join", {
-          sessionId: sessionId ?? undefined,
-          code: joinCode ?? undefined,
-        })
-      } else if (sessionId) {
+        socket.emit("lesson:join", { sessionId })
+      } else {
         socket.emit("lesson:subscribe", { sessionId })
       }
     })
@@ -83,7 +79,7 @@ export function useLiveLessonSocket(
       socketRef.current = null
       setConnected(false)
     }
-  }, [sessionId, role, joinCode])
+  }, [sessionId, role])
 
   const emit = useCallback((event: string, payload?: unknown) => {
     socketRef.current?.emit(event, payload)
