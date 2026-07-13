@@ -23,6 +23,7 @@ type PresencePatch = {
       ok: boolean
     }>
   } | null
+  answers?: unknown
   lastSeenAt?: string
   persisted?: boolean
 }

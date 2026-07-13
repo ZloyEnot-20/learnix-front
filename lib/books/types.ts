@@ -137,6 +137,17 @@ export interface LiveStudentProgress {
   elapsedSeconds: number
 }
 
+export interface LiveExerciseResult {
+  unitNumber: number
+  exerciseId: string
+  studentId: string
+  name: string
+  score: number | null
+  scoreDetail?: LiveStudentProgress["scoreDetail"]
+  answers?: unknown
+  completedAt?: string | null
+}
+
 export interface LiveLessonState {
   id: string
   code: string
@@ -153,6 +164,7 @@ export interface LiveLessonState {
   pausedAt: string | null
   finishedAt: string | null
   students: LiveStudentProgress[]
+  exerciseResults?: LiveExerciseResult[]
   onlineCount: number
   workingCount: number
   doneCount: number

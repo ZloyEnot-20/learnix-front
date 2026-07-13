@@ -21,6 +21,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -39,13 +46,18 @@ import {
   fetchLessonSteps,
   listUnitsFromMeta,
 } from "@/lib/books/catalog"
-import type { LessonStep, LiveLessonState, LiveStudentProgress } from "@/lib/books/types"
+import type {
+  LessonStep,
+  LiveExerciseResult,
+  LiveLessonState,
+  LiveStudentProgress,
+} from "@/lib/books/types"
 import { liveLessonsApi, type LiveBookSummary } from "@/lib/live-lessons-api"
 import { useLiveLessonSocket } from "@/lib/use-live-lesson-socket"
 import { useAdminData } from "@/lib/admin-data-context"
 import { cn } from "@/lib/utils"
 
-type View = "books" | "units" | "workspace"
+type View = "books" | "units" | "workspace" | "results"
 
 const PROGRESS_POLL_MS = 2000
 
@@ -60,6 +72,118 @@ function recount(students: LiveLessonState["students"]) {
     onlineCount: students.filter((s) => s.status === "online" || s.status === "working").length,
     workingCount: students.filter((s) => s.status === "working").length,
     doneCount: students.filter((s) => s.status === "done").length,
+  }
+}
+
+function scoreLabelFor(s: {
+  score?: number | null
+  scoreDetail?: LiveStudentProgress["scoreDetail"] | null
+}): string | null {
+  if (s.scoreDetail && s.scoreDetail.total > 0) {
+    return `${s.scoreDetail.correct}/${s.scoreDetail.total}`
+  }
+  if (s.score != null && Number.isFinite(s.score)) return `${Math.round(s.score)}%`
+  return null
+}
+
+function buildLessonStats(live: LiveLessonState) {
+  const results = live.exerciseResults ?? []
+  const byUnit = new Map<
+    number,
+    { unitNumber: number; exercises: Map<string, { scores: number[]; submissions: number }> }
+  >()
+
+  for (const r of results) {
+    const unit = Number(r.unitNumber)
+    if (!byUnit.has(unit)) {
+      byUnit.set(unit, { unitNumber: unit, exercises: new Map() })
+    }
+    const unitRow = byUnit.get(unit)!
+    if (!unitRow.exercises.has(r.exerciseId)) {
+      unitRow.exercises.set(r.exerciseId, { scores: [], submissions: 0 })
+    }
+    const ex = unitRow.exercises.get(r.exerciseId)!
+    ex.submissions += 1
+    if (r.score != null && Number.isFinite(r.score)) ex.scores.push(Number(r.score))
+  }
+
+  const byStudent = new Map<
+    string,
+    { studentId: string; name: string; scores: number[]; results: LiveExerciseResult[] }
+  >()
+  for (const r of results) {
+    if (!byStudent.has(r.studentId)) {
+      byStudent.set(r.studentId, {
+        studentId: r.studentId,
+        name: r.name || "Student",
+        scores: [],
+        results: [],
+      })
+    }
+    const row = byStudent.get(r.studentId)!
+    row.results.push(r)
+    if (r.score != null && Number.isFinite(r.score)) row.scores.push(Number(r.score))
+  }
+
+  // Include roster students with zero submissions
+  for (const s of live.students ?? []) {
+    if (!byStudent.has(s.studentId)) {
+      byStudent.set(s.studentId, {
+        studentId: s.studentId,
+        name: s.name,
+        scores: [],
+        results: [],
+      })
+    }
+  }
+
+  const units = [...byUnit.values()]
+    .sort((a, b) => a.unitNumber - b.unitNumber)
+    .map((u) => ({
+      unitNumber: u.unitNumber,
+      exercises: [...u.exercises.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([exerciseId, data]) => ({
+          exerciseId,
+          submissions: data.submissions,
+          avgScore:
+            data.scores.length > 0
+              ? Math.round(data.scores.reduce((a, b) => a + b, 0) / data.scores.length)
+              : null,
+        })),
+    }))
+
+  const students = [...byStudent.values()]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((s) => ({
+      studentId: s.studentId,
+      name: s.name,
+      overallPct:
+        s.scores.length > 0
+          ? Math.round(s.scores.reduce((a, b) => a + b, 0) / s.scores.length)
+          : null,
+      exerciseCount: s.results.length,
+      results: s.results.sort(
+        (a, b) =>
+          Number(a.unitNumber) - Number(b.unitNumber) ||
+          String(a.exerciseId).localeCompare(String(b.exerciseId)),
+      ),
+    }))
+
+  const allScores = results
+    .map((r) => r.score)
+    .filter((n): n is number => n != null && Number.isFinite(n))
+  const classAvg =
+    allScores.length > 0
+      ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+      : null
+
+  return {
+    units,
+    students,
+    classAvg,
+    submissionCount: results.length,
+    exerciseCount: new Set(results.map((r) => `${r.unitNumber}:${r.exerciseId}`)).size,
   }
 }
 
@@ -189,6 +313,7 @@ export default function TeacherLessonSection() {
       progress?: number
       score?: number | null
       scoreDetail?: LiveStudentProgress["scoreDetail"] | null
+      answers?: unknown
       lastSeenAt?: string
     }) => {
       setLive((prev) => {
@@ -207,6 +332,7 @@ export default function TeacherLessonSection() {
             ...(patch.scoreDetail !== undefined
               ? { scoreDetail: patch.scoreDetail ?? undefined }
               : {}),
+            ...(patch.answers !== undefined ? { answers: patch.answers ?? undefined } : {}),
           }
         })
         return {
@@ -331,7 +457,17 @@ export default function TeacherLessonSection() {
   const confirmFinish = async () => {
     if (!live) return
     setFinishOpen(false)
-    await runAction(() => liveLessonsApi.finish(live.id))
+    setBusy(true)
+    setError(null)
+    try {
+      const next = await liveLessonsApi.finish(live.id)
+      setLive(next)
+      setView("results")
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Action failed")
+    } finally {
+      setBusy(false)
+    }
   }
 
   const finishExercise = async () => {
@@ -344,6 +480,141 @@ export default function TeacherLessonSection() {
       <div className="space-y-4">
         <CardGridSkeleton count={3} columns={3} />
         <TableSkeleton rows={4} />
+      </div>
+    )
+  }
+
+  if (view === "results" && live) {
+    const stats = buildLessonStats(live)
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Lesson results</h2>
+            <p className="text-sm text-slate-500">
+              {bookTitle || "Live lesson"} · finished{" "}
+              {live.finishedAt ? new Date(live.finishedAt).toLocaleString() : ""}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={() => setView("units")}>
+              Back to units
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => {
+                setLive(null)
+                setView("books")
+              }}
+            >
+              New lesson
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Class average</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900">
+              {stats.classAvg != null ? `${stats.classAvg}%` : "—"}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Exercises</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900">{stats.exerciseCount}</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Submissions</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900">{stats.submissionCount}</p>
+          </div>
+        </div>
+
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">By unit</h3>
+          {stats.units.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
+              No graded submissions were recorded for this lesson.
+            </p>
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2">
+              {stats.units.map((u) => {
+                const unitMeta = units.find((x) => x.unitNumber === u.unitNumber)
+                return (
+                  <div
+                    key={u.unitNumber}
+                    className="rounded-2xl border border-slate-200 bg-white p-4"
+                  >
+                    <h4 className="font-semibold text-slate-900">
+                      Unit {u.unitNumber}
+                      {unitMeta?.title ? `: ${unitMeta.title}` : ""}
+                    </h4>
+                    <ul className="mt-3 space-y-2">
+                      {u.exercises.map((ex) => (
+                        <li
+                          key={ex.exerciseId}
+                          className="flex items-center justify-between gap-2 rounded-xl bg-slate-50 px-3 py-2 text-sm"
+                        >
+                          <span className="font-medium text-slate-800">Ex {ex.exerciseId}</span>
+                          <span className="text-slate-500">
+                            {ex.submissions} sub ·{" "}
+                            {ex.avgScore != null ? `${ex.avgScore}% avg` : "—"}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </section>
+
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            By student
+          </h3>
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Student</th>
+                  <th className="px-4 py-3 font-medium">Overall</th>
+                  <th className="px-4 py-3 font-medium">Exercises</th>
+                  <th className="px-4 py-3 font-medium">Breakdown</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.students.map((s) => (
+                  <tr key={s.studentId} className="border-b border-slate-50 last:border-0">
+                    <td className="px-4 py-3 font-medium text-slate-900">{s.name}</td>
+                    <td className="px-4 py-3">
+                      {s.overallPct != null ? (
+                        <span className="font-semibold text-emerald-700">{s.overallPct}%</span>
+                      ) : (
+                        <span className="text-slate-400">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">{s.exerciseCount}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-1">
+                        {s.results.length === 0 ? (
+                          <span className="text-slate-400">No submissions</span>
+                        ) : (
+                          s.results.map((r) => (
+                            <Badge key={`${r.unitNumber}-${r.exerciseId}`} variant="outline">
+                              U{r.unitNumber}·{r.exerciseId}{" "}
+                              {r.score != null ? `${Math.round(r.score)}%` : "—"}
+                            </Badge>
+                          ))
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     )
   }
@@ -432,7 +703,7 @@ export default function TeacherLessonSection() {
               Start lesson
             </Button>
           )}
-          {live.lessonStatus !== "finished" && (
+          {live.lessonStatus === "active" && (
             <Button
               size="sm"
               variant="destructive"
@@ -441,6 +712,11 @@ export default function TeacherLessonSection() {
             >
               <Square className="mr-1 h-4 w-4" />
               Finish lesson
+            </Button>
+          )}
+          {live.lessonStatus === "finished" && (
+            <Button size="sm" variant="outline" onClick={() => setView("results")}>
+              View results
             </Button>
           )}
           <div className="ml-auto flex flex-wrap gap-3 text-xs text-slate-600">
@@ -722,12 +998,6 @@ export default function TeacherLessonSection() {
               {(live.students ?? []).map((s) => {
                 const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
                 const isDone = s.status === "done"
-                const scoreLabel =
-                  s.scoreDetail && s.scoreDetail.total > 0
-                    ? `${s.scoreDetail.correct}/${s.scoreDetail.total}`
-                    : s.score != null
-                      ? `${s.score}%`
-                      : null
                 return (
                   <button
                     key={s.studentId}
@@ -753,11 +1023,7 @@ export default function TeacherLessonSection() {
                       </div>
                       {isDone ? (
                         <Badge className="bg-emerald-600 hover:bg-emerald-600">Completed</Badge>
-                      ) : (
-                        <Badge variant="outline" className="capitalize text-slate-600">
-                          {s.status}
-                        </Badge>
-                      )}
+                      ) : null}
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/80">
                       <div
@@ -769,9 +1035,9 @@ export default function TeacherLessonSection() {
                       />
                     </div>
                     <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
-                      <span>{s.progress ?? 0}%</span>
+                      <span>{isDone ? "Submitted" : `${s.progress ?? 0}%`}</span>
                       <span>
-                        {scoreLabel ? `Score ${scoreLabel}` : "—"} ·{" "}
+                        {scoreLabelFor(s) ? `Score ${scoreLabelFor(s)}` : "—"} ·{" "}
                         {formatElapsed(s.elapsedSeconds ?? 0)}
                       </span>
                     </div>
@@ -821,21 +1087,21 @@ export default function TeacherLessonSection() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog
+      <Dialog
         open={Boolean(inspectStudent)}
         onOpenChange={(open) => {
           if (!open) setInspectStudent(null)
         }}
       >
-        <AlertDialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{inspectStudent?.name ?? "Student"}</AlertDialogTitle>
-            <AlertDialogDescription>
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{inspectStudent?.name ?? "Student"}</DialogTitle>
+            <DialogDescription>
               {inspectStudent?.status === "done"
                 ? "Answers for the current exercise"
                 : "Student has not completed this exercise yet"}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+            </DialogDescription>
+          </DialogHeader>
           {inspectStudent?.scoreDetail && inspectStudent.scoreDetail.total > 0 ? (
             <div className="space-y-3">
               <p className="text-sm font-medium text-slate-800">
@@ -857,7 +1123,11 @@ export default function TeacherLessonSection() {
                       <span className="font-medium text-slate-900">{item.label ?? item.id}</span>
                       <Badge
                         variant="outline"
-                        className={item.ok ? "border-emerald-400 text-emerald-800" : "border-rose-400 text-rose-800"}
+                        className={
+                          item.ok
+                            ? "border-emerald-400 text-emerald-800"
+                            : "border-rose-400 text-rose-800"
+                        }
                       >
                         {item.ok ? "Correct" : "Mistake"}
                       </Badge>
@@ -874,18 +1144,22 @@ export default function TeacherLessonSection() {
                 ))}
               </ul>
             </div>
+          ) : inspectStudent?.answers ? (
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
+                Raw answers
+              </p>
+              <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-xs text-slate-700">
+                {JSON.stringify(inspectStudent.answers, null, 2)}
+              </pre>
+            </div>
           ) : (
             <p className="text-sm text-slate-500">
-              {inspectStudent?.answers
-                ? "Answers were saved, but this exercise type has no auto-grade key."
-                : "No graded answers yet. Ask the student to Mark complete after answering."}
+              No answers yet. Ask the student to Complete after answering.
             </p>
           )}
-          <AlertDialogFooter>
-            <AlertDialogCancel>Close</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
