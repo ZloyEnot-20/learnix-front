@@ -163,27 +163,58 @@ function Classification({ raw }: { raw: BookExerciseRaw }) {
 
 function ReadingTfng({ raw }: { raw: BookExerciseRaw }) {
   const questions = Array.isArray(raw.questions) ? raw.questions : []
+  const options = Array.isArray(raw.options) ? raw.options : []
   return (
     <div className="mt-4 space-y-4">
+      {typeof raw.title === "string" && (
+        <h4 className="text-center text-base font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4">
+          {raw.title}
+        </h4>
+      )}
       <div className="max-h-72 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-relaxed text-slate-800">
         {String(raw.passage ?? "")}
       </div>
-      <ol className="space-y-3">
-        {questions.map((q) => {
-          if (!isRecord(q)) return null
-          return (
-            <li key={String(q.number)} className="rounded-xl border border-slate-200 bg-white p-4">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <p className="text-sm text-slate-800">
-                  <span className="mr-2 font-semibold">{String(q.number)}.</span>
-                  {String(q.statement ?? "")}
-                </p>
-                <Badge variant="secondary">{String(q.answer ?? "")}</Badge>
-              </div>
-            </li>
-          )
-        })}
-      </ol>
+      {options.length > 0 && (
+        <div className="rounded-xl border border-violet-200 bg-violet-50 p-3">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-violet-800">
+            Options
+          </p>
+          <ul className="space-y-1 text-sm text-slate-800">
+            {options.map((opt, i) => {
+              if (!isRecord(opt)) return null
+              return (
+                <li key={i}>
+                  <span className="font-bold text-violet-800">{String(opt.letter)} </span>
+                  {String(opt.text ?? opt.name ?? "")}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+      {typeof raw.test_tip === "string" && (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+          {raw.test_tip}
+        </p>
+      )}
+      {questions.length > 0 ? (
+        <ol className="space-y-3">
+          {questions.map((q) => {
+            if (!isRecord(q)) return null
+            return (
+              <li key={String(q.number)} className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <p className="text-sm text-slate-800">
+                    <span className="mr-2 font-semibold">{String(q.number)}.</span>
+                    {String(q.statement ?? "")}
+                  </p>
+                  <Badge variant="secondary">{String(q.answer ?? "")}</Badge>
+                </div>
+              </li>
+            )
+          })}
+        </ol>
+      ) : null}
     </div>
   )
 }

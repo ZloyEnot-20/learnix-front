@@ -19,12 +19,26 @@ export const liveLessonsApi = {
     api.get<{
       bookId: string
       book: { title: string; author?: string; year?: number }
+      pages?: Array<{
+        page: number
+        unit: number
+        title: string
+        label: string
+        exercise_ids: string[]
+      }>
       units: Array<{
         unit_number: number
         title: string
         subtitle?: string | null
         ready?: boolean
         exerciseIds: string[]
+        pages?: Array<{
+          page: number
+          unit: number
+          title: string
+          label: string
+          exercise_ids: string[]
+        }>
       }>
       answer_key?: Record<string, unknown>
     }>(`/live-lessons/books/${bookId}`),

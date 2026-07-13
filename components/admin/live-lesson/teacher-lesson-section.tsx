@@ -222,7 +222,14 @@ export default function TeacherLessonSection() {
   const [bookId, setBookId] = useState(BOOK_ID_CAMBRIDGE_VOCAB_ADVANCED)
   const [bookTitle, setBookTitle] = useState("")
   const [units, setUnits] = useState<
-    Array<{ unitNumber: number; title: string; subtitle?: string; ready: boolean; stepCount: number }>
+    Array<{
+      unitNumber: number
+      title: string
+      subtitle?: string
+      ready: boolean
+      stepCount: number
+      pages?: Array<{ page: number; label: string }>
+    }>
   >([])
   const [unitNumber, setUnitNumber] = useState<number | null>(null)
   const [steps, setSteps] = useState<LessonStep[]>([])
@@ -808,6 +815,12 @@ export default function TeacherLessonSection() {
                 </div>
                 <h3 className="mt-2 font-medium text-slate-900">{u.title}</h3>
                 {u.subtitle && <p className="mt-1 text-xs text-slate-500">{u.subtitle}</p>}
+                {u.pages && u.pages.length > 0 && (
+                  <p className="mt-2 text-xs text-slate-500">
+                    pp. {u.pages[0].page}–{u.pages[u.pages.length - 1].page} ·{" "}
+                    {u.pages.map((p) => p.page).join(", ")}
+                  </p>
+                )}
               </button>
             )
           })}

@@ -75,6 +75,7 @@ export function listUnitsFromMeta(
     subtitle?: string | null
     ready?: boolean
     exerciseIds?: string[]
+    pages?: Array<{ page: number; label: string; exercise_ids?: string[] }>
   }>,
 ) {
   return units.map((u) => {
@@ -89,6 +90,10 @@ export function listUnitsFromMeta(
       subtitle: u.subtitle ?? undefined,
       ready,
       stepCount,
+      pages: (u.pages ?? []).map((p) => ({
+        page: p.page,
+        label: p.label,
+      })),
     }
   })
 }
