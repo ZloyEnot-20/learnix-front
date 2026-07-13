@@ -52,6 +52,10 @@ import type {
   LiveLessonState,
   LiveStudentProgress,
 } from "@/lib/books/types"
+import {
+  formatStudentAnswerRows,
+  percentCorrectLabel,
+} from "@/lib/books/format-student-answers"
 import { liveLessonsApi, type LiveBookSummary } from "@/lib/live-lessons-api"
 import { useLiveLessonSocket } from "@/lib/use-live-lesson-socket"
 import { useAdminData } from "@/lib/admin-data-context"
@@ -79,11 +83,7 @@ function scoreLabelFor(s: {
   score?: number | null
   scoreDetail?: LiveStudentProgress["scoreDetail"] | null
 }): string | null {
-  if (s.scoreDetail && s.scoreDetail.total > 0) {
-    return `${s.scoreDetail.correct}/${s.scoreDetail.total}`
-  }
-  if (s.score != null && Number.isFinite(s.score)) return `${Math.round(s.score)}%`
-  return null
+  return percentCorrectLabel(s)
 }
 
 function buildLessonStats(live: LiveLessonState) {
@@ -1021,9 +1021,23 @@ export default function TeacherLessonSection() {
                         />
                         <p className="truncate text-sm font-medium text-slate-900">{s.name}</p>
                       </div>
-                      {isDone ? (
-                        <Badge className="bg-emerald-600 hover:bg-emerald-600">Completed</Badge>
-                      ) : null}
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        {scoreLabelFor(s) ? (
+                          <span
+                            className={cn(
+                              "rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
+                              isDone
+                                ? "bg-emerald-600 text-white"
+                                : "bg-slate-200 text-slate-800",
+                            )}
+                          >
+                            {scoreLabelFor(s)}
+                          </span>
+                        ) : null}
+                        {isDone ? (
+                          <Badge className="bg-emerald-600 hover:bg-emerald-600">Completed</Badge>
+                        ) : null}
+                      </div>
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/80">
                       <div
@@ -1035,9 +1049,8 @@ export default function TeacherLessonSection() {
                       />
                     </div>
                     <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
-                      <span>{isDone ? "Submitted" : `${s.progress ?? 0}%`}</span>
-                      <span>
-                        {scoreLabelFor(s) ? `Score ${scoreLabelFor(s)}` : "—"} ·{" "}
+                      <span>{isDone ? "Submitted" : `${s.progress ?? 0}% done`}</span>
+                      <span className="font-semibold text-slate-700">
                         {formatElapsed(s.elapsedSeconds ?? 0)}
                       </span>
                     </div>
@@ -1102,62 +1115,66 @@ export default function TeacherLessonSection() {
                 : "Student has not completed this exercise yet"}
             </DialogDescription>
           </DialogHeader>
-          {inspectStudent?.scoreDetail && inspectStudent.scoreDetail.total > 0 ? (
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-slate-800">
-                Score {inspectStudent.scoreDetail.correct}/{inspectStudent.scoreDetail.total}
-                {inspectStudent.score != null ? ` · ${inspectStudent.score}%` : ""}
-              </p>
-              <ul className="space-y-2">
-                {(inspectStudent.scoreDetail.items ?? []).map((item) => (
-                  <li
-                    key={item.id}
-                    className={cn(
-                      "rounded-xl border px-3 py-2 text-sm",
-                      item.ok
-                        ? "border-emerald-200 bg-emerald-50/80"
-                        : "border-rose-200 bg-rose-50/80",
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium text-slate-900">{item.label ?? item.id}</span>
-                      <Badge
-                        variant="outline"
-                        className={
-                          item.ok
-                            ? "border-emerald-400 text-emerald-800"
-                            : "border-rose-400 text-rose-800"
-                        }
-                      >
-                        {item.ok ? "Correct" : "Mistake"}
-                      </Badge>
-                    </div>
-                    <p className="mt-1 text-xs text-slate-600">
-                      Student: <strong>{item.given}</strong>
+          {(() => {
+            const rows = inspectStudent ? formatStudentAnswerRows(inspectStudent) : []
+            const pct = inspectStudent ? percentCorrectLabel(inspectStudent) : null
+            if (rows.length > 0) {
+              return (
+                <div className="space-y-3">
+                  {pct ? (
+                    <p className="text-sm font-medium text-slate-800">
+                      {pct} correct
+                      {inspectStudent?.scoreDetail && inspectStudent.scoreDetail.total > 0
+                        ? ` · ${inspectStudent.scoreDetail.correct}/${inspectStudent.scoreDetail.total}`
+                        : ""}
                     </p>
-                    {!item.ok ? (
-                      <p className="text-xs text-slate-600">
-                        Expected: <strong>{item.expected}</strong>
-                      </p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : inspectStudent?.answers ? (
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
-                Raw answers
+                  ) : null}
+                  <ul className="space-y-2">
+                    {rows.map((item) => (
+                      <li
+                        key={item.id}
+                        className={cn(
+                          "rounded-xl border px-3 py-2 text-sm",
+                          item.ok === true && "border-emerald-200 bg-emerald-50/80",
+                          item.ok === false && "border-rose-200 bg-rose-50/80",
+                          item.ok == null && "border-slate-200 bg-slate-50",
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium text-slate-900">{item.label}</span>
+                          {item.ok != null ? (
+                            <Badge
+                              variant="outline"
+                              className={
+                                item.ok
+                                  ? "border-emerald-400 text-emerald-800"
+                                  : "border-rose-400 text-rose-800"
+                              }
+                            >
+                              {item.ok ? "Correct" : "Mistake"}
+                            </Badge>
+                          ) : null}
+                        </div>
+                        <p className="mt-1 text-xs text-slate-600">
+                          Student: <strong>{item.given}</strong>
+                        </p>
+                        {item.ok === false && item.expected ? (
+                          <p className="text-xs text-slate-600">
+                            Expected: <strong>{item.expected}</strong>
+                          </p>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            }
+            return (
+              <p className="text-sm text-slate-500">
+                No answers yet. Ask the student to Complete after answering.
               </p>
-              <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-xs text-slate-700">
-                {JSON.stringify(inspectStudent.answers, null, 2)}
-              </pre>
-            </div>
-          ) : (
-            <p className="text-sm text-slate-500">
-              No answers yet. Ask the student to Complete after answering.
-            </p>
-          )}
+            )
+          })()}
         </DialogContent>
       </Dialog>
     </div>

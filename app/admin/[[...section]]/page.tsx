@@ -12,7 +12,6 @@ import {
   ClipboardList,
   ClipboardCheck,
   GraduationCap,
-  BookMarked,
   BookOpen,
   Wallet,
   UserSquare,
@@ -25,15 +24,14 @@ import {
   CreditCard,
   BarChart3,
   Settings,
+  Clock,
 } from "lucide-react"
 import TestsList from "@/components/admin/tests-list"
 import GroupsManager from "@/components/admin/groups-manager"
 import StudentsManager from "@/components/admin/students-manager"
 import HomeworkManager from "@/components/admin/homework-manager"
-import ControlWorkManager from "@/components/admin/control-work-manager"
 import EntryTestManager from "@/components/admin/entry-test-manager"
 import ExercisesSection from "@/components/admin/exercises-section"
-import { ManageExercisesSection } from "@/components/admin/manage-exercises-section"
 import TelegramBotSection from "@/components/admin/telegram-bot-section"
 import FinanceManager from "@/components/admin/finance-manager"
 import UsersManager from "@/components/admin/users-manager"
@@ -45,14 +43,13 @@ import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
 import TeacherLessonSection from "@/components/admin/live-lesson/teacher-lesson-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
-import { invalidateExercises } from "@/lib/exercises-cache"
-import { invalidatePodcasts } from "@/lib/podcast-data"
 import {
   AdminDataProvider,
   useAdminData,
   type AdminListKey,
 } from "@/lib/admin-data-context"
 import { StatusScreen } from "@/components/status-screen"
+import { Card, CardContent } from "@/components/ui/card"
 
 const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   dashboard: { title: "Overview", subtitle: "Platform snapshot and key metrics" },
@@ -63,14 +60,13 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   tests: { title: "IELTS Assessment", subtitle: "Full practice tests — coming soon" },
   homework: { title: "Homework check", subtitle: "Review submissions and track completion" },
   stats: { title: "Exercise statistics", subtitle: "Completion, cheating and failure rates per exercise" },
-  control: { title: "Progress test", subtitle: "Multi-section unit tests with custom topic order" },
+  control: { title: "Progress test", subtitle: "Unit progress tests — coming soon" },
   entry: { title: "Entry Test", subtitle: "Phone-based candidates and placement tests" },
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   lessons: {
     title: "Live lessons",
     subtitle: "Run a book unit live with your group — open exercises and track progress",
   },
-  manage: { title: "Manage exercises", subtitle: "Add vocabulary and speaking content for your organization" },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
   billing: { title: "Billing", subtitle: "Your organization subscription and platform payments" },
@@ -91,33 +87,66 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   lessons: ["students", "groups"],
   finance: ["students", "groups"],
   bot: ["students"],
-  control: ["students", "groups"],
-  // tests, manage — no shared list APIs
+  // control — soon placeholder, no lists
 }
 
 /** Sections that need the full exercise catalogue (GET /exercises). */
-const SECTIONS_NEED_EXERCISES = new Set(["homework", "exercises", "control"])
-
-/** Platform content import — teachers, org admin and super admin. */
-function canManageExercises(type: UserRole): boolean {
-  return canAccessAdmin(type)
-}
-
-/** Section ids restricted to org admin / super admin (not teachers). */
-const CONTENT_MANAGE_SECTIONS = new Set(["manage"])
+const SECTIONS_NEED_EXERCISES = new Set(["homework", "exercises"])
 
 /** Section ids restricted to org admin (admin + super admin), not teachers. */
 const ADMIN_ONLY_SECTIONS = new Set(["users", "audit", "billing", "settings"])
 
 function sectionFromSegment(segment: string | undefined, role: UserRole): string {
   if (!segment || !SECTION_IDS.includes(segment)) return "dashboard"
-  if (CONTENT_MANAGE_SECTIONS.has(segment) && !canManageExercises(role)) {
-    return "dashboard"
-  }
+  // Hidden / retired sections
+  if (segment === "manage") return "dashboard"
   if (ADMIN_ONLY_SECTIONS.has(segment) && !isAdminRole(role)) {
     return "dashboard"
   }
   return segment
+}
+
+function ProgressTestSoon() {
+  return (
+    <Card className="overflow-hidden">
+      <div className="border-b border-slate-100 bg-gradient-to-br from-slate-50 to-white px-6 py-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
+              <Layers className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-semibold text-slate-900">Progress test</h2>
+                <Badge
+                  variant="secondary"
+                  className="text-[10px] font-semibold uppercase tracking-wide"
+                >
+                  Soon
+                </Badge>
+              </div>
+              <p className="mt-1 max-w-xl text-sm text-slate-500">
+                Multi-section unit progress tests are being reworked. This section will be back
+                with a clearer flow soon.
+              </p>
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-500">
+            <Clock className="h-3.5 w-3.5" />
+            Coming soon
+          </div>
+        </div>
+      </div>
+      <CardContent className="p-6">
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-8 text-center">
+          <p className="text-sm font-medium text-slate-700">Not available yet</p>
+          <p className="mt-1 text-xs text-slate-400">
+            Existing progress tests stay in the system — creation and review will return here.
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
 function roleBadge(role: string) {
@@ -156,7 +185,6 @@ function AdminPanelContent() {
     router.push(id === "dashboard" ? "/admin" : `/admin/${id}`, { scroll: false })
   const superAdmin = user ? isSuperAdmin(user.type) : false
   const orgAdmin = user ? isAdminRole(user.type) : false
-  const manageExercises = user ? canManageExercises(user.type) : false
   const isTeacher = user?.type === "teacher"
 
   const [refreshKey, setRefreshKey] = useState(0)
@@ -174,11 +202,11 @@ function AdminPanelContent() {
       router.replace("/admin/settings")
       return
     }
-    if (segment && !SECTION_IDS.includes(segment)) {
+    if (segment === "manage") {
       router.replace("/admin")
       return
     }
-    if (segment && CONTENT_MANAGE_SECTIONS.has(segment) && !canManageExercises(user.type)) {
+    if (segment && !SECTION_IDS.includes(segment)) {
       router.replace("/admin")
       return
     }
@@ -193,12 +221,6 @@ function AdminPanelContent() {
     if (keys?.length) void ensureLists(keys, activeTab === "groups")
     if (SECTIONS_NEED_EXERCISES.has(activeTab)) void ensureExercisesCatalog()
   }, [activeTab, ensureLists, ensureExercisesCatalog])
-
-  /** Refresh exercise/topic catalogue after Manage exercises uploads — no people APIs. */
-  const bumpCatalog = () => {
-    invalidateExercises()
-    invalidatePodcasts()
-  }
 
   const bump = () => {
     invalidateHomeworkCount()
@@ -227,12 +249,9 @@ function AdminPanelContent() {
         { id: "tests", label: "IELTS Assessment", icon: ListChecks, badge: "Soon" },
         { id: "homework", label: "Homework check", icon: ClipboardList, badge: homeworkCount },
         { id: "stats", label: "Statistics", icon: BarChart3 },
-        { id: "control", label: "Progress test", icon: Layers },
+        { id: "control", label: "Progress test", icon: Layers, badge: "Soon" },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
         { id: "lessons", label: "Live lessons", icon: BookOpen },
-        ...(manageExercises
-          ? [{ id: "manage", label: "Manage exercises", icon: BookMarked }]
-          : []),
       ],
     },
     {
@@ -310,9 +329,7 @@ function AdminPanelContent() {
         <HomeworkManager createdByName={user.name} onChanged={bump} />
       )}
       {activeTab === "stats" && <ExerciseStatsSection />}
-      {activeTab === "control" && (
-        <ControlWorkManager createdByName={user.name} onChanged={bump} />
-      )}
+      {activeTab === "control" && <ProgressTestSoon />}
       {activeTab === "entry" && <EntryTestManager createdByName={user.name} />}
       {activeTab === "exercises" && (
         <ExercisesSection
@@ -322,9 +339,6 @@ function AdminPanelContent() {
         />
       )}
       {activeTab === "lessons" && <TeacherLessonSection />}
-      {activeTab === "manage" && manageExercises && (
-        <ManageExercisesSection onChanged={bumpCatalog} />
-      )}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
       {activeTab === "billing" && orgAdmin && <OrgBillingSection />}
