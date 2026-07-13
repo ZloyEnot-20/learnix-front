@@ -79,11 +79,22 @@ function recount(students: LiveLessonState["students"]) {
   }
 }
 
-function scoreLabelFor(s: {
+function scorePercentValue(s: {
   score?: number | null
   scoreDetail?: LiveStudentProgress["scoreDetail"] | null
-}): string | null {
-  return percentCorrectLabel(s)
+}): number | null {
+  if (s.scoreDetail && s.scoreDetail.total > 0) {
+    return Math.round((100 * s.scoreDetail.correct) / s.scoreDetail.total)
+  }
+  if (s.score != null && Number.isFinite(s.score)) return Math.round(s.score)
+  return null
+}
+
+/** Red → yellow → green by correctness. */
+function scoreBarColor(pct: number): string {
+  const p = Math.min(100, Math.max(0, pct)) / 100
+  const hue = p * 120
+  return `hsl(${hue} 78% 42%)`
 }
 
 function buildLessonStats(live: LiveLessonState) {
@@ -998,6 +1009,8 @@ export default function TeacherLessonSection() {
               {(live.students ?? []).map((s) => {
                 const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
                 const isDone = s.status === "done"
+                const scorePct = scorePercentValue(s)
+                const barPct = scorePct ?? 0
                 return (
                   <button
                     key={s.studentId}
@@ -1022,16 +1035,12 @@ export default function TeacherLessonSection() {
                         <p className="truncate text-sm font-medium text-slate-900">{s.name}</p>
                       </div>
                       <div className="flex shrink-0 items-center gap-1.5">
-                        {scoreLabelFor(s) ? (
+                        {scorePct != null ? (
                           <span
-                            className={cn(
-                              "rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
-                              isDone
-                                ? "bg-emerald-600 text-white"
-                                : "bg-slate-200 text-slate-800",
-                            )}
+                            className="rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-white"
+                            style={{ backgroundColor: scoreBarColor(scorePct) }}
                           >
-                            {scoreLabelFor(s)}
+                            {scorePct}%
                           </span>
                         ) : null}
                         {isDone ? (
@@ -1039,17 +1048,24 @@ export default function TeacherLessonSection() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/80">
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200/80">
                       <div
-                        className={cn(
-                          "h-full rounded-full transition-all",
-                          isDone ? "bg-emerald-500" : "bg-sky-500",
-                        )}
-                        style={{ width: `${Math.min(100, Math.max(0, s.progress ?? 0))}%` }}
+                        className="h-full rounded-full transition-all"
+                        style={{
+                          width: `${barPct}%`,
+                          backgroundColor:
+                            scorePct != null ? scoreBarColor(scorePct) : "transparent",
+                        }}
                       />
                     </div>
                     <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
-                      <span>{isDone ? "Submitted" : `${s.progress ?? 0}% done`}</span>
+                      <span>
+                        {scorePct != null
+                          ? `${scorePct}% correct`
+                          : isDone
+                            ? "Submitted"
+                            : "In progress"}
+                      </span>
                       <span className="font-semibold text-slate-700">
                         {formatElapsed(s.elapsedSeconds ?? 0)}
                       </span>
