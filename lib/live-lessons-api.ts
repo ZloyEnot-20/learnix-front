@@ -13,7 +13,30 @@ export interface LiveBookSummary {
 
 export type { LiveLessonState, LiveLessonStatus, LiveStudentProgress }
 
+export interface LiveLessonListItem {
+  id: string
+  code: string
+  groupId: string
+  bookId: string
+  teacherId: string
+  currentUnit: number | null
+  currentExercise: string | null
+  lessonStatus: LiveLessonStatus
+  openForStudents: boolean
+  unitCompleted: boolean
+  createdAt: string
+  updatedAt: string
+  startedAt: string | null
+  finishedAt: string | null
+  studentCount: number
+  onlineCount: number
+}
+
 export const liveLessonsApi = {
+  list: (limit?: number) =>
+    api.get<LiveLessonListItem[]>(
+      `/live-lessons${limit != null ? `?limit=${limit}` : ""}`,
+    ),
   listBooks: () => api.get<LiveBookSummary[]>("/live-lessons/books"),
   getBook: (bookId: string) =>
     api.get<{

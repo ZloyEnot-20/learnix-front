@@ -93,6 +93,7 @@ export function listUnitsFromMeta(
       pages: (u.pages ?? []).map((p) => ({
         page: p.page,
         label: p.label,
+        exercise_ids: (p.exercise_ids ?? []) as string[],
       })),
     }
   })

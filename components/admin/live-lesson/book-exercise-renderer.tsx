@@ -484,14 +484,52 @@ export function BookExerciseRenderer({
   step,
   className,
   showAnswers = true,
+  variant = "admin",
 }: {
   step: LessonStep
   className?: string
   /** Teachers see answer key; students must not. */
   showAnswers?: boolean
+  /** `cambridge` matches mobile/book page chrome. */
+  variant?: "admin" | "cambridge"
 }) {
   const Renderer = RENDERERS[step.uiType] ?? (() => <InstructionOnly />)
   const raw = showAnswers ? step.raw : stripClientAnswers(step.raw)
+
+  if (variant === "cambridge") {
+    const exLabel =
+      step.exerciseId === "test_practice"
+        ? step.sectionLabel
+        : /^\d/.test(String(step.exerciseId))
+          ? String(step.exerciseId)
+          : step.exerciseId
+    return (
+      <div
+        className={cn(
+          "mb-6 border-b pb-5 last:mb-0 last:border-b-0 last:pb-0",
+          className,
+        )}
+        style={{ borderColor: "#C4A8E0" }}
+      >
+        <div className="mb-2 flex items-start gap-2">
+          <span
+            className="mt-0.5 inline-flex min-w-8 shrink-0 items-center justify-center rounded-sm px-1.5 py-0.5 text-xs font-bold text-white"
+            style={{ backgroundColor: "#6B3FA0" }}
+          >
+            {exLabel}
+          </span>
+          <p className="font-serif text-[15px] leading-relaxed text-[#2B1B45]">
+            {step.instruction}
+          </p>
+        </div>
+        <div className="cambridge-exercise pl-0 sm:pl-10">
+          <Renderer raw={raw} />
+        </div>
+        {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
+      </div>
+    )
+  }
+
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex flex-wrap items-center gap-2">
