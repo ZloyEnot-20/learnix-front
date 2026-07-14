@@ -1,8 +1,11 @@
 "use client"
 
-import { createContext, useContext, type CSSProperties, type ReactNode } from "react"
+import { createContext, useContext, Fragment, type CSSProperties, type ReactNode } from "react"
 import type { BookExerciseRaw, BookExerciseUiType, LessonStep } from "@/lib/books/types"
 import { TEXTBOOK } from "@/lib/books/textbook-theme"
+import { requiresTypedWordForms } from "@/lib/books/word-form-exercise"
+import { displayListeningTrack } from "@/lib/books/repair-listening-audio"
+import { collectWordBoxItems, isCueWordBox } from "@/lib/books/word-box"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
@@ -287,6 +290,8 @@ function ChipList({
 
 function AudioMark({ track }: { track: string | number }) {
   const tb = useTB()
+  const label = displayListeningTrack(track)
+  if (!label) return null
   return (
     <span
       className={cn("text-sm", !tb && "rounded-full border px-2 py-0.5")}
@@ -296,7 +301,7 @@ function AudioMark({ track }: { track: string | number }) {
           : undefined
       }
     >
-      ♪ Audio {String(track)}
+      ♪ Audio {label}
     </span>
   )
 }
@@ -395,7 +400,10 @@ function Panel({ children, className }: { children: ReactNode; className?: strin
 }
 
 function VocabChecklist({ raw }: { raw: BookExerciseRaw }) {
-  return <ChipList items={asStringArray(raw.items)} className="mt-3" tone="vocab" />
+  const items = asStringArray(raw.items).length
+    ? asStringArray(raw.items)
+    : collectWordBoxItems(raw)
+  return <ChipList items={items} className="mt-3" tone="vocab" />
 }
 
 function VocabTable({ raw }: { raw: BookExerciseRaw }) {
@@ -638,10 +646,13 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
     : Array.isArray(raw.items)
       ? raw.items
       : []
+  const bank = collectWordBoxItems(raw)
   const tb = useTB()
   return (
+    <div className="mt-3 space-y-3">
+      {bank.length > 0 ? <ChipList items={bank} tone="vocab" /> : null}
     <div
-      className="mt-3 grid gap-2"
+      className="grid gap-2"
       style={
         tb
           ? { gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "6px 20px" }
@@ -676,6 +687,7 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
           </div>
         )
       })}
+    </div>
     </div>
   )
 }
@@ -724,21 +736,25 @@ function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
 
 function DiscussionQuestions({ raw }: { raw: BookExerciseRaw }) {
   const questions = asStringArray(raw.questions)
+  const bank = collectWordBoxItems(raw)
   return (
-    <ol className="mt-3 space-y-2.5">
-      {questions.map((q, i) => (
-        <li key={i}>
-          <BlankRow>
-            <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
-              <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
-                {i + 1}.
-              </span>
-              {q}
-            </p>
-          </BlankRow>
-        </li>
-      ))}
-    </ol>
+    <div className="mt-3 space-y-3">
+      {bank.length > 0 ? <ChipList items={bank} tone="vocab" /> : null}
+      <ol className="space-y-2.5">
+        {questions.map((q, i) => (
+          <li key={i}>
+            <BlankRow>
+              <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
+                <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                  {i + 1}.
+                </span>
+                {q}
+              </p>
+            </BlankRow>
+          </li>
+        ))}
+      </ol>
+    </div>
   )
 }
 
@@ -825,23 +841,46 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
   const words = asStringArray(raw.words)
   const bank = adjectives.length ? adjectives : words
   const sentences = Array.isArray(raw.sentences) ? raw.sentences : []
+  const typed = requiresTypedWordForms(raw.instruction)
   return (
     <div className="mt-3 space-y-3">
       <ChipList items={bank} tone="vocab" />
+      {typed ? (
+        <p className="text-[11px]" style={{ color: TEXTBOOK.muted }}>
+          Change the form if needed, then type your answer in each blank.
+        </p>
+      ) : null}
       <ol className="space-y-3">
         {sentences.map((s, i) => {
           if (!isRecord(s)) return null
+          const text = String(s.sentence ?? s.text ?? "")
+          const parts = text.split(/_{2,}|\u2026{2,}|\.{3,}|…+/)
           return (
             <li key={i}>
               <BlankRow>
-                <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
-                  {String(s.sentence ?? s.text ?? "")}
+                <p className="text-[13px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
+                  <span
+                    className="mr-2 font-bold"
+                    style={{ color: TEXTBOOK.headingAccent }}
+                  >
+                    {i + 1}.
+                  </span>
+                  {parts.map((part, pi) => (
+                    <Fragment key={pi}>
+                      {part}
+                      {pi < parts.length - 1 ? (
+                        <input
+                          type="text"
+                          readOnly
+                          aria-label={`Blank ${i + 1}`}
+                          className="mx-1 inline-block min-w-[5.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[13px] outline-none"
+                          style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                          placeholder="…"
+                        />
+                      ) : null}
+                    </Fragment>
+                  ))}
                 </p>
-                {"answer" in s && (
-                  <p className="mt-2 text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
-                    {String(s.answer)}
-                  </p>
-                )}
               </BlankRow>
             </li>
           )
@@ -852,19 +891,35 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
 }
 
 function GapFillPassage({ raw }: { raw: BookExerciseRaw }) {
+  const typed = requiresTypedWordForms(raw.instruction)
+  const text = String(raw.text ?? raw.passage ?? "")
+  const parts = text.split(/((?:\d+[.)]\s*)?_{2,})/)
   return (
     <div className="mt-3 space-y-3">
       <ChipList items={asStringArray(raw.words)} tone="list" />
+      {typed ? (
+        <p className="text-[11px]" style={{ color: TEXTBOOK.muted }}>
+          Change the form if needed, then type your answer in each blank.
+        </p>
+      ) : null}
       <PassageBox>
-        <span className="whitespace-pre-wrap">{String(raw.text ?? "")}</span>
+        <span className="whitespace-pre-wrap">
+          {parts.map((part, i) =>
+            /_{2,}/.test(part) ? (
+              <input
+                key={i}
+                type="text"
+                readOnly
+                className="mx-0.5 inline-block min-w-[4.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[13px] outline-none"
+                style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                placeholder="…"
+              />
+            ) : (
+              <span key={i}>{part}</span>
+            ),
+          )}
+        </span>
       </PassageBox>
-      <ol className="grid gap-1 sm:grid-cols-2">
-        {asStringArray(raw.answers).map((a, i) => (
-          <li key={i} className="text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
-            {i + 1}. {a}
-          </li>
-        ))}
-      </ol>
     </div>
   )
 }
@@ -918,11 +973,79 @@ function AnswerList({ raw }: { raw: BookExerciseRaw }) {
   return <ChipList items={asStringArray(raw.answers)} className="mt-3" tone="vocab" />
 }
 
-function InstructionOnly() {
+function InstructionOnly({ raw }: { raw?: BookExerciseRaw }) {
+  const bank = raw ? collectWordBoxItems(raw) : []
+  if (bank.length === 0) {
+    return (
+      <p className="mt-3 text-sm" style={{ color: TEXTBOOK.muted }}>
+        Follow the instruction with the class. No additional item bank in the book JSON.
+      </p>
+    )
+  }
   return (
-    <p className="mt-3 text-sm" style={{ color: TEXTBOOK.muted }}>
-      Follow the instruction with the class. No additional item bank in the book JSON.
-    </p>
+    <div className="mt-3 space-y-3">
+      <ChipList items={bank} tone="vocab" />
+      {isCueWordBox(raw ?? {}) ? (
+        <ol className="space-y-2">
+          {bank.map((w, i) => (
+            <li key={i}>
+              <BlankRow>
+                <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
+                  <span className="font-semibold" style={{ color: TEXTBOOK.headingAccent }}>
+                    {w}
+                  </span>
+                  {": "}
+                  <input
+                    type="text"
+                    readOnly
+                    className="mx-1 inline-block min-w-[8rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[13px] outline-none"
+                    style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                    placeholder="…"
+                  />
+                </p>
+              </BlankRow>
+            </li>
+          ))}
+        </ol>
+      ) : null}
+    </div>
+  )
+}
+
+function WordBoxNotes({ raw }: { raw: BookExerciseRaw }) {
+  const bank = collectWordBoxItems(raw)
+  const cue = isCueWordBox(raw)
+  return (
+    <div className="mt-3 space-y-3">
+      <ChipList items={bank} tone="vocab" />
+      {cue ? (
+        <ol className="space-y-2">
+          {bank.map((w, i) => (
+            <li key={i}>
+              <BlankRow>
+                <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
+                  <span className="font-semibold" style={{ color: TEXTBOOK.headingAccent }}>
+                    {w}
+                  </span>
+                  {": "}
+                  <input
+                    type="text"
+                    readOnly
+                    className="mx-1 inline-block min-w-[8rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[13px] outline-none"
+                    style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                    placeholder="…"
+                  />
+                </p>
+              </BlankRow>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="text-[12px]" style={{ color: TEXTBOOK.muted }}>
+          Use the words in the box with the task above.
+        </p>
+      )}
+    </div>
   )
 }
 
@@ -1128,7 +1251,7 @@ const RENDERERS: Record<BookExerciseUiType, (props: { raw: BookExerciseRaw }) =>
   "image-prompt": ImagePrompt,
   "fill-blank-sentences": FillBlankSentences,
   "speaking-topic": SpeakingTopic,
-  "instruction-only": () => <InstructionOnly />,
+  "instruction-only": ({ raw }) => <InstructionOnly raw={raw} />,
   "reading-tfng": ReadingTfng,
   "paraphrase-pairs": ParaphrasePairs,
   "listening-notes": ListeningNotes,
@@ -1145,6 +1268,7 @@ const RENDERERS: Record<BookExerciseUiType, (props: { raw: BookExerciseRaw }) =>
   "short-answer": ShortAnswer,
   "matching-pairs": MatchingPairs,
   "passage-read": PassageRead,
+  "word-box-notes": WordBoxNotes,
 }
 
 export function BookExerciseRenderer({
@@ -1163,7 +1287,7 @@ export function BookExerciseRenderer({
   /** `cambridge` / `textbook` = academic book page styles. */
   variant?: "admin" | "cambridge" | "textbook"
 }) {
-  const Renderer = RENDERERS[step.uiType] ?? (() => <InstructionOnly />)
+  const Renderer = RENDERERS[step.uiType] ?? (({ raw }) => <InstructionOnly raw={raw} />)
   // Always strip — teachers see the same exercise body as students; keys live in TeacherAnswers.
   const raw = stripClientAnswers(step.raw)
   const teacherAnswers = showAnswers

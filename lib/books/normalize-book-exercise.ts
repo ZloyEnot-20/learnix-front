@@ -1,4 +1,5 @@
 import type { BookExerciseRaw } from "./types"
+import { collectWordBoxItems, isCueWordBox } from "./word-box"
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v)
@@ -18,6 +19,14 @@ export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
   if (out.audio != null && out.audio_track == null) {
     out.audio_track = out.audio
   }
+  // Drop broken OCR markers so UI never shows "D??"
+  for (const key of ["audio_track", "audio"] as const) {
+    const v = out[key]
+    if (v == null) continue
+    if (/\?/.test(String(v))) {
+      delete out[key]
+    }
+  }
   if (out.speaker1 != null && out.speaker_1 == null) {
     out.speaker_1 = out.speaker1
   }
@@ -29,6 +38,16 @@ export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
   }
   if (out.adverbs != null && out.adjectives == null) {
     out.adjectives = out.adverbs
+  }
+
+  // Print word-box fields (nouns, phrases, idioms, …) → words for UI
+  const box = collectWordBoxItems(out)
+  if (box.length > 0 && asStringArray(out.words).length === 0) {
+    out.words = box
+  }
+  // phrases also alias for gap-fill when no words
+  if (asStringArray(out.phrases).length > 0 && asStringArray(out.words).length === 0) {
+    out.words = asStringArray(out.phrases)
   }
 
   // sentences[{ text }] → also expose .sentence for wordbox / fill-blank helpers
@@ -82,7 +101,10 @@ export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
   }
 
   // Bank-only adjectives / words → checklist items
+  // Skip cue boxes (nouns / "note adjectives for these nouns") — those need word-box-notes UI.
+  const cueBox = isCueWordBox(out)
   if (
+    !cueBox &&
     Array.isArray(out.adjectives) &&
     (!Array.isArray(out.items) || out.items.length === 0) &&
     (!Array.isArray(out.sentences) || out.sentences.length === 0)
@@ -90,6 +112,7 @@ export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
     out.items = asStringArray(out.adjectives)
   }
   if (
+    !cueBox &&
     Array.isArray(out.words) &&
     (!Array.isArray(out.items) || out.items.length === 0) &&
     (!Array.isArray(out.sentences) || out.sentences.length === 0) &&

@@ -52,15 +52,27 @@ export async function fetchBookDocument(bookId: string): Promise<BookDocument> {
 export async function fetchBookUnit(bookId: string, unitNumber: number) {
   const key = `${bookId}:${unitNumber}`
   const hit = fresh(unitCache.get(key))
-  if (hit) return hit
+  const blob = hit ? JSON.stringify(hit) : ""
+  if (hit && !/\?\?/.test(blob)) return hit
+  if (hit) unitCache.delete(key)
 
   const result = await liveLessonsApi.getUnit(bookId, unitNumber)
   const value = {
     unit: result.unit as BookUnitRaw,
     answer_key: (result.answer_key as Record<string, unknown> | null) ?? null,
   }
-  unitCache.set(key, { at: Date.now(), value })
+  // Never cache broken markers
+  if (!/\?\?/.test(JSON.stringify(value))) {
+    unitCache.set(key, { at: Date.now(), value })
+  }
   return value
+}
+
+/** Drop client book/unit caches (e.g. after seed / audio repair). */
+export function clearBookCaches() {
+  bookMetaCache.current = null
+  bookDocCache.clear()
+  unitCache.clear()
 }
 
 export async function fetchLessonSteps(bookId: string, unitNumber: number) {
