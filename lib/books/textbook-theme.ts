@@ -42,12 +42,12 @@ export const TEXTBOOK = {
     exLabel: 13,
   },
   space: {
-    pagePadX: 14,
-    pagePadY: 14,
-    exercisePadY: 10,
-    exercisePadX: 12,
-    exerciseGap: 18,
-    sectionMb: 12,
+    pagePadX: 12,
+    pagePadY: 12,
+    exercisePadY: 8,
+    exercisePadX: 10,
+    exerciseGap: 12,
+    sectionMb: 10,
   },
 } as const
 

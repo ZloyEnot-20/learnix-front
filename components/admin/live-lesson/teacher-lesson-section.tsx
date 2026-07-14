@@ -1,10 +1,10 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
   BookOpen,
-  Circle,
   History,
   Play,
   Plus,
@@ -53,6 +53,7 @@ import {
   listUnitsFromMeta,
 } from "@/lib/books/catalog"
 import { shouldSkipExercise } from "@/lib/books/should-skip-exercise"
+import { isLiveGradableExercise } from "@/lib/books/is-live-gradable-exercise"
 import type {
   LessonStep,
   LiveExerciseResult,
@@ -81,12 +82,6 @@ type UnitPageMeta = {
 }
 
 const PROGRESS_POLL_MS = 2000
-
-function formatElapsed(seconds: number): string {
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return `${m}:${String(s).padStart(2, "0")}`
-}
 
 function recount(students: LiveLessonState["students"]) {
   return {
@@ -215,22 +210,6 @@ function buildLessonStats(live: LiveLessonState) {
   }
 }
 
-function stepStatus(
-  step: LessonStep,
-  live: LiveLessonState | null,
-  selectedId: string | null,
-  viewingAssignedUnit: boolean,
-): "pending" | "current" | "open" | "done" {
-  if (!live || !viewingAssignedUnit) {
-    if (selectedId === step.id) return "current"
-    return "pending"
-  }
-  if (live.currentExercise === step.exerciseId) {
-    return live.openForStudents ? "open" : "current"
-  }
-  return "pending"
-}
-
 function statusBadgeClass(status: string) {
   if (status === "active") return "bg-emerald-600 hover:bg-emerald-600"
   if (status === "paused") return "bg-amber-500 hover:bg-amber-500"
@@ -239,7 +218,14 @@ function statusBadgeClass(status: string) {
 }
 
 export default function TeacherLessonSection() {
+  const router = useRouter()
+  const params = useParams<{ section?: string[] }>()
   const { groups, students, ensureLists } = useAdminData()
+  const selectedLessonId = useMemo(() => {
+    const parts = Array.isArray(params.section) ? params.section : []
+    if (parts[0] !== "lessons" || !parts[1]) return null
+    return parts[1]
+  }, [params.section])
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<View>("history")
   const [history, setHistory] = useState<LiveLessonListItem[]>([])
@@ -270,6 +256,7 @@ export default function TeacherLessonSection() {
   const [finishOpen, setFinishOpen] = useState(false)
   const [inspectStudent, setInspectStudent] = useState<LiveStudentProgress | null>(null)
   const liveIdRef = useRef<string | null>(null)
+  const openingLessonIdRef = useRef<string | null>(null)
 
   const groupName = useCallback(
     (id: string) => groups.find((g) => g.id === id)?.name ?? "Group",
@@ -310,6 +297,13 @@ export default function TeacherLessonSection() {
     void loadHistory()
   }, [loadHistory])
 
+  const openLessonRoute = useCallback(
+    (id: string) => {
+      router.push(`/admin/lessons/${id}`, { scroll: false })
+    },
+    [router],
+  )
+
   const startNewLesson = () => {
     setLive(null)
     setGroupId("")
@@ -319,6 +313,9 @@ export default function TeacherLessonSection() {
     setPageIndex(0)
     setError(null)
     setView("books")
+    if (selectedLessonId) {
+      router.push("/admin/lessons", { scroll: false })
+    }
     if (books.length === 0) {
       void fetchAvailableBooks()
         .then(setBooks)
@@ -326,11 +323,11 @@ export default function TeacherLessonSection() {
     }
   }
 
-  const openLessonFromHistory = async (item: LiveLessonListItem) => {
+  const openLessonById = async (id: string) => {
     setBusy(true)
     setError(null)
     try {
-      const session = await liveLessonsApi.get(item.id)
+      const session = await liveLessonsApi.get(id)
       setLive(session)
       setGroupId(session.groupId)
       setBookId(session.bookId)
@@ -354,6 +351,7 @@ export default function TeacherLessonSection() {
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to open lesson")
+      router.replace("/admin/lessons", { scroll: false })
     } finally {
       setBusy(false)
     }
@@ -425,13 +423,7 @@ export default function TeacherLessonSection() {
     }
   }
 
-  const selectedStep = steps.find((s) => s.id === selectedStepId) ?? steps[0] ?? null
   const assignedUnit = live?.currentUnit ?? null
-  const viewingAssignedUnit =
-    live != null &&
-    unitNumber != null &&
-    Number(live.currentUnit) === Number(unitNumber) &&
-    Boolean(live.openForStudents || !live.unitCompleted)
 
   const currentPage = unitPages[pageIndex] ?? null
   const pageSteps = useMemo(() => {
@@ -591,15 +583,12 @@ export default function TeacherLessonSection() {
     try {
       const session = await liveLessonsApi.create({ groupId, bookId })
       await syncLive(session)
+      router.replace(`/admin/lessons/${session.id}`, { scroll: false })
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create live lesson")
     } finally {
       setBusy(false)
     }
-  }
-
-  const selectExerciseLocal = (step: LessonStep) => {
-    setSelectedStepId(step.id)
   }
 
   /**
@@ -670,10 +659,42 @@ export default function TeacherLessonSection() {
     setSteps([])
     setUnitPages([])
     setView("history")
+    router.push("/admin/lessons", { scroll: false })
     void loadHistory()
   }
 
-  if (loading || (view === "history" && historyLoading && history.length === 0)) {
+  useEffect(() => {
+    if (!selectedLessonId) {
+      // New-lesson flow (book/unit pick) has no id in the URL — keep it.
+      if (!live && (view === "books" || view === "units" || view === "workspace")) return
+      if (view === "history") return
+      setLive(null)
+      setUnitNumber(null)
+      setSteps([])
+      setUnitPages([])
+      setPageIndex(0)
+      setSelectedStepId(null)
+      setError(null)
+      setView("history")
+      void loadHistory()
+      return
+    }
+    if (live?.id === selectedLessonId || openingLessonIdRef.current === selectedLessonId) return
+    openingLessonIdRef.current = selectedLessonId
+    void openLessonById(selectedLessonId).finally(() => {
+      if (openingLessonIdRef.current === selectedLessonId) {
+        openingLessonIdRef.current = null
+      }
+    })
+    // Intentionally drive only from the URL segment — openLessonById reads latest setters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLessonId])
+
+  if (
+    loading ||
+    (Boolean(selectedLessonId) && live?.id !== selectedLessonId) ||
+    (view === "history" && historyLoading && history.length === 0)
+  ) {
     return (
       <div className="space-y-4">
         <TableSkeleton rows={6} columns={8} />
@@ -690,7 +711,7 @@ export default function TeacherLessonSection() {
         <tr
           key={item.id}
           onClick={() => {
-            if (!busy) void openLessonFromHistory(item)
+            if (!busy) openLessonRoute(item.id)
           }}
           className={cn(
             "cursor-pointer border-b border-slate-100 transition-colors hover:bg-slate-50",
@@ -738,7 +759,7 @@ export default function TeacherLessonSection() {
               disabled={busy}
               onClick={(e) => {
                 e.stopPropagation()
-                void openLessonFromHistory(item)
+                openLessonRoute(item.id)
               }}
             >
               {finished ? "Results" : "Open"}
@@ -1201,137 +1222,102 @@ export default function TeacherLessonSection() {
       !live!.openForStudents)
 
   return (
-    <div className="flex flex-col gap-3 lg:h-[calc(100dvh-7rem)] lg:overflow-hidden">
-      {/* Fixed top chrome: navigation, lesson controls, live assignment, page assign chips */}
-      <div className="shrink-0 space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setView("units")}>
-              <ArrowLeft className="mr-1 h-4 w-4" />
-              Units
-            </Button>
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900">
-                Unit {unitNumber}: {unitMeta?.title}
-                {Number(live?.currentUnit) === Number(unitNumber) && !live?.unitCompleted && (
-                  <Badge className="ml-2 bg-emerald-600 align-middle hover:bg-emerald-600">
-                    Active
-                  </Badge>
-                )}
-              </h2>
-              <p className="text-xs text-slate-500">
-                {bookTitle}
-                {live?.lessonStatus === "active"
-                  ? " · Browse book pages, then Assign an exercise for students"
-                  : " · Book pages match the Cambridge layout on mobile"}
-              </p>
-            </div>
-          </div>
+    <div className="flex flex-col gap-2 lg:h-[calc(100dvh-5.5rem)] lg:overflow-hidden">
+      <div className="flex shrink-0 flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 px-2 text-slate-600"
+          onClick={() => setView("units")}
+        >
+          <ArrowLeft className="mr-1 h-4 w-4" />
+          Units
+        </Button>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-slate-900">
+            Unit {unitNumber}
+            {unitMeta?.title ? `: ${unitMeta.title}` : ""}
+            {Number(live?.currentUnit) === Number(unitNumber) && !live?.unitCompleted ? (
+              <Badge className="ml-1.5 align-middle bg-emerald-600 hover:bg-emerald-600">Active</Badge>
+            ) : null}
+          </p>
+          <p className="truncate text-[11px] text-slate-500">{bookTitle}</p>
         </div>
-
-        {error && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-            {error}
-          </div>
+        <Select
+          value={groupId || undefined}
+          onValueChange={setGroupId}
+          disabled={Boolean(live) && live.lessonStatus !== "finished"}
+        >
+          <SelectTrigger className="h-8 w-[160px] text-xs">
+            <SelectValue placeholder="Group" />
+          </SelectTrigger>
+          <SelectContent>
+            {groups.map((g) => (
+              <SelectItem key={g.id} value={g.id}>
+                {g.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {!live && (
+          <Button
+            size="sm"
+            className="h-8"
+            disabled={busy || !groupId}
+            onClick={() => void prepareLesson()}
+          >
+            Prepare
+          </Button>
         )}
-
-        {lessonControls}
-
-        {liveExerciseOpen && live && (
-          <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-              <Badge className="bg-emerald-600 hover:bg-emerald-600">
-                <Radio className="mr-1 h-3 w-3" />
-                Live
-              </Badge>
-              <span className="text-sm font-semibold text-emerald-950">
-                Unit {live.currentUnit} · Ex {live.currentExercise}
-              </span>
-              <span className="text-sm text-emerald-800">
-                {live.doneCount}/{studentTotal || live.studentCount || 0} completed · {donePct}%
-              </span>
-            </div>
-            <div className="h-2 w-28 overflow-hidden rounded-full bg-emerald-200 sm:w-40">
-              <div
-                className="h-full rounded-full bg-emerald-600 transition-all"
-                style={{ width: `${donePct}%` }}
-              />
-            </div>
-            <Button size="sm" variant="outline" disabled={busy} onClick={() => void finishExercise()}>
-              Finish exercise
-            </Button>
-          </div>
+        {live && live.lessonStatus !== "active" && live.lessonStatus !== "finished" && (
+          <Button
+            size="sm"
+            className="h-8"
+            disabled={busy}
+            onClick={() => void runAction(() => liveLessonsApi.start(live.id))}
+          >
+            <Play className="mr-1 h-3.5 w-3.5" />
+            Start
+          </Button>
         )}
-
-        {pageSteps.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-              On this page
+        {live?.lessonStatus === "active" && (
+          <Button
+            size="sm"
+            variant="destructive"
+            className="h-8"
+            disabled={busy}
+            onClick={() => setFinishOpen(true)}
+          >
+            <Square className="mr-1 h-3.5 w-3.5" />
+            End lesson
+          </Button>
+        )}
+        {live && (
+          <div className="hidden items-center gap-2 text-[11px] text-slate-600 sm:flex">
+            {liveExerciseOpen ? (
+              <span className="inline-flex items-center gap-1 font-medium text-emerald-700">
+                <Radio className="h-3 w-3" />
+                Ex {live.currentExercise} · {live.doneCount}/{studentTotal || live.studentCount || 0}
+              </span>
+            ) : null}
+            <span className="inline-flex items-center gap-1">
+              <Users className="h-3 w-3" />
+              {live.onlineCount}
             </span>
-            {pageSteps.map((step) => {
-              const status = stepStatus(
-                step,
-                live,
-                selectedStep?.id ?? null,
-                viewingAssignedUnit,
-              )
-              const isLiveExercise =
-                Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
-              const showAssign = canAssignFromThisUnit && !isLiveExercise
-              return (
-                <div
-                  key={step.id}
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-lg border px-2 py-1",
-                    selectedStep?.id === step.id
-                      ? "border-sky-300 bg-sky-50"
-                      : "border-slate-200 bg-slate-50",
-                    isLiveExercise && "border-emerald-300 bg-emerald-50",
-                  )}
-                >
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1 text-left text-xs font-medium text-slate-800"
-                    onClick={() => selectExerciseLocal(step)}
-                  >
-                    {status === "open" || isLiveExercise ? (
-                      <Radio className="h-3.5 w-3.5 text-emerald-600" />
-                    ) : (
-                      <Circle
-                        className={cn(
-                          "h-3.5 w-3.5",
-                          status === "current" ? "fill-sky-500 text-sky-500" : "text-slate-300",
-                        )}
-                      />
-                    )}
-                    Ex {step.exerciseId}
-                  </button>
-                  {showAssign ? (
-                    <Button
-                      size="sm"
-                      className="h-6 px-2 text-[11px]"
-                      disabled={busy}
-                      onClick={() => void assignExercise(step)}
-                    >
-                      Assign
-                    </Button>
-                  ) : null}
-                  {isLiveExercise ? (
-                    <Badge className="h-5 bg-emerald-600 px-1.5 text-[10px] hover:bg-emerald-600">
-                      Live
-                    </Badge>
-                  ) : null}
-                </div>
-              )
-            })}
           </div>
         )}
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-        {/* Lesson pages: sole vertical scroller on desktop */}
-        <div className="min-h-0 lg:overflow-y-auto">
+      {error && (
+        <div className="shrink-0 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+          {error}
+        </div>
+      )}
+
+      <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_200px]">
+        <div className="min-h-0">
           <CambridgeBookChrome
+            className="h-full"
             title={unitMeta?.title || `Unit ${unitNumber}`}
             unit={unitNumber}
             subtitle={unitMeta?.subtitle}
@@ -1343,6 +1329,8 @@ export default function TeacherLessonSection() {
             canPrev={canPrevPage}
             canNext={canNextPage}
             loading={stepsLoading}
+            compact
+            fitPage
           >
             {pageIndex === 0 && unitNumber != null ? (
               <CambridgeUnitHeader
@@ -1355,30 +1343,76 @@ export default function TeacherLessonSection() {
             {pageSteps.length === 0 && !stepsLoading ? (
               <p className="text-sm text-[#7f8c8d]">No exercises on this page.</p>
             ) : (
-              pageSteps.map((step) => (
-                <BookExerciseRenderer
-                  key={step.id}
-                  step={step}
-                  showAnswers
-                  variant="cambridge"
-                />
-              ))
+              pageSteps.map((step) => {
+                const isLiveExercise =
+                  Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
+                const justFinished =
+                  !live?.openForStudents &&
+                  live?.lastExerciseReview?.exerciseId === step.exerciseId &&
+                  Number(live?.lastExerciseReview?.unitNumber) === Number(unitNumber)
+                const gradable = isLiveGradableExercise(step)
+                const showAssign = canAssignFromThisUnit && gradable && !isLiveExercise
+                return (
+                  <BookExerciseRenderer
+                    key={step.id}
+                    step={step}
+                    showAnswers={false}
+                    variant="cambridge"
+                    active={isLiveExercise}
+                    actions={
+                      showAssign || isLiveExercise || justFinished ? (
+                        <>
+                          {showAssign ? (
+                            <Button
+                              size="sm"
+                              className="h-7 rounded-full bg-emerald-600 px-3 text-xs font-semibold hover:bg-emerald-700"
+                              disabled={busy}
+                              onClick={() => void assignExercise(step)}
+                            >
+                              Assign
+                            </Button>
+                          ) : null}
+                          {isLiveExercise ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 rounded-full border-emerald-400 px-3 text-xs font-semibold text-emerald-800"
+                              disabled={busy}
+                              onClick={() => void finishExercise()}
+                            >
+                              Finish
+                            </Button>
+                          ) : null}
+                          {justFinished && gradable ? (
+                            <Badge
+                              variant="outline"
+                              className="h-7 border-slate-300 px-2 text-[10px] font-semibold text-slate-600"
+                            >
+                              Results in panel →
+                            </Badge>
+                          ) : null}
+                        </>
+                      ) : undefined
+                    }
+                  />
+                )
+              })
             )}
           </CambridgeBookChrome>
         </div>
 
-        {/* Students panel: pinned on desktop; list scrolls inside if needed */}
-        <aside className="flex min-h-0 flex-col rounded-2xl border border-slate-200 bg-white p-3 lg:overflow-hidden">
-          <p className="mb-3 shrink-0 px-1 text-xs font-medium uppercase tracking-wide text-slate-500">
-            Progress panel
+        <aside className="flex min-h-0 flex-col rounded-xl border border-slate-200 bg-white p-2 lg:overflow-hidden">
+          <p className="mb-2 shrink-0 px-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+            Students
+            {liveExerciseOpen ? (
+              <span className="ml-1 font-normal normal-case text-emerald-700">· {donePct}% done</span>
+            ) : null}
           </p>
           {!live && (
-            <p className="px-1 text-sm text-slate-500">
-              Prepare a lesson with a group to see live student progress.
-            </p>
+            <p className="px-1 text-xs text-slate-500">Prepare a lesson to track live progress.</p>
           )}
           {live && (
-            <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
+            <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
               {(live.students ?? []).map((s) => {
                 const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
                 const isDone = s.status === "done"
@@ -1390,38 +1424,36 @@ export default function TeacherLessonSection() {
                     type="button"
                     onClick={() => setInspectStudent(s)}
                     className={cn(
-                      "w-full rounded-xl border px-3 py-2.5 text-left transition hover:shadow-sm",
+                      "w-full rounded-lg border px-2 py-1.5 text-left transition hover:shadow-sm",
                       isDone
                         ? "border-emerald-200 bg-emerald-50/70"
-                        : "border-sky-100 bg-sky-50/40 hover:border-sky-200",
+                        : "border-slate-100 bg-slate-50/60 hover:border-slate-200",
                     )}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex min-w-0 items-center gap-2">
+                    <div className="flex items-center justify-between gap-1">
+                      <div className="flex min-w-0 items-center gap-1.5">
                         <span
                           className={cn(
-                            "h-2.5 w-2.5 shrink-0 rounded-full",
+                            "h-2 w-2 shrink-0 rounded-full",
                             isOnline ? "bg-emerald-500" : "bg-slate-300",
                           )}
-                          title={isOnline ? "Online" : "Offline"}
                         />
-                        <p className="truncate text-sm font-medium text-slate-900">{s.name}</p>
+                        <p className="truncate text-xs font-medium text-slate-900">{s.name}</p>
                       </div>
-                      <div className="flex shrink-0 items-center gap-1.5">
-                        {scorePct != null ? (
-                          <span
-                            className="rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-white"
-                            style={{ backgroundColor: scoreBarColor(scorePct) }}
-                          >
-                            {scorePct}%
-                          </span>
-                        ) : null}
-                        {isDone ? (
-                          <Badge className="bg-emerald-600 hover:bg-emerald-600">Completed</Badge>
-                        ) : null}
-                      </div>
+                      {scorePct != null ? (
+                        <span
+                          className="rounded px-1 py-0.5 text-[10px] font-bold tabular-nums text-white"
+                          style={{ backgroundColor: scoreBarColor(scorePct) }}
+                        >
+                          {scorePct}%
+                        </span>
+                      ) : isDone ? (
+                        <Badge className="h-5 bg-emerald-600 px-1 text-[9px] hover:bg-emerald-600">
+                          Done
+                        </Badge>
+                      ) : null}
                     </div>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200/80">
+                    <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200/80">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{
@@ -1431,32 +1463,20 @@ export default function TeacherLessonSection() {
                         }}
                       />
                     </div>
-                    <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
-                      <span>
-                        {scorePct != null
-                          ? `${scorePct}% correct`
-                          : isDone
-                            ? "Submitted"
-                            : "In progress"}
-                      </span>
-                      <span className="font-semibold text-slate-700">
-                        {formatElapsed(s.elapsedSeconds ?? 0)}
-                      </span>
-                    </div>
                   </button>
                 )
               })}
               {(live.students ?? []).length === 0 && (
-                <p className="text-sm text-slate-500">No students in this group.</p>
+                <p className="text-xs text-slate-500">No students in this group.</p>
               )}
             </div>
           )}
           {!live && groupId && (
-            <ul className="mt-3 min-h-0 flex-1 space-y-1 overflow-y-auto">
+            <ul className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto">
               {students
                 .filter((s) => s.groupId === groupId)
                 .map((s) => (
-                  <li key={s.id} className="rounded-lg px-2 py-1.5 text-sm text-slate-600">
+                  <li key={s.id} className="rounded-lg px-2 py-1 text-xs text-slate-600">
                     {s.name}
                   </li>
                 ))}

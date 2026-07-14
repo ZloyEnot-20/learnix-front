@@ -7,6 +7,7 @@ import { requiresTypedWordForms } from "@/lib/books/word-form-exercise"
 import { displayListeningTrack } from "@/lib/books/repair-listening-audio"
 import { collectWordBoxItems, isCueWordBox } from "@/lib/books/word-box"
 import { parseListeningTable, countTableGaps } from "@/lib/books/listening-table"
+import { flattenNotes, notesTitle } from "@/lib/books/notes-outline"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
@@ -719,27 +720,67 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
 }
 
 function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
-  const notes = isRecord(raw.notes) ? raw.notes : {}
-  const body = asStringArray(notes.body)
-  const answers = asStringArray(raw.answers)
+  const notes = raw.notes
+  const title = notesTitle(notes)
+  const lines = flattenNotes(notes)
+  const answers = Array.isArray(raw.answers)
+    ? asStringArray(raw.answers)
+    : Array.isArray(raw.blanks)
+      ? raw.blanks
+          .filter(isRecord)
+          .map((b) => (b.answer != null ? String(b.answer) : ""))
+          .filter(Boolean)
+      : []
   const tb = useTB()
   return (
     <div className="mt-3 space-y-3">
       {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       {typeof raw.test_tip === "string" && <TipBox>{raw.test_tip}</TipBox>}
+      {typeof raw.passage === "string" && raw.passage.trim() ? (
+        <PassageBox>{raw.passage}</PassageBox>
+      ) : null}
       <Panel>
-        {typeof notes.title === "string" && (
+        {(title || lines.length > 0) && (
           <h4
             className="mb-3 font-semibold"
             style={tb ? { color: TEXTBOOK.heading } : undefined}
           >
-            {notes.title}
+            {title || "Notes"}
           </h4>
         )}
         <ul className="space-y-2 text-[13px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
-          {body.map((line, i) => (
-            <li key={i}>{line}</li>
-          ))}
+          {lines.map((line, i) => {
+            const prev = lines[i - 1]
+            const showHeading = Boolean(line.heading && line.heading !== prev?.heading)
+            return (
+              <li key={i}>
+                {showHeading ? (
+                  <p
+                    className="mb-1 text-[11px] font-semibold uppercase tracking-wide"
+                    style={{ color: TEXTBOOK.headingAccent }}
+                  >
+                    {line.heading}
+                  </p>
+                ) : null}
+                <p>
+                  {line.text.split(/(\d+[.)]?\s*_{2,}|_{2,}|\u2026{2,}|\.{3,}|…+)/).map((part, pi) =>
+                    /_{2,}|\u2026{2,}|\.{3,}|…/.test(part) ? (
+                      <input
+                        key={pi}
+                        type="text"
+                        readOnly
+                        className="mx-0.5 inline-block min-w-[4.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[12px] outline-none"
+                        style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                        placeholder="…"
+                      />
+                    ) : (
+                      <span key={pi}>{part}</span>
+                    ),
+                  )}
+                </p>
+              </li>
+            )
+          })}
         </ul>
       </Panel>
       {answers.length > 0 && (
@@ -1248,6 +1289,15 @@ function ListeningTable({ raw }: { raw: BookExerciseRaw }) {
       </p>
     )
   }
+  const blankAnswers = Array.isArray(raw.blanks)
+    ? Object.fromEntries(
+        raw.blanks
+          .filter(isRecord)
+          .filter((b) => b.number != null)
+          .map((b) => [String(b.number), b.answer != null ? String(b.answer) : ""]),
+      )
+    : {}
+  const answersList = Array.isArray(raw.answers) ? asStringArray(raw.answers) : []
   const gapCount = Math.max(
     countTableGaps(model),
     Array.isArray(raw.blanks) ? raw.blanks.length : 0,
@@ -1287,20 +1337,25 @@ function ListeningTable({ raw }: { raw: BookExerciseRaw }) {
                   >
                     {String(row[c] ?? "")
                       .split(/(\d+[.)]?\s*_{2,}|_{2,}|\u2026{2,}|\.{3,}|…+)/)
-                      .map((part, pi) =>
-                        /_{2,}|\u2026{2,}|\.{3,}|…/.test(part) ? (
-                          <input
-                            key={pi}
-                            type="text"
-                            readOnly
-                            className="mx-0.5 inline-block min-w-[4.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[12px] outline-none"
-                            style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
-                            placeholder="…"
-                          />
-                        ) : (
-                          <span key={pi}>{part}</span>
-                        ),
-                      )}
+                      .map((part, pi) => {
+                        const numMatch = part.match(/^(\d+)[.)]?\s*_{2,}/)
+                        if (numMatch || /_{2,}|\u2026{2,}|\.{3,}|…/.test(part)) {
+                          const n = numMatch?.[1]
+                          const ans = n ? blankAnswers[n] : ""
+                          return (
+                            <input
+                              key={pi}
+                              type="text"
+                              readOnly
+                              defaultValue={ans || undefined}
+                              className="mx-0.5 inline-block min-w-[4.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[12px] outline-none"
+                              style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.correct }}
+                              placeholder="…"
+                            />
+                          )
+                        }
+                        return <span key={pi}>{part}</span>
+                      })}
                   </td>
                 ))}
               </tr>
@@ -1312,6 +1367,21 @@ function ListeningTable({ raw }: { raw: BookExerciseRaw }) {
         <p className="text-[11px]" style={{ color: TEXTBOOK.muted }}>
           Complete {gapCount} gap{gapCount === 1 ? "" : "s"} (NO MORE THAN TWO WORDS OR A NUMBER).
         </p>
+      ) : null}
+      {answersList.length > 0 ? (
+        <ol className="grid gap-1 sm:grid-cols-2">
+          {Array.isArray(raw.blanks)
+            ? raw.blanks.filter(isRecord).map((b, i) => (
+                <li key={i} className="text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
+                  {String(b.number ?? i + 1)}. {String(b.answer ?? "")}
+                </li>
+              ))
+            : answersList.slice(0, gapCount).map((a, i) => (
+                <li key={i} className="text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
+                  {i + 1}. {a}
+                </li>
+              ))}
+        </ol>
       ) : null}
     </div>
   )
@@ -1383,6 +1453,8 @@ export function BookExerciseRenderer({
   className,
   showAnswers = true,
   variant = "admin",
+  active = false,
+  actions,
 }: {
   step: LessonStep
   className?: string
@@ -1393,6 +1465,10 @@ export function BookExerciseRenderer({
   showAnswers?: boolean
   /** `cambridge` / `textbook` = academic book page styles. */
   variant?: "admin" | "cambridge" | "textbook"
+  /** Live assignment highlight — green border with “Active” on the top edge. */
+  active?: boolean
+  /** Assign / Finish controls nestled in the exercise header. */
+  actions?: ReactNode
 }) {
   const Renderer = RENDERERS[step.uiType] ?? (({ raw }) => <InstructionOnly raw={raw} />)
   // Always strip — teachers see the same exercise body as students; keys live in TeacherAnswers.
@@ -1412,15 +1488,28 @@ export function BookExerciseRenderer({
     return (
       <TextbookMode.Provider value={true}>
         <div
-          className={cn("last:mb-0", className)}
+          className={cn("relative last:mb-0", className)}
           style={{
             fontFamily: TEXTBOOK.font,
-            backgroundColor: TEXTBOOK.exerciseBg,
+            backgroundColor: active ? TEXTBOOK.correctSoft : TEXTBOOK.exerciseBg,
             borderRadius: 6,
             padding: `${TEXTBOOK.space.exercisePadY}px ${TEXTBOOK.space.exercisePadX}px`,
             marginBottom: TEXTBOOK.space.exerciseGap,
+            border: active ? `2px solid ${TEXTBOOK.correct}` : `1px solid ${TEXTBOOK.border}`,
           }}
         >
+          {active ? (
+            <span
+              className="absolute left-3 top-0 -translate-y-1/2 rounded px-1.5 text-[10px] font-bold uppercase tracking-wide"
+              style={{
+                backgroundColor: TEXTBOOK.content,
+                color: TEXTBOOK.correctDeep,
+                lineHeight: "14px",
+              }}
+            >
+              Active
+            </span>
+          ) : null}
           <div className="mb-2 flex flex-wrap items-center gap-1.5">
             <span
               className="font-bold"
@@ -1448,6 +1537,7 @@ export function BookExerciseRenderer({
             {raw.audio_track != null ? (
               <AudioMark track={String(raw.audio_track)} url={audioUrlOf(raw)} />
             ) : null}
+            {actions ? <div className="ml-auto flex shrink-0 items-center gap-1.5">{actions}</div> : null}
           </div>
           <Instruction text={step.instruction} />
           <Renderer raw={raw} />
