@@ -105,7 +105,7 @@ export function CambridgeBookChrome({
 
   return (
     <div
-      className={cn("flex min-h-[520px] flex-col overflow-hidden rounded-lg", className)}
+      className={cn("flex min-h-0 flex-col rounded-lg", className)}
       style={{
         ...font,
         backgroundColor: TEXTBOOK.pageBg,
@@ -113,7 +113,7 @@ export function CambridgeBookChrome({
       }}
     >
       <div
-        className="flex items-center gap-3 border-b px-4 py-3"
+        className="flex shrink-0 items-center gap-3 border-b px-4 py-3"
         style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.content }}
       >
         <div className="min-w-0 flex-1 text-center">
@@ -134,7 +134,8 @@ export function CambridgeBookChrome({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-4 max-[650px]:px-2 sm:px-5 sm:py-6">
+      {/* Page body scrolls with the parent lesson column (mobile-like top→bottom). */}
+      <div className="px-3 py-4 max-[650px]:px-2 sm:px-5 sm:py-6">
         {loading ? (
           <PageSkeleton />
         ) : (
@@ -158,7 +159,7 @@ export function CambridgeBookChrome({
       </div>
 
       <div
-        className="flex items-center justify-between gap-3 border-t px-3 py-2.5"
+        className="flex shrink-0 items-center justify-between gap-3 border-t px-3 py-2.5"
         style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.content }}
       >
         <button

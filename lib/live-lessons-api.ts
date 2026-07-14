@@ -72,6 +72,8 @@ export const liveLessonsApi = {
       unit: unknown
       exerciseIds: string[]
       answer_key?: Record<string, unknown> | null
+      /** Staff-only: CD track number → public MP3 URL */
+      audio_urls?: Record<string, string>
     }>(`/live-lessons/books/${bookId}/units/${unitNumber}`),
   create: (input: { groupId: string; bookId: string; unitNumber?: number }) =>
     api.post<LiveLessonState>("/live-lessons", input),

@@ -6,6 +6,7 @@ import { TEXTBOOK } from "@/lib/books/textbook-theme"
 import { requiresTypedWordForms } from "@/lib/books/word-form-exercise"
 import { displayListeningTrack } from "@/lib/books/repair-listening-audio"
 import { collectWordBoxItems, isCueWordBox } from "@/lib/books/word-box"
+import { parseListeningTable, countTableGaps } from "@/lib/books/listening-table"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
@@ -288,20 +289,45 @@ function ChipList({
   )
 }
 
-function AudioMark({ track }: { track: string | number }) {
+function audioUrlOf(raw: BookExerciseRaw | Record<string, unknown>): string | null {
+  const u = raw.audio_url
+  return typeof u === "string" && u.trim() ? u.trim() : null
+}
+
+function AudioMark({
+  track,
+  url,
+}: {
+  track: string | number
+  url?: string | null
+}) {
   const tb = useTB()
   const label = displayListeningTrack(track)
   if (!label) return null
   return (
     <span
-      className={cn("text-sm", !tb && "rounded-full border px-2 py-0.5")}
+      className={cn(
+        "inline-flex max-w-full flex-wrap items-center gap-2",
+        !tb && "rounded-full border px-2 py-0.5",
+      )}
       style={
         tb
           ? { color: TEXTBOOK.audio, fontWeight: 600 }
           : undefined
       }
     >
-      ♪ Audio {label}
+      <span className="text-sm">♪ Audio {label}</span>
+      {url ? (
+        <audio
+          controls
+          preload="none"
+          src={url}
+          className="h-8 max-w-[min(100%,280px)]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <track kind="captions" />
+        </audio>
+      ) : null}
     </span>
   )
 }
@@ -1183,13 +1209,15 @@ function MatchingPairs({ raw }: { raw: BookExerciseRaw }) {
   const labelRight = (item: unknown, i: number) => {
     if (typeof item === "string") return item
     if (!isRecord(item)) return String(item)
-    return `${String(item.number ?? item.letter ?? i + 1)}. ${String(item.text ?? item.name ?? "")}`
+    return `${String(item.letter ?? item.number ?? String.fromCharCode(97 + i))}. ${String(item.text ?? item.name ?? "")}`
   }
+  const leftTitle = Array.isArray(raw.jobs) ? "Jobs" : "Match from"
+  const rightTitle = Array.isArray(raw.jobs) ? "Definitions" : "Options"
   return (
     <div className="mt-3 grid gap-4 md:grid-cols-2">
       <Panel>
         <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
-          Match from
+          {leftTitle}
         </h4>
         <ul className="space-y-2 text-[12px]" style={{ color: TEXTBOOK.text }}>
           {left.map((item, i) => (
@@ -1199,7 +1227,7 @@ function MatchingPairs({ raw }: { raw: BookExerciseRaw }) {
       </Panel>
       <Panel>
         <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
-          Options
+          {rightTitle}
         </h4>
         <ul className="space-y-2 text-[12px]" style={{ color: TEXTBOOK.text }}>
           {right.map((item, i) => (
@@ -1207,6 +1235,84 @@ function MatchingPairs({ raw }: { raw: BookExerciseRaw }) {
           ))}
         </ul>
       </Panel>
+    </div>
+  )
+}
+
+function ListeningTable({ raw }: { raw: BookExerciseRaw }) {
+  const model = parseListeningTable(raw)
+  if (!model) {
+    return (
+      <p className="mt-3 text-sm" style={{ color: TEXTBOOK.muted }}>
+        Table data missing.
+      </p>
+    )
+  }
+  const gapCount = Math.max(
+    countTableGaps(model),
+    Array.isArray(raw.blanks) ? raw.blanks.length : 0,
+  )
+  const titleCase = (s: string) =>
+    s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  return (
+    <div className="mt-3 space-y-3">
+      {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left text-[12px]" style={{ color: TEXTBOOK.text }}>
+          <thead>
+            <tr>
+              {model.columns.map((c) => (
+                <th
+                  key={c}
+                  className="border px-2 py-1.5 font-semibold"
+                  style={{
+                    borderColor: TEXTBOOK.border,
+                    backgroundColor: TEXTBOOK.content,
+                    color: TEXTBOOK.heading,
+                  }}
+                >
+                  {titleCase(c)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {model.rows.map((row, ri) => (
+              <tr key={ri}>
+                {model.columns.map((c) => (
+                  <td
+                    key={c}
+                    className="border px-2 py-1.5 align-top leading-relaxed"
+                    style={{ borderColor: TEXTBOOK.border }}
+                  >
+                    {String(row[c] ?? "")
+                      .split(/(\d+[.)]?\s*_{2,}|_{2,}|\u2026{2,}|\.{3,}|…+)/)
+                      .map((part, pi) =>
+                        /_{2,}|\u2026{2,}|\.{3,}|…/.test(part) ? (
+                          <input
+                            key={pi}
+                            type="text"
+                            readOnly
+                            className="mx-0.5 inline-block min-w-[4.5rem] border-0 border-b-2 bg-transparent px-1 py-0 text-[12px] outline-none"
+                            style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                            placeholder="…"
+                          />
+                        ) : (
+                          <span key={pi}>{part}</span>
+                        ),
+                      )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {gapCount > 0 ? (
+        <p className="text-[11px]" style={{ color: TEXTBOOK.muted }}>
+          Complete {gapCount} gap{gapCount === 1 ? "" : "s"} (NO MORE THAN TWO WORDS OR A NUMBER).
+        </p>
+      ) : null}
     </div>
   )
 }
@@ -1267,6 +1373,7 @@ const RENDERERS: Record<BookExerciseUiType, (props: { raw: BookExerciseRaw }) =>
   "multiple-choice": MultipleChoice,
   "short-answer": ShortAnswer,
   "matching-pairs": MatchingPairs,
+  "listening-table": ListeningTable,
   "passage-read": PassageRead,
   "word-box-notes": WordBoxNotes,
 }
@@ -1338,7 +1445,9 @@ export function BookExerciseRenderer({
             >
               {step.uiLabel}
             </span>
-            {raw.audio_track != null ? <AudioMark track={String(raw.audio_track)} /> : null}
+            {raw.audio_track != null ? (
+              <AudioMark track={String(raw.audio_track)} url={audioUrlOf(raw)} />
+            ) : null}
           </div>
           <Instruction text={step.instruction} />
           <Renderer raw={raw} />
@@ -1355,6 +1464,9 @@ export function BookExerciseRenderer({
           <Badge variant="secondary">{step.uiLabel}</Badge>
           <Badge variant="outline">{step.sectionLabel}</Badge>
           <span className="text-xs text-slate-500">Exercise {step.exerciseId}</span>
+          {raw.audio_track != null ? (
+            <AudioMark track={String(raw.audio_track)} url={audioUrlOf(raw)} />
+          ) : null}
         </div>
         <Instruction text={step.instruction} />
         <Renderer raw={raw} />

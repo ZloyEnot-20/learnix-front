@@ -9,11 +9,45 @@ function asStringArray(v: unknown): string[] {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []
 }
 
+function expandJobsMatching(
+  jobs: unknown[],
+  answers?: unknown,
+): { left: Array<Record<string, unknown>>; right: Array<Record<string, unknown>> } {
+  const rows = jobs.filter(isRecord)
+  const left = rows.map((j, i) => ({
+    number: j.number ?? i + 1,
+    text: String(j.job ?? j.name ?? j.term ?? ""),
+  }))
+
+  const ansMap = isRecord(answers) ? answers : null
+  const letterToDef: Record<string, string> = {}
+  if (ansMap) {
+    for (const j of rows) {
+      const num = String(j.number ?? "")
+      const letter = String(ansMap[num] ?? "").trim().toLowerCase()
+      if (letter && /^[a-z]$/.test(letter)) {
+        letterToDef[letter] = String(j.definition ?? j.meaning ?? "")
+      }
+    }
+  }
+  const letters = Object.keys(letterToDef).sort()
+  const right =
+    letters.length === rows.length
+      ? letters.map((letter) => ({ letter, text: letterToDef[letter] }))
+      : rows.map((j, i) => ({
+          letter: String.fromCharCode(97 + i),
+          text: String(j.definition ?? j.meaning ?? ""),
+        }))
+
+  return { left, right }
+}
+
 /**
  * Map DeepSeek / source book JSON shapes onto the fields existing renderers understand.
  * Does not invent content — only renames / aliases.
+ * `answers` is the unit answer-key slice for this exercise (used to letter-order match options).
  */
-export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
+export function normalizeBookExercise(raw: BookExerciseRaw, answers?: unknown): BookExerciseRaw {
   const out: BookExerciseRaw = { ...raw }
 
   if (out.audio != null && out.audio_track == null) {
@@ -98,6 +132,32 @@ export function normalizeBookExercise(raw: BookExerciseRaw): BookExerciseRaw {
         ),
       }
     })
+  }
+
+  // jobs[{ job, definition }] → matching columns (1–n / a–f), using answer key for letter order
+  if (
+    Array.isArray(out.jobs) &&
+    out.jobs.length > 0 &&
+    (!Array.isArray(out.left) || out.left.length === 0) &&
+    (!Array.isArray(out.beginnings) || out.beginnings.length === 0)
+  ) {
+    const { left, right } = expandJobsMatching(out.jobs, answers)
+    out.left = left
+    out.right = right
+    out.beginnings = left
+    out.endings = right
+  }
+
+  // meanings a–d (match-to-previous-exercise) → option list
+  if (
+    Array.isArray(out.meanings) &&
+    out.meanings.every((m) => typeof m === "string") &&
+    (!Array.isArray(out.items) || out.items.length === 0)
+  ) {
+    out.items = asStringArray(out.meanings)
+    if (!Array.isArray(out.right) || out.right.length === 0) {
+      out.right = asStringArray(out.meanings)
+    }
   }
 
   // Bank-only adjectives / words → checklist items

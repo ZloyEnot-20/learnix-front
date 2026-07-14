@@ -20,6 +20,19 @@ export function displayListeningTrack(v: unknown): string | null {
   return /^D/i.test(s) ? `D${String(n).padStart(2, "0")}` : String(n).padStart(2, "0")
 }
 
+/** Resolve CD track label → public URL from book `audio_urls` map ("02" → url). */
+export function resolveBookAudioUrl(
+  track: unknown,
+  audioUrls?: Record<string, string> | null,
+): string | null {
+  if (!audioUrls || typeof audioUrls !== "object") return null
+  const n = parseListeningTrack(track)
+  if (n == null) return null
+  const key = String(n).padStart(2, "0")
+  const url = audioUrls[key] ?? audioUrls[String(n)]
+  return typeof url === "string" && url.trim() ? url.trim() : null
+}
+
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v)
 }

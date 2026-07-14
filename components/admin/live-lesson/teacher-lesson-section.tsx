@@ -1201,130 +1201,136 @@ export default function TeacherLessonSection() {
       !live!.openForStudents)
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => setView("units")}>
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Units
-          </Button>
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Unit {unitNumber}: {unitMeta?.title}
-              {Number(live?.currentUnit) === Number(unitNumber) && !live?.unitCompleted && (
-                <Badge className="ml-2 bg-emerald-600 align-middle hover:bg-emerald-600">Active</Badge>
-              )}
-            </h2>
-            <p className="text-xs text-slate-500">
-              {bookTitle}
-              {live?.lessonStatus === "active"
-                ? " · Browse book pages, then Assign an exercise for students"
-                : " · Book pages match the Cambridge layout on mobile"}
-            </p>
+    <div className="flex flex-col gap-3 lg:h-[calc(100dvh-7rem)] lg:overflow-hidden">
+      {/* Fixed top chrome: navigation, lesson controls, live assignment, page assign chips */}
+      <div className="shrink-0 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={() => setView("units")}>
+              <ArrowLeft className="mr-1 h-4 w-4" />
+              Units
+            </Button>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">
+                Unit {unitNumber}: {unitMeta?.title}
+                {Number(live?.currentUnit) === Number(unitNumber) && !live?.unitCompleted && (
+                  <Badge className="ml-2 bg-emerald-600 align-middle hover:bg-emerald-600">
+                    Active
+                  </Badge>
+                )}
+              </h2>
+              <p className="text-xs text-slate-500">
+                {bookTitle}
+                {live?.lessonStatus === "active"
+                  ? " · Browse book pages, then Assign an exercise for students"
+                  : " · Book pages match the Cambridge layout on mobile"}
+              </p>
+            </div>
           </div>
         </div>
+
+        {error && (
+          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+            {error}
+          </div>
+        )}
+
+        {lessonControls}
+
+        {liveExerciseOpen && live && (
+          <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+              <Badge className="bg-emerald-600 hover:bg-emerald-600">
+                <Radio className="mr-1 h-3 w-3" />
+                Live
+              </Badge>
+              <span className="text-sm font-semibold text-emerald-950">
+                Unit {live.currentUnit} · Ex {live.currentExercise}
+              </span>
+              <span className="text-sm text-emerald-800">
+                {live.doneCount}/{studentTotal || live.studentCount || 0} completed · {donePct}%
+              </span>
+            </div>
+            <div className="h-2 w-28 overflow-hidden rounded-full bg-emerald-200 sm:w-40">
+              <div
+                className="h-full rounded-full bg-emerald-600 transition-all"
+                style={{ width: `${donePct}%` }}
+              />
+            </div>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => void finishExercise()}>
+              Finish exercise
+            </Button>
+          </div>
+        )}
+
+        {pageSteps.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              On this page
+            </span>
+            {pageSteps.map((step) => {
+              const status = stepStatus(
+                step,
+                live,
+                selectedStep?.id ?? null,
+                viewingAssignedUnit,
+              )
+              const isLiveExercise =
+                Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
+              const showAssign = canAssignFromThisUnit && !isLiveExercise
+              return (
+                <div
+                  key={step.id}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-lg border px-2 py-1",
+                    selectedStep?.id === step.id
+                      ? "border-sky-300 bg-sky-50"
+                      : "border-slate-200 bg-slate-50",
+                    isLiveExercise && "border-emerald-300 bg-emerald-50",
+                  )}
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1 text-left text-xs font-medium text-slate-800"
+                    onClick={() => selectExerciseLocal(step)}
+                  >
+                    {status === "open" || isLiveExercise ? (
+                      <Radio className="h-3.5 w-3.5 text-emerald-600" />
+                    ) : (
+                      <Circle
+                        className={cn(
+                          "h-3.5 w-3.5",
+                          status === "current" ? "fill-sky-500 text-sky-500" : "text-slate-300",
+                        )}
+                      />
+                    )}
+                    Ex {step.exerciseId}
+                  </button>
+                  {showAssign ? (
+                    <Button
+                      size="sm"
+                      className="h-6 px-2 text-[11px]"
+                      disabled={busy}
+                      onClick={() => void assignExercise(step)}
+                    >
+                      Assign
+                    </Button>
+                  ) : null}
+                  {isLiveExercise ? (
+                    <Badge className="h-5 bg-emerald-600 px-1.5 text-[10px] hover:bg-emerald-600">
+                      Live
+                    </Badge>
+                  ) : null}
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
 
-      {error && (
-        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-          {error}
-        </div>
-      )}
-
-      {lessonControls}
-
-      {liveExerciseOpen && live && (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-            <Badge className="bg-emerald-600 hover:bg-emerald-600">
-              <Radio className="mr-1 h-3 w-3" />
-              Live
-            </Badge>
-            <span className="text-sm font-semibold text-emerald-950">
-              Unit {live.currentUnit} · Ex {live.currentExercise}
-            </span>
-            <span className="text-sm text-emerald-800">
-              {live.doneCount}/{studentTotal || live.studentCount || 0} completed · {donePct}%
-            </span>
-          </div>
-          <div className="h-2 w-28 overflow-hidden rounded-full bg-emerald-200 sm:w-40">
-            <div
-              className="h-full rounded-full bg-emerald-600 transition-all"
-              style={{ width: `${donePct}%` }}
-            />
-          </div>
-          <Button size="sm" variant="outline" disabled={busy} onClick={() => void finishExercise()}>
-            Finish exercise
-          </Button>
-        </div>
-      )}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="space-y-3">
-          {pageSteps.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                On this page
-              </span>
-              {pageSteps.map((step) => {
-                const status = stepStatus(
-                  step,
-                  live,
-                  selectedStep?.id ?? null,
-                  viewingAssignedUnit,
-                )
-                const isLiveExercise =
-                  Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
-                const showAssign = canAssignFromThisUnit && !isLiveExercise
-                return (
-                  <div
-                    key={step.id}
-                    className={cn(
-                      "inline-flex items-center gap-1.5 rounded-lg border px-2 py-1",
-                      selectedStep?.id === step.id
-                        ? "border-sky-300 bg-sky-50"
-                        : "border-slate-200 bg-slate-50",
-                      isLiveExercise && "border-emerald-300 bg-emerald-50",
-                    )}
-                  >
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1 text-left text-xs font-medium text-slate-800"
-                      onClick={() => selectExerciseLocal(step)}
-                    >
-                      {status === "open" || isLiveExercise ? (
-                        <Radio className="h-3.5 w-3.5 text-emerald-600" />
-                      ) : (
-                        <Circle
-                          className={cn(
-                            "h-3.5 w-3.5",
-                            status === "current" ? "fill-sky-500 text-sky-500" : "text-slate-300",
-                          )}
-                        />
-                      )}
-                      Ex {step.exerciseId}
-                    </button>
-                    {showAssign ? (
-                      <Button
-                        size="sm"
-                        className="h-6 px-2 text-[11px]"
-                        disabled={busy}
-                        onClick={() => void assignExercise(step)}
-                      >
-                        Assign
-                      </Button>
-                    ) : null}
-                    {isLiveExercise ? (
-                      <Badge className="h-5 bg-emerald-600 px-1.5 text-[10px] hover:bg-emerald-600">
-                        Live
-                      </Badge>
-                    ) : null}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-
+      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+        {/* Lesson pages: sole vertical scroller on desktop */}
+        <div className="min-h-0 lg:overflow-y-auto">
           <CambridgeBookChrome
             title={unitMeta?.title || `Unit ${unitNumber}`}
             unit={unitNumber}
@@ -1361,8 +1367,9 @@ export default function TeacherLessonSection() {
           </CambridgeBookChrome>
         </div>
 
-        <aside className="rounded-2xl border border-slate-200 bg-white p-3">
-          <p className="mb-3 px-1 text-xs font-medium uppercase tracking-wide text-slate-500">
+        {/* Students panel: pinned on desktop; list scrolls inside if needed */}
+        <aside className="flex min-h-0 flex-col rounded-2xl border border-slate-200 bg-white p-3 lg:overflow-hidden">
+          <p className="mb-3 shrink-0 px-1 text-xs font-medium uppercase tracking-wide text-slate-500">
             Progress panel
           </p>
           {!live && (
@@ -1371,7 +1378,7 @@ export default function TeacherLessonSection() {
             </p>
           )}
           {live && (
-            <div className="max-h-[70vh] space-y-2 overflow-y-auto">
+            <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
               {(live.students ?? []).map((s) => {
                 const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
                 const isDone = s.status === "done"
@@ -1445,7 +1452,7 @@ export default function TeacherLessonSection() {
             </div>
           )}
           {!live && groupId && (
-            <ul className="mt-3 space-y-1">
+            <ul className="mt-3 min-h-0 flex-1 space-y-1 overflow-y-auto">
               {students
                 .filter((s) => s.groupId === groupId)
                 .map((s) => (

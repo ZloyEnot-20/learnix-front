@@ -1,5 +1,6 @@
 import type { BookDocument, BookUnitRaw } from "./types"
 import { flattenUnitToSteps, unitIsReady } from "./lesson-flow"
+import { resolveBookAudioUrl } from "./repair-listening-audio"
 import { liveLessonsApi, type LiveBookSummary } from "@/lib/live-lessons-api"
 
 export const BOOK_ID_CAMBRIDGE_VOCAB_ADVANCED = "cambridge-vocab-ielts-advanced"
@@ -9,7 +10,14 @@ const TTL_MS = 5 * 60 * 1000
 
 const bookMetaCache: { current: CacheEntry<LiveBookSummary[]> | null } = { current: null }
 const bookDocCache = new Map<string, CacheEntry<BookDocument>>()
-const unitCache = new Map<string, CacheEntry<{ unit: BookUnitRaw; answer_key: Record<string, unknown> | null }>>()
+const unitCache = new Map<
+  string,
+  CacheEntry<{
+    unit: BookUnitRaw
+    answer_key: Record<string, unknown> | null
+    audio_urls: Record<string, string> | null
+  }>
+>()
 
 function fresh<T>(entry: CacheEntry<T> | null | undefined): T | null {
   if (!entry) return null
@@ -60,6 +68,10 @@ export async function fetchBookUnit(bookId: string, unitNumber: number) {
   const value = {
     unit: result.unit as BookUnitRaw,
     answer_key: (result.answer_key as Record<string, unknown> | null) ?? null,
+    audio_urls:
+      result.audio_urls && typeof result.audio_urls === "object"
+        ? result.audio_urls
+        : null,
   }
   // Never cache broken markers
   if (!/\?\?/.test(JSON.stringify(value))) {
@@ -76,8 +88,15 @@ export function clearBookCaches() {
 }
 
 export async function fetchLessonSteps(bookId: string, unitNumber: number) {
-  const { unit, answer_key } = await fetchBookUnit(bookId, unitNumber)
-  return flattenUnitToSteps(unit, answer_key ?? undefined)
+  const { unit, answer_key, audio_urls } = await fetchBookUnit(bookId, unitNumber)
+  const steps = flattenUnitToSteps(unit, answer_key ?? undefined)
+  if (!audio_urls) return steps
+  return steps.map((step) => {
+    const track = step.raw.audio_track ?? step.raw.audio
+    const audio_url = resolveBookAudioUrl(track, audio_urls)
+    if (!audio_url) return step
+    return { ...step, raw: { ...step.raw, audio_url } }
+  })
 }
 
 export function listUnitsFromMeta(
