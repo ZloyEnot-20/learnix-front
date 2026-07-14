@@ -1,10 +1,12 @@
 "use client"
 
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { CAMBRIDGE } from "@/lib/books/cambridge-theme"
+import { TEXTBOOK } from "@/lib/books/textbook-theme"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
+
+const font: CSSProperties = { fontFamily: TEXTBOOK.font }
 
 export function CambridgeUnitHeader({
   unitNumber,
@@ -16,54 +18,52 @@ export function CambridgeUnitHeader({
   subtitle?: string
 }) {
   return (
-    <div
-      className="mb-5 flex items-stretch overflow-hidden rounded-sm border"
-      style={{ borderColor: CAMBRIDGE.line }}
-    >
-      <div
-        className="flex w-14 shrink-0 items-center justify-center text-2xl font-bold text-white"
-        style={{ backgroundColor: CAMBRIDGE.deep }}
+    <header className="mb-5 text-center" style={font}>
+      <p
+        className="text-[32px] font-light uppercase leading-tight tracking-[2px] max-[650px]:text-2xl"
+        style={{ color: TEXTBOOK.heading }}
       >
-        {unitNumber}
-      </div>
-      <div className="flex-1 px-4 py-3" style={{ backgroundColor: CAMBRIDGE.mid }}>
-        <p className="font-serif text-lg font-semibold text-white">{title}</p>
-        {subtitle ? (
-          <p className="mt-0.5 text-sm" style={{ color: CAMBRIDGE.soft }}>
-            {subtitle}
-          </p>
-        ) : null}
-      </div>
-    </div>
+        Unit {unitNumber}
+        {title ? `: ${title}` : ""}
+      </p>
+      {subtitle ? (
+        <p
+          className="mt-2 text-[20px] font-semibold"
+          style={{ color: TEXTBOOK.headingAccent }}
+        >
+          {subtitle}
+        </p>
+      ) : null}
+      <div
+        className="mx-auto mt-5 h-[3px] w-full"
+        style={{ backgroundColor: TEXTBOOK.heading }}
+      />
+    </header>
   )
 }
 
 export function CambridgeSectionBanner({ title }: { title: string }) {
   return (
-    <div
-      className="mb-4 border-y px-3 py-2"
+    <h2
+      className="mb-5 pl-[15px] text-2xl font-bold max-[650px]:text-xl"
       style={{
-        backgroundColor: CAMBRIDGE.wash,
-        borderColor: CAMBRIDGE.line,
+        ...font,
+        color: TEXTBOOK.heading,
+        borderLeft: `4px solid ${TEXTBOOK.accent}`,
       }}
     >
-      <p
-        className="text-center text-xs font-bold uppercase tracking-[0.14em]"
-        style={{ color: CAMBRIDGE.note }}
-      >
-        {title}
-      </p>
-    </div>
+      {title}
+    </h2>
   )
 }
 
 function PageSkeleton() {
   return (
-    <div className="space-y-4 p-2">
-      <Skeleton className="h-7 w-2/3" />
-      <Skeleton className="h-24 w-full rounded-xl" />
-      <Skeleton className="h-16 w-full rounded-xl" />
-      <Skeleton className="h-20 w-4/5 rounded-xl" />
+    <div className="mx-auto max-w-[900px] space-y-4 rounded-lg bg-white p-8 shadow-[0_2px_20px_rgba(0,0,0,0.1)]">
+      <Skeleton className="mx-auto h-8 w-2/3" />
+      <Skeleton className="h-24 w-full rounded-md" />
+      <Skeleton className="h-16 w-full rounded-md" />
+      <Skeleton className="h-20 w-4/5 rounded-md" />
     </div>
   )
 }
@@ -99,54 +99,56 @@ export function CambridgeBookChrome({
 }) {
   const eyebrow =
     unit != null
-      ? `UNIT ${unit} · P.${pageNum} · ${pageIndex + 1}/${pageCount || 1}`
-      : `P.${pageNum} · ${pageIndex + 1}/${pageCount || 1}`
+      ? `Unit ${unit} · p.${pageNum} · ${pageIndex + 1}/${pageCount || 1}`
+      : `p.${pageNum} · ${pageIndex + 1}/${pageCount || 1}`
 
   return (
     <div
-      className={cn("flex min-h-[520px] flex-col overflow-hidden rounded-2xl border", className)}
+      className={cn("flex min-h-[520px] flex-col overflow-hidden rounded-lg", className)}
       style={{
-        backgroundColor: CAMBRIDGE.pageBg,
-        borderColor: CAMBRIDGE.line,
+        ...font,
+        backgroundColor: TEXTBOOK.pageBg,
+        boxShadow: TEXTBOOK.shadow,
       }}
     >
       <div
         className="flex items-center gap-3 border-b px-4 py-3"
-        style={{ borderColor: CAMBRIDGE.line, backgroundColor: CAMBRIDGE.wash }}
+        style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.content }}
       >
         <div className="min-w-0 flex-1 text-center">
           <p
             className="text-[11px] font-semibold uppercase tracking-wide"
-            style={{ color: CAMBRIDGE.mid }}
+            style={{ color: TEXTBOOK.muted }}
           >
             {eyebrow}
           </p>
-          <p className="truncate font-serif text-base font-bold" style={{ color: CAMBRIDGE.deep }}>
+          <p className="truncate text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
             {title}
           </p>
           {subtitle ? (
-            <p className="truncate text-xs" style={{ color: CAMBRIDGE.note }}>
+            <p className="truncate text-xs" style={{ color: TEXTBOOK.muted }}>
               {subtitle}
             </p>
           ) : null}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-5">
+      <div className="flex-1 overflow-y-auto px-3 py-4 max-[650px]:px-2 sm:px-5 sm:py-6">
         {loading ? (
           <PageSkeleton />
         ) : (
           <div
-            className="relative mx-auto max-w-3xl rounded-sm px-5 py-6 shadow-md sm:px-8 sm:py-8"
+            className="relative mx-auto w-full max-w-[900px] rounded-lg px-5 py-6 max-[650px]:px-5 max-[650px]:py-5 sm:px-[50px] sm:py-10"
             style={{
-              backgroundColor: CAMBRIDGE.page,
-              boxShadow: `0 8px 28px ${CAMBRIDGE.deep}22`,
+              backgroundColor: TEXTBOOK.content,
+              boxShadow: TEXTBOOK.shadow,
+              color: TEXTBOOK.text,
             }}
           >
             {children}
             <p
-              className="mt-8 text-center font-serif text-sm tabular-nums"
-              style={{ color: CAMBRIDGE.mid }}
+              className="mt-10 text-center text-sm tabular-nums"
+              style={{ color: TEXTBOOK.muted }}
             >
               {pageNum}
             </p>
@@ -156,26 +158,26 @@ export function CambridgeBookChrome({
 
       <div
         className="flex items-center justify-between gap-3 border-t px-3 py-2.5"
-        style={{ borderColor: CAMBRIDGE.line, backgroundColor: CAMBRIDGE.wash }}
+        style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.content }}
       >
         <button
           type="button"
           disabled={!canPrev || loading}
           onClick={onPrev}
-          className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-bold disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold disabled:opacity-40"
           style={{
-            backgroundColor: CAMBRIDGE.soft,
-            color: CAMBRIDGE.deep,
+            backgroundColor: TEXTBOOK.accentSoft,
+            color: TEXTBOOK.headingAccent,
           }}
         >
           <ChevronLeft className="h-4 w-4" />
           Prev
         </button>
         <div className="text-center">
-          <p className="text-xs font-semibold" style={{ color: CAMBRIDGE.deep }}>
+          <p className="text-xs font-semibold" style={{ color: TEXTBOOK.heading }}>
             Page {pageNum}
           </p>
-          <p className="text-[11px]" style={{ color: CAMBRIDGE.note }}>
+          <p className="text-[11px]" style={{ color: TEXTBOOK.muted }}>
             {pageIndex + 1} of {pageCount || 1}
           </p>
         </div>
@@ -183,10 +185,10 @@ export function CambridgeBookChrome({
           type="button"
           disabled={!canNext || loading}
           onClick={onNext}
-          className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-bold disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold disabled:opacity-40"
           style={{
-            backgroundColor: CAMBRIDGE.soft,
-            color: CAMBRIDGE.deep,
+            backgroundColor: TEXTBOOK.accentSoft,
+            color: TEXTBOOK.headingAccent,
           }}
         >
           Next

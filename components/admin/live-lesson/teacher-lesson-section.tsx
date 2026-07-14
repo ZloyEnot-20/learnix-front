@@ -1118,23 +1118,23 @@ export default function TeacherLessonSection() {
                 disabled={!u.ready || busy}
                 onClick={() => void openUnit(u.unitNumber, u.ready)}
                 className={cn(
-                  "rounded-xl border p-0 text-left transition overflow-hidden",
+                  "overflow-hidden rounded-lg border p-0 text-left transition",
                   u.ready
-                    ? "border-[#C4A8E0] bg-[#FFFEFB] hover:shadow-md"
+                    ? "border-[#dce1e6] bg-white hover:shadow-[0_2px_12px_rgba(0,0,0,0.08)]"
                     : "cursor-not-allowed border-slate-100 bg-slate-50 opacity-70",
-                  isActive && "ring-2 ring-emerald-400",
+                  isActive && "ring-2 ring-[#3498db]",
                 )}
               >
                 <div className="flex items-stretch">
                   <div
-                    className="flex w-12 shrink-0 items-center justify-center text-xl font-bold text-white"
-                    style={{ backgroundColor: "#4A2C7A" }}
+                    className="flex w-12 shrink-0 items-center justify-center text-xl font-light text-white"
+                    style={{ backgroundColor: "#2c3e50" }}
                   >
                     {u.unitNumber}
                   </div>
                   <div className="min-w-0 flex-1 p-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-[#6B3FA0]">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-[#2980b9]">
                         Unit {u.unitNumber}
                       </span>
                       <div className="flex flex-wrap gap-1">
@@ -1148,10 +1148,12 @@ export default function TeacherLessonSection() {
                         )}
                       </div>
                     </div>
-                    <h3 className="mt-1 font-serif font-semibold text-[#2B1B45]">{u.title}</h3>
-                    {u.subtitle && <p className="mt-0.5 text-xs text-[#5B3A8C]">{u.subtitle}</p>}
+                    <h3 className="mt-1 font-semibold text-[#1a1a1a]" style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+                      {u.title}
+                    </h3>
+                    {u.subtitle && <p className="mt-0.5 text-xs text-[#7f8c8d]">{u.subtitle}</p>}
                     {u.pages && u.pages.length > 0 && (
-                      <p className="mt-2 text-xs text-[#6B3FA0]">
+                      <p className="mt-2 text-xs text-[#2980b9]">
                         pp. {u.pages[0].page}–{u.pages[u.pages.length - 1].page}
                       </p>
                     )}
@@ -1345,7 +1347,7 @@ export default function TeacherLessonSection() {
             ) : null}
             {sectionBannerTitle ? <CambridgeSectionBanner title={sectionBannerTitle} /> : null}
             {pageSteps.length === 0 && !stepsLoading ? (
-              <p className="font-serif text-sm text-[#5B3A8C]">No exercises on this page.</p>
+              <p className="text-sm text-[#7f8c8d]">No exercises on this page.</p>
             ) : (
               pageSteps.map((step) => (
                 <BookExerciseRenderer

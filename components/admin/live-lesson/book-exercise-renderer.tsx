@@ -1,9 +1,15 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { createContext, useContext, type CSSProperties, type ReactNode } from "react"
 import type { BookExerciseRaw, BookExerciseUiType, LessonStep } from "@/lib/books/types"
+import { TEXTBOOK } from "@/lib/books/textbook-theme"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+
+const TextbookMode = createContext(false)
+function useTB() {
+  return useContext(TextbookMode)
+}
 
 function asStringArray(v: unknown): string[] {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []
@@ -14,13 +20,36 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 }
 
 function TeacherAnswers({ answers }: { answers?: unknown }) {
+  const tb = useTB()
   if (answers == null) return null
   return (
-    <details className="mt-6 rounded-xl border border-amber-200 bg-amber-50/80 p-4">
-      <summary className="cursor-pointer text-sm font-medium text-amber-900">
+    <details
+      className="mt-4 rounded p-3"
+      style={
+        tb
+          ? {
+              backgroundColor: TEXTBOOK.tipSoft,
+              borderLeft: `4px solid ${TEXTBOOK.tip}`,
+            }
+          : undefined
+      }
+    >
+      <summary
+        className={cn(
+          "cursor-pointer text-sm font-medium",
+          !tb && "text-amber-900",
+        )}
+        style={tb ? { color: TEXTBOOK.tipText } : undefined}
+      >
         Teacher answers (answer key)
       </summary>
-      <pre className="mt-3 max-h-64 overflow-auto whitespace-pre-wrap text-xs text-amber-950">
+      <pre
+        className={cn(
+          "mt-3 max-h-64 overflow-auto whitespace-pre-wrap text-xs",
+          !tb && "text-amber-950",
+        )}
+        style={tb ? { color: TEXTBOOK.text } : undefined}
+      >
         {typeof answers === "string" ? answers : JSON.stringify(answers, null, 2)}
       </pre>
     </details>
@@ -28,18 +57,97 @@ function TeacherAnswers({ answers }: { answers?: unknown }) {
 }
 
 function Instruction({ text }: { text: string }) {
+  const tb = useTB()
   if (!text) return null
-  return <p className="text-base leading-relaxed text-slate-700">{text}</p>
+  return (
+    <p
+      className={cn(!tb && "text-base leading-relaxed text-slate-700")}
+      style={tb ? { fontSize: 15, lineHeight: 1.6, color: TEXTBOOK.text } : undefined}
+    >
+      {text}
+    </p>
+  )
 }
 
-function ChipList({ items, className }: { items: string[]; className?: string }) {
+type ChipTone = "list" | "vocab" | "collocation" | "phrase" | "speaking" | "default"
+
+function ChipList({
+  items,
+  className,
+  tone = "list",
+}: {
+  items: string[]
+  className?: string
+  tone?: ChipTone
+}) {
+  const tb = useTB()
+  if (!tb) {
+    return (
+      <div className={cn("flex flex-wrap gap-2", className)}>
+        {items.map((item) => (
+          <span
+            key={item}
+            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    )
+  }
+
+  const toneStyle: Record<ChipTone, CSSProperties> = {
+    list: {
+      backgroundColor: TEXTBOOK.content,
+      border: `1px solid ${TEXTBOOK.border}`,
+      color: TEXTBOOK.text,
+      padding: "4px 12px",
+      borderRadius: 4,
+    },
+    vocab: {
+      backgroundColor: TEXTBOOK.correctSoft,
+      color: TEXTBOOK.correctDeep,
+      fontStyle: "italic",
+      padding: "4px 16px",
+      borderRadius: 4,
+    },
+    collocation: {
+      backgroundColor: TEXTBOOK.orangeSoft,
+      color: TEXTBOOK.orange,
+      padding: "4px 14px",
+      borderRadius: 4,
+    },
+    phrase: {
+      backgroundColor: TEXTBOOK.accentWash,
+      color: TEXTBOOK.accentDeep,
+      fontStyle: "italic",
+      fontWeight: 600,
+      padding: "4px 16px",
+      borderRadius: 4,
+    },
+    speaking: {
+      backgroundColor: TEXTBOOK.tipSoft,
+      color: TEXTBOOK.tipText,
+      fontStyle: "italic",
+      border: `1px solid ${TEXTBOOK.tipBorder}`,
+      padding: "6px 16px",
+      borderRadius: 4,
+    },
+    default: {
+      backgroundColor: TEXTBOOK.mutedSoft,
+      color: TEXTBOOK.muted,
+      padding: "4px 12px",
+      borderRadius: 4,
+    },
+  }
+
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
+    <div
+      className={cn("flex flex-wrap", className)}
+      style={{ gap: "8px 20px" }}
+    >
       {items.map((item) => (
-        <span
-          key={item}
-          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800"
-        >
+        <span key={item} className="text-[14px]" style={toneStyle[tone]}>
           {item}
         </span>
       ))}
@@ -47,33 +155,147 @@ function ChipList({ items, className }: { items: string[]; className?: string })
   )
 }
 
+function AudioMark({ track }: { track: string | number }) {
+  const tb = useTB()
+  return (
+    <span
+      className={cn("text-sm", !tb && "rounded-full border px-2 py-0.5")}
+      style={
+        tb
+          ? { color: TEXTBOOK.audio, fontWeight: 600 }
+          : undefined
+      }
+    >
+      ♪ Audio {String(track)}
+    </span>
+  )
+}
+
+function BlankRow({ children }: { children: ReactNode }) {
+  const tb = useTB()
+  return (
+    <div
+      className={cn(!tb && "rounded-xl border border-slate-200 bg-white p-4")}
+      style={
+        tb
+          ? {
+              backgroundColor: TEXTBOOK.content,
+              borderLeft: `3px solid ${TEXTBOOK.accent}`,
+              padding: "8px 12px",
+              borderRadius: 4,
+            }
+          : undefined
+      }
+    >
+      {children}
+    </div>
+  )
+}
+
+function PassageBox({ children }: { children: ReactNode }) {
+  const tb = useTB()
+  return (
+    <div
+      className={cn(
+        "overflow-y-auto text-sm leading-relaxed",
+        !tb && "max-h-72 rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800",
+      )}
+      style={
+        tb
+          ? {
+              backgroundColor: TEXTBOOK.content,
+              border: `1px solid ${TEXTBOOK.border}`,
+              padding: "20px 25px",
+              borderRadius: 6,
+              lineHeight: 1.8,
+              maxHeight: 300,
+              color: TEXTBOOK.text,
+              fontSize: 15,
+            }
+          : undefined
+      }
+    >
+      {children}
+    </div>
+  )
+}
+
+function TipBox({ children }: { children: ReactNode }) {
+  const tb = useTB()
+  return (
+    <div
+      className={cn(!tb && "rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950")}
+      style={
+        tb
+          ? {
+              backgroundColor: TEXTBOOK.tipSoft,
+              borderLeft: `4px solid ${TEXTBOOK.tip}`,
+              padding: "12px 18px",
+              borderRadius: 4,
+              color: TEXTBOOK.text,
+              fontSize: 14,
+            }
+          : undefined
+      }
+    >
+      {children}
+    </div>
+  )
+}
+
+function Panel({ children, className }: { children: ReactNode; className?: string }) {
+  const tb = useTB()
+  return (
+    <div
+      className={cn(!tb && "rounded-xl border border-slate-200 bg-white p-4", className)}
+      style={
+        tb
+          ? {
+              backgroundColor: TEXTBOOK.content,
+              border: `1px solid ${TEXTBOOK.border}`,
+              borderRadius: 6,
+              padding: "12px 14px",
+            }
+          : undefined
+      }
+    >
+      {children}
+    </div>
+  )
+}
+
 function VocabChecklist({ raw }: { raw: BookExerciseRaw }) {
-  return <ChipList items={asStringArray(raw.items)} className="mt-4" />
+  return <ChipList items={asStringArray(raw.items)} className="mt-4" tone="vocab" />
 }
 
 function VocabTable({ raw }: { raw: BookExerciseRaw }) {
   const table = isRecord(raw.table) ? raw.table : {}
   const bank = asStringArray(raw.items)
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-4">
       {bank.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">Word box</p>
-          <ChipList items={bank} />
+          <p
+            className={cn("mb-2 text-xs font-medium uppercase tracking-wide", !tb && "text-slate-500")}
+            style={tb ? { color: TEXTBOOK.muted } : undefined}
+          >
+            Word box
+          </p>
+          <ChipList items={bank} tone="vocab" />
         </div>
       )}
       <div className="grid gap-3 md:grid-cols-2">
         {Object.entries(table).map(([col, vals]) => (
-          <div key={col} className="rounded-xl border border-slate-200 bg-white p-4">
-            <h4 className="mb-3 text-sm font-semibold text-slate-900">{col}</h4>
-            <ul className="space-y-1.5 text-sm text-slate-700">
-              {asStringArray(vals).map((v) => (
-                <li key={v} className="rounded-md bg-slate-50 px-2 py-1">
-                  {v}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Panel key={col}>
+            <h4
+              className={cn("mb-3 text-sm font-semibold", !tb && "text-slate-900")}
+              style={tb ? { color: TEXTBOOK.heading } : undefined}
+            >
+              {col}
+            </h4>
+            <ChipList items={asStringArray(vals)} tone="list" />
+          </Panel>
         ))}
       </div>
     </div>
@@ -83,15 +305,21 @@ function VocabTable({ raw }: { raw: BookExerciseRaw }) {
 function PrefixChoice({ raw }: { raw: BookExerciseRaw }) {
   const items = asStringArray(raw.items)
   const answers = isRecord(raw.answers) ? raw.answers : {}
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-4">
-      <ChipList items={items} />
+      <ChipList items={items} tone="list" />
       <div className="grid gap-3 md:grid-cols-2">
         {Object.entries(answers).map(([prefix, vals]) => (
-          <div key={prefix} className="rounded-xl border border-slate-200 p-4">
-            <h4 className="mb-2 font-semibold text-sky-800">{prefix}</h4>
-            <ChipList items={asStringArray(vals)} />
-          </div>
+          <Panel key={prefix}>
+            <h4
+              className={cn("mb-2 font-semibold", !tb && "text-sky-800")}
+              style={tb ? { color: TEXTBOOK.headingAccent } : undefined}
+            >
+              {prefix}
+            </h4>
+            <ChipList items={asStringArray(vals)} tone="vocab" />
+          </Panel>
         ))}
       </div>
     </div>
@@ -101,19 +329,34 @@ function PrefixChoice({ raw }: { raw: BookExerciseRaw }) {
 function WordFormation({ raw }: { raw: BookExerciseRaw }) {
   const items = asStringArray(raw.items)
   const answers = asStringArray(raw.answers)
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-3">
       {items.map((item, i) => (
-        <div
-          key={item}
-          className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"
-        >
-          <span className="font-medium text-slate-900">{item}</span>
-          <span className="text-slate-400">→</span>
-          <span className="rounded-md bg-emerald-50 px-2 py-1 text-sm text-emerald-800">
-            {answers[i] ?? "—"}
-          </span>
-        </div>
+        <BlankRow key={item}>
+          <div className="flex flex-wrap items-center gap-3 text-[15px]">
+            <span className="font-medium" style={tb ? { color: TEXTBOOK.text } : undefined}>
+              {item}
+            </span>
+            <span style={{ color: TEXTBOOK.muted }}>→</span>
+            <span
+              className={cn(!tb && "rounded-md bg-emerald-50 px-2 py-1 text-sm text-emerald-800")}
+              style={
+                tb
+                  ? {
+                      borderBottom: `2px dotted ${TEXTBOOK.accent}`,
+                      minWidth: 120,
+                      color: TEXTBOOK.headingAccent,
+                      display: "inline-block",
+                      padding: "0 4px",
+                    }
+                  : undefined
+              }
+            >
+              {answers[i] ?? "______"}
+            </span>
+          </div>
+        </BlankRow>
       ))}
     </div>
   )
@@ -126,16 +369,26 @@ function FillBlankSentences({ raw }: { raw: BookExerciseRaw }) {
       {items.map((it, idx) => {
         if (!isRecord(it)) return null
         return (
-          <li key={idx} className="rounded-xl border border-slate-200 bg-white p-4">
-            <p className="text-sm leading-relaxed text-slate-800">
-              <span className="mr-2 font-semibold text-slate-500">{idx + 1}.</span>
-              {String(it.sentence ?? "")}
-            </p>
-            {"answer" in it && (
-              <p className="mt-2 text-sm text-emerald-700">
-                Answer: <span className="font-medium">{String(it.answer)}</span>
+          <li key={idx}>
+            <BlankRow>
+              <p className="text-[15px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
+                <span
+                  className="mr-2 font-bold"
+                  style={{ color: TEXTBOOK.headingAccent }}
+                >
+                  {idx + 1}.
+                </span>
+                {String(it.sentence ?? "")}
               </p>
-            )}
+              {"answer" in it && (
+                <p
+                  className="mt-2 text-sm font-semibold"
+                  style={{ color: TEXTBOOK.correct }}
+                >
+                  {String(it.answer)}
+                </p>
+              )}
+            </BlankRow>
           </li>
         )
       })}
@@ -146,15 +399,21 @@ function FillBlankSentences({ raw }: { raw: BookExerciseRaw }) {
 function Classification({ raw }: { raw: BookExerciseRaw }) {
   const items = asStringArray(raw.items)
   const answers = isRecord(raw.answers) ? raw.answers : {}
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-4">
-      <ChipList items={items} />
+      <ChipList items={items} tone="list" />
       <div className="grid gap-3 md:grid-cols-2">
         {Object.entries(answers).map(([bucket, vals]) => (
-          <div key={bucket} className="rounded-xl border border-slate-200 p-4">
-            <h4 className="mb-2 text-sm font-semibold capitalize text-slate-900">{bucket}</h4>
-            <ChipList items={asStringArray(vals)} />
-          </div>
+          <Panel key={bucket}>
+            <h4
+              className={cn("mb-2 text-sm font-semibold capitalize", !tb && "text-slate-900")}
+              style={tb ? { color: TEXTBOOK.heading } : undefined}
+            >
+              {bucket}
+            </h4>
+            <ChipList items={asStringArray(vals)} tone="collocation" />
+          </Panel>
         ))}
       </div>
     </div>
@@ -164,52 +423,76 @@ function Classification({ raw }: { raw: BookExerciseRaw }) {
 function ReadingTfng({ raw }: { raw: BookExerciseRaw }) {
   const questions = Array.isArray(raw.questions) ? raw.questions : []
   const options = Array.isArray(raw.options) ? raw.options : []
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-4">
       {typeof raw.title === "string" && (
-        <h4 className="text-center text-base font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4">
+        <h4
+          className={cn("text-center text-base font-semibold", !tb && "underline decoration-slate-300 underline-offset-4 text-slate-900")}
+          style={tb ? { color: TEXTBOOK.heading, fontSize: 16, fontWeight: 700 } : undefined}
+        >
           {raw.title}
         </h4>
       )}
-      <div className="max-h-72 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-relaxed text-slate-800">
-        {String(raw.passage ?? "")}
-      </div>
+      <PassageBox>{String(raw.passage ?? "")}</PassageBox>
       {options.length > 0 && (
-        <div className="rounded-xl border border-violet-200 bg-violet-50 p-3">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-violet-800">
+        <Panel>
+          <p
+            className="mb-2 text-xs font-semibold uppercase tracking-wide"
+            style={{ color: TEXTBOOK.muted }}
+          >
             Options
           </p>
-          <ul className="space-y-1 text-sm text-slate-800">
+          <ul className="flex flex-wrap gap-[5px_15px] text-[14px] max-[650px]:flex-col">
             {options.map((opt, i) => {
               if (!isRecord(opt)) return null
               return (
-                <li key={i}>
-                  <span className="font-bold text-violet-800">{String(opt.letter)} </span>
+                <li
+                  key={i}
+                  className="rounded px-3 py-1.5"
+                  style={{
+                    backgroundColor: TEXTBOOK.content,
+                    border: `1px solid ${TEXTBOOK.border}`,
+                  }}
+                >
+                  <span className="font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                    {String(opt.letter)}{" "}
+                  </span>
                   {String(opt.text ?? opt.name ?? "")}
                 </li>
               )
             })}
           </ul>
-        </div>
+        </Panel>
       )}
-      {typeof raw.test_tip === "string" && (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
-          {raw.test_tip}
-        </p>
-      )}
+      {typeof raw.test_tip === "string" && <TipBox>{raw.test_tip}</TipBox>}
       {questions.length > 0 ? (
         <ol className="space-y-3">
           {questions.map((q) => {
             if (!isRecord(q)) return null
             return (
-              <li key={String(q.number)} className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <p className="text-sm text-slate-800">
-                    <span className="mr-2 font-semibold">{String(q.number)}.</span>
-                    {String(q.statement ?? "")}
-                  </p>
-                  <Badge variant="secondary">{String(q.answer ?? "")}</Badge>
-                </div>
+              <li key={String(q.number)}>
+                <BlankRow>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
+                      <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                        {String(q.number)}.
+                      </span>
+                      {String(q.statement ?? "")}
+                    </p>
+                    {q.answer != null ? (
+                      <span
+                        className="rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wide"
+                        style={{
+                          backgroundColor: TEXTBOOK.correctSoft,
+                          color: TEXTBOOK.correctDeep,
+                        }}
+                      >
+                        {String(q.answer)}
+                      </span>
+                    ) : null}
+                  </div>
+                </BlankRow>
               </li>
             )
           })}
@@ -225,19 +508,39 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
     : Array.isArray(raw.items)
       ? raw.items
       : []
+  const tb = useTB()
   return (
-    <div className="mt-4 space-y-2">
+    <div
+      className="mt-4 grid gap-2"
+      style={
+        tb
+          ? { gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "6px 20px" }
+          : undefined
+      }
+    >
       {rows.map((row, i) => {
         if (!isRecord(row)) return null
         return (
           <div
             key={i}
-            className="grid gap-2 rounded-xl border border-slate-200 bg-white p-3 md:grid-cols-2"
+            className={cn(!tb && "grid gap-2 rounded-xl border border-slate-200 bg-white p-3 md:grid-cols-2")}
+            style={
+              tb
+                ? {
+                    backgroundColor: TEXTBOOK.content,
+                    border: `1px solid ${TEXTBOOK.borderAlt}`,
+                    borderRadius: 4,
+                    padding: "6px 20px",
+                    fontSize: 14,
+                  }
+                : undefined
+            }
           >
-            <div className="text-sm text-slate-600">{String(row.original ?? "")}</div>
-            <div className="text-sm font-medium text-sky-900">
+            <span style={{ color: TEXTBOOK.muted }}>{String(row.original ?? "")}</span>
+            <span style={{ color: TEXTBOOK.muted }}> | </span>
+            <span className="font-semibold" style={{ color: TEXTBOOK.headingAccent }}>
               {String(row.paraphrase ?? row.answer ?? "")}
-            </div>
+            </span>
           </div>
         )
       })}
@@ -249,32 +552,34 @@ function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
   const notes = isRecord(raw.notes) ? raw.notes : {}
   const body = asStringArray(notes.body)
   const answers = asStringArray(raw.answers)
+  const tb = useTB()
   return (
     <div className="mt-4 space-y-4">
-      {raw.audio_track != null && (
-        <Badge variant="outline">Audio track {String(raw.audio_track)}</Badge>
-      )}
-      {typeof raw.test_tip === "string" && (
-        <p className="rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm text-sky-900">
-          {raw.test_tip}
-        </p>
-      )}
-      <div className="rounded-xl border border-slate-200 bg-white p-4">
+      {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
+      {typeof raw.test_tip === "string" && <TipBox>{raw.test_tip}</TipBox>}
+      <Panel>
         {typeof notes.title === "string" && (
-          <h4 className="mb-3 font-semibold text-slate-900">{notes.title}</h4>
+          <h4
+            className="mb-3 font-semibold"
+            style={tb ? { color: TEXTBOOK.heading } : undefined}
+          >
+            {notes.title}
+          </h4>
         )}
-        <ul className="space-y-2 text-sm leading-relaxed text-slate-800">
+        <ul className="space-y-2 text-[15px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
           {body.map((line, i) => (
             <li key={i}>{line}</li>
           ))}
         </ul>
-      </div>
+      </Panel>
       {answers.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-medium uppercase text-slate-500">Answers 1–{answers.length}</p>
+          <p className="mb-2 text-xs font-medium uppercase" style={{ color: TEXTBOOK.muted }}>
+            Answers 1–{answers.length}
+          </p>
           <ol className="grid gap-1 sm:grid-cols-2">
             {answers.map((a, i) => (
-              <li key={i} className="text-sm text-emerald-800">
+              <li key={i} className="text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
                 {i + 1}. {a}
               </li>
             ))}
@@ -290,9 +595,15 @@ function DiscussionQuestions({ raw }: { raw: BookExerciseRaw }) {
   return (
     <ol className="mt-4 space-y-3">
       {questions.map((q, i) => (
-        <li key={i} className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-800">
-          <span className="mr-2 font-semibold text-slate-500">{i + 1}.</span>
-          {q}
+        <li key={i}>
+          <BlankRow>
+            <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
+              <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                {i + 1}.
+              </span>
+              {q}
+            </p>
+          </BlankRow>
         </li>
       ))}
     </ol>
@@ -303,17 +614,19 @@ function ListeningStructured({ raw }: { raw: BookExerciseRaw }) {
   const items = Array.isArray(raw.items) ? raw.items : []
   return (
     <div className="mt-4 space-y-3">
-      {raw.audio_track != null && (
-        <Badge variant="outline">Audio track {String(raw.audio_track)}</Badge>
-      )}
+      {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       {items.map((it, i) => {
         if (!isRecord(it)) return null
         return (
-          <div key={i} className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
-            <p className="font-medium text-slate-900">Speaker {String(it.speaker)}</p>
-            <p className="mt-1 text-slate-600">Person: {String(it.person ?? "—")}</p>
-            <ChipList items={asStringArray(it.adjectives)} className="mt-2" />
-          </div>
+          <Panel key={i}>
+            <p className="font-semibold text-[15px]" style={{ color: TEXTBOOK.heading }}>
+              Speaker {String(it.speaker)}
+            </p>
+            <p className="mt-1 text-sm" style={{ color: TEXTBOOK.muted }}>
+              Person: {String(it.person ?? "—")}
+            </p>
+            <ChipList items={asStringArray(it.adjectives)} className="mt-2" tone="vocab" />
+          </Panel>
         )
       })}
     </div>
@@ -323,18 +636,24 @@ function ListeningStructured({ raw }: { raw: BookExerciseRaw }) {
 function ListeningMatch({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div className="mt-4 space-y-3">
-      {raw.audio_track != null && (
-        <Badge variant="outline">Audio track {String(raw.audio_track)}</Badge>
-      )}
+      {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 p-4 text-sm">
-          <p className="font-medium">Speaker 1</p>
-          <p className="mt-1 text-slate-700">{String(raw.speaker_1 ?? "—")}</p>
-        </div>
-        <div className="rounded-xl border border-slate-200 p-4 text-sm">
-          <p className="font-medium">Speaker 2</p>
-          <p className="mt-1 text-slate-700">{String(raw.speaker_2 ?? "—")}</p>
-        </div>
+        <Panel>
+          <p className="font-semibold" style={{ color: TEXTBOOK.heading }}>
+            Speaker 1
+          </p>
+          <p className="mt-1 text-[15px]" style={{ color: TEXTBOOK.text }}>
+            {String(raw.speaker_1 ?? "—")}
+          </p>
+        </Panel>
+        <Panel>
+          <p className="font-semibold" style={{ color: TEXTBOOK.heading }}>
+            Speaker 2
+          </p>
+          <p className="mt-1 text-[15px]" style={{ color: TEXTBOOK.text }}>
+            {String(raw.speaker_2 ?? "—")}
+          </p>
+        </Panel>
       </div>
     </div>
   )
@@ -343,14 +662,18 @@ function ListeningMatch({ raw }: { raw: BookExerciseRaw }) {
 function ExpressionNotes({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div className="mt-4 grid gap-3 md:grid-cols-2">
-      <div className="rounded-xl border border-slate-200 p-4">
-        <h4 className="mb-2 text-sm font-semibold">Speaker 1</h4>
-        <ChipList items={asStringArray(raw.speaker_1_expressions)} />
-      </div>
-      <div className="rounded-xl border border-slate-200 p-4">
-        <h4 className="mb-2 text-sm font-semibold">Speaker 2</h4>
-        <ChipList items={asStringArray(raw.speaker_2_expressions)} />
-      </div>
+      <Panel>
+        <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+          Speaker 1
+        </h4>
+        <ChipList items={asStringArray(raw.speaker_1_expressions)} tone="phrase" />
+      </Panel>
+      <Panel>
+        <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+          Speaker 2
+        </h4>
+        <ChipList items={asStringArray(raw.speaker_2_expressions)} tone="phrase" />
+      </Panel>
     </div>
   )
 }
@@ -358,13 +681,9 @@ function ExpressionNotes({ raw }: { raw: BookExerciseRaw }) {
 function SummaryCompletion({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div className="mt-4 space-y-3">
-      {raw.audio_track != null && (
-        <Badge variant="outline">Audio track {String(raw.audio_track)}</Badge>
-      )}
-      <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed text-slate-800">
-        {String(raw.summary ?? "")}
-      </p>
-      <ChipList items={asStringArray(raw.answers)} />
+      {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
+      <PassageBox>{String(raw.summary ?? "")}</PassageBox>
+      <ChipList items={asStringArray(raw.answers)} tone="vocab" />
     </div>
   )
 }
@@ -376,16 +695,22 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
   const sentences = Array.isArray(raw.sentences) ? raw.sentences : []
   return (
     <div className="mt-4 space-y-4">
-      <ChipList items={bank} />
+      <ChipList items={bank} tone="vocab" />
       <ol className="space-y-3">
         {sentences.map((s, i) => {
           if (!isRecord(s)) return null
           return (
-            <li key={i} className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
-              <p>{String(s.sentence ?? "")}</p>
-              {"answer" in s && (
-                <p className="mt-2 text-emerald-700">Answer: {String(s.answer)}</p>
-              )}
+            <li key={i}>
+              <BlankRow>
+                <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
+                  {String(s.sentence ?? "")}
+                </p>
+                {"answer" in s && (
+                  <p className="mt-2 text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
+                    {String(s.answer)}
+                  </p>
+                )}
+              </BlankRow>
             </li>
           )
         })}
@@ -397,13 +722,13 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
 function GapFillPassage({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div className="mt-4 space-y-4">
-      <ChipList items={asStringArray(raw.words)} />
-      <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed whitespace-pre-wrap">
-        {String(raw.text ?? "")}
-      </p>
+      <ChipList items={asStringArray(raw.words)} tone="list" />
+      <PassageBox>
+        <span className="whitespace-pre-wrap">{String(raw.text ?? "")}</span>
+      </PassageBox>
       <ol className="grid gap-1 sm:grid-cols-2">
         {asStringArray(raw.answers).map((a, i) => (
-          <li key={i} className="text-sm text-emerald-800">
+          <li key={i} className="text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
             {i + 1}. {a}
           </li>
         ))}
@@ -414,10 +739,17 @@ function GapFillPassage({ raw }: { raw: BookExerciseRaw }) {
 
 function ImagePrompt({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-      <p className="text-sm font-medium text-slate-700">Image / mind map</p>
+    <div
+      className="mt-4 rounded-md border border-dashed p-6 text-center"
+      style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.exerciseBg }}
+    >
+      <p className="text-sm font-medium" style={{ color: TEXTBOOK.heading }}>
+        Image / mind map
+      </p>
       {typeof raw.image_description === "string" && (
-        <p className="mt-2 text-sm text-slate-500">{raw.image_description}</p>
+        <p className="mt-2 text-sm" style={{ color: TEXTBOOK.muted }}>
+          {raw.image_description}
+        </p>
       )}
     </div>
   )
@@ -425,32 +757,38 @@ function ImagePrompt({ raw }: { raw: BookExerciseRaw }) {
 
 function GraphTask({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-      <p className="text-sm font-medium text-slate-700">Graph task</p>
-      <p className="mt-2 text-sm text-slate-500">
+    <div
+      className="mt-4 rounded-md border border-dashed p-6 text-center"
+      style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.exerciseBg }}
+    >
+      <p className="text-sm font-medium" style={{ color: TEXTBOOK.heading }}>
+        Graph task
+      </p>
+      <p className="mt-2 text-sm" style={{ color: TEXTBOOK.muted }}>
         Use the book graph while students complete the prompts.
       </p>
-      {Array.isArray(raw.answers) && <ChipList items={asStringArray(raw.answers)} className="mt-4 justify-center" />}
+      {Array.isArray(raw.answers) && (
+        <ChipList items={asStringArray(raw.answers)} className="mt-4 justify-center" tone="list" />
+      )}
     </div>
   )
 }
 
 function SpeakingTopic({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 rounded-xl border border-violet-200 bg-violet-50 p-5">
-      <p className="text-sm font-medium text-violet-900">Speaking topic</p>
-      <p className="mt-2 text-sm leading-relaxed text-violet-950">{String(raw.topic ?? "")}</p>
+    <div className="mt-4">
+      <ChipList items={[String(raw.topic ?? "")]} tone="speaking" />
     </div>
   )
 }
 
 function AnswerList({ raw }: { raw: BookExerciseRaw }) {
-  return <ChipList items={asStringArray(raw.answers)} className="mt-4" />
+  return <ChipList items={asStringArray(raw.answers)} className="mt-4" tone="vocab" />
 }
 
 function InstructionOnly() {
   return (
-    <p className="mt-4 text-sm text-slate-500">
+    <p className="mt-4 text-sm" style={{ color: TEXTBOOK.muted }}>
       Follow the instruction with the class. No additional item bank in the book JSON.
     </p>
   )
@@ -490,13 +828,14 @@ export function BookExerciseRenderer({
   className?: string
   /** Teachers see answer key; students must not. */
   showAnswers?: boolean
-  /** `cambridge` matches mobile/book page chrome. */
-  variant?: "admin" | "cambridge"
+  /** `cambridge` / `textbook` = academic book page styles. */
+  variant?: "admin" | "cambridge" | "textbook"
 }) {
   const Renderer = RENDERERS[step.uiType] ?? (() => <InstructionOnly />)
   const raw = showAnswers ? step.raw : stripClientAnswers(step.raw)
+  const textbook = variant === "cambridge" || variant === "textbook"
 
-  if (variant === "cambridge") {
+  if (textbook) {
     const exLabel =
       step.exerciseId === "test_practice"
         ? step.sectionLabel
@@ -504,43 +843,62 @@ export function BookExerciseRenderer({
           ? String(step.exerciseId)
           : step.exerciseId
     return (
-      <div
-        className={cn(
-          "mb-6 border-b pb-5 last:mb-0 last:border-b-0 last:pb-0",
-          className,
-        )}
-        style={{ borderColor: "#C4A8E0" }}
-      >
-        <div className="mb-2 flex items-start gap-2">
-          <span
-            className="mt-0.5 inline-flex min-w-8 shrink-0 items-center justify-center rounded-sm px-1.5 py-0.5 text-xs font-bold text-white"
-            style={{ backgroundColor: "#6B3FA0" }}
-          >
-            {exLabel}
-          </span>
-          <p className="font-serif text-[15px] leading-relaxed text-[#2B1B45]">
-            {step.instruction}
-          </p>
-        </div>
-        <div className="cambridge-exercise pl-0 sm:pl-10">
+      <TextbookMode.Provider value={true}>
+        <div
+          className={cn("mb-[30px] last:mb-0", className)}
+          style={{
+            fontFamily: TEXTBOOK.font,
+            backgroundColor: TEXTBOOK.exerciseBg,
+            borderRadius: 6,
+            padding: "15px 20px",
+          }}
+        >
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span
+              className="text-[16px] font-bold"
+              style={{
+                backgroundColor: TEXTBOOK.accentSoft,
+                color: TEXTBOOK.headingAccent,
+                padding: "2px 10px",
+                borderRadius: 4,
+              }}
+            >
+              {exLabel}
+            </span>
+            <span
+              className="text-[11px] font-semibold uppercase tracking-[1px]"
+              style={{
+                backgroundColor: TEXTBOOK.mutedSoft,
+                color: TEXTBOOK.muted,
+                padding: "2px 12px",
+                borderRadius: 12,
+              }}
+            >
+              {step.uiLabel}
+            </span>
+            {raw.audio_track != null ? <AudioMark track={String(raw.audio_track)} /> : null}
+          </div>
+          <Instruction text={step.instruction} />
           <Renderer raw={raw} />
+          {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
         </div>
-        {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
-      </div>
+      </TextbookMode.Provider>
     )
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="secondary">{step.uiLabel}</Badge>
-        <Badge variant="outline">{step.sectionLabel}</Badge>
-        <span className="text-xs text-slate-500">Exercise {step.exerciseId}</span>
+    <TextbookMode.Provider value={false}>
+      <div className={cn("space-y-3", className)}>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">{step.uiLabel}</Badge>
+          <Badge variant="outline">{step.sectionLabel}</Badge>
+          <span className="text-xs text-slate-500">Exercise {step.exerciseId}</span>
+        </div>
+        <Instruction text={step.instruction} />
+        <Renderer raw={raw} />
+        {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
       </div>
-      <Instruction text={step.instruction} />
-      <Renderer raw={raw} />
-      {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
-    </div>
+    </TextbookMode.Provider>
   )
 }
 
