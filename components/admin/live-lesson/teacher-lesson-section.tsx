@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { CardGridSkeleton, TableSkeleton } from "@/components/admin/skeletons"
+import { TableSkeleton } from "@/components/admin/skeletons"
 import { BookExerciseRenderer } from "@/components/admin/live-lesson/book-exercise-renderer"
 import {
   CambridgeBookChrome,
@@ -676,8 +676,7 @@ export default function TeacherLessonSection() {
   if (loading || (view === "history" && historyLoading && history.length === 0)) {
     return (
       <div className="space-y-4">
-        <CardGridSkeleton count={3} columns={3} />
-        <TableSkeleton rows={4} />
+        <TableSkeleton rows={6} columns={8} />
       </div>
     )
   }
@@ -685,6 +684,69 @@ export default function TeacherLessonSection() {
   if (view === "history") {
     const openLessons = history.filter((h) => h.lessonStatus !== "finished")
     const pastLessons = history.filter((h) => h.lessonStatus === "finished")
+
+    const renderRows = (rows: LiveLessonListItem[], { finished }: { finished: boolean }) =>
+      rows.map((item) => (
+        <tr
+          key={item.id}
+          onClick={() => {
+            if (!busy) void openLessonFromHistory(item)
+          }}
+          className={cn(
+            "cursor-pointer border-b border-slate-100 transition-colors hover:bg-slate-50",
+            busy && "pointer-events-none opacity-60",
+          )}
+        >
+          <td className="px-3 py-3">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {finished ? (
+                <Badge variant="secondary">finished</Badge>
+              ) : (
+                <Badge className={statusBadgeClass(item.lessonStatus)}>{item.lessonStatus}</Badge>
+              )}
+              {!finished && item.openForStudents ? (
+                <Badge variant="outline" className="border-emerald-400 text-emerald-800">
+                  open
+                </Badge>
+              ) : null}
+            </div>
+          </td>
+          <td className="px-3 py-3 font-medium text-slate-900">
+            {groupName(String(item.groupId))}
+          </td>
+          <td className="px-3 py-3 text-slate-700">{bookLabel(item.bookId)}</td>
+          <td className="px-3 py-3 tabular-nums text-slate-700">
+            {item.currentUnit != null ? item.currentUnit : "—"}
+          </td>
+          <td className="px-3 py-3 text-slate-700">{item.currentExercise ?? "—"}</td>
+          <td className="px-3 py-3 tabular-nums text-slate-700">
+            {finished
+              ? item.studentCount
+              : `${item.onlineCount}/${item.studentCount}`}
+          </td>
+          <td className="px-3 py-3 whitespace-nowrap text-slate-600">
+            {finished
+              ? item.finishedAt
+                ? new Date(item.finishedAt).toLocaleString()
+                : new Date(item.updatedAt).toLocaleString()
+              : new Date(item.updatedAt).toLocaleString()}
+          </td>
+          <td className="px-3 py-3 text-right">
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={busy}
+              onClick={(e) => {
+                e.stopPropagation()
+                void openLessonFromHistory(item)
+              }}
+            >
+              {finished ? "Results" : "Open"}
+            </Button>
+          </td>
+        </tr>
+      ))
+
     return (
       <div className="space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -705,95 +767,60 @@ export default function TeacherLessonSection() {
           </div>
         )}
 
-        <section className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Active &amp; ready
-          </h3>
+        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="border-b border-slate-100 px-4 py-3">
+            <h3 className="text-sm font-semibold text-slate-900">Active &amp; ready</h3>
+          </div>
           {openLessons.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+            <p className="px-4 py-10 text-center text-sm text-slate-500">
               No open lessons. Tap New lesson to begin.
             </p>
           ) : (
-            <ul className="space-y-2">
-              {openLessons.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => void openLessonFromHistory(item)}
-                    className="flex w-full flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-sky-300 hover:shadow-sm"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge className={statusBadgeClass(item.lessonStatus)}>
-                          {item.lessonStatus}
-                        </Badge>
-                        {item.openForStudents && (
-                          <Badge variant="outline" className="border-emerald-400 text-emerald-800">
-                            Students open
-                          </Badge>
-                        )}
-                        <span className="text-sm font-semibold text-slate-900">
-                          {groupName(String(item.groupId))}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {bookLabel(item.bookId)}
-                        {item.currentUnit != null ? ` · Unit ${item.currentUnit}` : ""}
-                        {item.currentExercise ? ` · Ex ${item.currentExercise}` : ""}
-                      </p>
-                    </div>
-                    <div className="text-right text-xs text-slate-500">
-                      <p>
-                        {item.onlineCount}/{item.studentCount} students
-                      </p>
-                      <p>{new Date(item.updatedAt).toLocaleString()}</p>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 text-[11px] uppercase tracking-wider text-slate-500">
+                    <th className="px-3 py-3 font-semibold">Status</th>
+                    <th className="px-3 py-3 font-semibold">Group</th>
+                    <th className="px-3 py-3 font-semibold">Book</th>
+                    <th className="px-3 py-3 font-semibold">Unit</th>
+                    <th className="px-3 py-3 font-semibold">Exercise</th>
+                    <th className="px-3 py-3 font-semibold">Students</th>
+                    <th className="px-3 py-3 font-semibold">Updated</th>
+                    <th className="px-3 py-3 font-semibold text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>{renderRows(openLessons, { finished: false })}</tbody>
+              </table>
+            </div>
           )}
         </section>
 
-        <section className="space-y-3">
-          <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
-            <History className="h-4 w-4" />
-            History
-          </h3>
+        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
+            <History className="h-4 w-4 text-slate-500" />
+            <h3 className="text-sm font-semibold text-slate-900">History</h3>
+          </div>
           {pastLessons.length === 0 ? (
-            <p className="text-sm text-slate-500">No finished lessons yet.</p>
+            <p className="px-4 py-10 text-center text-sm text-slate-500">No finished lessons yet.</p>
           ) : (
-            <ul className="space-y-2">
-              {pastLessons.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => void openLessonFromHistory(item)}
-                    className="flex w-full flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-white"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant="secondary">finished</Badge>
-                        <span className="text-sm font-medium text-slate-900">
-                          {groupName(String(item.groupId))}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {bookLabel(item.bookId)}
-                        {item.currentUnit != null ? ` · Unit ${item.currentUnit}` : ""}
-                      </p>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {item.finishedAt
-                        ? new Date(item.finishedAt).toLocaleString()
-                        : new Date(item.updatedAt).toLocaleString()}
-                    </p>
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 text-[11px] uppercase tracking-wider text-slate-500">
+                    <th className="px-3 py-3 font-semibold">Status</th>
+                    <th className="px-3 py-3 font-semibold">Group</th>
+                    <th className="px-3 py-3 font-semibold">Book</th>
+                    <th className="px-3 py-3 font-semibold">Unit</th>
+                    <th className="px-3 py-3 font-semibold">Exercise</th>
+                    <th className="px-3 py-3 font-semibold">Students</th>
+                    <th className="px-3 py-3 font-semibold">Finished</th>
+                    <th className="px-3 py-3 font-semibold text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>{renderRows(pastLessons, { finished: true })}</tbody>
+              </table>
+            </div>
           )}
         </section>
       </div>
