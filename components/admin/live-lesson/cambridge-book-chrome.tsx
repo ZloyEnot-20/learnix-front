@@ -18,24 +18,24 @@ export function CambridgeUnitHeader({
   subtitle?: string
 }) {
   return (
-    <header className="mb-5 text-center" style={font}>
+    <header className="mb-4 text-center" style={font}>
       <p
-        className="text-[32px] font-light uppercase leading-tight tracking-[2px] max-[650px]:text-2xl"
-        style={{ color: TEXTBOOK.heading }}
+        className="font-light uppercase leading-tight tracking-[1.5px] max-[650px]:text-lg"
+        style={{ color: TEXTBOOK.heading, fontSize: TEXTBOOK.type.unitTitle }}
       >
         Unit {unitNumber}
         {title ? `: ${title}` : ""}
       </p>
       {subtitle ? (
         <p
-          className="mt-2 text-[20px] font-semibold"
-          style={{ color: TEXTBOOK.headingAccent }}
+          className="mt-1.5 font-semibold"
+          style={{ color: TEXTBOOK.headingAccent, fontSize: TEXTBOOK.type.unitSubtitle }}
         >
           {subtitle}
         </p>
       ) : null}
       <div
-        className="mx-auto mt-5 h-[3px] w-full"
+        className="mx-auto mt-3 h-[2px] w-full"
         style={{ backgroundColor: TEXTBOOK.heading }}
       />
     </header>
@@ -45,11 +45,12 @@ export function CambridgeUnitHeader({
 export function CambridgeSectionBanner({ title }: { title: string }) {
   return (
     <h2
-      className="mb-5 pl-[15px] text-2xl font-bold max-[650px]:text-xl"
+      className="mb-3 pl-2.5 font-bold"
       style={{
         ...font,
         color: TEXTBOOK.heading,
-        borderLeft: `4px solid ${TEXTBOOK.accent}`,
+        fontSize: TEXTBOOK.type.section,
+        borderLeft: `3px solid ${TEXTBOOK.accent}`,
       }}
     >
       {title}
@@ -138,7 +139,7 @@ export function CambridgeBookChrome({
           <PageSkeleton />
         ) : (
           <div
-            className="relative mx-auto w-full max-w-[900px] rounded-lg px-5 py-6 max-[650px]:px-5 max-[650px]:py-5 sm:px-[50px] sm:py-10"
+            className="relative mx-auto w-full max-w-[900px] rounded-lg px-4 py-5 max-[650px]:px-4 max-[650px]:py-4 sm:px-8 sm:py-7"
             style={{
               backgroundColor: TEXTBOOK.content,
               boxShadow: TEXTBOOK.shadow,

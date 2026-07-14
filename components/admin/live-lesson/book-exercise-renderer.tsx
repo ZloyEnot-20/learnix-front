@@ -19,12 +19,124 @@ function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v)
 }
 
+/** Collect answer key from answer_key slice and/or embedded fields in raw. */
+function collectTeacherAnswers(raw: BookExerciseRaw, key?: unknown): unknown {
+  if (key != null) return key
+  if (raw.answers != null) return raw.answers
+  if (raw.answer != null) return raw.answer
+
+  const fromQuestions =
+    Array.isArray(raw.questions) &&
+    raw.questions.some((q) => isRecord(q) && q.answer != null)
+      ? raw.questions
+          .filter((q): q is Record<string, unknown> => isRecord(q) && q.answer != null)
+          .map((q) => ({
+            number: q.number,
+            answer: q.answer,
+          }))
+      : null
+  if (fromQuestions?.length) return fromQuestions
+
+  const fromItems =
+    Array.isArray(raw.items) &&
+    raw.items.some(
+      (it) =>
+        isRecord(it) &&
+        (it.answer != null || it.paraphrase != null || it.person != null || it.adjectives != null),
+    )
+      ? raw.items
+          .filter((it): it is Record<string, unknown> => isRecord(it))
+          .map((it, i) => {
+            if (it.answer != null) return { n: i + 1, answer: it.answer, sentence: it.sentence }
+            if (it.paraphrase != null) return { original: it.original, paraphrase: it.paraphrase }
+            if (it.speaker != null) {
+              return {
+                speaker: it.speaker,
+                person: it.person,
+                adjectives: it.adjectives,
+              }
+            }
+            return null
+          })
+          .filter(Boolean)
+      : null
+  if (fromItems?.length) return fromItems
+
+  const fromSentences =
+    Array.isArray(raw.sentences) &&
+    raw.sentences.some((s) => isRecord(s) && s.answer != null)
+      ? raw.sentences
+          .filter((s): s is Record<string, unknown> => isRecord(s) && s.answer != null)
+          .map((s, i) => ({ n: i + 1, answer: s.answer }))
+      : null
+  if (fromSentences?.length) return fromSentences
+
+  const fromParaphrases =
+    Array.isArray(raw.paraphrases) &&
+    raw.paraphrases.some((p) => isRecord(p) && p.paraphrase != null)
+      ? raw.paraphrases
+          .filter((p): p is Record<string, unknown> => isRecord(p))
+          .map((p) => ({ original: p.original, paraphrase: p.paraphrase }))
+      : null
+  if (fromParaphrases?.length) return fromParaphrases
+
+  if (raw.speaker_1 || raw.speaker_2) {
+    return { speaker_1: raw.speaker_1, speaker_2: raw.speaker_2 }
+  }
+  if (raw.speaker_1_expressions || raw.speaker_2_expressions) {
+    return {
+      speaker_1_expressions: raw.speaker_1_expressions,
+      speaker_2_expressions: raw.speaker_2_expressions,
+    }
+  }
+  if (isRecord(raw.table) && Object.values(raw.table).some((v) => asStringArray(v).length > 0)) {
+    return raw.table
+  }
+
+  return null
+}
+
+function formatAnswerLines(answers: unknown): string[] {
+  if (answers == null) return []
+  if (typeof answers === "string" || typeof answers === "number" || typeof answers === "boolean") {
+    return [String(answers)]
+  }
+  if (Array.isArray(answers)) {
+    return answers.flatMap((item, i) => {
+      if (typeof item === "string" || typeof item === "number") return [`${i + 1}. ${item}`]
+      if (!isRecord(item)) return [JSON.stringify(item)]
+      if (item.answer != null && item.number != null) return [`${item.number}. ${item.answer}`]
+      if (item.answer != null && item.n != null) return [`${item.n}. ${item.answer}`]
+      if (item.answer != null) return [`${i + 1}. ${item.answer}`]
+      if (item.original != null && item.paraphrase != null) {
+        return [`${item.original} → ${item.paraphrase}`]
+      }
+      if (item.speaker != null) {
+        const adj = asStringArray(item.adjectives).join(", ")
+        return [`Speaker ${item.speaker}: ${item.person ?? "—"}${adj ? ` (${adj})` : ""}`]
+      }
+      return [JSON.stringify(item)]
+    })
+  }
+  if (isRecord(answers)) {
+    return Object.entries(answers).flatMap(([k, v]) => {
+      const vals = asStringArray(v)
+      if (vals.length > 0) return [`${k}: ${vals.join(", ")}`]
+      if (typeof v === "string" || typeof v === "number") return [`${k}: ${v}`]
+      if (Array.isArray(v)) return [`${k}: ${v.map(String).join(", ")}`]
+      return [`${k}: ${JSON.stringify(v)}`]
+    })
+  }
+  return [JSON.stringify(answers, null, 2)]
+}
+
 function TeacherAnswers({ answers }: { answers?: unknown }) {
   const tb = useTB()
-  if (answers == null) return null
+  const lines = formatAnswerLines(answers)
+  if (lines.length === 0) return null
   return (
     <details
-      className="mt-4 rounded p-3"
+      className="mt-3 rounded p-3"
       style={
         tb
           ? {
@@ -36,22 +148,26 @@ function TeacherAnswers({ answers }: { answers?: unknown }) {
     >
       <summary
         className={cn(
-          "cursor-pointer text-sm font-medium",
+          "cursor-pointer text-sm font-medium select-none",
           !tb && "text-amber-900",
         )}
         style={tb ? { color: TEXTBOOK.tipText } : undefined}
       >
-        Teacher answers (answer key)
+        Answers
       </summary>
-      <pre
+      <ol
         className={cn(
-          "mt-3 max-h-64 overflow-auto whitespace-pre-wrap text-xs",
+          "mt-3 max-h-64 list-none space-y-1.5 overflow-auto text-sm",
           !tb && "text-amber-950",
         )}
         style={tb ? { color: TEXTBOOK.text } : undefined}
       >
-        {typeof answers === "string" ? answers : JSON.stringify(answers, null, 2)}
-      </pre>
+        {lines.map((line, i) => (
+          <li key={i} className="font-medium leading-relaxed">
+            {line}
+          </li>
+        ))}
+      </ol>
     </details>
   )
 }
@@ -61,8 +177,16 @@ function Instruction({ text }: { text: string }) {
   if (!text) return null
   return (
     <p
-      className={cn(!tb && "text-base leading-relaxed text-slate-700")}
-      style={tb ? { fontSize: 15, lineHeight: 1.6, color: TEXTBOOK.text } : undefined}
+      className={cn(!tb && "text-sm leading-relaxed text-slate-700")}
+      style={
+        tb
+          ? {
+              fontSize: TEXTBOOK.type.instruction,
+              lineHeight: TEXTBOOK.type.bodyLh,
+              color: TEXTBOOK.text,
+            }
+          : undefined
+      }
     >
       {text}
     </p>
@@ -101,53 +225,59 @@ function ChipList({
       backgroundColor: TEXTBOOK.content,
       border: `1px solid ${TEXTBOOK.border}`,
       color: TEXTBOOK.text,
-      padding: "4px 12px",
+      padding: "2px 8px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
     vocab: {
       backgroundColor: TEXTBOOK.correctSoft,
       color: TEXTBOOK.correctDeep,
       fontStyle: "italic",
-      padding: "4px 16px",
+      padding: "2px 10px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
     collocation: {
       backgroundColor: TEXTBOOK.orangeSoft,
       color: TEXTBOOK.orange,
-      padding: "4px 14px",
+      padding: "2px 10px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
     phrase: {
       backgroundColor: TEXTBOOK.accentWash,
       color: TEXTBOOK.accentDeep,
       fontStyle: "italic",
       fontWeight: 600,
-      padding: "4px 16px",
+      padding: "2px 10px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
     speaking: {
       backgroundColor: TEXTBOOK.tipSoft,
       color: TEXTBOOK.tipText,
       fontStyle: "italic",
       border: `1px solid ${TEXTBOOK.tipBorder}`,
-      padding: "6px 16px",
+      padding: "4px 10px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
     default: {
       backgroundColor: TEXTBOOK.mutedSoft,
       color: TEXTBOOK.muted,
-      padding: "4px 12px",
+      padding: "2px 8px",
       borderRadius: 4,
+      fontSize: TEXTBOOK.type.chip,
     },
   }
 
   return (
     <div
       className={cn("flex flex-wrap", className)}
-      style={{ gap: "8px 20px" }}
+      style={{ gap: "6px 12px" }}
     >
       {items.map((item) => (
-        <span key={item} className="text-[14px]" style={toneStyle[tone]}>
+        <span key={item} className="text-[12px]" style={toneStyle[tone]}>
           {item}
         </span>
       ))}
@@ -181,7 +311,7 @@ function BlankRow({ children }: { children: ReactNode }) {
           ? {
               backgroundColor: TEXTBOOK.content,
               borderLeft: `3px solid ${TEXTBOOK.accent}`,
-              padding: "8px 12px",
+              padding: "6px 10px",
               borderRadius: 4,
             }
           : undefined
@@ -205,12 +335,12 @@ function PassageBox({ children }: { children: ReactNode }) {
           ? {
               backgroundColor: TEXTBOOK.content,
               border: `1px solid ${TEXTBOOK.border}`,
-              padding: "20px 25px",
+              padding: "10px 12px",
               borderRadius: 6,
-              lineHeight: 1.8,
-              maxHeight: 300,
+              lineHeight: TEXTBOOK.type.bodyLh,
+              maxHeight: 260,
               color: TEXTBOOK.text,
-              fontSize: 15,
+              fontSize: TEXTBOOK.type.body,
             }
           : undefined
       }
@@ -229,11 +359,11 @@ function TipBox({ children }: { children: ReactNode }) {
         tb
           ? {
               backgroundColor: TEXTBOOK.tipSoft,
-              borderLeft: `4px solid ${TEXTBOOK.tip}`,
-              padding: "12px 18px",
+              borderLeft: `3px solid ${TEXTBOOK.tip}`,
+              padding: "8px 12px",
               borderRadius: 4,
               color: TEXTBOOK.text,
-              fontSize: 14,
+              fontSize: TEXTBOOK.type.caption,
             }
           : undefined
       }
@@ -254,7 +384,7 @@ function Panel({ children, className }: { children: ReactNode; className?: strin
               backgroundColor: TEXTBOOK.content,
               border: `1px solid ${TEXTBOOK.border}`,
               borderRadius: 6,
-              padding: "12px 14px",
+              padding: "8px 10px",
             }
           : undefined
       }
@@ -265,7 +395,7 @@ function Panel({ children, className }: { children: ReactNode; className?: strin
 }
 
 function VocabChecklist({ raw }: { raw: BookExerciseRaw }) {
-  return <ChipList items={asStringArray(raw.items)} className="mt-4" tone="vocab" />
+  return <ChipList items={asStringArray(raw.items)} className="mt-3" tone="vocab" />
 }
 
 function VocabTable({ raw }: { raw: BookExerciseRaw }) {
@@ -273,7 +403,7 @@ function VocabTable({ raw }: { raw: BookExerciseRaw }) {
   const bank = asStringArray(raw.items)
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       {bank.length > 0 && (
         <div>
           <p
@@ -307,7 +437,7 @@ function PrefixChoice({ raw }: { raw: BookExerciseRaw }) {
   const answers = isRecord(raw.answers) ? raw.answers : {}
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       <ChipList items={items} tone="list" />
       <div className="grid gap-3 md:grid-cols-2">
         {Object.entries(answers).map(([prefix, vals]) => (
@@ -331,10 +461,10 @@ function WordFormation({ raw }: { raw: BookExerciseRaw }) {
   const answers = asStringArray(raw.answers)
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-3 space-y-2.5">
       {items.map((item, i) => (
         <BlankRow key={item}>
-          <div className="flex flex-wrap items-center gap-3 text-[15px]">
+          <div className="flex flex-wrap items-center gap-3 text-[13px]">
             <span className="font-medium" style={tb ? { color: TEXTBOOK.text } : undefined}>
               {item}
             </span>
@@ -365,13 +495,13 @@ function WordFormation({ raw }: { raw: BookExerciseRaw }) {
 function FillBlankSentences({ raw }: { raw: BookExerciseRaw }) {
   const items = Array.isArray(raw.items) ? raw.items : []
   return (
-    <ol className="mt-4 space-y-3">
+    <ol className="mt-3 space-y-2.5">
       {items.map((it, idx) => {
         if (!isRecord(it)) return null
         return (
           <li key={idx}>
             <BlankRow>
-              <p className="text-[15px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
+              <p className="text-[13px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
                 <span
                   className="mr-2 font-bold"
                   style={{ color: TEXTBOOK.headingAccent }}
@@ -401,7 +531,7 @@ function Classification({ raw }: { raw: BookExerciseRaw }) {
   const answers = isRecord(raw.answers) ? raw.answers : {}
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       <ChipList items={items} tone="list" />
       <div className="grid gap-3 md:grid-cols-2">
         {Object.entries(answers).map(([bucket, vals]) => (
@@ -425,11 +555,11 @@ function ReadingTfng({ raw }: { raw: BookExerciseRaw }) {
   const options = Array.isArray(raw.options) ? raw.options : []
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       {typeof raw.title === "string" && (
         <h4
-          className={cn("text-center text-base font-semibold", !tb && "underline decoration-slate-300 underline-offset-4 text-slate-900")}
-          style={tb ? { color: TEXTBOOK.heading, fontSize: 16, fontWeight: 700 } : undefined}
+          className={cn("text-center text-sm font-semibold", !tb && "underline decoration-slate-300 underline-offset-4 text-slate-900")}
+          style={tb ? { color: TEXTBOOK.heading, fontSize: TEXTBOOK.type.section, fontWeight: 700 } : undefined}
         >
           {raw.title}
         </h4>
@@ -443,7 +573,7 @@ function ReadingTfng({ raw }: { raw: BookExerciseRaw }) {
           >
             Options
           </p>
-          <ul className="flex flex-wrap gap-[5px_15px] text-[14px] max-[650px]:flex-col">
+          <ul className="flex flex-wrap gap-[5px_15px] text-[12px] max-[650px]:flex-col">
             {options.map((opt, i) => {
               if (!isRecord(opt)) return null
               return (
@@ -474,11 +604,11 @@ function ReadingTfng({ raw }: { raw: BookExerciseRaw }) {
               <li key={String(q.number)}>
                 <BlankRow>
                   <div className="flex flex-wrap items-start justify-between gap-2">
-                    <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
+                    <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
                       <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
                         {String(q.number)}.
                       </span>
-                      {String(q.statement ?? "")}
+                      {String(q.statement ?? q.text ?? "")}
                     </p>
                     {q.answer != null ? (
                       <span
@@ -511,7 +641,7 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
   const tb = useTB()
   return (
     <div
-      className="mt-4 grid gap-2"
+      className="mt-3 grid gap-2"
       style={
         tb
           ? { gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "6px 20px" }
@@ -530,8 +660,8 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
                     backgroundColor: TEXTBOOK.content,
                     border: `1px solid ${TEXTBOOK.borderAlt}`,
                     borderRadius: 4,
-                    padding: "6px 20px",
-                    fontSize: 14,
+                    padding: "4px 12px",
+                    fontSize: TEXTBOOK.type.body,
                   }
                 : undefined
             }
@@ -539,7 +669,9 @@ function ParaphrasePairs({ raw }: { raw: BookExerciseRaw }) {
             <span style={{ color: TEXTBOOK.muted }}>{String(row.original ?? "")}</span>
             <span style={{ color: TEXTBOOK.muted }}> | </span>
             <span className="font-semibold" style={{ color: TEXTBOOK.headingAccent }}>
-              {String(row.paraphrase ?? row.answer ?? "")}
+              {row.paraphrase != null || row.answer != null
+                ? String(row.paraphrase ?? row.answer ?? "")
+                : "______"}
             </span>
           </div>
         )
@@ -554,7 +686,7 @@ function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
   const answers = asStringArray(raw.answers)
   const tb = useTB()
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       {typeof raw.test_tip === "string" && <TipBox>{raw.test_tip}</TipBox>}
       <Panel>
@@ -566,7 +698,7 @@ function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
             {notes.title}
           </h4>
         )}
-        <ul className="space-y-2 text-[15px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
+        <ul className="space-y-2 text-[13px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
           {body.map((line, i) => (
             <li key={i}>{line}</li>
           ))}
@@ -593,11 +725,11 @@ function ListeningNotes({ raw }: { raw: BookExerciseRaw }) {
 function DiscussionQuestions({ raw }: { raw: BookExerciseRaw }) {
   const questions = asStringArray(raw.questions)
   return (
-    <ol className="mt-4 space-y-3">
+    <ol className="mt-3 space-y-2.5">
       {questions.map((q, i) => (
         <li key={i}>
           <BlankRow>
-            <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
+            <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
               <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
                 {i + 1}.
               </span>
@@ -613,13 +745,13 @@ function DiscussionQuestions({ raw }: { raw: BookExerciseRaw }) {
 function ListeningStructured({ raw }: { raw: BookExerciseRaw }) {
   const items = Array.isArray(raw.items) ? raw.items : []
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-3 space-y-2.5">
       {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       {items.map((it, i) => {
         if (!isRecord(it)) return null
         return (
           <Panel key={i}>
-            <p className="font-semibold text-[15px]" style={{ color: TEXTBOOK.heading }}>
+            <p className="font-semibold text-[13px]" style={{ color: TEXTBOOK.heading }}>
               Speaker {String(it.speaker)}
             </p>
             <p className="mt-1 text-sm" style={{ color: TEXTBOOK.muted }}>
@@ -635,14 +767,14 @@ function ListeningStructured({ raw }: { raw: BookExerciseRaw }) {
 
 function ListeningMatch({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-3 space-y-2.5">
       {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       <div className="grid gap-3 sm:grid-cols-2">
         <Panel>
           <p className="font-semibold" style={{ color: TEXTBOOK.heading }}>
             Speaker 1
           </p>
-          <p className="mt-1 text-[15px]" style={{ color: TEXTBOOK.text }}>
+          <p className="mt-1 text-[13px]" style={{ color: TEXTBOOK.text }}>
             {String(raw.speaker_1 ?? "—")}
           </p>
         </Panel>
@@ -650,7 +782,7 @@ function ListeningMatch({ raw }: { raw: BookExerciseRaw }) {
           <p className="font-semibold" style={{ color: TEXTBOOK.heading }}>
             Speaker 2
           </p>
-          <p className="mt-1 text-[15px]" style={{ color: TEXTBOOK.text }}>
+          <p className="mt-1 text-[13px]" style={{ color: TEXTBOOK.text }}>
             {String(raw.speaker_2 ?? "—")}
           </p>
         </Panel>
@@ -661,7 +793,7 @@ function ListeningMatch({ raw }: { raw: BookExerciseRaw }) {
 
 function ExpressionNotes({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 grid gap-3 md:grid-cols-2">
+    <div className="mt-3 grid gap-3 md:grid-cols-2">
       <Panel>
         <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
           Speaker 1
@@ -680,7 +812,7 @@ function ExpressionNotes({ raw }: { raw: BookExerciseRaw }) {
 
 function SummaryCompletion({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-3 space-y-2.5">
       {raw.audio_track != null && <AudioMark track={String(raw.audio_track)} />}
       <PassageBox>{String(raw.summary ?? "")}</PassageBox>
       <ChipList items={asStringArray(raw.answers)} tone="vocab" />
@@ -694,7 +826,7 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
   const bank = adjectives.length ? adjectives : words
   const sentences = Array.isArray(raw.sentences) ? raw.sentences : []
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       <ChipList items={bank} tone="vocab" />
       <ol className="space-y-3">
         {sentences.map((s, i) => {
@@ -702,8 +834,8 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
           return (
             <li key={i}>
               <BlankRow>
-                <p className="text-[15px]" style={{ color: TEXTBOOK.text }}>
-                  {String(s.sentence ?? "")}
+                <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
+                  {String(s.sentence ?? s.text ?? "")}
                 </p>
                 {"answer" in s && (
                   <p className="mt-2 text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
@@ -721,7 +853,7 @@ function SentenceWordbox({ raw }: { raw: BookExerciseRaw }) {
 
 function GapFillPassage({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4 space-y-4">
+    <div className="mt-3 space-y-3">
       <ChipList items={asStringArray(raw.words)} tone="list" />
       <PassageBox>
         <span className="whitespace-pre-wrap">{String(raw.text ?? "")}</span>
@@ -740,7 +872,7 @@ function GapFillPassage({ raw }: { raw: BookExerciseRaw }) {
 function ImagePrompt({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div
-      className="mt-4 rounded-md border border-dashed p-6 text-center"
+      className="mt-3 rounded-md border border-dashed p-3 text-center"
       style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.exerciseBg }}
     >
       <p className="text-sm font-medium" style={{ color: TEXTBOOK.heading }}>
@@ -758,7 +890,7 @@ function ImagePrompt({ raw }: { raw: BookExerciseRaw }) {
 function GraphTask({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div
-      className="mt-4 rounded-md border border-dashed p-6 text-center"
+      className="mt-3 rounded-md border border-dashed p-3 text-center"
       style={{ borderColor: TEXTBOOK.border, backgroundColor: TEXTBOOK.exerciseBg }}
     >
       <p className="text-sm font-medium" style={{ color: TEXTBOOK.heading }}>
@@ -768,7 +900,7 @@ function GraphTask({ raw }: { raw: BookExerciseRaw }) {
         Use the book graph while students complete the prompts.
       </p>
       {Array.isArray(raw.answers) && (
-        <ChipList items={asStringArray(raw.answers)} className="mt-4 justify-center" tone="list" />
+        <ChipList items={asStringArray(raw.answers)} className="mt-3 justify-center" tone="list" />
       )}
     </div>
   )
@@ -776,21 +908,214 @@ function GraphTask({ raw }: { raw: BookExerciseRaw }) {
 
 function SpeakingTopic({ raw }: { raw: BookExerciseRaw }) {
   return (
-    <div className="mt-4">
+    <div className="mt-3">
       <ChipList items={[String(raw.topic ?? "")]} tone="speaking" />
     </div>
   )
 }
 
 function AnswerList({ raw }: { raw: BookExerciseRaw }) {
-  return <ChipList items={asStringArray(raw.answers)} className="mt-4" tone="vocab" />
+  return <ChipList items={asStringArray(raw.answers)} className="mt-3" tone="vocab" />
 }
 
 function InstructionOnly() {
   return (
-    <p className="mt-4 text-sm" style={{ color: TEXTBOOK.muted }}>
+    <p className="mt-3 text-sm" style={{ color: TEXTBOOK.muted }}>
       Follow the instruction with the class. No additional item bank in the book JSON.
     </p>
+  )
+}
+
+function MultipleChoice({ raw }: { raw: BookExerciseRaw }) {
+  const questions = Array.isArray(raw.questions) ? raw.questions : []
+  return (
+    <ol className="mt-3 space-y-3">
+      {questions.map((q, i) => {
+        if (!isRecord(q)) return null
+        const options = Array.isArray(q.options) ? q.options : []
+        return (
+          <li key={String(q.number ?? i)}>
+            <BlankRow>
+              <p className="text-[13px] leading-relaxed" style={{ color: TEXTBOOK.text }}>
+                <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                  {String(q.number ?? i + 1)}.
+                </span>
+                {String(q.text ?? q.statement ?? "")}
+              </p>
+              <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                {options.map((opt, oi) => {
+                  const label = typeof opt === "string" ? opt : String(opt ?? "")
+                  const selected =
+                    q.answer != null &&
+                    (label.startsWith(String(q.answer)) ||
+                      label === String(q.answer) ||
+                      label.replace(/^[A-D]\.?\s*/i, "") === String(q.answer))
+                  return (
+                    <li
+                      key={oi}
+                      className="rounded px-2 py-1.5 text-[12px]"
+                      style={{
+                        backgroundColor: selected ? TEXTBOOK.correctSoft : TEXTBOOK.content,
+                        border: `1px solid ${selected ? TEXTBOOK.correct : TEXTBOOK.border}`,
+                        color: selected ? TEXTBOOK.correctDeep : TEXTBOOK.text,
+                      }}
+                    >
+                      {label}
+                    </li>
+                  )
+                })}
+              </ul>
+            </BlankRow>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+function ShortAnswer({ raw }: { raw: BookExerciseRaw }) {
+  const questions = Array.isArray(raw.questions) ? raw.questions : []
+  const options = Array.isArray(raw.options) ? raw.options : []
+  return (
+    <div className="mt-3 space-y-3">
+      {typeof raw.passage === "string" && raw.passage ? (
+        <PassageBox>{raw.passage}</PassageBox>
+      ) : null}
+      {options.length > 0 && (
+        <Panel>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide" style={{ color: TEXTBOOK.muted }}>
+            Options
+          </p>
+          <ul className="flex flex-wrap gap-[5px_15px] text-[12px]">
+            {options.map((opt, i) => {
+              if (!isRecord(opt)) {
+                return (
+                  <li key={i} className="rounded px-3 py-1.5" style={{ border: `1px solid ${TEXTBOOK.border}` }}>
+                    {String(opt)}
+                  </li>
+                )
+              }
+              return (
+                <li
+                  key={i}
+                  className="rounded px-3 py-1.5"
+                  style={{ backgroundColor: TEXTBOOK.content, border: `1px solid ${TEXTBOOK.border}` }}
+                >
+                  <span className="font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                    {String(opt.letter ?? "")}{" "}
+                  </span>
+                  {String(opt.text ?? opt.name ?? "")}
+                </li>
+              )
+            })}
+          </ul>
+        </Panel>
+      )}
+      <ol className="space-y-3">
+        {questions.map((q, i) => {
+          if (!isRecord(q)) return null
+          return (
+            <li key={String(q.number ?? i)}>
+              <BlankRow>
+                <p className="text-[13px]" style={{ color: TEXTBOOK.text }}>
+                  <span className="mr-2 font-bold" style={{ color: TEXTBOOK.headingAccent }}>
+                    {String(q.number ?? i + 1)}.
+                  </span>
+                  {String(q.text ?? q.statement ?? "")}
+                </p>
+                {q.answer != null ? (
+                  <p className="mt-2 text-sm font-semibold" style={{ color: TEXTBOOK.correct }}>
+                    {String(q.answer)}
+                  </p>
+                ) : null}
+              </BlankRow>
+            </li>
+          )
+        })}
+      </ol>
+    </div>
+  )
+}
+
+function MatchingPairs({ raw }: { raw: BookExerciseRaw }) {
+  const left = Array.isArray(raw.beginnings)
+    ? raw.beginnings
+    : Array.isArray(raw.people)
+      ? raw.people
+      : Array.isArray(raw.left)
+        ? raw.left
+        : []
+  const right = Array.isArray(raw.endings)
+    ? raw.endings
+    : Array.isArray(raw.statements)
+      ? raw.statements
+      : Array.isArray(raw.right)
+        ? raw.right
+        : []
+  const labelLeft = (item: unknown, i: number) => {
+    if (typeof item === "string") return `${i + 1}. ${item}`
+    if (!isRecord(item)) return String(item)
+    return `${String(item.letter ?? item.number ?? i + 1)}. ${String(item.text ?? item.name ?? "")}`
+  }
+  const labelRight = (item: unknown, i: number) => {
+    if (typeof item === "string") return item
+    if (!isRecord(item)) return String(item)
+    return `${String(item.number ?? item.letter ?? i + 1)}. ${String(item.text ?? item.name ?? "")}`
+  }
+  return (
+    <div className="mt-3 grid gap-4 md:grid-cols-2">
+      <Panel>
+        <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+          Match from
+        </h4>
+        <ul className="space-y-2 text-[12px]" style={{ color: TEXTBOOK.text }}>
+          {left.map((item, i) => (
+            <li key={i}>{labelLeft(item, i)}</li>
+          ))}
+        </ul>
+      </Panel>
+      <Panel>
+        <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+          Options
+        </h4>
+        <ul className="space-y-2 text-[12px]" style={{ color: TEXTBOOK.text }}>
+          {right.map((item, i) => (
+            <li key={i}>{labelRight(item, i)}</li>
+          ))}
+        </ul>
+      </Panel>
+    </div>
+  )
+}
+
+function PassageRead({ raw }: { raw: BookExerciseRaw }) {
+  return (
+    <div className="mt-3 space-y-2.5">
+      {typeof raw.title === "string" ? (
+        <h4 className="text-center text-sm font-semibold" style={{ color: TEXTBOOK.heading, fontSize: TEXTBOOK.type.section }}>
+          {raw.title}
+        </h4>
+      ) : null}
+      <PassageBox>{String(raw.passage ?? "")}</PassageBox>
+      {Array.isArray(raw.advantages) ? (
+        <Panel>
+          <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+            Advantages
+          </h4>
+          <ChipList items={asStringArray(raw.advantages)} tone="vocab" />
+        </Panel>
+      ) : null}
+      {raw.disadvantage != null ? (
+        <Panel>
+          <h4 className="mb-2 text-sm font-semibold" style={{ color: TEXTBOOK.heading }}>
+            Disadvantage
+          </h4>
+          <p className="text-[12px]" style={{ color: TEXTBOOK.text }}>
+            {String(raw.disadvantage)}
+          </p>
+        </Panel>
+      ) : null}
+    </div>
   )
 }
 
@@ -816,6 +1141,10 @@ const RENDERERS: Record<BookExerciseUiType, (props: { raw: BookExerciseRaw }) =>
   "graph-task": GraphTask,
   "answer-list": AnswerList,
   "gap-fill-passage": GapFillPassage,
+  "multiple-choice": MultipleChoice,
+  "short-answer": ShortAnswer,
+  "matching-pairs": MatchingPairs,
+  "passage-read": PassageRead,
 }
 
 export function BookExerciseRenderer({
@@ -826,13 +1155,20 @@ export function BookExerciseRenderer({
 }: {
   step: LessonStep
   className?: string
-  /** Teachers see answer key; students must not. */
+  /**
+   * When true, show a collapsible answer key under the exercise.
+   * The exercise body is always rendered without answers (same as students).
+   */
   showAnswers?: boolean
   /** `cambridge` / `textbook` = academic book page styles. */
   variant?: "admin" | "cambridge" | "textbook"
 }) {
   const Renderer = RENDERERS[step.uiType] ?? (() => <InstructionOnly />)
-  const raw = showAnswers ? step.raw : stripClientAnswers(step.raw)
+  // Always strip — teachers see the same exercise body as students; keys live in TeacherAnswers.
+  const raw = stripClientAnswers(step.raw)
+  const teacherAnswers = showAnswers
+    ? collectTeacherAnswers(step.raw, step.answers)
+    : null
   const textbook = variant === "cambridge" || variant === "textbook"
 
   if (textbook) {
@@ -845,22 +1181,24 @@ export function BookExerciseRenderer({
     return (
       <TextbookMode.Provider value={true}>
         <div
-          className={cn("mb-[30px] last:mb-0", className)}
+          className={cn("last:mb-0", className)}
           style={{
             fontFamily: TEXTBOOK.font,
             backgroundColor: TEXTBOOK.exerciseBg,
             borderRadius: 6,
-            padding: "15px 20px",
+            padding: `${TEXTBOOK.space.exercisePadY}px ${TEXTBOOK.space.exercisePadX}px`,
+            marginBottom: TEXTBOOK.space.exerciseGap,
           }}
         >
-          <div className="mb-3 flex flex-wrap items-center gap-2">
+          <div className="mb-2 flex flex-wrap items-center gap-1.5">
             <span
-              className="text-[16px] font-bold"
+              className="font-bold"
               style={{
                 backgroundColor: TEXTBOOK.accentSoft,
                 color: TEXTBOOK.headingAccent,
-                padding: "2px 10px",
+                padding: "1px 8px",
                 borderRadius: 4,
+                fontSize: TEXTBOOK.type.exLabel,
               }}
             >
               {exLabel}
@@ -880,7 +1218,7 @@ export function BookExerciseRenderer({
           </div>
           <Instruction text={step.instruction} />
           <Renderer raw={raw} />
-          {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
+          {showAnswers && <TeacherAnswers answers={teacherAnswers} />}
         </div>
       </TextbookMode.Provider>
     )
@@ -896,16 +1234,26 @@ export function BookExerciseRenderer({
         </div>
         <Instruction text={step.instruction} />
         <Renderer raw={raw} />
-        {showAnswers && <TeacherAnswers answers={step.answers ?? step.raw.answers} />}
+        {showAnswers && <TeacherAnswers answers={teacherAnswers} />}
       </div>
     </TextbookMode.Provider>
   )
 }
 
+/** Match student payloads: keep structure (bucket labels, stems) but remove solutions. */
 function stripClientAnswers(raw: BookExerciseRaw): BookExerciseRaw {
   const clone = structuredClone(raw)
-  delete clone.answers
+
+  // Keep classification / prefix bucket labels, clear contents
+  if (clone.answers && typeof clone.answers === "object" && !Array.isArray(clone.answers)) {
+    clone.answers = Object.fromEntries(
+      Object.keys(clone.answers as Record<string, unknown>).map((k) => [k, []]),
+    )
+  } else {
+    delete clone.answers
+  }
   delete clone.answer
+
   if (Array.isArray(clone.questions)) {
     clone.questions = clone.questions.map((q) => {
       if (q && typeof q === "object" && !Array.isArray(q)) {
@@ -920,9 +1268,13 @@ function stripClientAnswers(raw: BookExerciseRaw): BookExerciseRaw {
       if (it && typeof it === "object" && !Array.isArray(it)) {
         const next = { ...(it as Record<string, unknown>) }
         delete next.answer
-        delete next.person
-        delete next.adjectives
-        delete next.paraphrase
+        if ("speaker" in next) {
+          delete next.person
+          delete next.adjectives
+        }
+        if ("original" in next && "paraphrase" in next) {
+          delete next.paraphrase
+        }
         return next
       }
       return it
@@ -938,5 +1290,20 @@ function stripClientAnswers(raw: BookExerciseRaw): BookExerciseRaw {
       return s
     })
   }
+  if (Array.isArray(clone.paraphrases)) {
+    clone.paraphrases = clone.paraphrases.map((p) =>
+      p && typeof p === "object" ? { original: (p as Record<string, unknown>).original } : p,
+    )
+  }
+  if (clone.table && typeof clone.table === "object") {
+    clone.table = Object.fromEntries(
+      Object.keys(clone.table as Record<string, unknown>).map((k) => [k, []]),
+    )
+  }
+  if (clone.speaker_1_expressions) clone.speaker_1_expressions = []
+  if (clone.speaker_2_expressions) clone.speaker_2_expressions = []
+  if (typeof clone.speaker_1 === "string") clone.speaker_1 = ""
+  if (typeof clone.speaker_2 === "string") clone.speaker_2 = ""
+
   return clone
 }

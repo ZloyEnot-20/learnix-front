@@ -29,6 +29,26 @@ export const TEXTBOOK = {
   exerciseBg: "#f8f9fa",
   shadow: "0 2px 20px rgba(0,0,0,0.1)",
   font: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  /** Compact textbook scale — keep pages denser on mobile/desktop. */
+  type: {
+    unitTitle: 22,
+    unitSubtitle: 14,
+    section: 16,
+    body: 13,
+    bodyLh: 1.45,
+    instruction: 13,
+    caption: 11,
+    chip: 12,
+    exLabel: 13,
+  },
+  space: {
+    pagePadX: 14,
+    pagePadY: 14,
+    exercisePadY: 10,
+    exercisePadX: 12,
+    exerciseGap: 18,
+    sectionMb: 12,
+  },
 } as const
 
 /** @deprecated Use TEXTBOOK — kept for import compatibility during rename. */
