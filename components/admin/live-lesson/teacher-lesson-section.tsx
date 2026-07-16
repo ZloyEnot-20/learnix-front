@@ -1635,16 +1635,12 @@ export default function TeacherLessonSection() {
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-medium text-slate-900">{item.label}</span>
-                          {item.ok != null ? (
+                          {item.ok === true ? (
                             <Badge
                               variant="outline"
-                              className={
-                                item.ok
-                                  ? "border-emerald-400 text-emerald-800"
-                                  : "border-rose-400 text-rose-800"
-                              }
+                              className="border-emerald-400 text-emerald-800"
                             >
-                              {item.ok ? "Correct" : "Mistake"}
+                              Correct
                             </Badge>
                           ) : null}
                         </div>

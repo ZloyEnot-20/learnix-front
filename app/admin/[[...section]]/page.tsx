@@ -40,7 +40,6 @@ import OrgBillingSection from "@/components/admin/org-billing-section"
 import OrgSettingsSection from "@/components/admin/org-settings-section"
 import OverviewDashboard from "@/components/admin/overview-dashboard"
 import ExerciseStatsSection from "@/components/admin/exercise-stats-section"
-import TeacherLessonSection from "@/components/admin/live-lesson/teacher-lesson-section"
 import { AdminShell, type NavSection } from "@/components/admin/admin-shell"
 import { invalidateHomeworkCount } from "@/lib/admin-cache"
 import {
@@ -65,7 +64,7 @@ const SECTION_TITLES: Record<string, { title: string; subtitle: string }> = {
   exercises: { title: "Exercises", subtitle: "Grammar topics — preview and assign to groups" },
   lessons: {
     title: "Live lessons",
-    subtitle: "Run a book unit live with your group — open exercises and track progress",
+    subtitle: "Run a book unit live with your group — coming soon",
   },
   bot: { title: "Telegram bot", subtitle: "Invite codes and parent subscriptions" },
   finance: { title: "Finance", subtitle: "Payments and revenue by group" },
@@ -84,10 +83,9 @@ const SECTION_LIST_NEEDS: Record<string, AdminListKey[]> = {
   homework: ["students", "groups", "homeworkCount"],
   entry: ["students"],
   exercises: ["groups"],
-  lessons: ["students", "groups"],
   finance: ["students", "groups"],
   bot: ["students"],
-  // control — soon placeholder, no lists
+  // control / lessons — soon placeholders, no lists
 }
 
 /** Sections that need the full exercise catalogue (GET /exercises). */
@@ -142,6 +140,49 @@ function ProgressTestSoon() {
           <p className="text-sm font-medium text-slate-700">Not available yet</p>
           <p className="mt-1 text-xs text-slate-400">
             Existing progress tests stay in the system — creation and review will return here.
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function LiveLessonsSoon() {
+  return (
+    <Card className="overflow-hidden">
+      <div className="border-b border-slate-100 bg-gradient-to-br from-slate-50 to-white px-6 py-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
+              <BookOpen className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-semibold text-slate-900">Live lessons</h2>
+                <Badge
+                  variant="secondary"
+                  className="text-[10px] font-semibold uppercase tracking-wide"
+                >
+                  Soon
+                </Badge>
+              </div>
+              <p className="mt-1 max-w-xl text-sm text-slate-500">
+                Live book lessons with your group are almost ready. You will be able to open
+                exercises in real time and track student progress here soon.
+              </p>
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-500">
+            <Clock className="h-3.5 w-3.5" />
+            Coming soon
+          </div>
+        </div>
+      </div>
+      <CardContent className="p-6">
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-8 text-center">
+          <p className="text-sm font-medium text-slate-700">Not available yet</p>
+          <p className="mt-1 text-xs text-slate-400">
+            This section will open when live lessons are rolled out for your organization.
           </p>
         </div>
       </CardContent>
@@ -251,7 +292,7 @@ function AdminPanelContent() {
         { id: "stats", label: "Statistics", icon: BarChart3 },
         { id: "control", label: "Progress test", icon: Layers, badge: "Soon" },
         { id: "exercises", label: "Exercises", icon: GraduationCap },
-        { id: "lessons", label: "Live lessons", icon: BookOpen },
+        { id: "lessons", label: "Live lessons", icon: BookOpen, badge: "Soon" },
       ],
     },
     {
@@ -338,7 +379,7 @@ function AdminPanelContent() {
           onHomeworkAssigned={bump}
         />
       )}
-      {activeTab === "lessons" && <TeacherLessonSection />}
+      {activeTab === "lessons" && <LiveLessonsSoon />}
       {activeTab === "bot" && <TelegramBotSection />}
       {activeTab === "finance" && <FinanceManager onChanged={bump} />}
       {activeTab === "billing" && orgAdmin && <OrgBillingSection />}
