@@ -43,9 +43,10 @@ import {
 import { TableSkeleton } from "@/components/admin/skeletons"
 import { BookExerciseRenderer } from "@/components/admin/live-lesson/book-exercise-renderer"
 import {
-  ExerciseResultsPanel,
+  ExerciseResultsPopover,
   type ResultsMetric,
-} from "@/components/admin/live-lesson/exercise-results-panel"
+} from "@/components/admin/live-lesson/exercise-results-popover"
+import { LessonStudentsPanel } from "@/components/admin/live-lesson/lesson-students-panel"
 import {
   CambridgeBookChrome,
   CambridgeSectionBanner,
@@ -95,24 +96,6 @@ function recount(students: LiveLessonState["students"]) {
     workingCount: students.filter((s) => s.status === "working").length,
     doneCount: students.filter((s) => s.status === "done").length,
   }
-}
-
-function scorePercentValue(s: {
-  score?: number | null
-  scoreDetail?: LiveStudentProgress["scoreDetail"] | null
-}): number | null {
-  if (s.scoreDetail && s.scoreDetail.total > 0) {
-    return Math.round((100 * s.scoreDetail.correct) / s.scoreDetail.total)
-  }
-  if (s.score != null && Number.isFinite(s.score)) return Math.round(s.score)
-  return null
-}
-
-/** Red → yellow → green by correctness. */
-function scoreBarColor(pct: number): string {
-  const p = Math.min(100, Math.max(0, pct)) / 100
-  const hue = p * 120
-  return `hsl(${hue} 78% 42%)`
 }
 
 function buildLessonStats(live: LiveLessonState) {
@@ -261,8 +244,8 @@ export default function TeacherLessonSection() {
   const [error, setError] = useState<string | null>(null)
   const [finishOpen, setFinishOpen] = useState(false)
   const [inspectStudent, setInspectStudent] = useState<LiveStudentProgress | null>(null)
-  const [resultsPanelOpen, setResultsPanelOpen] = useState(false)
-  const [resultsPanelExerciseId, setResultsPanelExerciseId] = useState<string | null>(null)
+  const [resultsPopoverOpen, setResultsPopoverOpen] = useState(false)
+  const [resultsPopoverExerciseId, setResultsPopoverExerciseId] = useState<string | null>(null)
   const [resultsMetric, setResultsMetric] = useState<ResultsMetric>("completion")
   const liveIdRef = useRef<string | null>(null)
   const openingLessonIdRef = useRef<string | null>(null)
@@ -646,8 +629,8 @@ export default function TeacherLessonSection() {
       session = await liveLessonsApi.selectExercise(session.id, step.exerciseId, true)
       await syncLive(session)
       setSelectedStepId(step.id)
-      setResultsPanelOpen(false)
-      setResultsPanelExerciseId(null)
+      setResultsPopoverOpen(false)
+      setResultsPopoverExerciseId(null)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to assign exercise")
     } finally {
@@ -679,8 +662,8 @@ export default function TeacherLessonSection() {
     try {
       const next = await liveLessonsApi.setOpen(live.id, false)
       await syncLive(next)
-      setResultsPanelExerciseId(exerciseId)
-      setResultsPanelOpen(true)
+      setResultsPopoverExerciseId(exerciseId)
+      setResultsPopoverOpen(true)
       setResultsMetric("completion")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Action failed")
@@ -690,8 +673,8 @@ export default function TeacherLessonSection() {
   }
 
   const openExerciseResults = (exerciseId: string) => {
-    setResultsPanelExerciseId(exerciseId)
-    setResultsPanelOpen(true)
+    setResultsPopoverExerciseId(exerciseId)
+    setResultsPopoverOpen(true)
   }
 
   const studentsForExerciseResults = useCallback(
@@ -1403,14 +1386,7 @@ export default function TeacherLessonSection() {
         </div>
       )}
 
-      <div
-        className={cn(
-          "grid min-h-0 flex-1 gap-2",
-          resultsPanelOpen
-            ? "lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]"
-            : "lg:grid-cols-[minmax(0,1fr)_200px]",
-        )}
-      >
+      <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_200px]">
         <div className="min-h-0">
           <CambridgeBookChrome
             className="h-full"
@@ -1447,56 +1423,73 @@ export default function TeacherLessonSection() {
                 const showAssign = canAssignFromThisUnit && gradable && !isLiveExercise
                 const showResultsBtn = hasResults && gradable && !isLiveExercise
                 return (
-                  <BookExerciseRenderer
-                    key={step.id}
-                    step={step}
-                    showAnswers={false}
-                    variant="cambridge"
-                    active={isLiveExercise}
-                    actions={
-                      showAssign || isLiveExercise || showResultsBtn ? (
-                        <div className="ml-auto flex shrink-0 flex-col items-end gap-1">
-                          {showAssign ? (
-                            <Button
-                              size="sm"
-                              className="h-8 rounded-lg bg-emerald-600 px-4 text-xs font-semibold shadow-sm hover:bg-emerald-700"
-                              disabled={busy}
-                              onClick={() => void assignExercise(step)}
-                            >
-                              Assign
-                            </Button>
-                          ) : null}
-                          {isLiveExercise ? (
-                            <Button
-                              size="sm"
-                              className="h-8 rounded-lg border-0 bg-amber-500 px-4 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
-                              disabled={busy}
-                              onClick={() => void finishExercise(step.exerciseId)}
-                            >
-                              <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
-                              Finish
-                            </Button>
-                          ) : null}
-                          {showResultsBtn ? (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className={cn(
-                                "h-7 rounded-lg border-violet-200 px-3 text-[11px] font-semibold text-violet-700 hover:bg-violet-50",
-                                resultsPanelOpen &&
-                                  resultsPanelExerciseId === step.exerciseId &&
-                                  "border-violet-400 bg-violet-50",
-                              )}
-                              onClick={() => openExerciseResults(step.exerciseId)}
-                            >
-                              <BarChart3 className="mr-1 h-3 w-3" />
-                              Results
-                            </Button>
-                          ) : null}
-                        </div>
-                      ) : undefined
-                    }
-                  />
+                  <div key={step.id} className="flex items-start gap-1">
+                    <div className="min-w-0 flex-1">
+                      <BookExerciseRenderer
+                        step={step}
+                        showAnswers={false}
+                        variant="cambridge"
+                        active={isLiveExercise}
+                        actions={
+                          showAssign || isLiveExercise || showResultsBtn ? (
+                            <div className="ml-auto flex shrink-0 flex-col items-end gap-1">
+                              {showAssign ? (
+                                <Button
+                                  size="sm"
+                                  className="h-8 rounded-lg bg-emerald-600 px-4 text-xs font-semibold shadow-sm hover:bg-emerald-700"
+                                  disabled={busy}
+                                  onClick={() => void assignExercise(step)}
+                                >
+                                  Assign
+                                </Button>
+                              ) : null}
+                              {isLiveExercise ? (
+                                <Button
+                                  size="sm"
+                                  className="h-8 rounded-lg border-0 bg-amber-500 px-4 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
+                                  disabled={busy}
+                                  onClick={() => void finishExercise(step.exerciseId)}
+                                >
+                                  <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
+                                  Finish
+                                </Button>
+                              ) : null}
+                              {showResultsBtn ? (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className={cn(
+                                    "h-7 rounded-lg border-violet-200 px-3 text-[11px] font-semibold text-violet-700 hover:bg-violet-50",
+                                    resultsPopoverOpen &&
+                                      resultsPopoverExerciseId === step.exerciseId &&
+                                      "border-violet-400 bg-violet-50",
+                                  )}
+                                  onClick={() => openExerciseResults(step.exerciseId)}
+                                >
+                                  <BarChart3 className="mr-1 h-3 w-3" />
+                                  Results
+                                </Button>
+                              ) : null}
+                            </div>
+                          ) : undefined
+                        }
+                      />
+                    </div>
+                    {resultsPopoverOpen && resultsPopoverExerciseId === step.exerciseId ? (
+                      <ExerciseResultsPopover
+                        className="mt-3"
+                        exerciseId={step.exerciseId}
+                        students={studentsForExerciseResults(step.exerciseId)}
+                        metric={resultsMetric}
+                        onMetricChange={setResultsMetric}
+                        onStudentClick={setInspectStudent}
+                        onClose={() => {
+                          setResultsPopoverOpen(false)
+                          setResultsPopoverExerciseId(null)
+                        }}
+                      />
+                    ) : null}
+                  </div>
                 )
               })
             )}
@@ -1504,105 +1497,23 @@ export default function TeacherLessonSection() {
         </div>
 
         <aside className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
-          {resultsPanelOpen && resultsPanelExerciseId ? (
-            <ExerciseResultsPanel
-              className="min-h-0 flex-1"
-              exerciseId={resultsPanelExerciseId}
-              students={studentsForExerciseResults(resultsPanelExerciseId)}
-              metric={resultsMetric}
-              onMetricChange={setResultsMetric}
-              onStudentClick={setInspectStudent}
-              onClose={() => {
-                setResultsPanelOpen(false)
-                setResultsPanelExerciseId(null)
-              }}
-            />
-          ) : (
-            <>
-              <p className="mb-2 shrink-0 px-3 pt-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                Students
-                {liveExerciseOpen ? (
-                  <span className="ml-1 font-normal normal-case text-emerald-700">
-                    · {donePct}% done
-                  </span>
-                ) : null}
-              </p>
-              {!live && (
-                <p className="px-3 text-xs text-slate-500">Prepare a lesson to track live progress.</p>
-              )}
-              {live && (
-                <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-2 pb-2">
-                  {(live.students ?? []).map((s) => {
-                    const isOnline =
-                      s.status === "online" || s.status === "working" || s.status === "done"
-                    const isDone = s.status === "done"
-                    const scorePct = scorePercentValue(s)
-                    const barPct = scorePct ?? 0
-                    return (
-                      <button
-                        key={s.studentId}
-                        type="button"
-                        onClick={() => setInspectStudent(s)}
-                        className={cn(
-                          "w-full rounded-lg border px-2 py-1.5 text-left transition hover:shadow-sm",
-                          isDone
-                            ? "border-emerald-200 bg-emerald-50/70"
-                            : "border-slate-100 bg-slate-50/60 hover:border-slate-200",
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-1">
-                          <div className="flex min-w-0 items-center gap-1.5">
-                            <span
-                              className={cn(
-                                "h-2 w-2 shrink-0 rounded-full",
-                                isOnline ? "bg-emerald-500" : "bg-slate-300",
-                              )}
-                            />
-                            <p className="truncate text-xs font-medium text-slate-900">{s.name}</p>
-                          </div>
-                          {scorePct != null ? (
-                            <span
-                              className="rounded px-1 py-0.5 text-[10px] font-bold tabular-nums text-white"
-                              style={{ backgroundColor: scoreBarColor(scorePct) }}
-                            >
-                              {scorePct}%
-                            </span>
-                          ) : isDone ? (
-                            <Badge className="h-5 bg-emerald-600 px-1 text-[9px] hover:bg-emerald-600">
-                              Done
-                            </Badge>
-                          ) : null}
-                        </div>
-                        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200/80">
-                          <div
-                            className="h-full rounded-full transition-all"
-                            style={{
-                              width: `${barPct}%`,
-                              backgroundColor:
-                                scorePct != null ? scoreBarColor(scorePct) : "transparent",
-                            }}
-                          />
-                        </div>
-                      </button>
-                    )
-                  })}
-                  {(live.students ?? []).length === 0 && (
-                    <p className="px-1 text-xs text-slate-500">No students in this group.</p>
-                  )}
-                </div>
-              )}
-              {!live && groupId && (
-                <ul className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-2">
-                  {students
-                    .filter((s) => s.groupId === groupId)
-                    .map((s) => (
-                      <li key={s.id} className="rounded-lg px-2 py-1 text-xs text-slate-600">
-                        {s.name}
-                      </li>
-                    ))}
-                </ul>
-              )}
-            </>
+          <LessonStudentsPanel
+            className="min-h-0 flex-1"
+            live={live}
+            liveExerciseOpen={liveExerciseOpen}
+            donePct={donePct}
+            onStudentClick={setInspectStudent}
+          />
+          {!live && groupId && (
+            <ul className="min-h-0 flex-1 space-y-1 overflow-y-auto border-t border-slate-100 px-2 py-2">
+              {students
+                .filter((s) => s.groupId === groupId)
+                .map((s) => (
+                  <li key={s.id} className="rounded-lg px-2 py-1 text-xs text-slate-600">
+                    {s.name}
+                  </li>
+                ))}
+            </ul>
           )}
         </aside>
       </div>
