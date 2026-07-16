@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -246,9 +246,12 @@ export default function TeacherLessonSection() {
   const [inspectStudent, setInspectStudent] = useState<LiveStudentProgress | null>(null)
   const [resultsPopoverOpen, setResultsPopoverOpen] = useState(false)
   const [resultsPopoverExerciseId, setResultsPopoverExerciseId] = useState<string | null>(null)
-  const [resultsMetric, setResultsMetric] = useState<ResultsMetric>("completion")
+  const [resultsMetric, setResultsMetric] = useState<ResultsMetric>("accuracy")
   const liveIdRef = useRef<string | null>(null)
   const openingLessonIdRef = useRef<string | null>(null)
+  const bookColumnRef = useRef<HTMLDivElement>(null)
+  const exerciseAnchorRef = useRef<HTMLDivElement>(null)
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null)
 
   const groupName = useCallback(
     (id: string) => groups.find((g) => g.id === id)?.name ?? "Group",
@@ -664,7 +667,7 @@ export default function TeacherLessonSection() {
       await syncLive(next)
       setResultsPopoverExerciseId(exerciseId)
       setResultsPopoverOpen(true)
-      setResultsMetric("completion")
+      setResultsMetric("accuracy")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Action failed")
     } finally {
@@ -724,6 +727,47 @@ export default function TeacherLessonSection() {
     },
     [live, unitNumber],
   )
+
+  useLayoutEffect(() => {
+    if (!resultsPopoverOpen || !resultsPopoverExerciseId) {
+      setPopoverPos(null)
+      return
+    }
+
+    const update = () => {
+      const anchor = exerciseAnchorRef.current
+      const column = bookColumnRef.current
+      if (!anchor || !column) {
+        setPopoverPos(null)
+        return
+      }
+      const anchorRect = anchor.getBoundingClientRect()
+      const columnRect = column.getBoundingClientRect()
+      setPopoverPos({
+        top: anchorRect.top - columnRect.top + 12,
+        left: anchorRect.right - columnRect.left + 16,
+      })
+    }
+
+    update()
+    window.addEventListener("resize", update)
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null
+    if (ro) {
+      if (exerciseAnchorRef.current) ro.observe(exerciseAnchorRef.current)
+      if (bookColumnRef.current) ro.observe(bookColumnRef.current)
+    }
+    return () => {
+      window.removeEventListener("resize", update)
+      ro?.disconnect()
+    }
+  }, [
+    resultsPopoverOpen,
+    resultsPopoverExerciseId,
+    pageIndex,
+    stepsLoading,
+    live?.students,
+    live?.doneCount,
+  ])
 
   const backToHistory = () => {
     setLive(null)
@@ -1387,7 +1431,7 @@ export default function TeacherLessonSection() {
       )}
 
       <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_200px]">
-        <div className="min-h-0">
+        <div ref={bookColumnRef} className="relative min-h-0 overflow-visible">
           <CambridgeBookChrome
             className="h-full"
             title={unitMeta?.title || `Unit ${unitNumber}`}
@@ -1423,77 +1467,84 @@ export default function TeacherLessonSection() {
                 const showAssign = canAssignFromThisUnit && gradable && !isLiveExercise
                 const showResultsBtn = hasResults && gradable && !isLiveExercise
                 return (
-                  <div key={step.id} className="flex items-start gap-1">
-                    <div className="min-w-0 flex-1">
-                      <BookExerciseRenderer
-                        step={step}
-                        showAnswers={false}
-                        variant="cambridge"
-                        active={isLiveExercise}
-                        actions={
-                          showAssign || isLiveExercise || showResultsBtn ? (
-                            <div className="ml-auto flex shrink-0 flex-col items-end gap-1">
-                              {showAssign ? (
-                                <Button
-                                  size="sm"
-                                  className="h-8 rounded-lg bg-emerald-600 px-4 text-xs font-semibold shadow-sm hover:bg-emerald-700"
-                                  disabled={busy}
-                                  onClick={() => void assignExercise(step)}
-                                >
-                                  Assign
-                                </Button>
-                              ) : null}
-                              {isLiveExercise ? (
-                                <Button
-                                  size="sm"
-                                  className="h-8 rounded-lg border-0 bg-amber-500 px-4 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
-                                  disabled={busy}
-                                  onClick={() => void finishExercise(step.exerciseId)}
-                                >
-                                  <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
-                                  Finish
-                                </Button>
-                              ) : null}
-                              {showResultsBtn ? (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className={cn(
-                                    "h-7 rounded-lg border-violet-200 px-3 text-[11px] font-semibold text-violet-700 hover:bg-violet-50",
-                                    resultsPopoverOpen &&
-                                      resultsPopoverExerciseId === step.exerciseId &&
-                                      "border-violet-400 bg-violet-50",
-                                  )}
-                                  onClick={() => openExerciseResults(step.exerciseId)}
-                                >
-                                  <BarChart3 className="mr-1 h-3 w-3" />
-                                  Results
-                                </Button>
-                              ) : null}
-                            </div>
-                          ) : undefined
-                        }
-                      />
-                    </div>
-                    {resultsPopoverOpen && resultsPopoverExerciseId === step.exerciseId ? (
-                      <ExerciseResultsPopover
-                        className="mt-3"
-                        exerciseId={step.exerciseId}
-                        students={studentsForExerciseResults(step.exerciseId)}
-                        metric={resultsMetric}
-                        onMetricChange={setResultsMetric}
-                        onStudentClick={setInspectStudent}
-                        onClose={() => {
-                          setResultsPopoverOpen(false)
-                          setResultsPopoverExerciseId(null)
-                        }}
-                      />
-                    ) : null}
+                  <div
+                    key={step.id}
+                    ref={
+                      resultsPopoverOpen && resultsPopoverExerciseId === step.exerciseId
+                        ? exerciseAnchorRef
+                        : undefined
+                    }
+                  >
+                    <BookExerciseRenderer
+                      step={step}
+                      showAnswers={false}
+                      variant="cambridge"
+                      active={isLiveExercise}
+                      actions={
+                        showAssign || isLiveExercise || showResultsBtn ? (
+                          <div className="ml-auto flex shrink-0 flex-col items-end gap-1">
+                            {showAssign ? (
+                              <Button
+                                size="sm"
+                                className="h-8 rounded-lg bg-emerald-600 px-4 text-xs font-semibold shadow-sm hover:bg-emerald-700"
+                                disabled={busy}
+                                onClick={() => void assignExercise(step)}
+                              >
+                                Assign
+                              </Button>
+                            ) : null}
+                            {isLiveExercise ? (
+                              <Button
+                                size="sm"
+                                className="h-8 rounded-lg border-0 bg-amber-500 px-4 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
+                                disabled={busy}
+                                onClick={() => void finishExercise(step.exerciseId)}
+                              >
+                                <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
+                                Finish
+                              </Button>
+                            ) : null}
+                            {showResultsBtn ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className={cn(
+                                  "h-7 rounded-lg border-violet-200 px-3 text-[11px] font-semibold text-violet-700 hover:bg-violet-50",
+                                  resultsPopoverOpen &&
+                                    resultsPopoverExerciseId === step.exerciseId &&
+                                    "border-violet-400 bg-violet-50",
+                                )}
+                                onClick={() => openExerciseResults(step.exerciseId)}
+                              >
+                                <BarChart3 className="mr-1 h-3 w-3" />
+                                Results
+                              </Button>
+                            ) : null}
+                          </div>
+                        ) : undefined
+                      }
+                    />
                   </div>
                 )
               })
             )}
           </CambridgeBookChrome>
+
+          {resultsPopoverOpen && resultsPopoverExerciseId && popoverPos ? (
+            <ExerciseResultsPopover
+              className="pointer-events-auto absolute z-30"
+              style={{ top: popoverPos.top, left: popoverPos.left }}
+              exerciseId={resultsPopoverExerciseId}
+              students={studentsForExerciseResults(resultsPopoverExerciseId)}
+              metric={resultsMetric}
+              onMetricChange={setResultsMetric}
+              onStudentClick={setInspectStudent}
+              onClose={() => {
+                setResultsPopoverOpen(false)
+                setResultsPopoverExerciseId(null)
+              }}
+            />
+          ) : null}
         </div>
 
         <aside className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">

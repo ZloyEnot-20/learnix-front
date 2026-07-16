@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, type CSSProperties } from "react"
 import { X } from "lucide-react"
 import type { LiveStudentProgress } from "@/lib/books/types"
 import { cn } from "@/lib/utils"
@@ -20,28 +20,35 @@ function scorePercentValue(s: {
 
 function sortValue(s: LiveStudentProgress, metric: ResultsMetric): number {
   if (metric === "completion") {
-    if (s.status === "done") return 100
-    return s.progress ?? 0
+    if (s.status === "done") return 1
+    if (s.status === "working") return 0.5
+    return 0
   }
-  const pct = scorePercentValue(s)
-  if (pct != null) return pct
+  // Accuracy: prefer graded scoreDetail (0 correct → 0), never treat "done" as 100%
   if (s.scoreDetail && s.scoreDetail.total > 0) {
     return (100 * s.scoreDetail.correct) / s.scoreDetail.total
   }
+  const pct = scorePercentValue(s)
+  if (pct != null) return pct
   return -1
 }
 
 function displayValue(s: LiveStudentProgress, metric: ResultsMetric): string {
   if (metric === "completion") {
-    if (s.status === "done") return "100%"
-    if (s.status === "working" && s.progress > 0) return `${s.progress}%`
+    // Completion of the task — not correctness. Never show "100%" here.
+    if (s.status === "done") return "Done"
+    if (s.status === "working") return "…"
     return "—"
   }
   const correct = s.scoreDetail?.correct
   const total = s.scoreDetail?.total
-  if (correct != null && total != null && total > 0) return `${correct}/${total}`
-  const pct = scorePercentValue(s)
-  if (pct != null) return `${pct}%`
+  if (correct != null && total != null && total > 0) {
+    return `${correct}/${total}`
+  }
+  // Only use score when we have a real grade (scoreDetail missing but score set)
+  if (s.score != null && Number.isFinite(s.score) && s.status === "done") {
+    return `${Math.round(s.score)}%`
+  }
   return "—"
 }
 
@@ -58,6 +65,7 @@ type Props = {
   onStudentClick: (s: LiveStudentProgress) => void
   onClose?: () => void
   className?: string
+  style?: React.CSSProperties
 }
 
 function StudentColumn({
@@ -74,6 +82,19 @@ function StudentColumn({
       {rows.map((s) => {
         const value = displayValue(s, metric)
         const numeric = sortValue(s, metric)
+        const isAccuracy = metric === "accuracy"
+        const tone =
+          !isAccuracy
+            ? s.status === "done"
+              ? "text-emerald-600"
+              : "text-slate-400"
+            : numeric < 0
+              ? "text-slate-300"
+              : numeric >= 80
+                ? "text-emerald-600"
+                : numeric >= 50
+                  ? "text-amber-600"
+                  : "text-rose-600"
         return (
           <button
             key={s.studentId}
@@ -82,18 +103,7 @@ function StudentColumn({
             className="flex items-baseline justify-between gap-2 rounded px-1.5 py-0.5 text-left transition hover:bg-slate-50"
           >
             <span className="min-w-0 truncate text-[11px] text-slate-700">{s.name}</span>
-            <span
-              className={cn(
-                "shrink-0 text-[11px] font-semibold tabular-nums",
-                numeric >= 80
-                  ? "text-emerald-600"
-                  : numeric >= 50
-                    ? "text-amber-600"
-                    : numeric >= 0
-                      ? "text-slate-600"
-                      : "text-slate-300",
-              )}
-            >
+            <span className={cn("shrink-0 text-[11px] font-semibold tabular-nums", tone)}>
               {value}
             </span>
           </button>
@@ -111,6 +121,7 @@ export function ExerciseResultsPopover({
   onStudentClick,
   onClose,
   className,
+  style,
 }: Props) {
   const sorted = useMemo(
     () => [...students].sort((a, b) => sortValue(b, metric) - sortValue(a, metric)),
@@ -142,7 +153,7 @@ export function ExerciseResultsPopover({
   }, [students, metric])
 
   return (
-    <div className={cn("relative shrink-0", className)}>
+    <div className={cn("relative", className)} style={style}>
       {/* Arrow pointing left toward the exercise */}
       <div
         className="absolute top-5 -left-[7px] z-10 h-0 w-0"
@@ -161,7 +172,7 @@ export function ExerciseResultsPopover({
         }}
       />
 
-      <div className="w-[220px] rounded-lg border border-slate-200 bg-white shadow-md">
+      <div className="w-[220px] rounded-lg border border-slate-200 bg-white shadow-lg">
         <div className="flex items-center justify-between border-b border-slate-100 px-2.5 py-2">
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
