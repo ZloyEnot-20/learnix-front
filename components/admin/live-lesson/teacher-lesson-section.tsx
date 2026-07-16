@@ -394,6 +394,15 @@ export default function TeacherLessonSection() {
     setStepsLoading(true)
     setError(null)
     try {
+      let sessionForUnit = opts?.nextLive ?? live
+      if (
+        sessionForUnit &&
+        sessionForUnit.lessonStatus !== "finished" &&
+        Number(sessionForUnit.currentUnit) !== Number(n)
+      ) {
+        sessionForUnit = await liveLessonsApi.assignUnit(sessionForUnit.id, n)
+        await syncLive(sessionForUnit)
+      }
       const flow = await fetchLessonSteps(activeBookId, n)
       const visible = flow.filter((s) => !shouldSkipExercise(s))
       setSteps(visible)
@@ -413,7 +422,7 @@ export default function TeacherLessonSection() {
               exercise_ids: [s.exerciseId],
             }))
       setUnitPages(pages)
-      if (opts?.nextLive) setLive(opts.nextLive)
+      if (sessionForUnit) setLive(sessionForUnit)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load unit")
       setSteps([])
@@ -581,7 +590,11 @@ export default function TeacherLessonSection() {
     setBusy(true)
     setError(null)
     try {
-      const session = await liveLessonsApi.create({ groupId, bookId })
+      const session = await liveLessonsApi.create({
+        groupId,
+        bookId,
+        ...(unitNumber != null ? { unitNumber } : {}),
+      })
       await syncLive(session)
       router.replace(`/admin/lessons/${session.id}`, { scroll: false })
     } catch (e) {

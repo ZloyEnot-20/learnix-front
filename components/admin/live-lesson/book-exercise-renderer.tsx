@@ -8,6 +8,7 @@ import { displayListeningTrack } from "@/lib/books/repair-listening-audio"
 import { collectWordBoxItems, isCueWordBox } from "@/lib/books/word-box"
 import { parseListeningTable, countTableGaps } from "@/lib/books/listening-table"
 import { flattenNotes, notesTitle } from "@/lib/books/notes-outline"
+import { getOddOneOutGroups } from "@/lib/books/match-shapes"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
@@ -1387,6 +1388,37 @@ function ListeningTable({ raw }: { raw: BookExerciseRaw }) {
   )
 }
 
+function OddOneOut({ raw }: { raw: BookExerciseRaw }) {
+  const groups = getOddOneOutGroups(raw)
+  return (
+    <div className="mt-3 space-y-3">
+      {groups.map((g, i) => (
+        <Panel key={i}>
+          <p className="mb-2 text-[11px] font-semibold uppercase" style={{ color: TEXTBOOK.muted }}>
+            List {i + 1}
+          </p>
+          <ChipList items={g.items} tone="vocab" />
+          {g.answer ? (
+            <p className="mt-2 text-[12px] font-semibold" style={{ color: TEXTBOOK.correct }}>
+              Odd one out: {g.answer}
+            </p>
+          ) : (
+            <BlankRow>
+              <input
+                type="text"
+                readOnly
+                className="mt-2 w-full border-0 border-b-2 bg-transparent px-1 py-0 text-[13px] outline-none"
+                style={{ borderColor: TEXTBOOK.accent, color: TEXTBOOK.text }}
+                placeholder="Odd one out + reason…"
+              />
+            </BlankRow>
+          )}
+        </Panel>
+      ))}
+    </div>
+  )
+}
+
 function PassageRead({ raw }: { raw: BookExerciseRaw }) {
   return (
     <div className="mt-3 space-y-2.5">
@@ -1444,6 +1476,7 @@ const RENDERERS: Record<BookExerciseUiType, (props: { raw: BookExerciseRaw }) =>
   "short-answer": ShortAnswer,
   "matching-pairs": MatchingPairs,
   "listening-table": ListeningTable,
+  "odd-one-out": OddOneOut,
   "passage-read": PassageRead,
   "word-box-notes": WordBoxNotes,
 }

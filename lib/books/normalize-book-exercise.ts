@@ -1,5 +1,10 @@
 import type { BookExerciseRaw } from "./types"
 import { collectWordBoxItems, isCueWordBox } from "./word-box"
+import {
+  expandSemanticMatches,
+  isOddOneOutLists,
+  matchesToParaphrases,
+} from "./match-shapes"
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v)
@@ -75,9 +80,12 @@ export function normalizeBookExercise(raw: BookExerciseRaw, answers?: unknown): 
   }
 
   // Print word-box fields (nouns, phrases, idioms, …) → words for UI
-  const box = collectWordBoxItems(out)
-  if (box.length > 0 && asStringArray(out.words).length === 0) {
-    out.words = box
+  // Skip odd-one-out list groups — they need their own UI, not a flat bank
+  if (!isOddOneOutLists(out)) {
+    const box = collectWordBoxItems(out)
+    if (box.length > 0 && asStringArray(out.words).length === 0) {
+      out.words = box
+    }
   }
   // phrases also alias for gap-fill when no words
   if (asStringArray(out.phrases).length > 0 && asStringArray(out.words).length === 0) {
@@ -121,17 +129,45 @@ export function normalizeBookExercise(raw: BookExerciseRaw, answers?: unknown): 
     }
   }
 
-  // matches[{ word, definition }] → paraphrases for match UI
-  if (Array.isArray(out.matches) && out.matches.length > 0 && !Array.isArray(out.paraphrases)) {
-    out.paraphrases = out.matches.map((m) => {
-      if (!isRecord(m)) return { original: String(m) }
-      return {
-        original: String(m.word ?? m.left ?? m.term ?? m.begin ?? ""),
-        paraphrase: String(
-          m.definition ?? m.match ?? m.right ?? m.meaning ?? m.end ?? "",
-        ),
+  // matches → matching columns OR paraphrases (field names vary by unit)
+  if (
+    Array.isArray(out.matches) &&
+    out.matches.length > 0 &&
+    (!Array.isArray(out.left) || out.left.length === 0) &&
+    (!Array.isArray(out.beginnings) || out.beginnings.length === 0)
+  ) {
+    const semantic = expandSemanticMatches(out.matches, answers)
+    if (semantic) {
+      out.left = semantic.left
+      out.right = semantic.right
+      out.beginnings = semantic.left
+      out.endings = semantic.right
+    } else if (!Array.isArray(out.paraphrases)) {
+      const paras = matchesToParaphrases(out.matches)
+      if (paras && paras.some((p) => String(p.original ?? "").trim())) {
+        out.paraphrases = paras
+      } else {
+        // Classic gloss: word / definition
+        out.paraphrases = out.matches.map((m) => {
+          if (!isRecord(m)) return { original: String(m) }
+          return {
+            original: String(m.word ?? m.left ?? m.term ?? m.begin ?? ""),
+            paraphrase: String(
+              m.definition ?? m.match ?? m.right ?? m.meaning ?? m.end ?? m.answer ?? "",
+            ),
+          }
+        })
+        // Drop if still empty (prevents blank "| ______" rows)
+        if (
+          Array.isArray(out.paraphrases) &&
+          out.paraphrases.every(
+            (p) => isRecord(p) && !String(p.original ?? "").trim() && !String(p.paraphrase ?? "").trim(),
+          )
+        ) {
+          delete out.paraphrases
+        }
       }
-    })
+    }
   }
 
   // jobs[{ job, definition }] → matching columns (1–n / a–f), using answer key for letter order
@@ -146,6 +182,30 @@ export function normalizeBookExercise(raw: BookExerciseRaw, answers?: unknown): 
     out.right = right
     out.beginnings = left
     out.endings = right
+  }
+
+  // ideas A–E listening matching options
+  if (
+    Array.isArray(out.ideas) &&
+    out.ideas.every((x) => typeof x === "string") &&
+    (!Array.isArray(out.right) || out.right.length === 0) &&
+    (!Array.isArray(out.endings) || out.endings.length === 0)
+  ) {
+    out.right = asStringArray(out.ideas).map((text) => {
+      const m = text.match(/^([A-E])\.\s*(.*)$/i)
+      return m ? { letter: m[1].toUpperCase(), text: m[2] } : { text }
+    })
+    out.endings = out.right
+    if ((!Array.isArray(out.left) || out.left.length === 0) && isRecord(answers)) {
+      const nums = Object.keys(answers)
+        .map(Number)
+        .filter((n) => !Number.isNaN(n))
+        .sort((a, b) => a - b)
+      if (nums.length) {
+        out.left = nums.map((n) => ({ number: n, text: `Idea ${n}` }))
+        out.beginnings = out.left
+      }
+    }
   }
 
   // meanings a–d (match-to-previous-exercise) → option list
