@@ -186,11 +186,8 @@ export default function StudentLiveLessonPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
             <p className="font-medium text-slate-900">No live lesson yet</p>
             <p className="mt-2 text-sm text-slate-500">
-              When your teacher starts a lesson for your group, tap Refresh to join.
+              When your teacher starts a lesson for your group, it will appear here automatically.
             </p>
-            <Button className="mt-4" onClick={() => void joinActive()}>
-              Check again
-            </Button>
           </div>
         )}
 

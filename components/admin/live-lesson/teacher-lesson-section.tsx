@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
+  BarChart3,
   BookOpen,
+  CheckCircle2,
   History,
   Play,
   Plus,
@@ -40,6 +42,10 @@ import {
 } from "@/components/ui/select"
 import { TableSkeleton } from "@/components/admin/skeletons"
 import { BookExerciseRenderer } from "@/components/admin/live-lesson/book-exercise-renderer"
+import {
+  ExerciseResultsPanel,
+  type ResultsMetric,
+} from "@/components/admin/live-lesson/exercise-results-panel"
 import {
   CambridgeBookChrome,
   CambridgeSectionBanner,
@@ -255,6 +261,9 @@ export default function TeacherLessonSection() {
   const [error, setError] = useState<string | null>(null)
   const [finishOpen, setFinishOpen] = useState(false)
   const [inspectStudent, setInspectStudent] = useState<LiveStudentProgress | null>(null)
+  const [resultsPanelOpen, setResultsPanelOpen] = useState(false)
+  const [resultsPanelExerciseId, setResultsPanelExerciseId] = useState<string | null>(null)
+  const [resultsMetric, setResultsMetric] = useState<ResultsMetric>("completion")
   const liveIdRef = useRef<string | null>(null)
   const openingLessonIdRef = useRef<string | null>(null)
 
@@ -637,6 +646,8 @@ export default function TeacherLessonSection() {
       session = await liveLessonsApi.selectExercise(session.id, step.exerciseId, true)
       await syncLive(session)
       setSelectedStepId(step.id)
+      setResultsPanelOpen(false)
+      setResultsPanelExerciseId(null)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to assign exercise")
     } finally {
@@ -661,10 +672,75 @@ export default function TeacherLessonSection() {
     }
   }
 
-  const finishExercise = async () => {
+  const finishExercise = async (exerciseId: string) => {
     if (!live) return
-    await runAction(() => liveLessonsApi.setOpen(live.id, false))
+    setBusy(true)
+    setError(null)
+    try {
+      const next = await liveLessonsApi.setOpen(live.id, false)
+      await syncLive(next)
+      setResultsPanelExerciseId(exerciseId)
+      setResultsPanelOpen(true)
+      setResultsMetric("completion")
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Action failed")
+    } finally {
+      setBusy(false)
+    }
   }
+
+  const openExerciseResults = (exerciseId: string) => {
+    setResultsPanelExerciseId(exerciseId)
+    setResultsPanelOpen(true)
+  }
+
+  const studentsForExerciseResults = useCallback(
+    (exerciseId: string): LiveStudentProgress[] => {
+      if (!live) return []
+      const roster = live.students ?? []
+      const isLastFinished =
+        !live.openForStudents &&
+        live.lastExerciseReview?.exerciseId === exerciseId &&
+        Number(live.lastExerciseReview?.unitNumber) === Number(unitNumber)
+      if (isLastFinished) return roster
+
+      const results = (live.exerciseResults ?? []).filter(
+        (r) =>
+          r.exerciseId === exerciseId && Number(r.unitNumber) === Number(unitNumber),
+      )
+      return roster.map((s) => {
+        const result = results.find((r) => r.studentId === s.studentId)
+        if (!result) {
+          return { ...s, status: "offline" as const, score: null, progress: 0 }
+        }
+        return {
+          ...s,
+          status: "done" as const,
+          score: result.score,
+          scoreDetail: result.scoreDetail,
+          answers: result.answers,
+          progress: 100,
+        }
+      })
+    },
+    [live, unitNumber],
+  )
+
+  const exerciseHasResults = useCallback(
+    (exerciseId: string) => {
+      if (!live) return false
+      const justFinished =
+        !live.openForStudents &&
+        live.lastExerciseReview?.exerciseId === exerciseId &&
+        Number(live.lastExerciseReview?.unitNumber) === Number(unitNumber)
+      if (justFinished) return true
+      return (live.exerciseResults ?? []).some(
+        (r) =>
+          r.exerciseId === exerciseId && Number(r.unitNumber) === Number(unitNumber),
+      )
+    },
+    [live, unitNumber],
+  )
 
   const backToHistory = () => {
     setLive(null)
@@ -1327,7 +1403,14 @@ export default function TeacherLessonSection() {
         </div>
       )}
 
-      <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_200px]">
+      <div
+        className={cn(
+          "grid min-h-0 flex-1 gap-2",
+          resultsPanelOpen
+            ? "lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]"
+            : "lg:grid-cols-[minmax(0,1fr)_200px]",
+        )}
+      >
         <div className="min-h-0">
           <CambridgeBookChrome
             className="h-full"
@@ -1359,12 +1442,10 @@ export default function TeacherLessonSection() {
               pageSteps.map((step) => {
                 const isLiveExercise =
                   Boolean(live?.openForStudents) && live?.currentExercise === step.exerciseId
-                const justFinished =
-                  !live?.openForStudents &&
-                  live?.lastExerciseReview?.exerciseId === step.exerciseId &&
-                  Number(live?.lastExerciseReview?.unitNumber) === Number(unitNumber)
+                const hasResults = exerciseHasResults(step.exerciseId)
                 const gradable = isLiveGradableExercise(step)
                 const showAssign = canAssignFromThisUnit && gradable && !isLiveExercise
+                const showResultsBtn = hasResults && gradable && !isLiveExercise
                 return (
                   <BookExerciseRenderer
                     key={step.id}
@@ -1373,12 +1454,12 @@ export default function TeacherLessonSection() {
                     variant="cambridge"
                     active={isLiveExercise}
                     actions={
-                      showAssign || isLiveExercise || justFinished ? (
-                        <>
+                      showAssign || isLiveExercise || showResultsBtn ? (
+                        <div className="ml-auto flex shrink-0 flex-col items-end gap-1">
                           {showAssign ? (
                             <Button
                               size="sm"
-                              className="h-7 rounded-full bg-emerald-600 px-3 text-xs font-semibold hover:bg-emerald-700"
+                              className="h-8 rounded-lg bg-emerald-600 px-4 text-xs font-semibold shadow-sm hover:bg-emerald-700"
                               disabled={busy}
                               onClick={() => void assignExercise(step)}
                             >
@@ -1388,23 +1469,31 @@ export default function TeacherLessonSection() {
                           {isLiveExercise ? (
                             <Button
                               size="sm"
-                              variant="outline"
-                              className="h-7 rounded-full border-emerald-400 px-3 text-xs font-semibold text-emerald-800"
+                              className="h-8 rounded-lg border-0 bg-amber-500 px-4 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
                               disabled={busy}
-                              onClick={() => void finishExercise()}
+                              onClick={() => void finishExercise(step.exerciseId)}
                             >
+                              <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
                               Finish
                             </Button>
                           ) : null}
-                          {justFinished && gradable ? (
-                            <Badge
+                          {showResultsBtn ? (
+                            <Button
+                              size="sm"
                               variant="outline"
-                              className="h-7 border-slate-300 px-2 text-[10px] font-semibold text-slate-600"
+                              className={cn(
+                                "h-7 rounded-lg border-violet-200 px-3 text-[11px] font-semibold text-violet-700 hover:bg-violet-50",
+                                resultsPanelOpen &&
+                                  resultsPanelExerciseId === step.exerciseId &&
+                                  "border-violet-400 bg-violet-50",
+                              )}
+                              onClick={() => openExerciseResults(step.exerciseId)}
                             >
-                              Results in panel →
-                            </Badge>
+                              <BarChart3 className="mr-1 h-3 w-3" />
+                              Results
+                            </Button>
                           ) : null}
-                        </>
+                        </div>
                       ) : undefined
                     }
                   />
@@ -1414,86 +1503,106 @@ export default function TeacherLessonSection() {
           </CambridgeBookChrome>
         </div>
 
-        <aside className="flex min-h-0 flex-col rounded-xl border border-slate-200 bg-white p-2 lg:overflow-hidden">
-          <p className="mb-2 shrink-0 px-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-            Students
-            {liveExerciseOpen ? (
-              <span className="ml-1 font-normal normal-case text-emerald-700">· {donePct}% done</span>
-            ) : null}
-          </p>
-          {!live && (
-            <p className="px-1 text-xs text-slate-500">Prepare a lesson to track live progress.</p>
-          )}
-          {live && (
-            <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
-              {(live.students ?? []).map((s) => {
-                const isOnline = s.status === "online" || s.status === "working" || s.status === "done"
-                const isDone = s.status === "done"
-                const scorePct = scorePercentValue(s)
-                const barPct = scorePct ?? 0
-                return (
-                  <button
-                    key={s.studentId}
-                    type="button"
-                    onClick={() => setInspectStudent(s)}
-                    className={cn(
-                      "w-full rounded-lg border px-2 py-1.5 text-left transition hover:shadow-sm",
-                      isDone
-                        ? "border-emerald-200 bg-emerald-50/70"
-                        : "border-slate-100 bg-slate-50/60 hover:border-slate-200",
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <div className="flex min-w-0 items-center gap-1.5">
-                        <span
-                          className={cn(
-                            "h-2 w-2 shrink-0 rounded-full",
-                            isOnline ? "bg-emerald-500" : "bg-slate-300",
-                          )}
-                        />
-                        <p className="truncate text-xs font-medium text-slate-900">{s.name}</p>
-                      </div>
-                      {scorePct != null ? (
-                        <span
-                          className="rounded px-1 py-0.5 text-[10px] font-bold tabular-nums text-white"
-                          style={{ backgroundColor: scoreBarColor(scorePct) }}
-                        >
-                          {scorePct}%
-                        </span>
-                      ) : isDone ? (
-                        <Badge className="h-5 bg-emerald-600 px-1 text-[9px] hover:bg-emerald-600">
-                          Done
-                        </Badge>
-                      ) : null}
-                    </div>
-                    <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200/80">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${barPct}%`,
-                          backgroundColor:
-                            scorePct != null ? scoreBarColor(scorePct) : "transparent",
-                        }}
-                      />
-                    </div>
-                  </button>
-                )
-              })}
-              {(live.students ?? []).length === 0 && (
-                <p className="text-xs text-slate-500">No students in this group.</p>
+        <aside className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
+          {resultsPanelOpen && resultsPanelExerciseId ? (
+            <ExerciseResultsPanel
+              className="min-h-0 flex-1"
+              exerciseId={resultsPanelExerciseId}
+              students={studentsForExerciseResults(resultsPanelExerciseId)}
+              metric={resultsMetric}
+              onMetricChange={setResultsMetric}
+              onStudentClick={setInspectStudent}
+              onClose={() => {
+                setResultsPanelOpen(false)
+                setResultsPanelExerciseId(null)
+              }}
+            />
+          ) : (
+            <>
+              <p className="mb-2 shrink-0 px-3 pt-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Students
+                {liveExerciseOpen ? (
+                  <span className="ml-1 font-normal normal-case text-emerald-700">
+                    · {donePct}% done
+                  </span>
+                ) : null}
+              </p>
+              {!live && (
+                <p className="px-3 text-xs text-slate-500">Prepare a lesson to track live progress.</p>
               )}
-            </div>
-          )}
-          {!live && groupId && (
-            <ul className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto">
-              {students
-                .filter((s) => s.groupId === groupId)
-                .map((s) => (
-                  <li key={s.id} className="rounded-lg px-2 py-1 text-xs text-slate-600">
-                    {s.name}
-                  </li>
-                ))}
-            </ul>
+              {live && (
+                <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-2 pb-2">
+                  {(live.students ?? []).map((s) => {
+                    const isOnline =
+                      s.status === "online" || s.status === "working" || s.status === "done"
+                    const isDone = s.status === "done"
+                    const scorePct = scorePercentValue(s)
+                    const barPct = scorePct ?? 0
+                    return (
+                      <button
+                        key={s.studentId}
+                        type="button"
+                        onClick={() => setInspectStudent(s)}
+                        className={cn(
+                          "w-full rounded-lg border px-2 py-1.5 text-left transition hover:shadow-sm",
+                          isDone
+                            ? "border-emerald-200 bg-emerald-50/70"
+                            : "border-slate-100 bg-slate-50/60 hover:border-slate-200",
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <div className="flex min-w-0 items-center gap-1.5">
+                            <span
+                              className={cn(
+                                "h-2 w-2 shrink-0 rounded-full",
+                                isOnline ? "bg-emerald-500" : "bg-slate-300",
+                              )}
+                            />
+                            <p className="truncate text-xs font-medium text-slate-900">{s.name}</p>
+                          </div>
+                          {scorePct != null ? (
+                            <span
+                              className="rounded px-1 py-0.5 text-[10px] font-bold tabular-nums text-white"
+                              style={{ backgroundColor: scoreBarColor(scorePct) }}
+                            >
+                              {scorePct}%
+                            </span>
+                          ) : isDone ? (
+                            <Badge className="h-5 bg-emerald-600 px-1 text-[9px] hover:bg-emerald-600">
+                              Done
+                            </Badge>
+                          ) : null}
+                        </div>
+                        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200/80">
+                          <div
+                            className="h-full rounded-full transition-all"
+                            style={{
+                              width: `${barPct}%`,
+                              backgroundColor:
+                                scorePct != null ? scoreBarColor(scorePct) : "transparent",
+                            }}
+                          />
+                        </div>
+                      </button>
+                    )
+                  })}
+                  {(live.students ?? []).length === 0 && (
+                    <p className="px-1 text-xs text-slate-500">No students in this group.</p>
+                  )}
+                </div>
+              )}
+              {!live && groupId && (
+                <ul className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-2">
+                  {students
+                    .filter((s) => s.groupId === groupId)
+                    .map((s) => (
+                      <li key={s.id} className="rounded-lg px-2 py-1 text-xs text-slate-600">
+                        {s.name}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </>
           )}
         </aside>
       </div>
