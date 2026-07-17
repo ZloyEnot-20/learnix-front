@@ -317,6 +317,7 @@ export default function ExercisesSection({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null)
   const [levelSearch, setLevelSearch] = useState("")
+  const deferredSearch = useDeferredValue(levelSearch)
   const [topicTab, setTopicTab] = useState<"exercises" | "materials" | "explanation">("exercises")
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
@@ -522,7 +523,6 @@ export default function ExercisesSection({
 
   // Defer the heavy filtering behind the keystrokes so typing stays smooth, and
   // memoise it so it only recomputes when the query or catalogue changes.
-  const deferredSearch = useDeferredValue(levelSearch)
   const searchHits = useMemo(() => {
     const query = deferredSearch.trim().toLowerCase()
     // Only search once the query is meaningful (3+ chars) to avoid noise/lag.
