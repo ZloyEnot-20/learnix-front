@@ -17,12 +17,20 @@ export interface ReadingReviewItem {
 }
 
 export function flattenReadingQuestions(parts: IeltsReadingPart[]) {
-  return parts.flatMap((part) =>
-    part.questions.map((question) => ({
+  return parts.flatMap((part) => {
+    if (part.sections?.length) {
+      return part.sections.flatMap((section) =>
+        section.questions.map((question) => ({
+          ...question,
+          partInstruction: section.instruction || part.questionInstruction,
+        })),
+      )
+    }
+    return part.questions.map((question) => ({
       ...question,
       partInstruction: part.questionInstruction,
-    })),
-  )
+    }))
+  })
 }
 
 export function buildReadingReviewItems(

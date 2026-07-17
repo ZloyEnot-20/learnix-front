@@ -26,8 +26,11 @@ import { getExerciseBySlug, peekExerciseBySlug } from "@/lib/exercises-cache"
 import { peekHomeworkById, invalidateMyHomework } from "@/lib/homework-cache"
 import {
   GRAMMAR_BLANK_TOKEN,
+  type ErrorSegment,
   type GrammarExercise,
+  type GrammarQuestion,
 } from "@/lib/grammar-types"
+import { resolveQuestionType } from "@/lib/grammar-question-types"
 import { homeworkApi, analyticsApi } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
@@ -158,6 +161,17 @@ function ExerciseRunner() {
     timeLimitMinutes,
     sessionStartedAt,
   }
+
+  const questions = exercise.content.questions ?? []
+  const questionTypes = new Set(
+    questions.map((q) => resolveQuestionType(q, exercise.type)),
+  )
+  const useMixed = exercise.type === "mixed" || questionTypes.size > 1
+
+  if (useMixed) {
+    return <MixedTypeRunner {...common} />
+  }
+
   switch (exercise.type) {
     case "multiple-choice":
       return <MultipleChoiceRunner {...common} />
@@ -187,6 +201,41 @@ function normalizeAnswer(s: string): string {
     .replace(/\s+/g, " ")
     .replace(/[.?!]+$/g, "")
     .trim()
+}
+
+function rebuildErrorCorrectionSentence(
+  segments: ErrorSegment[],
+  edits: Record<string, string>,
+): string {
+  return segments.map((s) => (edits[s.id] ?? s.text) + (s.after ?? "")).join("").trim()
+}
+
+function formatErrorCorrectionCorrectAnswer(question: GrammarQuestion): string {
+  if (question.answer) return question.answer
+  const segments = question.segments ?? []
+  return segments.map((s) => (s.correctText ?? s.text) + (s.after ?? "")).join("").trim()
+}
+
+function gradeErrorCorrection(
+  question: GrammarQuestion,
+  edits: Record<string, string>,
+): boolean {
+  const segments = question.segments ?? []
+  const rebuilt = rebuildErrorCorrectionSentence(segments, edits)
+  const accepted = [question.answer ?? "", ...(question.accepted ?? [])].filter(
+    (a) => a.length > 0,
+  )
+  if (accepted.length > 0) {
+    return accepted.some((a) => normalizeAnswer(a) === normalizeAnswer(rebuilt))
+  }
+  return segments.every((seg) => {
+    const userText = edits[seg.id] ?? seg.text
+    if (!seg.correctText) {
+      return normalizeAnswer(userText) === normalizeAnswer(seg.text)
+    }
+    const acceptedSeg = [seg.correctText, ...(seg.acceptableText ?? [])]
+    return acceptedSeg.some((a) => normalizeAnswer(a) === normalizeAnswer(userText))
+  })
 }
 
 function remainingSeconds(
@@ -1338,6 +1387,482 @@ function TrueFalseRunner({
             <ActionRow
               result={result}
               canCheck={selected != null}
+              isLast={index + 1 >= total}
+              onCheck={handleCheck}
+              onNext={handleNext}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+// ─── Mixed type runner (heterogeneous question sequence) ─────────────────────
+
+function MixedTypeRunner({
+  exercise,
+  backHref,
+  homeworkId,
+  studentId,
+  timeLimitMinutes,
+  sessionStartedAt,
+}: ExerciseRunnerProps) {
+  const questions = exercise.content.questions ?? []
+  const [index, setIndex] = useState(0)
+  const [result, setResult] = useState<"idle" | "correct" | "incorrect">("idle")
+  const [showHint, setShowHint] = useState(false)
+  const [correctCount, setCorrectCount] = useState(0)
+  const [mistakes, setMistakes] = useState<ReviewItem[]>([])
+  const [finished, setFinished] = useState(false)
+  const [finishedAt, setFinishedAt] = useState<number | null>(null)
+  const [timedOut, setTimedOut] = useState(false)
+
+  const [fillInputs, setFillInputs] = useState<string[]>([])
+  const [fillPerBlank, setFillPerBlank] = useState<boolean[]>([])
+  const [mcSelected, setMcSelected] = useState<string | null>(null)
+  const [tfSelected, setTfSelected] = useState<boolean | null>(null)
+  const [ecEdits, setEcEdits] = useState<Record<string, string>>({})
+  const [ecEditingId, setEcEditingId] = useState<string | null>(null)
+
+  const secondsLeft = useCountdown(
+    timeLimitMinutes,
+    () => {
+      setTimedOut(true)
+      setFinished(true)
+      setFinishedAt(Date.now())
+    },
+    finished,
+    sessionStartedAt,
+  )
+
+  const question = questions[index] ?? null
+  const questionType = question
+    ? resolveQuestionType(question, exercise.type)
+    : null
+
+  const fillSegments = useMemo(() => {
+    if (!question || questionType !== "fill-in-the-blank") return [] as string[]
+    return question.text.split(GRAMMAR_BLANK_TOKEN)
+  }, [question, questionType])
+
+  const fillBlanksCount = Math.max(fillSegments.length - 1, 0)
+
+  useEffect(() => {
+    setResult("idle")
+    setShowHint(false)
+    setMcSelected(null)
+    setTfSelected(null)
+    setEcEdits({})
+    setEcEditingId(null)
+
+    if (!question || questionType !== "fill-in-the-blank") {
+      setFillInputs([])
+      setFillPerBlank([])
+      return
+    }
+
+    const segs = question.text.split(GRAMMAR_BLANK_TOKEN)
+    const blanksCount = Math.max(segs.length - 1, 0)
+    setFillInputs(Array.from({ length: blanksCount }, () => ""))
+    setFillPerBlank([])
+  }, [index, question, questionType])
+
+  const fillAllFilled =
+    fillInputs.length > 0 && fillInputs.every((v) => v.trim().length > 0)
+
+  const canCheck = useMemo(() => {
+    if (!question || !questionType) return false
+    switch (questionType) {
+      case "fill-in-the-blank":
+        return fillAllFilled
+      case "multiple-choice":
+        return mcSelected != null
+      case "true-false":
+        return tfSelected != null
+      case "error-correction":
+        return true
+      default:
+        return false
+    }
+  }, [question, questionType, fillAllFilled, mcSelected, tfSelected])
+
+  const handleCheck = useCallback(() => {
+    if (!question || !questionType || result !== "idle" || !canCheck) return
+
+    let isCorrect = false
+    let userAnswer = ""
+    let correctAnswer = ""
+
+    switch (questionType) {
+      case "fill-in-the-blank": {
+        const checks = fillInputs.map((val, i) =>
+          isBlankCorrect(val, getAcceptableAnswersForBlank(question, i)),
+        )
+        isCorrect = checks.every(Boolean)
+        setFillPerBlank(checks)
+        userAnswer = fillInputs.map((s) => s.trim()).filter(Boolean).join(" / ")
+        correctAnswer = formatFillBlankCorrectAnswer(question)
+        break
+      }
+      case "multiple-choice": {
+        isCorrect = mcSelected === question.correctAnswer
+        userAnswer = mcSelected ?? ""
+        correctAnswer = question.correctAnswer ?? ""
+        break
+      }
+      case "true-false": {
+        isCorrect = tfSelected === question.correctBool
+        userAnswer = tfSelected ? "Correct" : "Incorrect"
+        correctAnswer = question.correctBool ? "Correct" : "Incorrect"
+        break
+      }
+      case "error-correction": {
+        isCorrect = gradeErrorCorrection(question, ecEdits)
+        setEcEditingId(null)
+        userAnswer = rebuildErrorCorrectionSentence(question.segments ?? [], ecEdits)
+        correctAnswer = formatErrorCorrectionCorrectAnswer(question)
+        break
+      }
+    }
+
+    setResult(isCorrect ? "correct" : "incorrect")
+    if (isCorrect) {
+      setCorrectCount((c) => c + 1)
+    } else {
+      setMistakes((prev) => [
+        ...prev,
+        {
+          id: question.id,
+          prompt: question.text,
+          userAnswer,
+          correctAnswer,
+          explanation: question.explanation,
+        },
+      ])
+    }
+  }, [
+    canCheck,
+    ecEdits,
+    fillInputs,
+    mcSelected,
+    question,
+    questionType,
+    result,
+    tfSelected,
+  ])
+
+  const handleNext = useCallback(() => {
+    if (index + 1 >= questions.length) {
+      setFinished(true)
+      setFinishedAt(Date.now())
+      return
+    }
+    setIndex((i) => i + 1)
+  }, [questions.length, index])
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return
+    e.preventDefault()
+    if (result === "idle") handleCheck()
+    else handleNext()
+  }
+
+  const total = questions.length
+  const progressPct = Math.round(((finished ? total : index) / total) * 100)
+
+  if (finished) {
+    return (
+      <ResultsScreen
+        exercise={exercise}
+        backHref={backHref}
+        correctCount={correctCount}
+        total={total}
+        startedAt={sessionStartedAt}
+        finishedAt={finishedAt}
+        mistakes={mistakes}
+        homeworkId={homeworkId}
+        studentId={studentId}
+        timedOut={timedOut}
+      />
+    )
+  }
+
+  if (!question || !questionType) return null
+
+  const checked = result !== "idle"
+  const ecSegments = question.segments ?? []
+
+  const questionInstruction =
+    question.instruction && question.instruction !== "Complete the question."
+      ? question.instruction
+      : null
+
+  let feedbackCorrectAnswer = ""
+  if (questionType === "fill-in-the-blank") {
+    feedbackCorrectAnswer = formatFillBlankCorrectAnswer(question)
+  } else if (questionType === "multiple-choice") {
+    feedbackCorrectAnswer = question.correctAnswer ?? ""
+  } else if (questionType === "true-false") {
+    feedbackCorrectAnswer = question.correctBool ? "Correct" : "Incorrect"
+  } else if (questionType === "error-correction") {
+    feedbackCorrectAnswer = formatErrorCorrectionCorrectAnswer(question)
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <ExerciseHeader
+        exercise={exercise}
+        backHref={backHref}
+        secondsLeft={secondsLeft}
+        hideBack={!!homeworkId}
+      />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+        <ProgressBar
+          index={index}
+          total={total}
+          correctCount={correctCount}
+          progressPct={progressPct}
+        />
+
+        <Card className="overflow-hidden">
+          <CardContent className="pt-6 pb-6 space-y-5">
+            <h2 className="text-lg font-semibold text-slate-900">Question {index + 1}</h2>
+
+            {questionType === "fill-in-the-blank" && (
+              <>
+                {questionInstruction && (
+                  <p className="text-sm text-slate-500">{questionInstruction}</p>
+                )}
+                <div className="text-lg leading-relaxed text-slate-900 flex flex-wrap items-baseline gap-y-2">
+                  {fillSegments.map((seg, i) => (
+                    <Fragment key={i}>
+                      {seg && <span className="whitespace-pre-wrap">{seg}</span>}
+                      {i < fillBlanksCount && (
+                        <BlankInput
+                          key={`q${index}-b${i}`}
+                          value={fillInputs[i] ?? ""}
+                          onChange={(val) => {
+                            setFillInputs((prev) => {
+                              const next = [...prev]
+                              next[i] = val
+                              return next
+                            })
+                          }}
+                          onKeyDown={handleKeyDown}
+                          result={result}
+                          correct={fillPerBlank[i]}
+                          autoFocus={i === 0}
+                          placeholder={
+                            result !== "idle" && fillPerBlank[i] === false
+                              ? question.blanks?.[i]
+                              : undefined
+                          }
+                        />
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {questionType === "multiple-choice" && (
+              <>
+                {questionInstruction && (
+                  <p className="text-sm text-slate-500">{questionInstruction}</p>
+                )}
+                <p className="text-lg leading-relaxed text-slate-900">
+                  {question.text.replace(GRAMMAR_BLANK_TOKEN, "_____")}
+                </p>
+                <div className="grid gap-2.5">
+                  {(question.options ?? []).map((opt) => {
+                    const isChosen = mcSelected === opt
+                    const isCorrectOpt = opt === question.correctAnswer
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        disabled={checked}
+                        onClick={() => setMcSelected(opt)}
+                        aria-pressed={isChosen}
+                        className={cn(
+                          "flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left text-base transition-all",
+                          !checked &&
+                            isChosen &&
+                            "border-blue-500 bg-blue-50 text-slate-900 ring-1 ring-blue-500",
+                          !checked &&
+                            !isChosen &&
+                            "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50",
+                          checked &&
+                            isCorrectOpt &&
+                            "border-emerald-500 bg-emerald-50 text-emerald-900",
+                          checked &&
+                            isChosen &&
+                            !isCorrectOpt &&
+                            "border-rose-500 bg-rose-50 text-rose-900",
+                          checked &&
+                            !isChosen &&
+                            !isCorrectOpt &&
+                            "border-slate-200 bg-white text-slate-400",
+                          checked && "cursor-default",
+                        )}
+                      >
+                        <span className="font-medium">{opt}</span>
+                        {checked && isCorrectOpt && (
+                          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+                        )}
+                        {checked && isChosen && !isCorrectOpt && (
+                          <XCircle className="h-5 w-5 shrink-0 text-rose-600" />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
+
+            {questionType === "true-false" && (
+              <>
+                {questionInstruction && (
+                  <p className="text-sm text-slate-500">{questionInstruction}</p>
+                )}
+                <p className="text-lg leading-relaxed text-slate-900">
+                  &ldquo;{question.text}&rdquo;
+                </p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {(
+                    [
+                      { value: true, label: "Correct" },
+                      { value: false, label: "Incorrect" },
+                    ] as const
+                  ).map((opt) => {
+                    const isChosen = tfSelected === opt.value
+                    const isCorrectOpt = opt.value === question.correctBool
+                    return (
+                      <button
+                        key={String(opt.value)}
+                        type="button"
+                        disabled={checked}
+                        onClick={() => setTfSelected(opt.value)}
+                        aria-pressed={isChosen}
+                        className={cn(
+                          "flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-base font-medium transition-all",
+                          !checked &&
+                            isChosen &&
+                            "border-blue-500 bg-blue-50 text-slate-900 ring-1 ring-blue-500",
+                          !checked &&
+                            !isChosen &&
+                            "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50",
+                          checked &&
+                            isCorrectOpt &&
+                            "border-emerald-500 bg-emerald-50 text-emerald-900",
+                          checked &&
+                            isChosen &&
+                            !isCorrectOpt &&
+                            "border-rose-500 bg-rose-50 text-rose-900",
+                          checked &&
+                            !isChosen &&
+                            !isCorrectOpt &&
+                            "border-slate-200 bg-white text-slate-400",
+                          checked && "cursor-default",
+                        )}
+                      >
+                        {checked && isCorrectOpt && (
+                          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+                        )}
+                        {checked && isChosen && !isCorrectOpt && (
+                          <XCircle className="h-5 w-5 shrink-0 text-rose-600" />
+                        )}
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
+
+            {questionType === "error-correction" && (
+              <>
+                {questionInstruction && (
+                  <p className="text-sm text-slate-500">{questionInstruction}</p>
+                )}
+                <div className="text-lg leading-loose text-slate-900">
+                  {ecSegments.map((seg) => {
+                    const value = ecEdits[seg.id] ?? seg.text
+                    const changed = value !== seg.text
+                    const isEditing = ecEditingId === seg.id
+                    return (
+                      <span key={seg.id}>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            autoFocus
+                            value={value}
+                            onChange={(e) =>
+                              setEcEdits((m) => ({ ...m, [seg.id]: e.target.value }))
+                            }
+                            onBlur={() => setEcEditingId(null)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault()
+                                setEcEditingId(null)
+                              }
+                            }}
+                            style={{ width: `${Math.max(value.length, 3) + 1}ch` }}
+                            className="rounded-md border border-blue-400 bg-blue-50 px-1.5 py-0.5 text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            title={seg.hint}
+                            onClick={() => result === "idle" && setEcEditingId(seg.id)}
+                            disabled={result !== "idle"}
+                            className={cn(
+                              "rounded-md px-1 py-0.5 transition-colors",
+                              result === "idle" &&
+                                "cursor-pointer hover:bg-amber-100 hover:ring-1 hover:ring-amber-200",
+                              changed
+                                ? "bg-amber-100 font-semibold text-amber-900 underline decoration-dotted underline-offset-4"
+                                : "text-slate-900",
+                            )}
+                          >
+                            {value}
+                          </button>
+                        )}
+                        <span className="whitespace-pre">{seg.after ?? ""}</span>
+                      </span>
+                    )
+                  })}
+                </div>
+                {result === "idle" && (
+                  <p className="text-xs text-slate-400">
+                    Click a chunk to fix it. Leave the sentence unchanged if it is already
+                    correct.
+                  </p>
+                )}
+              </>
+            )}
+
+            {(questionType === "fill-in-the-blank" ||
+              questionType === "multiple-choice" ||
+              questionType === "error-correction") &&
+              question.hint &&
+              result === "idle" && (
+                <HintRow showHint={showHint} setShowHint={setShowHint} hint={question.hint} />
+              )}
+
+            {result !== "idle" && (
+              <FeedbackBox
+                correct={result === "correct"}
+                correctAnswer={feedbackCorrectAnswer}
+                explanation={question.explanation}
+              />
+            )}
+
+            <ActionRow
+              result={result}
+              canCheck={canCheck}
               isLast={index + 1 >= total}
               onCheck={handleCheck}
               onNext={handleNext}

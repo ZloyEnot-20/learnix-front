@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 import { BookOpen, Headphones, Mic, PenLine } from "lucide-react"
 import type { IeltsReadingSummary } from "./reading-data"
+import { filterCefrReadingsByLevel, filterIeltsReadings } from "./reading-data"
 import type { IeltsListeningSummary } from "./listening-data"
 
 export const IELTS_LEVEL_KEY = "ielts"
@@ -39,14 +40,30 @@ export function ieltsFolderStats(
   passageCount: number
   questionCount: number
 } {
-  const passageCount = readings.length + listenings.length
+  const ieltsReadings = filterIeltsReadings(readings)
+  const passageCount = ieltsReadings.length + listenings.length
   const questionCount =
-    readings.reduce((sum, r) => sum + r.questionCount, 0) +
+    ieltsReadings.reduce((sum, r) => sum + r.questionCount, 0) +
     listenings.reduce((sum, t) => sum + t.questionCount, 0)
   return {
     sectionCount: IELTS_SUBJECT_FOLDERS.length,
     passageCount,
     questionCount,
+  }
+}
+
+export function cefrReadingStats(
+  level: string,
+  readings: IeltsReadingSummary[],
+): { count: number; lines: string[] } {
+  const levelReadings = filterCefrReadingsByLevel(readings, level)
+  const count = levelReadings.length
+  return {
+    count,
+    lines: [
+      `${count} passage${count === 1 ? "" : "s"}`,
+      "Reading comprehension",
+    ],
   }
 }
 
@@ -56,10 +73,11 @@ export function ieltsCategoryStats(
   listenings: IeltsListeningSummary[] = [],
 ): { count: number; lines: string[] } {
   if (categoryId === "reading") {
+    const ieltsReadings = filterIeltsReadings(readings)
     return {
-      count: readings.length,
+      count: ieltsReadings.length,
       lines: [
-        `${readings.length} passage${readings.length === 1 ? "" : "s"}`,
+        `${ieltsReadings.length} passage${ieltsReadings.length === 1 ? "" : "s"}`,
         "IELTS-style questions",
       ],
     }

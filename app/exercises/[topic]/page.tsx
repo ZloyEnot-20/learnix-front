@@ -48,6 +48,7 @@ import {
   type TopicSummary,
 } from "@/lib/grammar-utils"
 import type { GrammarExercise } from "@/lib/grammar-types"
+import { exerciseMatchesType } from "@/lib/grammar-question-types"
 import type { Group } from "@/lib/admin-storage"
 import { getGroups, peekGroups } from "@/lib/admin-cache"
 import { homeworkApi } from "@/lib/api"
@@ -163,7 +164,10 @@ export default function ExercisesTopicPage() {
   }, [exercises, allExercises, topicsMeta, topic])
 
   const visibleExercises = useMemo(
-    () => (typeFilter === "all" ? exercises : exercises.filter((e) => e.type === typeFilter)),
+    () =>
+      typeFilter === "all"
+        ? exercises
+        : exercises.filter((e) => exerciseMatchesType(e, typeFilter)),
     [exercises, typeFilter],
   )
 

@@ -1,5 +1,6 @@
 import type { HomeworkMistake } from "./admin-storage"
 import { formatFillBlankCorrectAnswer } from "./fill-blank-answers"
+import { resolveQuestionType } from "./grammar-question-types"
 import type { GrammarExercise, GrammarQuestion } from "./grammar-types"
 
 export function getReviewQuestions(exercise: GrammarExercise): GrammarQuestion[] {
@@ -19,7 +20,8 @@ export function questionCorrectAnswer(
   exercise: GrammarExercise,
   question: GrammarQuestion,
 ): string {
-  switch (exercise.type) {
+  const type = resolveQuestionType(question, exercise.type)
+  switch (type) {
     case "fill-in-the-blank":
       return formatFillBlankCorrectAnswer(question)
     case "multiple-choice":
@@ -37,9 +39,11 @@ export function questionCorrectAnswer(
       return [prefix, core, suffix].filter(Boolean).join(" ")
     }
     case "error-correction":
+      if (question.answer) return question.answer
       return (question.segments ?? [])
-        .map((s) => s.correctText ?? s.text)
+        .map((s) => (s.correctText ?? s.text) + (s.after ?? ""))
         .join("")
+        .trim()
     default:
       return question.correctAnswer ?? question.answer ?? ""
   }

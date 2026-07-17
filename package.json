@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/generate-reading-types.mjs && next build",
+    "build": "node scripts/generate-reading-types.mjs && node scripts/generate-cefr-reading-catalog.mjs && next build",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",

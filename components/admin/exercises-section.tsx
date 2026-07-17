@@ -57,6 +57,7 @@ import {
 } from "@/lib/grammar-utils"
 import { folderColorClass } from "@/lib/folder-colors"
 import type { GrammarExercise } from "@/lib/grammar-types"
+import { exerciseMatchesType } from "@/lib/grammar-question-types"
 import {
   listVocabDecks,
   fetchVocabDecks,
@@ -79,6 +80,8 @@ import {
   fetchReadingSummaries,
   fetchReading,
   readingHomeworkSlug,
+  filterCefrReadingsByLevel,
+  filterIeltsReadings,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
 import {
@@ -104,6 +107,7 @@ import {
   IELTS_LEVEL_KEY,
   IELTS_LEVEL_PALETTE,
   IELTS_SUBJECT_FOLDERS,
+  cefrReadingStats,
   ieltsCategoryStats,
   ieltsFolderStats,
   isIeltsLevel,
@@ -117,6 +121,18 @@ import { useToast } from "@/hooks/use-toast"
 import { LevelFolderCardsSkeleton } from "./skeletons"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+import {
+  ExerciseAssignTable,
+  type AssignableExercisePayload,
+} from "@/components/admin/exercise-assign-table"
+import { BulkAssignDialog } from "@/components/admin/bulk-assign-dialog"
+import {
+  grammarExerciseToTableRow,
+  vocabDeckToTableRow,
+  podcastToTableRow,
+  readingToTableRow,
+  listeningToTableRow,
+} from "@/lib/exercise-table-mappers"
 
 const DIFFICULTY_META: Record<
   GrammarExercise["difficulty"],
@@ -164,6 +180,7 @@ interface SubjectFolder {
 const CEFR_SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800 ring-amber-200/70" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700 ring-violet-200/70" },
+  { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-indigo-100 text-indigo-700 ring-indigo-200/70" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-sky-100 text-sky-700 ring-sky-200/70" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700 ring-emerald-200/70" },
@@ -302,16 +319,26 @@ export default function ExercisesSection({
   const [levelSearch, setLevelSearch] = useState("")
   const [topicTab, setTopicTab] = useState<"exercises" | "materials" | "explanation">("exercises")
   const [topicTypeFilter, setTopicTypeFilter] = useState<ExerciseTypeValue>("all")
-  const [assignTarget, setAssignTarget] = useState<GrammarExercise | null>(null)
-  const [assignDeck, setAssignDeck] = useState<VocabDeck | null>(null)
-  const [assignPodcast, setAssignPodcast] = useState<PodcastEpisode | null>(null)
-  const [assignReading, setAssignReading] = useState<IeltsReadingSummary | null>(null)
-  const [assignListening, setAssignListening] = useState<IeltsListeningSummary | null>(null)
   const [previewDeck, setPreviewDeck] = useState<VocabDeck | null>(null)
   const [previewPodcast, setPreviewPodcast] = useState<PodcastEpisode | null>(null)
   const [previewReading, setPreviewReading] = useState<IeltsReadingSummary | null>(null)
   const [previewTarget, setPreviewTarget] = useState<GrammarExercise | null>(null)
+  const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([])
+  const [bulkAssignOpen, setBulkAssignOpen] = useState(false)
+  const [bulkAssignItems, setBulkAssignItems] = useState<AssignableExercisePayload[]>([])
   const loading = !exercisesReady
+
+  const openBulkAssign = (items: AssignableExercisePayload[]) => {
+    setBulkAssignItems(items)
+    setBulkAssignOpen(true)
+  }
+
+  const handleBulkAssigned = () => {
+    setSelectedExerciseIds([])
+    setBulkAssignOpen(false)
+    setBulkAssignItems([])
+    onHomeworkAssigned?.()
+  }
 
   const grammarTopics = useMemo<TopicSummary[]>(() => {
     return buildTopicSummaries(exercises, topicsMeta).filter(
@@ -362,13 +389,26 @@ export default function ExercisesSection({
       .finally(() => setListeningsLoading(false))
   }, [])
 
+  const ieltsReadings = useMemo(() => filterIeltsReadings(readings), [readings])
+  const cefrReadingsForLevel = useMemo(
+    () =>
+      selectedLevel && !isIeltsLevel(selectedLevel)
+        ? filterCefrReadingsByLevel(readings, selectedLevel)
+        : [],
+    [readings, selectedLevel],
+  )
+  const activeReadings = useMemo(() => {
+    if (!selectedLevel) return readings
+    return isIeltsLevel(selectedLevel) ? ieltsReadings : cefrReadingsForLevel
+  }, [readings, selectedLevel, ieltsReadings, cefrReadingsForLevel])
+
   const readingQuestionTypes = useMemo(
-    () => collectAvailableReadingTypes(readings),
-    [readings],
+    () => collectAvailableReadingTypes(activeReadings),
+    [activeReadings],
   )
   const filteredReadings = useMemo(
-    () => filterReadingsByQuestionType(readings, readingTypeFilter),
-    [readings, readingTypeFilter],
+    () => filterReadingsByQuestionType(activeReadings, readingTypeFilter),
+    [activeReadings, readingTypeFilter],
   )
   const listeningQuestionTypes = useMemo(
     () => collectAvailableListeningTypes(listenings),
@@ -383,6 +423,18 @@ export default function ExercisesSection({
     setReadingTypeFilter(null)
     setListeningTypeFilter(null)
   }, [selectedCategory])
+
+  useEffect(() => {
+    setSelectedExerciseIds([])
+  }, [
+    selectedLevel,
+    selectedCategory,
+    selectedTopic,
+    topicTypeFilter,
+    readingTypeFilter,
+    listeningTypeFilter,
+    deferredSearch,
+  ])
 
   const ieltsStats = useMemo(() => ieltsFolderStats(readings, listenings), [readings, listenings])
 
@@ -454,7 +506,7 @@ export default function ExercisesSection({
     () =>
       topicTypeFilter === "all"
         ? topicExercises
-        : topicExercises.filter((e) => e.type === topicTypeFilter),
+        : topicExercises.filter((e) => exerciseMatchesType(e, topicTypeFilter)),
     [topicExercises, topicTypeFilter],
   )
 
@@ -571,21 +623,18 @@ export default function ExercisesSection({
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                         Podcasts · {podcastResults.length}
                       </h3>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {podcastResults.map((episode) => (
-                          <PodcastSearchCard
-                            key={episode.slug}
-                            episode={episode}
-                            onOpenFolder={() => {
-                              setLevelSearch("")
-                              setSelectedLevel(clampToFixedLevel(primaryLevel([episode.level])))
-                              setSelectedCategory("podcasts")
-                            }}
-                            onPreview={() => setPreviewPodcast(episode)}
-                            onAssign={canAssign ? () => setAssignPodcast(episode) : undefined}
-                          />
-                        ))}
-                      </div>
+                      <ExerciseAssignTable
+                        rows={podcastResults.map(podcastToTableRow)}
+                        canAssign={canAssign}
+                        selectedIds={selectedExerciseIds}
+                        onSelectionChange={setSelectedExerciseIds}
+                        onBulkAssign={openBulkAssign}
+                        onPreview={(row) => {
+                          const episode = podcastResults.find((p) => p.slug === row.id)
+                          if (episode) setPreviewPodcast(episode)
+                        }}
+                        levelBadgeClass={levelBadgeClass}
+                      />
                     </div>
                   )}
 
@@ -611,17 +660,20 @@ export default function ExercisesSection({
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                         Exercises · {exerciseResults.length}
                       </h3>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {exerciseResults.map((ex) => (
-                          <ExerciseSearchCard
-                            key={ex.id}
-                            exercise={ex}
-                            onOpenTopic={() => setSelectedTopic(ex.topic)}
-                            onPreview={() => setPreviewTarget(ex)}
-                            onAssign={canAssign ? () => setAssignTarget(ex) : undefined}
-                          />
-                        ))}
-                      </div>
+                      <ExerciseAssignTable
+                        rows={exerciseResults.map((ex) =>
+                          grammarExerciseToTableRow(ex, DIFFICULTY_META),
+                        )}
+                        canAssign={canAssign}
+                        selectedIds={selectedExerciseIds}
+                        onSelectionChange={setSelectedExerciseIds}
+                        onBulkAssign={openBulkAssign}
+                        onPreview={(row) => {
+                          const ex = exerciseResults.find((e) => e.id === row.id)
+                          if (ex) setPreviewTarget(ex)
+                        }}
+                        levelBadgeClass={levelBadgeClass}
+                      />
                     </div>
                   )}
                 </div>
@@ -656,18 +708,6 @@ export default function ExercisesSection({
           </section>
         )}
 
-        <AssignDialog
-          exercise={assignTarget}
-          groups={assignableGroups}
-          open={!!assignTarget}
-          onOpenChange={(open) => !open && setAssignTarget(null)}
-          onAssigned={() => {
-            toast({ title: "Exercise assigned to group" })
-            setAssignTarget(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
         <ExercisePreviewDialog
           exercise={previewTarget}
           open={!!previewTarget}
@@ -683,41 +723,13 @@ export default function ExercisesSection({
           open={!!previewReading}
           onOpenChange={(open) => !open && setPreviewReading(null)}
         />
-        <AssignPodcastDialog
-          episode={assignPodcast}
-          groups={assignableGroups}
-          open={!!assignPodcast}
-          onOpenChange={(open) => !open && setAssignPodcast(null)}
-          onAssigned={() => {
-            toast({ title: "Podcast assigned to group" })
-            setAssignPodcast(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
 
-        <AssignReadingDialog
-          test={assignReading}
+        <BulkAssignDialog
+          items={bulkAssignItems}
           groups={assignableGroups}
-          open={!!assignReading}
-          onOpenChange={(open) => !open && setAssignReading(null)}
-          onAssigned={() => {
-            toast({ title: "Reading task assigned" })
-            setAssignReading(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
-        <AssignListeningDialog
-          test={assignListening}
-          groups={assignableGroups}
-          open={!!assignListening}
-          onOpenChange={(open) => !open && setAssignListening(null)}
-          onAssigned={() => {
-            toast({ title: "Listening task assigned" })
-            setAssignListening(null)
-            onHomeworkAssigned?.()
-          }}
+          open={bulkAssignOpen}
+          onOpenChange={setBulkAssignOpen}
+          onAssigned={handleBulkAssigned}
           createdByName={createdByName}
         />
       </div>
@@ -752,7 +764,9 @@ export default function ExercisesSection({
         }
       }
       if (id === "reading") {
-        return { count: 0, lines: [] }
+        return isIeltsLevel(selectedLevel)
+          ? ieltsCategoryStats(id, readings, listenings)
+          : cefrReadingStats(selectedLevel, readings)
       }
       const topics = levelTopics.filter((t) => t.category === id)
       const exercises = topics.reduce((acc, t) => acc + t.exerciseCount, 0)
@@ -820,19 +834,6 @@ export default function ExercisesSection({
             )
           })}
         </div>
-
-        <AssignVocabDialog
-          deck={assignDeck}
-          groups={assignableGroups}
-          open={!!assignDeck}
-          onOpenChange={(open) => !open && setAssignDeck(null)}
-          onAssigned={() => {
-            toast({ title: "Vocabulary repetition assigned" })
-            setAssignDeck(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
       </div>
     )
   }
@@ -843,7 +844,7 @@ export default function ExercisesSection({
     const subject = subjectFolders.find((f) => f.id === selectedCategory)
     const isVocab = selectedCategory === "vocabulary"
     const isPodcasts = selectedCategory === "podcasts"
-    const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
+    const isReading = selectedCategory === "reading"
     const isListening = selectedCategory === "listening" && isIeltsLevel(selectedLevel)
     const topics = levelTopics.filter((t) => t.category === selectedCategory)
     const count = isVocab
@@ -851,7 +852,7 @@ export default function ExercisesSection({
       : isPodcasts
         ? podcastsForLevel.length
         : isReading
-          ? readings.length
+          ? activeReadings.length
           : isListening
             ? listenings.length
             : topics.length
@@ -897,142 +898,123 @@ export default function ExercisesSection({
             </p>
           </div>
         ) : isVocab ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {vocabDecksForLevel.map((d) => (
-              <VocabDeckCard
-                key={d.slug}
-                deck={d}
-                canAssign={canAssign}
-                onAssign={() => setAssignDeck(d)}
-                onPreview={() => setPreviewDeck(d)}
-              />
-            ))}
-          </div>
+          <ExerciseAssignTable
+            rows={vocabDecksForLevel.map(vocabDeckToTableRow)}
+            canAssign={canAssign}
+            selectedIds={selectedExerciseIds}
+            onSelectionChange={setSelectedExerciseIds}
+            onBulkAssign={openBulkAssign}
+            onPreview={(row) => {
+              const deck = vocabDecksForLevel.find((d) => d.slug === row.id)
+              if (deck) setPreviewDeck(deck)
+            }}
+            levelBadgeClass={levelBadgeClass}
+            emptyMessage="No vocabulary decks in this level."
+          />
         ) : isPodcasts ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {podcastsForLevel.map((p) => (
-              <PodcastCard
-                key={p.slug}
-                episode={p}
-                canAssign={canAssign}
-                onAssign={() => setAssignPodcast(p)}
-                onPreview={() => setPreviewPodcast(p)}
-              />
-            ))}
-          </div>
+          <ExerciseAssignTable
+            rows={podcastsForLevel.map(podcastToTableRow)}
+            canAssign={canAssign}
+            selectedIds={selectedExerciseIds}
+            onSelectionChange={setSelectedExerciseIds}
+            onBulkAssign={openBulkAssign}
+            onPreview={(row) => {
+              const episode = podcastsForLevel.find((p) => p.slug === row.id)
+              if (episode) setPreviewPodcast(episode)
+            }}
+            levelBadgeClass={levelBadgeClass}
+            emptyMessage="No podcasts in this level."
+          />
         ) : isReading ? (
-          readingsLoading ? (
-            <div>
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-8 w-24 rounded-full" />
-                ))}
+          <>
+            <ReadingTypeFilters
+              types={readingQuestionTypes}
+              readings={readings}
+              activeType={readingTypeFilter}
+              onChange={setReadingTypeFilter}
+            />
+            {filteredReadings.length === 0 && !readingsLoading ? (
+              <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                <p className="font-medium text-slate-900">No passages found</p>
+                <p className="text-sm text-slate-500">
+                  {readingTypeFilter
+                    ? `No tests with “${readingQuestionTypeLabel(readingTypeFilter)}” questions.`
+                    : "Reading passages haven't been added yet."}
+                </p>
+                {readingTypeFilter ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => setReadingTypeFilter(null)}
+                  >
+                    Show all passages
+                  </Button>
+                ) : null}
               </div>
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="h-48 rounded-2xl" />
-                ))}
+            ) : (
+              <div className="mt-4">
+                <ExerciseAssignTable
+                  rows={filteredReadings.map(readingToTableRow)}
+                  loading={readingsLoading}
+                  canAssign={canAssign}
+                  selectedIds={selectedExerciseIds}
+                  onSelectionChange={setSelectedExerciseIds}
+                  onBulkAssign={openBulkAssign}
+                  onPreview={(row) => {
+                    const test = filteredReadings.find((r) => r.slug === row.id)
+                    if (test) setPreviewReading(test)
+                  }}
+                  levelBadgeClass={levelBadgeClass}
+                  emptyMessage="No reading passages found."
+                />
               </div>
-            </div>
-          ) : (
-            <>
-              <ReadingTypeFilters
-                types={readingQuestionTypes}
-                readings={readings}
-                activeType={readingTypeFilter}
-                onChange={setReadingTypeFilter}
-              />
-              {filteredReadings.length === 0 ? (
-                <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
-                  <p className="font-medium text-slate-900">No passages found</p>
-                  <p className="text-sm text-slate-500">
-                    {readingTypeFilter
-                      ? `No tests with “${readingQuestionTypeLabel(readingTypeFilter)}” questions.`
-                      : "Reading passages haven't been added yet."}
-                  </p>
-                  {readingTypeFilter ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={() => setReadingTypeFilter(null)}
-                    >
-                      Show all passages
-                    </Button>
-                  ) : null}
-                </div>
-              ) : (
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredReadings.map((r) => (
-                    <ReadingCard
-                      key={r.slug}
-                      test={r}
-                      canAssign={canAssign}
-                      onAssign={() => setAssignReading(r)}
-                      onPreview={() => setPreviewReading(r)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )
+            )}
+          </>
         ) : isListening ? (
-          listeningsLoading ? (
-            <div>
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-8 w-24 rounded-full" />
-                ))}
+          <>
+            <ListeningTypeFilters
+              types={listeningQuestionTypes}
+              listenings={listenings}
+              activeType={listeningTypeFilter}
+              onChange={setListeningTypeFilter}
+            />
+            {filteredListenings.length === 0 && !listeningsLoading ? (
+              <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
+                <p className="font-medium text-slate-900">No listening tests found</p>
+                <p className="text-sm text-slate-500">
+                  {listeningTypeFilter
+                    ? `No tests with “${listeningQuestionTypeLabel(listeningTypeFilter)}” questions.`
+                    : "Listening tests haven't been added yet."}
+                </p>
+                {listeningTypeFilter ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => setListeningTypeFilter(null)}
+                  >
+                    Show all tests
+                  </Button>
+                ) : null}
               </div>
-              <div className="mt-4 space-y-2">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <Skeleton key={i} className="h-16 w-full rounded-xl" />
-                ))}
+            ) : (
+              <div className="mt-4">
+                <ExerciseAssignTable
+                  rows={filteredListenings.map(listeningToTableRow)}
+                  loading={listeningsLoading}
+                  canAssign={canAssign}
+                  selectedIds={selectedExerciseIds}
+                  onSelectionChange={setSelectedExerciseIds}
+                  onBulkAssign={openBulkAssign}
+                  levelBadgeClass={levelBadgeClass}
+                  emptyMessage="No listening tests found."
+                />
               </div>
-            </div>
-          ) : (
-            <>
-              <ListeningTypeFilters
-                types={listeningQuestionTypes}
-                listenings={listenings}
-                activeType={listeningTypeFilter}
-                onChange={setListeningTypeFilter}
-              />
-              {filteredListenings.length === 0 ? (
-                <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white px-4 py-12 text-center">
-                  <p className="font-medium text-slate-900">No listening tests found</p>
-                  <p className="text-sm text-slate-500">
-                    {listeningTypeFilter
-                      ? `No tests with “${listeningQuestionTypeLabel(listeningTypeFilter)}” questions.`
-                      : "Listening tests haven't been added yet."}
-                  </p>
-                  {listeningTypeFilter ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={() => setListeningTypeFilter(null)}
-                    >
-                      Show all tests
-                    </Button>
-                  ) : null}
-                </div>
-              ) : (
-                <div className="mt-4 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-sm">
-                  {filteredListenings.map((test) => (
-                    <ListeningListRow
-                      key={test.slug}
-                      test={test}
-                      canAssign={canAssign}
-                      onAssign={() => setAssignListening(test)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )
+            )}
+          </>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {topics.map((t) => (
@@ -1059,55 +1041,12 @@ export default function ExercisesSection({
           onOpenChange={(open) => !open && setPreviewReading(null)}
         />
 
-        <AssignVocabDialog
-          deck={assignDeck}
+        <BulkAssignDialog
+          items={bulkAssignItems}
           groups={assignableGroups}
-          open={!!assignDeck}
-          onOpenChange={(open) => !open && setAssignDeck(null)}
-          onAssigned={() => {
-            toast({ title: "Vocabulary repetition assigned" })
-            setAssignDeck(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
-
-        <AssignPodcastDialog
-          episode={assignPodcast}
-          groups={assignableGroups}
-          open={!!assignPodcast}
-          onOpenChange={(open) => !open && setAssignPodcast(null)}
-          onAssigned={() => {
-            toast({ title: "Podcast assigned to group" })
-            setAssignPodcast(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
-
-        <AssignReadingDialog
-          test={assignReading}
-          groups={assignableGroups}
-          open={!!assignReading}
-          onOpenChange={(open) => !open && setAssignReading(null)}
-          onAssigned={() => {
-            toast({ title: "Reading task assigned" })
-            setAssignReading(null)
-            onHomeworkAssigned?.()
-          }}
-          createdByName={createdByName}
-        />
-
-        <AssignListeningDialog
-          test={assignListening}
-          groups={assignableGroups}
-          open={!!assignListening}
-          onOpenChange={(open) => !open && setAssignListening(null)}
-          onAssigned={() => {
-            toast({ title: "Listening task assigned" })
-            setAssignListening(null)
-            onHomeworkAssigned?.()
-          }}
+          open={bulkAssignOpen}
+          onOpenChange={setBulkAssignOpen}
+          onAssigned={handleBulkAssigned}
           createdByName={createdByName}
         />
       </div>
@@ -1283,103 +1222,31 @@ export default function ExercisesSection({
           </Button>
         </div>
       ) : (
-        <div
-          className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
-        >
-          {visibleTopicExercises.map((ex) => {
-            const diff = DIFFICULTY_META[ex.difficulty]
-            const levelCls = levelBadgeClass(ex.level)
-            return (
-              <Card
-                key={ex.id}
-                className="group h-full overflow-hidden border-slate-200/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
-              >
-                <CardContent className="flex h-full flex-col gap-3 p-4 sm:gap-4 sm:p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-slate-600">
-                      {prettifySubtopic(ex.subtopic)}
-                    </span>
-                    <span
-                      className={cn(
-                        "shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-bold ring-1",
-                        levelCls,
-                      )}
-                    >
-                      {ex.level}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1">
-                    <h4 className="text-base font-bold leading-snug text-slate-900 sm:text-lg">
-                      {ex.title}
-                    </h4>
-                    <p className="line-clamp-3 text-[13px] leading-relaxed text-slate-600 sm:text-sm">
-                      {ex.description}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                      <ListChecks className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                      <span className="tabular-nums">{ex.totalQuestions}</span>
-                      <span className="hidden text-slate-500 sm:inline">questions</span>
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700">
-                      <Clock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                      <span className="tabular-nums">{ex.estimatedTime}</span>
-                      <span className="text-slate-500">min</span>
-                    </span>
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1",
-                        diff.cls,
-                      )}
-                    >
-                      <span className={cn("h-1.5 w-1.5 rounded-full", diff.dot)} />
-                      {diff.label}
-                    </span>
-                  </div>
-
-                  <div className="mt-auto flex flex-col gap-2 sm:flex-row">
-                    {canAssign && (
-                      <Button
-                        size="sm"
-                        onClick={() => setAssignTarget(ex)}
-                        className="h-9 w-full gap-1.5 bg-blue-500 text-white hover:bg-blue-600 sm:flex-1"
-                      >
-                        <UserPlus className="h-4 w-4" />
-                        Assign
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setPreviewTarget(ex)}
-                      className={cn("h-9 w-full gap-1.5 sm:w-auto", !canAssign && "sm:ml-auto")}
-                    >
-                      <Eye className="h-4 w-4" />
-                      Preview
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
+        <ExerciseAssignTable
+          rows={visibleTopicExercises.map((ex) =>
+            grammarExerciseToTableRow(ex, DIFFICULTY_META),
+          )}
+          canAssign={canAssign}
+          selectedIds={selectedExerciseIds}
+          onSelectionChange={setSelectedExerciseIds}
+          onBulkAssign={openBulkAssign}
+          onPreview={(row) => {
+            const ex = visibleTopicExercises.find((e) => e.id === row.id)
+            if (ex) setPreviewTarget(ex)
+          }}
+          levelBadgeClass={levelBadgeClass}
+          emptyMessage="No exercises of this type."
+        />
           )}
         </>
       )}
 
-      <AssignDialog
-        exercise={assignTarget}
+      <BulkAssignDialog
+        items={bulkAssignItems}
         groups={assignableGroups}
-        open={!!assignTarget}
-        onOpenChange={(open) => !open && setAssignTarget(null)}
-        onAssigned={() => {
-          toast({ title: "Exercise assigned to group" })
-          setAssignTarget(null)
-          onHomeworkAssigned?.()
-        }}
+        open={bulkAssignOpen}
+        onOpenChange={setBulkAssignOpen}
+        onAssigned={handleBulkAssigned}
         createdByName={createdByName}
       />
 

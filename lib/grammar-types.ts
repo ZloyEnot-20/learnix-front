@@ -12,9 +12,13 @@ export type GrammarExerciseType =
   | "error-correction"
   | "word-order"
   | "speaking"
+  | "mixed"
+
+/** Exercise types shown in topic filter pills (mixed is excluded). */
+export type FilterableExerciseType = Exclude<GrammarExerciseType, "mixed">
 
 /** Display labels for each exercise type, in the order they should appear in filters. */
-export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
+export const EXERCISE_TYPE_LABELS: Record<FilterableExerciseType, string> = {
   "multiple-choice": "Multiple choice",
   "fill-in-the-blank": "Fill in the gaps",
   matching: "Matching",
@@ -26,7 +30,7 @@ export const EXERCISE_TYPE_LABELS: Record<GrammarExerciseType, string> = {
   speaking: "Speaking",
 }
 
-export const EXERCISE_TYPE_ORDER: GrammarExerciseType[] = [
+export const EXERCISE_TYPE_ORDER: FilterableExerciseType[] = [
   "multiple-choice",
   "fill-in-the-blank",
   "matching",
@@ -40,6 +44,8 @@ export const EXERCISE_TYPE_ORDER: GrammarExerciseType[] = [
 
 export interface GrammarQuestion {
   id: number
+  /** Per-question type override (mixed exercises). */
+  type?: GrammarExerciseType
   instruction?: string
   /** Sentence text. For fill-in-the-blank it contains `_____` placeholders. */
   text: string
@@ -116,6 +122,8 @@ export interface GrammarExercise {
   difficulty: GrammarDifficulty
   level: string
   type: GrammarExerciseType
+  /** Declared question types included in this exercise (mixed). */
+  questionTypes?: GrammarExerciseType[]
   estimatedTime: number
   totalQuestions: number
   passingScore: number

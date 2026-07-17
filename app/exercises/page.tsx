@@ -47,6 +47,8 @@ import { LevelFolderCardsSkeleton, CardGridSkeleton } from "@/components/admin/s
 import { cn } from "@/lib/utils"
 import {
   fetchReadingSummaries,
+  filterCefrReadingsByLevel,
+  filterIeltsReadings,
   listReadings,
   type IeltsReadingSummary,
 } from "@/lib/reading-data"
@@ -74,6 +76,7 @@ import {
   IELTS_LEVEL_KEY,
   IELTS_LEVEL_PALETTE,
   IELTS_SUBJECT_FOLDERS,
+  cefrReadingStats,
   ieltsCategoryStats,
   ieltsFolderStats,
   isIeltsLevel,
@@ -120,6 +123,7 @@ interface SubjectFolder {
 const CEFR_SUBJECT_FOLDERS: SubjectFolder[] = [
   { id: "grammar", label: "Grammar", icon: SpellCheck, cls: "bg-amber-100 text-amber-800" },
   { id: "vocabulary", label: "Vocabulary", icon: BookMarked, cls: "bg-violet-100 text-violet-700" },
+  { id: "reading", label: "Reading", icon: BookOpen, cls: "bg-sky-100 text-sky-700" },
   { id: "podcasts", label: "Podcasts", icon: Headphones, cls: "bg-emerald-100 text-emerald-700" },
   { id: "speaking", label: "Speaking", icon: Mic, cls: "bg-rose-100 text-rose-700" },
   { id: "writing", label: "Writing", icon: PenLine, cls: "bg-emerald-100 text-emerald-700" },
@@ -301,13 +305,26 @@ export default function ExercisesIndexPage() {
     setListeningTypeFilter(null)
   }, [selectedCategory])
 
+  const ieltsReadings = useMemo(() => filterIeltsReadings(readings), [readings])
+  const cefrReadingsForLevel = useMemo(
+    () =>
+      selectedLevel && !isIeltsLevel(selectedLevel)
+        ? filterCefrReadingsByLevel(readings, selectedLevel)
+        : [],
+    [readings, selectedLevel],
+  )
+  const activeReadings = useMemo(() => {
+    if (!selectedLevel) return readings
+    return isIeltsLevel(selectedLevel) ? ieltsReadings : cefrReadingsForLevel
+  }, [readings, selectedLevel, ieltsReadings, cefrReadingsForLevel])
+
   const readingQuestionTypes = useMemo(
-    () => collectAvailableReadingTypes(readings),
-    [readings],
+    () => collectAvailableReadingTypes(activeReadings),
+    [activeReadings],
   )
   const filteredReadings = useMemo(
-    () => filterReadingsByQuestionType(readings, readingTypeFilter),
-    [readings, readingTypeFilter],
+    () => filterReadingsByQuestionType(activeReadings, readingTypeFilter),
+    [activeReadings, readingTypeFilter],
   )
   const listeningQuestionTypes = useMemo(
     () => collectAvailableListeningTypes(listenings),
@@ -370,6 +387,9 @@ export default function ExercisesIndexPage() {
           withWords > 0 ? `${withWords} with words` : "Listening",
         ],
       }
+    }
+    if (categoryId === "reading") {
+      return cefrReadingStats(level, readings)
     }
     const bucket = levelFolders.find((f) => f.level === level)
     const topics = bucket?.topics.filter((t) => t.category === categoryId) ?? []
@@ -519,7 +539,7 @@ export default function ExercisesIndexPage() {
               const subject = subjectFolders.find((f) => f.id === selectedCategory)
               const isVocab = selectedCategory === "vocabulary"
               const isPodcasts = selectedCategory === "podcasts"
-              const isReading = selectedCategory === "reading" && isIeltsLevel(selectedLevel)
+              const isReading = selectedCategory === "reading"
               const isListening = selectedCategory === "listening" && isIeltsLevel(selectedLevel)
               const topics = levelTopics.filter((t) => t.category === selectedCategory)
               const count = isVocab
@@ -527,7 +547,7 @@ export default function ExercisesIndexPage() {
                 : isPodcasts
                   ? podcastsForLevel.length
                   : isReading
-                    ? readings.length
+                    ? activeReadings.length
                     : isListening
                       ? listenings.length
                       : topics.length
@@ -561,7 +581,7 @@ export default function ExercisesIndexPage() {
                       <>
                         {levelLabel} ·{" "}
                         {isReading && readingTypeFilter
-                          ? `${filteredReadings.length} of ${readings.length} passages`
+                          ? `${filteredReadings.length} of ${activeReadings.length} passages`
                           : isListening && listeningTypeFilter
                             ? `${filteredListenings.length} of ${listenings.length} tests`
                             : `${count} ${
@@ -1077,8 +1097,15 @@ function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
   const typeLabels = sortReadingQuestionTypes(test.questionTypes ?? []).map(
     readingQuestionTypeLabel,
   )
+  const href = test.level
+    ? `/exercises/${test.level}/reading/${test.slug}`
+    : `/exercises/ielts/reading/${test.slug}`
+  const badge = test.level || "IELTS"
+  const description = test.level
+    ? `${test.level} reading passage with comprehension questions.`
+    : "IELTS Academic reading with passage and exam-style questions."
   return (
-    <Link href={`/exercises/ielts/reading/${test.slug}`} className="group block h-full">
+    <Link href={href} className="group block h-full">
       <Card className="relative h-full rounded-2xl border-sky-200/80 bg-white transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg sm:rounded-3xl">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
@@ -1107,11 +1134,11 @@ function ReadingPracticeCard({ test }: { test: IeltsReadingSummary }) {
               </div>
             </div>
             <span className="shrink-0 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
-              IELTS
+              {badge}
             </span>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-slate-600">
-            IELTS Academic reading with passage and exam-style questions.
+            {description}
           </p>
         </CardContent>
       </Card>

@@ -4,6 +4,7 @@
  */
 
 import readingTypesBySlug from "@/public/reading-types.json"
+import cefrReadingIndex from "@/lib/data/cefr-reading-index.json"
 import { sortReadingQuestionTypes } from "@/lib/reading-question-types"
 
 export interface IeltsReadingSummary {
@@ -13,6 +14,8 @@ export interface IeltsReadingSummary {
   totalTimeMinutes: number
   questionCount: number
   questionTypes?: string[]
+  /** CEFR band for level-based reading; empty = IELTS catalogue. */
+  level?: string
   order?: number
 }
 
@@ -24,6 +27,14 @@ export interface IeltsReadingPart {
   questionInstruction?: string
   passage: string
   totalQuestions: number
+  sections?: {
+    id: string
+    title: string
+    instruction: string
+    startQuestion: number
+    endQuestion: number
+    questions: IeltsReadingPart["questions"]
+  }[]
   questions: {
     id: number
     type: string
@@ -44,6 +55,58 @@ export interface IeltsReadingDocument {
     totalTimeMinutes: number
     parts: IeltsReadingPart[]
   }
+}
+
+type CefrReadingIndexItem = {
+  id: string
+  title: string
+  subtitle?: string
+  level?: string
+  estimatedMinutes?: number
+  questionCount?: number
+}
+
+const STATIC_CEFR_READINGS: IeltsReadingSummary[] = (
+  (cefrReadingIndex as { items?: CefrReadingIndexItem[] }).items ?? []
+).map((item, idx) => ({
+  slug: item.id,
+  title: item.title,
+  subtitle: item.subtitle ?? "",
+  totalTimeMinutes: item.estimatedMinutes ?? 15,
+  questionCount: item.questionCount ?? 0,
+  level: item.level ?? "",
+  order: 1000 + idx,
+}))
+
+/** Resolve CEFR band from API field or slug prefix (a1-reading-test-1 → A1). */
+export function resolveReadingLevel(
+  reading: Pick<IeltsReadingSummary, "slug" | "level">,
+): string {
+  const explicit = String(reading.level ?? "").trim()
+  if (explicit) return explicit
+  const match = reading.slug.match(/^(a1|a2|b1|b2|c1|c2)-reading-test-/i)
+  return match ? match[1].toUpperCase() : ""
+}
+
+function withResolvedLevel(reading: IeltsReadingSummary): IeltsReadingSummary {
+  const level = resolveReadingLevel(reading)
+  return level ? { ...reading, level } : { ...reading, level: undefined }
+}
+
+function mergeReadingCatalog(remote: IeltsReadingSummary[]): IeltsReadingSummary[] {
+  const bySlug = new Map<string, IeltsReadingSummary>()
+  for (const item of STATIC_CEFR_READINGS) {
+    bySlug.set(item.slug, item)
+  }
+  for (const item of remote.map(withResolvedLevel)) {
+    const prev = bySlug.get(item.slug)
+    bySlug.set(item.slug, {
+      ...(prev ?? {}),
+      ...item,
+      level: resolveReadingLevel({ slug: item.slug, level: item.level ?? prev?.level }) || prev?.level,
+    })
+  }
+  return [...bySlug.values()].sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.title.localeCompare(b.title))
 }
 
 /** Homework `exerciseSlug` payload for reading, e.g. "reading:1518-australian-artist-margaret-preston". */
@@ -67,9 +130,24 @@ export function isReadingHomework(
   return subject === "reading" || parseReadingHomeworkSlug(exerciseSlug) != null
 }
 
-/** Initial empty catalogue; use fetchReadingSummaries for the real list. */
+/** CEFR catalogue from repo JSON; merged with API in fetchReadingSummaries. */
 export function listReadings(): IeltsReadingSummary[] {
-  return []
+  return enrichReadingSummaries(mergeReadingCatalog([]))
+}
+
+export function isIeltsReading(reading: Pick<IeltsReadingSummary, "slug" | "level">): boolean {
+  return !resolveReadingLevel(reading)
+}
+
+export function filterIeltsReadings(readings: IeltsReadingSummary[]): IeltsReadingSummary[] {
+  return readings.filter(isIeltsReading)
+}
+
+export function filterCefrReadingsByLevel(
+  readings: IeltsReadingSummary[],
+  level: string,
+): IeltsReadingSummary[] {
+  return readings.filter((r) => resolveReadingLevel(r) === level)
 }
 
 const STATIC_TYPES_BY_SLUG = new Map<string, string[]>(
@@ -99,12 +177,10 @@ export async function fetchReadingSummaries(): Promise<IeltsReadingSummary[]> {
     const { exercisesApi } = await import("./api")
     remote = await exercisesApi.readingSummaries()
   } catch {
-    return []
+    remote = []
   }
 
-  if (remote.length === 0) return []
-
-  return enrichReadingSummaries(remote)
+  return enrichReadingSummaries(mergeReadingCatalog(remote))
 }
 
 export async function fetchReading(slug: string): Promise<IeltsReadingDocument | undefined> {

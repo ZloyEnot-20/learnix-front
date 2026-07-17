@@ -5,11 +5,12 @@ import {
   EXERCISE_TYPE_LABELS,
   EXERCISE_TYPE_ORDER,
   type GrammarExercise,
-  type GrammarExerciseType,
+  type FilterableExerciseType,
 } from "@/lib/grammar-types"
+import { exerciseMatchesType } from "@/lib/grammar-question-types"
 import { cn } from "@/lib/utils"
 
-export type ExerciseTypeValue = "all" | GrammarExerciseType
+export type ExerciseTypeValue = "all" | FilterableExerciseType
 
 /**
  * Pill filter for exercise types inside a topic folder.
@@ -26,10 +27,12 @@ export default function ExerciseTypeFilter({
   onChange: (value: ExerciseTypeValue) => void
 }) {
   const counts = useMemo(() => {
-    const c = {} as Record<GrammarExerciseType, number>
+    const c = {} as Record<FilterableExerciseType, number>
     for (const t of EXERCISE_TYPE_ORDER) c[t] = 0
     for (const ex of exercises) {
-      if (c[ex.type] != null) c[ex.type] += 1
+      for (const t of EXERCISE_TYPE_ORDER) {
+        if (exerciseMatchesType(ex, t)) c[t] += 1
+      }
     }
     return c
   }, [exercises])
