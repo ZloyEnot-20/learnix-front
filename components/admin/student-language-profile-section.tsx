@@ -86,18 +86,83 @@ const LANGUAGE_SKILL_ROWS = [
 ] as const
 
 function buildLanguageSkillRows(profile: StudentLanguageProfile): SkillProgressRow[] {
+  const componentBands = profile.ieltsEstimation?.componentBands ?? {}
   return LANGUAGE_SKILL_ROWS.map((meta) => {
     const skill = profile[meta.key]
     const hasData = Boolean(skill?.hasData)
+    const bandFromEstimation = componentBands[meta.key]
+    const ieltsBand = hasData
+      ? typeof bandFromEstimation === "number"
+        ? bandFromEstimation
+        : learnixScoreToIeltsBand(skill.score)
+      : null
     return {
       key: meta.key,
       label: meta.label,
       icon: meta.icon,
       hasData,
-      fillPercent: hasData ? learnixScoreFillPercent(skill.score) : 0,
-      ieltsBand: hasData ? learnixScoreToIeltsBand(skill.score) : null,
+      fillPercent: hasData && ieltsBand != null ? (ieltsBand / 9) * 100 : 0,
+      ieltsBand,
     }
   })
+}
+
+function IeltsEstimationCard({ profile }: { profile: StudentLanguageProfile }) {
+  const est = profile.ieltsEstimation
+  if (!est?.estimatedBand) return null
+
+  return (
+    <div className="rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
+      <p className="text-[11px] font-medium uppercase tracking-wide text-indigo-700/80">
+        IELTS Estimate
+      </p>
+      <div className="mt-1 flex items-end gap-2">
+        <p className="text-3xl font-bold tabular-nums text-indigo-900">
+          {est.estimatedBand.toFixed(1)}
+        </p>
+        {est.potentialBand != null && est.potentialBand > est.estimatedBand ? (
+          <span className="mb-1 text-xs text-indigo-600/70">
+            (raw {est.potentialBand.toFixed(1)})
+          </span>
+        ) : null}
+      </div>
+      <p className="mt-1 text-xs text-indigo-800/80">
+        Topic Mastery → CEFR → IELTS · {est.confidence}% confidence
+      </p>
+      {est.limitingFactors?.length ? (
+        <p className="mt-2 text-[10px] text-amber-800">
+          Ceiling: {est.limitingFactors.slice(0, 3).join(", ")}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+function CefrProfileGrid({ cefrProfile }: { cefrProfile: Record<string, number> }) {
+  const levels = ["A1", "A2", "B1", "B2", "C1", "C2"] as const
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        CEFR Profile
+      </p>
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {levels.map((level) => {
+          const pct = cefrProfile[level] ?? 0
+          return (
+            <div key={level} className="rounded-lg bg-slate-50 px-2 py-2 text-center">
+              <p
+                className="text-[10px] font-semibold"
+                style={{ color: CEFR_LEVEL_COLORS[level] ?? "#64748b" }}
+              >
+                {level}
+              </p>
+              <p className="text-lg font-bold tabular-nums text-slate-900">{pct}%</p>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 function OverallScoreCard({ profile }: { profile: StudentLanguageProfile }) {
@@ -152,6 +217,8 @@ const SKILL_BADGE: Record<TopicWithSkill["skill"], string> = {
   grammar: "bg-amber-100 text-amber-800",
   vocabulary: "bg-purple-100 text-purple-800",
   speaking: "bg-sky-100 text-sky-800",
+  reading: "bg-emerald-100 text-emerald-800",
+  listening: "bg-indigo-100 text-indigo-800",
 }
 
 function TopicsMasteryPanel({ topics }: { topics: TopicWithSkill[] }) {
@@ -235,6 +302,13 @@ function TopicsMasteryPanel({ topics }: { topics: TopicWithSkill[] }) {
   )
 }
 
+function historyPointToBand(point?: { band?: number | null; score?: number } | null): number | null {
+  if (!point) return null
+  if (typeof point.band === "number") return point.band
+  if (typeof point.score === "number" && point.score > 0) return learnixScoreToIeltsBand(point.score)
+  return null
+}
+
 function ProgressHistoryChart({ history }: { history: LanguageProfileHistory | null }) {
   const chartData = useMemo(() => {
     if (!history?.overall?.length) return []
@@ -243,10 +317,12 @@ function ProgressHistoryChart({ history }: { history: LanguageProfileHistory | n
         month: "short",
         day: "numeric",
       }),
-      grammar: history.grammar[i]?.score ?? null,
-      vocabulary: history.vocabulary[i]?.score ?? null,
-      speaking: history.speaking[i]?.score ?? null,
-      overall: point.score,
+      grammar: historyPointToBand(history.grammar[i]),
+      vocabulary: historyPointToBand(history.vocabulary[i]),
+      speaking: historyPointToBand(history.speaking[i]),
+      reading: historyPointToBand(history.reading?.[i]),
+      listening: historyPointToBand(history.listening?.[i]),
+      overall: historyPointToBand(point),
     }))
   }, [history])
 
@@ -262,19 +338,24 @@ function ProgressHistoryChart({ history }: { history: LanguageProfileHistory | n
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
         <TrendingUp className="h-3.5 w-3.5" />
-        Progress history
+        IELTS band history
       </p>
       <div className="h-52 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
             <XAxis dataKey="label" tick={{ fontSize: 10 }} />
-            <YAxis domain={[0, 1000]} tick={{ fontSize: 10 }} width={36} />
-            <Tooltip contentStyle={{ fontSize: 12 }} />
+            <YAxis domain={[4, 9]} tick={{ fontSize: 10 }} width={28} tickCount={6} />
+            <Tooltip
+              contentStyle={{ fontSize: 12 }}
+              formatter={(value: number) => [typeof value === "number" ? value.toFixed(1) : "—", ""]}
+            />
             <Legend wrapperStyle={{ fontSize: 11 }} />
             <Line type="monotone" dataKey="grammar" stroke="#F59E0B" strokeWidth={2.5} dot={false} name="Grammar" />
             <Line type="monotone" dataKey="vocabulary" stroke="#A855F7" strokeWidth={2.5} dot={false} name="Vocabulary" />
             <Line type="monotone" dataKey="speaking" stroke="#0EA5E9" strokeWidth={2.5} dot={false} name="Speaking" />
+            <Line type="monotone" dataKey="reading" stroke="#10B981" strokeWidth={2} dot={false} name="Reading" />
+            <Line type="monotone" dataKey="listening" stroke="#6366F1" strokeWidth={2} dot={false} name="Listening" />
             <Line type="monotone" dataKey="overall" stroke="#6D28D9" strokeWidth={3} dot={false} name="Overall" />
           </LineChart>
         </ResponsiveContainer>
@@ -365,7 +446,7 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
             <h3 className="text-sm font-semibold text-slate-900">Learnix Language Profile</h3>
           </div>
           <p className="mt-1 text-xs text-slate-500">
-            Based on homework, practice, and teacher assessments — not IELTS or CEFR.
+            Topic Mastery → CEFR → IELTS estimation from homework, practice, and assessments.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -391,13 +472,18 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
         </p>
       ) : (
         <>
-          <OverallScoreCard profile={profile} />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <IeltsEstimationCard profile={profile} />
+            <OverallScoreCard profile={profile} />
+          </div>
           <SkillProgressBarsBlock rows={buildLanguageSkillRows(profile)} />
+
+          {profile.cefrProfile ? <CefrProfileGrid cefrProfile={profile.cefrProfile} /> : null}
 
           <LearnixLevelScale
             levelCoverage={profile.levelCoverage ?? {}}
             studentLevel={profile.overall.level}
-            studentTopics={allTopics}
+            studentTopics={allTopics.filter((t) => t.skill === "grammar")}
           />
 
           <TopicsMasteryPanel topics={allTopics} />
@@ -456,6 +542,31 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
                   </li>
                 ))}
               </ul>
+            </div>
+          ) : null}
+
+          {profile.ieltsRecommendation?.recommendedTopics?.length ? (
+            <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-4">
+              <p className="mb-2 text-xs font-semibold text-indigo-900">
+                Path to Band {profile.ieltsRecommendation.nextBandTarget} · ~
+                {profile.ieltsRecommendation.estimatedStudyHours}h study
+              </p>
+              {profile.ieltsRecommendation.explanation ? (
+                <p className="mb-3 text-[11px] text-indigo-800/80">
+                  {profile.ieltsRecommendation.explanation}
+                </p>
+              ) : null}
+              <div className="flex flex-wrap gap-1.5">
+                {profile.ieltsRecommendation.recommendedTopics.map((t) => (
+                  <span
+                    key={t.topicId}
+                    className="rounded-md border border-indigo-200 bg-white px-2 py-1 text-[10px] text-indigo-950"
+                  >
+                    {t.name}
+                    <span className="ml-1 text-indigo-600">{t.masteryScore}%</span>
+                  </span>
+                ))}
+              </div>
             </div>
           ) : null}
 

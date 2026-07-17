@@ -14,22 +14,29 @@ import { studentsApi, type LearnixLevelCatalogueEntry } from "@/lib/api"
 import {
   CEFR_LEVEL_COLORS,
   type TopicWithSkill,
-  formatTopicLabel,
 } from "@/lib/language-profile"
 import { cn } from "@/lib/utils"
 
-function topicStatus(
+function topicMasteryStyle(
   slug: string,
   studentTopics: Map<string, TopicWithSkill>,
-): "mastered" | "attempted" | "none" {
+): { status: "mastered" | "partial" | "attempted" | "none"; score: number } {
   const stat = studentTopics.get(slug)
-  if (!stat) return "none"
-  if (stat.mastered) return "mastered"
-  return "attempted"
+  if (!stat) return { status: "none", score: 0 }
+  const score = stat.masteryScore ?? (stat.mastered ? 85 : stat.attemptedQuestions >= 3 ? Math.round(stat.weightedAccuracy) : 0)
+  if (score >= 80 || stat.masteryStatus === "mastered" || stat.mastered) {
+    return { status: "mastered", score }
+  }
+  if (score >= 60 || stat.masteryStatus === "partial") {
+    return { status: "partial", score }
+  }
+  if (stat.attemptedQuestions >= 1) return { status: "attempted", score }
+  return { status: "none", score: 0 }
 }
 
 const STATUS_STYLES = {
   mastered: "border-emerald-200 bg-emerald-50 text-emerald-900",
+  partial: "border-sky-200 bg-sky-50 text-sky-900",
   attempted: "border-amber-200 bg-amber-50 text-amber-900",
   none: "border-slate-200 bg-slate-50 text-slate-500",
 } as const
@@ -37,6 +44,7 @@ const STATUS_STYLES = {
 interface LearnixLevelScaleProps {
   levelCoverage: Record<string, number>
   studentLevel: number
+  /** Grammar topics only — vocabulary excluded from level scale. */
   studentTopics: TopicWithSkill[]
 }
 
@@ -70,18 +78,9 @@ export function LearnixLevelScale({
 
   const topicMap = useMemo(() => {
     const map = new Map<string, TopicWithSkill>()
-    for (const t of studentTopics) map.set(t.slug, t)
-    return map
-  }, [studentTopics])
-
-  const vocabByLevel = useMemo(() => {
-    const map = new Map<number, TopicWithSkill[]>()
     for (const t of studentTopics) {
-      if (t.skill !== "vocabulary") continue
-      const level = t.learnixLevel ?? 5
-      const list = map.get(level) ?? []
-      list.push(t)
-      map.set(level, list)
+      if (t.skill !== "grammar") continue
+      map.set(t.slug, t)
     }
     return map
   }, [studentTopics])
@@ -112,14 +111,13 @@ export function LearnixLevelScale({
         Learnix level scale
       </p>
       <p className="mb-4 text-[11px] text-slate-500">
-        What a student should know at each level. Green = mastered, amber = in progress.
+        Topic mastery per level. Green ≥80%, blue 60–79%, amber in progress, grey not started.
       </p>
 
       <div className="space-y-2">
         {catalogue.map((entry) => {
           const coveragePct = levelCoverage[String(entry.level)] ?? 0
           const isCurrent = entry.level === studentLevel
-          const vocabTopics = vocabByLevel.get(entry.level) ?? []
           const levelKey = String(entry.level)
 
           return (
@@ -171,7 +169,7 @@ export function LearnixLevelScale({
                         className="h-1.5 flex-1 bg-slate-200"
                       />
                       <span className="shrink-0 text-[10px] tabular-nums text-slate-500">
-                        {coveragePct}%
+                        {coveragePct}% topics mastered
                       </span>
                     </div>
                   </div>
@@ -179,61 +177,39 @@ export function LearnixLevelScale({
 
                 <CollapsibleContent className="border-t border-slate-200/80 px-3 pb-3 pt-2">
                   {entry.grammarTopics.length > 0 ? (
-                    <div className="mb-3">
+                    <div>
                       <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                        Grammar topics
+                        Grammar topics — mastery
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {entry.grammarTopics.map((topic) => {
-                          const status = topicStatus(topic.slug, topicMap)
+                          const { status, score } = topicMasteryStyle(topic.slug, topicMap)
                           return (
                             <span
                               key={topic.slug}
                               className={cn(
-                                "rounded-md border px-2 py-0.5 text-[10px] font-medium",
+                                "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium",
                                 STATUS_STYLES[status],
                               )}
                               title={
-                                status === "mastered"
-                                  ? "Mastered"
-                                  : status === "attempted"
-                                    ? "In progress"
-                                    : "Not started"
+                                score > 0
+                                  ? `${score}% mastery`
+                                  : status === "none"
+                                    ? "Not started"
+                                    : "In progress"
                               }
                             >
                               {topic.title}
+                              {score > 0 ? (
+                                <span className="tabular-nums opacity-80">{score}%</span>
+                              ) : null}
                             </span>
                           )
                         })}
                       </div>
                     </div>
-                  ) : null}
-
-                  {vocabTopics.length > 0 ? (
-                    <div>
-                      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                        Vocabulary decks ({entry.vocabularyCefr})
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {vocabTopics.map((topic) => (
-                          <span
-                            key={topic.slug}
-                            className={cn(
-                              "rounded-md border px-2 py-0.5 text-[10px] font-medium",
-                              topic.mastered
-                                ? STATUS_STYLES.mastered
-                                : STATUS_STYLES.attempted,
-                            )}
-                          >
-                            {topic.title || formatTopicLabel(topic.slug)}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
                   ) : (
-                    <p className="text-[10px] text-slate-400">
-                      Vocabulary at {entry.vocabularyCefr} appears when student practices decks at this level.
-                    </p>
+                    <p className="text-[10px] text-slate-400">No grammar topics at this level.</p>
                   )}
                 </CollapsibleContent>
               </div>

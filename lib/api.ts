@@ -109,6 +109,18 @@ export const studentsApi = {
     api.get<LanguageProfileDebugResponse>(`/students/${id}/language-profile/debug`),
   languageProfileHistory: (id: string) =>
     api.get<LanguageProfileHistory>(`/students/${id}/language-profile/history`),
+  ieltsEstimation: (id: string, force?: boolean) =>
+    api.get<{
+      studentId: string
+      cefrProfile: Record<string, number>
+      ieltsEstimation: IeltsEstimation
+      ieltsRecommendation: IeltsRecommendation
+      lastComputedAt: string
+    }>(`/students/${id}/ielts-estimation${force ? "?force=true" : ""}`),
+  topicMasteries: (id: string, category?: string) =>
+    api.get<StudentTopicMastery[]>(
+      `/students/${id}/topic-masteries${category ? `?category=${category}` : ""}`,
+    ),
   recommendedHomework: (id: string) =>
     api.get<RecommendedHomeworkResponse>(`/students/${id}/recommended-homework`),
   sendNotification: (
@@ -175,6 +187,8 @@ export interface LanguageTopicStat {
   weightedAccuracy: number
   confidence: number
   learnixLevel?: number
+  masteryScore?: number
+  masteryStatus?: "mastered" | "partial" | "not_mastered"
   mastered: boolean
   needsReview: boolean
 }
@@ -217,8 +231,56 @@ export interface StudentLanguageProfile {
   needsReviewTopics: string[]
   levelCoverage: Record<string, number>
   recommendations: LanguageRecommendation[]
+  cefrProfile?: Record<string, number>
+  grammarCefrProfile?: Record<string, number>
+  vocabularyCefrProfile?: Record<string, number>
+  ieltsEstimation?: IeltsEstimation
+  ieltsRecommendation?: IeltsRecommendation
   lastComputedAt: string
   version: number
+}
+
+export interface IeltsEstimation {
+  estimatedBand: number
+  potentialBand?: number
+  confidence: number
+  strengths: string[]
+  weaknesses: string[]
+  limitingFactors: string[]
+  componentBands?: Record<string, number | null>
+}
+
+export interface IeltsRecommendation {
+  nextBandTarget: number
+  missingTopics: Array<{
+    topicId: string
+    name: string
+    level: string
+    masteryScore: number
+    category?: string
+  }>
+  recommendedTopics: Array<{
+    topicId: string
+    name: string
+    level: string
+    masteryScore: number
+    expectedBandUplift?: number
+    category?: string
+  }>
+  estimatedStudyHours: number
+  explanation?: string
+}
+
+export interface StudentTopicMastery {
+  studentId: string
+  topicId: string
+  category: string
+  cefrLevel: string
+  masteryScore: number
+  confidenceScore: number
+  attempts: number
+  masteryStatus: string
+  lastPracticedAt?: string
 }
 
 export interface LanguageRecommendation {
@@ -234,12 +296,16 @@ export interface LanguageScoreHistoryPoint {
   date: string
   score: number
   level: number
+  /** IELTS band equivalent for chart display */
+  band?: number | null
 }
 
 export interface LanguageProfileHistory {
   grammar: LanguageScoreHistoryPoint[]
   vocabulary: LanguageScoreHistoryPoint[]
   speaking: LanguageScoreHistoryPoint[]
+  reading?: LanguageScoreHistoryPoint[]
+  listening?: LanguageScoreHistoryPoint[]
   overall: LanguageScoreHistoryPoint[]
 }
 
