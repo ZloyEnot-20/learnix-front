@@ -167,10 +167,18 @@ export function ExerciseAssignTable({
                 <TableRow
                   key={row.id}
                   data-state={selected ? "selected" : undefined}
-                  className={cn(selected && "bg-blue-50/40")}
+                  className={cn(
+                    canAssign && "cursor-pointer",
+                    selected ? "bg-blue-50/40" : canAssign && "hover:bg-slate-50/80",
+                  )}
+                  onClick={
+                    canAssign
+                      ? () => toggleRow(row.id)
+                      : undefined
+                  }
                 >
                   {canAssign && (
-                    <TableCell className="pl-4">
+                    <TableCell className="pl-4" onClick={(e) => e.stopPropagation()}>
                       <Checkbox
                         checked={selected}
                         onCheckedChange={() => toggleRow(row.id)}
@@ -253,13 +261,12 @@ export function ExerciseAssignTable({
                     )}
                   </TableCell>
                   {onPreview && (
-                    <TableCell className="pr-4 text-right">
+                    <TableCell className="pr-4 text-right" onClick={(e) => e.stopPropagation()}>
                       <Button
                         type="button"
                         size="sm"
-                        variant="ghost"
                         onClick={() => onPreview(row)}
-                        className="h-8 gap-1.5 px-2 text-slate-600"
+                        className="h-8 gap-1.5 px-2.5 bg-sky-500 text-white shadow-sm hover:bg-sky-600"
                       >
                         <Eye className="h-4 w-4" />
                         <span className="sr-only sm:not-sr-only">Preview</span>
