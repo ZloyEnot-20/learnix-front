@@ -475,6 +475,10 @@ export const homeworkApi = {
       recordingGrades?: Array<{
         questionId: number
         score?: number
+        grammarScore?: number
+        vocabularyScore?: number
+        fluencyScore?: number
+        pronunciationScore?: number
         feedback?: string
       }>
     },

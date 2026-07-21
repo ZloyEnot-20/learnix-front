@@ -1,7 +1,9 @@
 import type { HomeworkStatus, HomeworkSubmission, Student } from "./admin-storage"
 import {
   recordingGradesFromMistakes,
+  speakingRubricFromMistakes,
   type RecordingGradeDraft,
+  type SpeakingRubricDraft,
 } from "@/components/admin/speaking-recording-review"
 
 export interface HomeworkStudentRow {
@@ -12,6 +14,7 @@ export interface HomeworkStudentRow {
   score: string
   feedback: string
   recordingGrades: RecordingGradeDraft[]
+  speakingRubric: SpeakingRubricDraft
   dirty: boolean
 }
 
@@ -28,6 +31,7 @@ function rowFromSubmission(
     score: sub?.score != null ? String(sub.score) : "",
     feedback: sub?.feedback ?? "",
     recordingGrades: recordingGradesFromMistakes(sub?.attempt?.mistakes ?? []),
+    speakingRubric: speakingRubricFromMistakes(sub?.attempt?.mistakes ?? []),
     dirty: false,
   }
 }

@@ -94,8 +94,13 @@ export interface HomeworkMistake {
   userAnswer: string
   correctAnswer: string
   explanation?: string
-  /** Teacher IELTS band for a speaking recording (0–9). */
+  /** Teacher IELTS band for a speaking recording (0–9, legacy). */
   score?: number
+  /** Speaking rubric scores (1–10) set by the teacher. */
+  grammarScore?: number
+  vocabularyScore?: number
+  fluencyScore?: number
+  pronunciationScore?: number
   /** Teacher feedback for a single speaking recording. */
   feedback?: string
     /** Auto-generated speech-to-text (Whisper) — may be inaccurate. */

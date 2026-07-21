@@ -11,13 +11,169 @@ export interface RecordingGradeDraft {
   feedback: string
 }
 
+export interface SpeakingRubricDraft {
+  grammarScore: string
+  vocabularyScore: string
+  fluencyScore: string
+  pronunciationScore: string
+}
+
+export const EMPTY_SPEAKING_RUBRIC: SpeakingRubricDraft = {
+  grammarScore: "",
+  vocabularyScore: "",
+  fluencyScore: "",
+  pronunciationScore: "",
+}
+
+const SPEAKING_RUBRIC_CRITERIA = [
+  { key: "grammarScore" as const, label: "Grammar" },
+  { key: "vocabularyScore" as const, label: "Vocabulary" },
+  { key: "fluencyScore" as const, label: "Fluency" },
+  { key: "pronunciationScore" as const, label: "Pronunciation" },
+]
+
+function speakingRecordings(mistakes: HomeworkMistake[]): HomeworkMistake[] {
+  return mistakes.filter((m) => /^https?:\/\//i.test(m.userAnswer))
+}
+
 export function recordingGradesFromMistakes(mistakes: HomeworkMistake[]): RecordingGradeDraft[] {
-  return mistakes
-    .filter((m) => /^https?:\/\//i.test(m.userAnswer))
-    .map((m) => ({
-      questionId: m.questionId,
-      feedback: m.feedback ?? "",
-    }))
+  return speakingRecordings(mistakes).map((m) => ({
+    questionId: m.questionId,
+    feedback: m.feedback ?? "",
+  }))
+}
+
+export function speakingRubricFromMistakes(mistakes: HomeworkMistake[]): SpeakingRubricDraft {
+  const source = speakingRecordings(mistakes).find(
+    (m) =>
+      m.grammarScore != null ||
+      m.vocabularyScore != null ||
+      m.fluencyScore != null ||
+      m.pronunciationScore != null,
+  )
+  if (!source) return { ...EMPTY_SPEAKING_RUBRIC }
+  return {
+    grammarScore: source.grammarScore != null ? String(source.grammarScore) : "",
+    vocabularyScore: source.vocabularyScore != null ? String(source.vocabularyScore) : "",
+    fluencyScore: source.fluencyScore != null ? String(source.fluencyScore) : "",
+    pronunciationScore:
+      source.pronunciationScore != null ? String(source.pronunciationScore) : "",
+  }
+}
+
+export function parseSpeakingRubric(
+  rubric: SpeakingRubricDraft,
+): {
+  grammarScore: number
+  vocabularyScore: number
+  fluencyScore: number
+  pronunciationScore: number
+} | null {
+  const parsed = SPEAKING_RUBRIC_CRITERIA.map(({ key }) => {
+    const raw = rubric[key].trim()
+    if (!raw) return null
+    const n = Number(raw.replace(",", "."))
+    if (Number.isNaN(n) || n < 1 || n > 10) return null
+    return n
+  })
+  if (parsed.some((v) => v == null)) return null
+  return {
+    grammarScore: parsed[0]!,
+    vocabularyScore: parsed[1]!,
+    fluencyScore: parsed[2]!,
+    pronunciationScore: parsed[3]!,
+  }
+}
+
+export function speakingRubricAverageFromMistakes(mistakes: HomeworkMistake[]): number | null {
+  const rubric = parseSpeakingRubric(speakingRubricFromMistakes(mistakes))
+  if (!rubric) return null
+  const values = [
+    rubric.grammarScore,
+    rubric.vocabularyScore,
+    rubric.fluencyScore,
+    rubric.pronunciationScore,
+  ]
+  return values.reduce((sum, v) => sum + v, 0) / values.length
+}
+
+export function SpeakingRubricField({
+  value,
+  onChange,
+}: {
+  value: SpeakingRubricDraft
+  onChange: (next: SpeakingRubricDraft) => void
+}) {
+  const average = parseSpeakingRubric(value)
+  const averageScore = average
+    ? (average.grammarScore +
+        average.vocabularyScore +
+        average.fluencyScore +
+        average.pronunciationScore) /
+      4
+    : null
+
+  return (
+    <div className="space-y-3">
+      <div>
+        <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">
+          Final speaking assessment
+        </label>
+        <p className="mt-0.5 text-[11px] text-slate-500">
+          Rate each criterion from 1 to 10. These scores feed the student language profile.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {SPEAKING_RUBRIC_CRITERIA.map(({ key, label }) => {
+          const selected = value[key].trim() ? Number(value[key]) : null
+          return (
+            <div key={key}>
+              <div className="mb-1.5 flex items-center justify-between gap-2">
+                <span className="text-xs font-medium text-slate-700">{label}</span>
+                {selected != null && !Number.isNaN(selected) ? (
+                  <span className="text-xs font-bold tabular-nums text-emerald-700">{selected}/10</span>
+                ) : (
+                  <span className="text-xs text-slate-400">Not set</span>
+                )}
+              </div>
+              <div className="grid grid-cols-10 gap-1">
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => {
+                  const active = selected === n
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => onChange({ ...value, [key]: String(n) })}
+                      className={cn(
+                        "rounded-md border py-1.5 text-center text-xs font-semibold tabular-nums transition-colors",
+                        active
+                          ? "border-emerald-500 bg-emerald-50 text-emerald-900"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50",
+                      )}
+                    >
+                      {n}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {averageScore != null ? (
+        <p className="text-xs text-slate-600">
+          Overall average:{" "}
+          <span className="font-semibold tabular-nums text-slate-900">
+            {averageScore.toFixed(1)}/10
+          </span>
+        </p>
+      ) : (
+        <p className="text-xs text-slate-400">Select a score for each criterion to complete grading</p>
+      )}
+    </div>
+  )
 }
 
 export function SpeakingRecordingReviewCard({

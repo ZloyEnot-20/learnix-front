@@ -548,8 +548,7 @@ export function StudentLanguageProfileSection({ student }: StudentLanguageProfil
           {profile.ieltsRecommendation?.recommendedTopics?.length ? (
             <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-4">
               <p className="mb-2 text-xs font-semibold text-indigo-900">
-                Path to Band {profile.ieltsRecommendation.nextBandTarget} · ~
-                {profile.ieltsRecommendation.estimatedStudyHours}h study
+                Path to Band {profile.ieltsRecommendation.nextBandTarget}
               </p>
               {profile.ieltsRecommendation.explanation ? (
                 <p className="mb-3 text-[11px] text-indigo-800/80">

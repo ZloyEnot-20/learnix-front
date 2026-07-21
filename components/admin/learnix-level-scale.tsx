@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { studentsApi, type LearnixLevelCatalogueEntry } from "@/lib/api"
 import {
   CEFR_LEVEL_COLORS,
+  skillBarFillColor,
   type TopicWithSkill,
 } from "@/lib/language-profile"
 import { cn } from "@/lib/utils"
@@ -33,13 +34,6 @@ function topicMasteryStyle(
   if (stat.attemptedQuestions >= 1) return { status: "attempted", score }
   return { status: "none", score: 0 }
 }
-
-const STATUS_STYLES = {
-  mastered: "border-emerald-200 bg-emerald-50 text-emerald-900",
-  partial: "border-sky-200 bg-sky-50 text-sky-900",
-  attempted: "border-amber-200 bg-amber-50 text-amber-900",
-  none: "border-slate-200 bg-slate-50 text-slate-500",
-} as const
 
 interface LearnixLevelScaleProps {
   levelCoverage: Record<string, number>
@@ -111,7 +105,7 @@ export function LearnixLevelScale({
         Learnix level scale
       </p>
       <p className="mb-4 text-[11px] text-slate-500">
-        Topic mastery per level. Green ≥80%, blue 60–79%, amber in progress, grey not started.
+        Expand a level to see its topics and how well the student knows each one.
       </p>
 
       <div className="space-y-2">
@@ -177,36 +171,45 @@ export function LearnixLevelScale({
 
                 <CollapsibleContent className="border-t border-slate-200/80 px-3 pb-3 pt-2">
                   {entry.grammarTopics.length > 0 ? (
-                    <div>
-                      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                        Grammar topics — mastery
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                        Grammar topics
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {entry.grammarTopics.map((topic) => {
-                          const { status, score } = topicMasteryStyle(topic.slug, topicMap)
-                          return (
-                            <span
-                              key={topic.slug}
-                              className={cn(
-                                "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium",
-                                STATUS_STYLES[status],
-                              )}
-                              title={
-                                score > 0
-                                  ? `${score}% mastery`
-                                  : status === "none"
-                                    ? "Not started"
-                                    : "In progress"
-                              }
-                            >
-                              {topic.title}
-                              {score > 0 ? (
-                                <span className="tabular-nums opacity-80">{score}%</span>
-                              ) : null}
-                            </span>
-                          )
-                        })}
-                      </div>
+                      {entry.grammarTopics.map((topic) => {
+                        const { status, score } = topicMasteryStyle(topic.slug, topicMap)
+                        const fill = Math.max(0, Math.min(100, score))
+                        const hasProgress = status !== "none"
+                        const barColor = hasProgress ? skillBarFillColor(fill) : "#e2e8f0"
+
+                        return (
+                          <div key={topic.slug} className="space-y-1.5">
+                            <div className="flex items-center justify-between gap-2">
+                              <span
+                                className={cn(
+                                  "min-w-0 truncate text-xs font-medium",
+                                  hasProgress ? "text-slate-800" : "text-slate-500",
+                                )}
+                              >
+                                {topic.title}
+                              </span>
+                              <span
+                                className={cn(
+                                  "shrink-0 text-[11px] font-semibold tabular-nums",
+                                  hasProgress ? "text-slate-700" : "text-slate-400",
+                                )}
+                              >
+                                {hasProgress ? `${fill}%` : "—"}
+                              </span>
+                            </div>
+                            <div className="relative h-2 overflow-hidden rounded-full bg-slate-100">
+                              <div
+                                className="absolute inset-y-0 left-0 rounded-full transition-[width] duration-500 ease-out"
+                                style={{ width: `${fill}%`, backgroundColor: barColor }}
+                              />
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   ) : (
                     <p className="text-[10px] text-slate-400">No grammar topics at this level.</p>

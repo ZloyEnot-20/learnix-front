@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Dialog,
   DialogContent,
@@ -49,7 +48,11 @@ import {
 } from "@/lib/build-homework-student-rows"
 import {
   SpeakingRecordingReviewCard,
+  SpeakingRubricField,
+  parseSpeakingRubric,
   recordingGradesFromMistakes,
+  speakingRubricAverageFromMistakes,
+  speakingRubricFromMistakes,
   type RecordingGradeDraft,
 } from "@/components/admin/speaking-recording-review"
 import { PodcastListenCoverageBar } from "@/components/admin/podcast-listen-coverage-bar"
@@ -59,11 +62,6 @@ import { resolveMistakeCorrectAnswer } from "@/lib/homework-review"
 import { isReadingHomework } from "@/lib/reading-data"
 import { isPodcastHomework } from "@/lib/podcast-data"
 import { ReadingAnswersReview } from "@/components/admin/reading-answers-review"
-import {
-  LEARNIX_LEVEL_META,
-  learnixScoreToSpeakingBand,
-  speakingBandToLearnixScore,
-} from "@/lib/language-profile"
 
 const STATUS_META: Record<HomeworkStatus, { label: string; cls: string; dot: string }> = {
   pending: { label: "Pending", cls: "bg-slate-100 text-slate-700", dot: "bg-slate-400" },
@@ -186,6 +184,7 @@ export function HomeworkStudentResults({
                   score: fresh.score != null ? String(fresh.score) : r.score,
                   feedback: fresh.feedback ?? r.feedback,
                   recordingGrades: recordingGradesFromMistakes(fresh.attempt?.mistakes ?? []),
+                  speakingRubric: speakingRubricFromMistakes(fresh.attempt?.mistakes ?? []),
                 }
               : r,
           ),
@@ -305,6 +304,7 @@ export function HomeworkStudentResults({
                 score: "",
                 feedback: "",
                 recordingGrades: [],
+                speakingRubric: speakingRubricFromMistakes([]),
                 dirty: false,
               }
             : r,
@@ -337,35 +337,63 @@ export function HomeworkStudentResults({
       return
     }
     const isSpeakingHomework = homework.subject === "speaking"
-    const parsedScore = row.score.trim()
-      ? Number(row.score.replace(",", "."))
-      : undefined
-    if (parsedScore !== undefined && (Number.isNaN(parsedScore) || parsedScore < 0 || parsedScore > 9)) {
+    const parsedRubric = isSpeakingHomework ? parseSpeakingRubric(row.speakingRubric) : null
+    const parsedScore =
+      !isSpeakingHomework && row.score.trim()
+        ? Number(row.score.replace(",", "."))
+        : undefined
+
+    if (isSpeakingHomework && !parsedRubric) {
       toast({
-        title: "Invalid Learnix score",
-        description: "Pick a Learnix level or enter a score from 0 to 1000.",
+        title: "Incomplete speaking assessment",
+        description: "Select a score from 1 to 10 for grammar, vocabulary, fluency, and pronunciation.",
+        variant: "destructive",
+      })
+      return
+    }
+    if (
+      parsedScore !== undefined &&
+      (Number.isNaN(parsedScore) || parsedScore < 0 || parsedScore > 9)
+    ) {
+      toast({
+        title: "Invalid score",
+        description: "Enter a score from 0 to 9.",
         variant: "destructive",
       })
       return
     }
 
-    // Speaking homework: teacher gives ONE overall Learnix-aligned score (stored 0–9).
-    // Per-recording grades (band/rubric) are intentionally not collected in the UI.
     const submittedAt =
       row.status === "submitted" || row.status === "graded"
         ? row.submission.submittedAt ?? new Date().toISOString()
         : undefined
     const nextStatus =
-      isSpeakingHomework && parsedScore != null
-        ? "graded"
-        : row.status
+      (isSpeakingHomework && parsedRubric) || parsedScore != null ? "graded" : row.status
+
+    const recordingGrades = parsedRubric
+      ? (
+          row.recordingGrades.length > 0
+            ? row.recordingGrades
+            : (row.submission.attempt?.mistakes ?? [])
+                .filter((m) => /^https?:\/\//i.test(m.userAnswer))
+                .map((m) => ({ questionId: m.questionId, feedback: m.feedback ?? "" }))
+        ).map((g) => ({
+          questionId: g.questionId,
+          grammarScore: parsedRubric.grammarScore,
+          vocabularyScore: parsedRubric.vocabularyScore,
+          fluencyScore: parsedRubric.fluencyScore,
+          pronunciationScore: parsedRubric.pronunciationScore,
+          feedback: g.feedback.trim() || undefined,
+        }))
+      : undefined
 
     setSavingId(row.studentId)
     try {
       await homeworkApi.grade(row.submission.id, {
         status: nextStatus,
-        score: parsedScore,
         submittedAt,
+        score: parsedScore,
+        recordingGrades,
       })
       setRows((prev) =>
         prev.map((r) =>
@@ -377,6 +405,14 @@ export function HomeworkStudentResults({
                 recordingGrades: recordingGradesFromMistakes(
                   r.submission?.attempt?.mistakes ?? [],
                 ),
+                speakingRubric: parsedRubric
+                  ? {
+                      grammarScore: String(parsedRubric.grammarScore),
+                      vocabularyScore: String(parsedRubric.vocabularyScore),
+                      fluencyScore: String(parsedRubric.fluencyScore),
+                      pronunciationScore: String(parsedRubric.pronunciationScore),
+                    }
+                  : r.speakingRubric,
                 submission: r.submission
                   ? {
                       ...r.submission,
@@ -386,7 +422,20 @@ export function HomeworkStudentResults({
                       attempt: r.submission.attempt
                         ? {
                             ...r.submission.attempt,
-                            mistakes: r.submission.attempt.mistakes,
+                            mistakes: (r.submission.attempt.mistakes ?? []).map((m) => {
+                              if (!/^https?:\/\//i.test(m.userAnswer) || !parsedRubric) return m
+                              const grade = recordingGrades?.find(
+                                (g) => g.questionId === m.questionId,
+                              )
+                              return {
+                                ...m,
+                                grammarScore: parsedRubric.grammarScore,
+                                vocabularyScore: parsedRubric.vocabularyScore,
+                                fluencyScore: parsedRubric.fluencyScore,
+                                pronunciationScore: parsedRubric.pronunciationScore,
+                                feedback: grade?.feedback,
+                              }
+                            }),
                           }
                         : undefined,
                     }
@@ -496,7 +545,9 @@ export function HomeworkStudentResults({
                 attempt.totalQuestions > 0
                   ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
                   : null
-              const numericScore = row.submission?.score
+              const numericScore = isSpeaking
+                ? speakingRubricAverageFromMistakes(attempt?.mistakes ?? [])
+                : row.submission?.score
               const canExpand = !!row.submission
               const isSelected = selectedId === row.studentId
               const rowBg = isSelected
@@ -560,7 +611,9 @@ export function HomeworkStudentResults({
                               )}
                             >
                               <Award className="h-3 w-3" />
-                              {numericScore.toFixed(1)}
+                              {isSpeaking
+                                ? `${numericScore.toFixed(1)}/10`
+                                : numericScore.toFixed(1)}
                             </span>
                           ) : null}
                         </span>
@@ -586,7 +639,9 @@ export function HomeworkStudentResults({
                               )}
                             >
                               <Award className="h-3 w-3" />
-                              {numericScore.toFixed(1)}
+                              {isSpeaking
+                                ? `${numericScore.toFixed(1)}/10`
+                                : numericScore.toFixed(1)}
                             </span>
                           ) : (
                             <span
@@ -774,7 +829,9 @@ function StudentDetail({
     attempt.totalQuestions > 0
       ? Math.round((attempt.correctCount / attempt.totalQuestions) * 100)
       : null
-  const numericScore = row.submission?.score
+  const numericScore = isSpeaking
+    ? speakingRubricAverageFromMistakes(attempt?.mistakes ?? [])
+    : row.submission?.score
   const overdueMissed = isOverdueRow(row, homework.dueAt)
   const submittedLate =
     row.submission?.submittedAt &&
@@ -790,6 +847,7 @@ function StudentDetail({
       onUpdate(row.studentId, {
         submission: updated,
         recordingGrades: recordingGradesFromMistakes(updated.attempt?.mistakes ?? []),
+        speakingRubric: speakingRubricFromMistakes(updated.attempt?.mistakes ?? []),
       })
       onChanged?.()
       toast({ title: "Transcription complete" })
@@ -904,7 +962,9 @@ function StudentDetail({
                   )}
                 >
                   <Award className="h-3 w-3" />
-                  {numericScore.toFixed(1)}
+                  {isSpeaking
+                    ? `${numericScore.toFixed(1)}/10`
+                    : numericScore.toFixed(1)}
                 </span>
               ) : null}
               {accuracy != null && (
@@ -1134,112 +1194,6 @@ function StudentDetail({
   )
 }
 
-function LearnixSpeakingScoreField({
-  bandValue,
-  onChange,
-}: {
-  bandValue: string
-  onChange: (band: string) => void
-}) {
-  const band = bandValue.trim() ? Number(bandValue.replace(",", ".")) : NaN
-  const hasBand = Number.isFinite(band) && band >= 0 && band <= 9
-  const learnixScore = hasBand ? speakingBandToLearnixScore(band) : null
-  const selectedLevel = hasBand ? Math.max(1, Math.min(9, Math.round(band))) : null
-  const levelMeta = selectedLevel
-    ? LEARNIX_LEVEL_META.find((m) => m.level === selectedLevel)
-    : null
-
-  const [learnixInput, setLearnixInput] = useState(
-    learnixScore != null ? String(learnixScore) : "",
-  )
-
-  useEffect(() => {
-    setLearnixInput(learnixScore != null ? String(learnixScore) : "")
-  }, [learnixScore])
-
-  const commitLearnixScore = () => {
-    if (!learnixInput.trim()) {
-      onChange("")
-      return
-    }
-    const n = Number(learnixInput.replace(",", "."))
-    if (Number.isNaN(n) || n < 0 || n > 1000) {
-      setLearnixInput(learnixScore != null ? String(learnixScore) : "")
-      return
-    }
-    onChange(String(learnixScoreToSpeakingBand(n)))
-  }
-
-  return (
-    <div className="space-y-3">
-      <div>
-        <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">
-          Learnix speaking score
-        </label>
-        <p className="mt-0.5 text-[11px] text-slate-500">
-          Grade on the Learnix 0–1000 scale (levels 1–9 · CEFR). This feeds the student language
-          profile.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-9">
-        {LEARNIX_LEVEL_META.map((meta) => {
-          const active = selectedLevel === meta.level
-          return (
-            <button
-              key={meta.level}
-              type="button"
-              onClick={() => onChange(String(meta.level))}
-              className={cn(
-                "rounded-lg border px-1.5 py-2 text-center transition-colors",
-                active
-                  ? "border-emerald-500 bg-emerald-50 text-emerald-900"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50",
-              )}
-            >
-              <span className="block text-sm font-bold tabular-nums">{meta.level}</span>
-              <span className="block text-[9px] font-semibold uppercase tracking-wide opacity-80">
-                {meta.cefr}
-              </span>
-            </button>
-          )
-        })}
-      </div>
-
-      <div className="flex flex-wrap items-end gap-3">
-        <div className="min-w-[140px] flex-1">
-          <label className="text-[10px] uppercase tracking-wider text-slate-500">
-            Score (0–1000)
-          </label>
-          <Input
-            value={learnixInput}
-            onChange={(e) => setLearnixInput(e.target.value)}
-            onBlur={commitLearnixScore}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                commitLearnixScore()
-              }
-            }}
-            placeholder="e.g. 670"
-            inputMode="numeric"
-            className="mt-1"
-          />
-        </div>
-        {learnixScore != null && levelMeta ? (
-          <p className="pb-2 text-xs text-slate-600">
-            <span className="font-semibold tabular-nums text-slate-900">{learnixScore}</span>
-            {" · "}
-            Level {levelMeta.level} · {levelMeta.cefr} · {levelMeta.title}
-          </p>
-        ) : (
-          <p className="pb-2 text-xs text-slate-400">Select a level or enter a Learnix score</p>
-        )}
-      </div>
-    </div>
-  )
-}
-
 function StudentReviewFooter({
   row,
   homework,
@@ -1265,9 +1219,9 @@ function StudentReviewFooter({
     <div className="shrink-0 border-t border-slate-200 bg-white px-6 py-4">
       <div className="space-y-3">
         {isSpeaking ? (
-          <LearnixSpeakingScoreField
-            bandValue={row.score}
-            onChange={(band) => onUpdate(row.studentId, { score: band })}
+          <SpeakingRubricField
+            value={row.speakingRubric}
+            onChange={(speakingRubric) => onUpdate(row.studentId, { speakingRubric })}
           />
         ) : null}
 
